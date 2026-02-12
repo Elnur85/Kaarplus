@@ -1,0 +1,12 @@
+{
+    "name": "@kaarplus/api",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "echo 'not scaffolded yet'",
+        "build": "echo 'not scaffolded yet'",
+        "start": "echo 'not scaffolded yet'",
+        "lint": "echo 'not scaffolded yet'",
+        "typecheck": "echo 'not scaffolded yet'"
+    }
+}

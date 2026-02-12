@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx prisma *)",
+      "Bash(npm install *)",
+      "Bash(npm test *)",
+      "Bash(git *)",
+      "Bash(mkdir *)",
+      "Bash(ls *)",
+      "Bash(cat *)"
+    ],
+    "deny": ["Bash(rm -rf /)", "Bash(sudo *)"]
+  }
+}
