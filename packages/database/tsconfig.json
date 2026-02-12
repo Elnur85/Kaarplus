@@ -1,0 +1,15 @@
+{
+    "extends": "@kaarplus/typescript-config/node.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "rootDir": "."
+    },
+    "include": [
+        "src/**/*.ts",
+        "prisma/seed.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

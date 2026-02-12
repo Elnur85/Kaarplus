@@ -32,7 +32,7 @@ The goal of Phase 1 is a working, deployable application with core listing brows
 | ID     | Task                                        | Status | Dependencies     | Est. |
 | ------ | ------------------------------------------- | ------ | ---------------- | ---- |
 | P1-T01 | Monorepo scaffolding & tooling              | ✅     | —                | 3h   |
-| P1-T02 | Database schema & Prisma setup              | ⬜     | P1-T01           | 2h   |
+| P1-T02 | Database schema & Prisma setup              | ✅     | P1-T01           | 2h   |
 | P1-T03 | Express API server boilerplate              | ⬜     | P1-T01           | 2h   |
 | P1-T04 | Next.js app scaffolding & design system     | ⬜     | P1-T01           | 3h   |
 | P1-T05 | Authentication (NextAuth + Express JWT)     | ⬜     | P1-T02, T03, T04 | 4h   |

@@ -1,0 +1,170 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  BUYER
+  INDIVIDUAL_SELLER
+  DEALERSHIP
+  ADMIN
+  SUPPORT
+}
+
+enum ListingStatus {
+  DRAFT
+  PENDING
+  ACTIVE
+  SOLD
+  REJECTED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  passwordHash    String?
+  name            String?
+  phone           String?
+  role            UserRole      @default(BUYER)
+  dealershipId    String?
+  emailVerified   DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  listings        Listing[]
+  favorites       Favorite[]
+  messagesSent    Message[]     @relation("SentMessages")
+  messagesReceived Message[]    @relation("ReceivedMessages")
+  sessions        Session[]
+  gdprConsent     GdprConsent?
+}
+
+model Listing {
+  id                 String          @id @default(cuid())
+  userId             String
+  status             ListingStatus   @default(PENDING)
+  make               String
+  model              String
+  variant            String?
+  year               Int
+  vin                String?         @unique
+  mileage            Int
+  price              Decimal         @db.Decimal(10, 2)
+  priceVatIncluded   Boolean         @default(true)
+  currency           String          @default("EUR")
+  bodyType           String
+  fuelType           String
+  transmission       String
+  powerKw            Int
+  driveType          String?
+  doors              Int?
+  seats              Int?
+  colorExterior      String
+  colorInterior      String?
+  condition          String
+  description        String?         @db.Text
+  features           Json            // Flexible features storage
+  registrationDate   DateTime?
+  location           String          // City/region in Estonia
+  viewCount          Int             @default(0)
+  favoriteCount      Int             @default(0)
+  verifiedAt         DateTime?
+  publishedAt        DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  user               User            @relation(fields: [userId], references: [id])
+  images             ListingImage[]
+  favorites          Favorite[]
+  messages           Message[]
+
+  @@index([make, model])
+  @@index([price])
+  @@index([year])
+  @@index([status, publishedAt])
+}
+
+model ListingImage {
+  id         String   @id @default(cuid())
+  listingId  String
+  url        String
+  order      Int
+  verified   Boolean  @default(false)
+  verifiedBy String?
+  verifiedAt DateTime?
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, order])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  listingId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  recipientId String
+  listingId   String?
+  subject     String?
+  body        String   @db.Text
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  listing     Listing? @relation(fields: [listingId], references: [id])
+
+  @@index([recipientId, read])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  listingId       String
+  buyerId         String
+  sellerId        String
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String        @default("EUR")
+  stripePaymentId String        @unique
+  status          PaymentStatus @default(PENDING)
+  createdAt       DateTime      @default(now())
+  completedAt     DateTime?
+
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+model GdprConsent {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  marketing     Boolean  @default(false)
+  analytics     Boolean  @default(false)
+  consentDate   DateTime @default(now())
+  ipAddress     String?
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
