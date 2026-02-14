@@ -9,7 +9,10 @@ export default auth((req) => {
     // Protected routes pattern
     const isProtectedRoute = pathname.startsWith("/dashboard") ||
         pathname.startsWith("/sell") ||
-        pathname.startsWith("/account");
+        pathname.startsWith("/account") ||
+        pathname.startsWith("/admin");
+
+    const isAdminRoute = pathname.startsWith("/admin");
 
     // Auth routes (redirect to dashboard if already logged in)
     const isAuthRoute = pathname.startsWith("/login") ||
@@ -20,6 +23,13 @@ export default auth((req) => {
         const loginUrl = new URL("/login", req.nextUrl);
         loginUrl.searchParams.set("callbackUrl", callbackUrl);
         return NextResponse.redirect(loginUrl);
+    }
+
+    if (isAdminRoute && isLoggedIn) {
+        const role = (req.auth?.user as any)?.role;
+        if (role !== "ADMIN" && role !== "SUPPORT") {
+            return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+        }
     }
 
     if (isAuthRoute && isLoggedIn) {

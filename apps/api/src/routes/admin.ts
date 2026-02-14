@@ -1,14 +1,19 @@
 import { Router } from "express";
 
+import * as adminController from "../controllers/adminController";
 import { requireAuth, requireRole } from "../middleware/auth";
+
 
 export const adminRouter = Router();
 
 // All admin routes require admin role
 adminRouter.use(requireAuth);
-adminRouter.use(requireRole("ADMIN"));
+adminRouter.use(requireRole("ADMIN", "SUPPORT"));
 
-// GET   /api/admin/listings/pending — P1-T12
-// PATCH /api/admin/listings/:id/verify — P1-T12
-// GET   /api/admin/users — P1-T12
-// GET   /api/admin/analytics — P3-T03
+// Listings
+adminRouter.get("/listings/pending", adminController.getPendingListings);
+adminRouter.patch("/listings/:id/verify", adminController.verifyListing);
+
+// Users
+adminRouter.get("/users", adminController.getUsers);
+

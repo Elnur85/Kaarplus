@@ -42,7 +42,7 @@ The goal of Phase 1 is a working, deployable application with core listing brows
 | P1-T09 | Car detail page                             | ✅     | P1-T04, T07      | 4h   |
 | P1-T10 | Sell vehicle wizard (multi-step form)       | ✅     | P1-T05, T07      | 5h   |
 | P1-T11 | Photo upload (S3 presigned URLs)            | ✅     | P1-T03, T10      | 3h   |
-| P1-T12 | Admin listing verification queue            | ⬜     | P1-T05, T07      | 3h   |
+| P1-T12 | Admin listing verification queue            | ✅     | P1-T05, T07      | 3h   |
 | P1-T13 | SEO implementation (meta, sitemap, JSON-LD) | ⬜     | P1-T06, T08, T09 | 3h   |
 | P1-T14 | GDPR compliance (consent, privacy, export)  | ⬜     | P1-T05           | 3h   |
 
