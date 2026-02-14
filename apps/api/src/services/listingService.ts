@@ -158,6 +158,22 @@ export class ListingService {
     }
 
     async createListing(userId: string, data: Prisma.ListingCreateWithoutUserInput) {
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) throw new NotFoundError("User not found");
+
+        if (user.role === "INDIVIDUAL_SELLER") {
+            const activeCount = await prisma.listing.count({
+                where: {
+                    userId,
+                    status: { in: ["ACTIVE", "PENDING"] },
+                },
+            });
+
+            if (activeCount >= 5) {
+                throw new ForbiddenError("Erakasutajana on Teil lubatud maksimaalselt 5 aktiivset kuulutust.");
+            }
+        }
+
         return prisma.listing.create({
             data: {
                 ...data,

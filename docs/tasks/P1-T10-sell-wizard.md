@@ -1,7 +1,7 @@
 # P1-T10: Sell Vehicle Wizard (Multi-Step Form)
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T05, P1-T07
 > **Estimated Time:** 5 hours
 
