@@ -1,13 +1,26 @@
 import { Router } from "express";
 
+import * as listingController from "../controllers/listingController";
+import { requireAuth, requireRole } from "../middleware/auth";
 import { readLimiter, writeLimiter } from "../middleware/rateLimiter";
 
 export const listingsRouter = Router();
 
-// GET    /api/listings — P1-T07 (public, read limiter)
-// GET    /api/listings/:id — P1-T07 (public)
-// POST   /api/listings — P1-T07 (auth + seller role, write limiter)
-// PATCH  /api/listings/:id — P1-T07 (owner/admin)
-// DELETE /api/listings/:id — P1-T07 (owner/admin)
-// GET    /api/listings/:id/similar — P1-T07 (public)
-// POST   /api/listings/:id/contact — P1-T07 (public)
+// Public routes
+listingsRouter.get("/", readLimiter, listingController.getAllListings);
+listingsRouter.get("/:id", listingController.getListingById);
+listingsRouter.get("/:id/similar", listingController.getSimilarListings);
+listingsRouter.post("/:id/contact", listingController.contactSeller);
+
+// Protected routes (Seller/Dealership/Admin)
+listingsRouter.post(
+    "/",
+    requireAuth,
+    requireRole("INDIVIDUAL_SELLER", "DEALERSHIP", "ADMIN"),
+    writeLimiter,
+    listingController.createListing
+);
+
+// Protected routes (Owner/Admin)
+listingsRouter.patch("/:id", requireAuth, listingController.updateListing);
+listingsRouter.delete("/:id", requireAuth, listingController.deleteListing);

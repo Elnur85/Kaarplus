@@ -36,7 +36,7 @@ The goal of Phase 1 is a working, deployable application with core listing brows
 | P1-T03 | Express API server boilerplate              | ✅     | P1-T01           | 2h   |
 | P1-T04 | Next.js app scaffolding & design system     | ✅     | P1-T01           | 3h   |
 | P1-T05 | Authentication (NextAuth + Express JWT)     | ✅     | P1-T02, T03, T04 | 4h   |
-| P1-T06 | Landing page                                | ⬜     | P1-T04           | 4h   |
+| P1-T06 | Landing page                                | ✅     | P1-T04           | 4h   |
 | P1-T07 | Listings API (CRUD + filters + search)      | ⬜     | P1-T02, T03      | 4h   |
 | P1-T08 | Car listings page (list/grid + filters)     | ⬜     | P1-T04, T07      | 5h   |
 | P1-T09 | Car detail page                             | ⬜     | P1-T04, T07      | 4h   |

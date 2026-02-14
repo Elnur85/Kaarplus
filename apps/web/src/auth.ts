@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
@@ -31,7 +31,7 @@ async function loginUser(credentials: any) {
     }
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const config = {
     providers: [
         Credentials({
             credentials: {
@@ -62,7 +62,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return token;
         },
         async session({ session, token }: any) {
-            if (token) {
+            if (token && session.user) {
                 session.user.role = token.role;
                 session.user.id = token.id;
                 session.apiToken = token.apiToken;
@@ -74,4 +74,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         signIn: "/login",
     },
     session: { strategy: "jwt" },
-});
+} satisfies NextAuthConfig;
+
+export const { handlers, signIn, signOut, auth } = NextAuth(config);

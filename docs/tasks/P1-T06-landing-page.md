@@ -1,7 +1,7 @@
 # P1-T06: Landing Page
 
 > **Phase:** 1 — Core MVP
-> **Status:** ⬜ Not Started
+> **Status:** ✅ Complete
 > **Dependencies:** P1-T04
 > **Estimated Time:** 4 hours
 

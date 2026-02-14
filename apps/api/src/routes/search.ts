@@ -1,12 +1,15 @@
 import { Router } from "express";
 
+import * as listingController from "../controllers/listingController";
+import * as searchController from "../controllers/searchController";
 import { readLimiter } from "../middleware/rateLimiter";
 
 export const searchRouter = Router();
 
 searchRouter.use(readLimiter);
 
-// GET /api/search — P1-T07
-// GET /api/search/makes — P1-T07
-// GET /api/search/models — P1-T07
-// GET /api/search/filters — P1-T07
+// Search and Discovery
+searchRouter.get("/", listingController.getAllListings); // Map /api/search to listings filter
+searchRouter.get("/makes", searchController.getMakes);
+searchRouter.get("/models", searchController.getModels);
+searchRouter.get("/filters", searchController.getFilterOptions);
