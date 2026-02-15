@@ -43,10 +43,9 @@ function saveConsent(consent: ConsentState) {
 export function CookieBanner() {
     const [isVisible, setIsVisible] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
-    const [consent, setConsent] = useState<ConsentState>({
-        essential: true,
-        analytics: false,
-        marketing: false,
+    const [consent, setConsent] = useState<ConsentState>(() => {
+        const stored = getStoredConsent();
+        return stored ?? { essential: true, analytics: false, marketing: false };
     });
 
     useEffect(() => {
@@ -56,7 +55,6 @@ export function CookieBanner() {
             const timer = setTimeout(() => setIsVisible(true), 500);
             return () => clearTimeout(timer);
         }
-        setConsent(stored);
     }, []);
 
     const handleAcceptAll = () => {

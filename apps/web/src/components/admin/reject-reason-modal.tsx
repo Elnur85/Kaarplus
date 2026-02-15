@@ -28,7 +28,7 @@ export function RejectReasonModal({ isOpen, onClose, onConfirm, listingTitle }: 
                 <DialogHeader>
                     <DialogTitle>Lükka kuulutus tagasi</DialogTitle>
                     <DialogDescription>
-                        Palun lisage põhjus, miks kuulutus "{listingTitle}" tagasi lükatakse. See saadetakse ka kasutajale.
+                        Palun lisage põhjus, miks kuulutus &ldquo;{listingTitle}&rdquo; tagasi lükatakse. See saadetakse ka kasutajale.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-4">

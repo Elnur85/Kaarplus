@@ -11,7 +11,7 @@ export function UrlSync() {
     const filters = useFilterStore();
     const isInitialMount = useRef(true);
 
-    // Sync URL -> Store on mount
+    // Sync URL -> Store on mount (intentionally runs once)
     useEffect(() => {
         if (isInitialMount.current) {
             const params = Object.fromEntries(searchParams.entries());
@@ -32,6 +32,7 @@ export function UrlSync() {
 
             isInitialMount.current = false;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Sync Store -> URL on change

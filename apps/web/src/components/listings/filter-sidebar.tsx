@@ -17,6 +17,7 @@ export function FilterSidebar() {
     const filters = useFilterStore();
     const [makes, setMakes] = useState<string[]>([]);
     const [models, setModels] = useState<string[]>([]);
+    const currentMake = filters.make;
 
     // Fetch makes on mount
     useEffect(() => {
@@ -28,15 +29,22 @@ export function FilterSidebar() {
 
     // Fetch models when make changes
     useEffect(() => {
-        if (filters.make) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search/models?make=${filters.make}`)
-                .then((res) => res.json())
-                .then((json) => setModels(json.data || []))
-                .catch(console.error);
-        } else {
-            setModels([]);
+        let cancelled = false;
+        if (!currentMake) {
+            // No fetch needed, but we still want to reset via the cleanup
+            return () => { cancelled = true; };
         }
-    }, [filters.make]);
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search/models?make=${currentMake}`)
+            .then((res) => res.json())
+            .then((json) => {
+                if (!cancelled) setModels(json.data || []);
+            })
+            .catch(console.error);
+        return () => {
+            cancelled = true;
+            setModels([]);
+        };
+    }, [currentMake]);
 
     const fuelTypes = ["Bensiin", "Diisel", "Hübriid", "Elekter", "Gaas"];
     const bodyTypes = ["Sedaan", "Universaal", "Maastur", "Kupee", "Kabriolett", "Mahtuniversaal", "Pikap", "Väikeautod"];

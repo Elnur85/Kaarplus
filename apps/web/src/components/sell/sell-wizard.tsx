@@ -279,7 +279,7 @@ export function SellWizard() {
             </div>
 
             <p className="text-center text-xs text-muted-foreground pt-4">
-                Klõpsates "Avalda kuulutus", nõustute Kaarplus <a href="/terms" className="underline hover:text-primary">kasutustingimuste</a> ja <a href="/privacy" className="underline hover:text-primary">privaatsuspoliitikaga</a>.
+                Klõpsates &ldquo;Avalda kuulutus&rdquo;, nõustute Kaarplus <a href="/terms" className="underline hover:text-primary">kasutustingimuste</a> ja <a href="/privacy" className="underline hover:text-primary">privaatsuspoliitikaga</a>.
             </p>
         </div>
     );

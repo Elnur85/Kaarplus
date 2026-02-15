@@ -57,6 +57,8 @@ export default function ListingsPage() {
 
     useEffect(() => {
         fetchListings();
+        // fetchListings depends on filter state which is captured via individual deps below
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         filters.make,
         filters.model,
