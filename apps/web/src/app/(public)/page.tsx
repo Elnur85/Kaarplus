@@ -9,6 +9,9 @@ import { StatisticsSection } from "@/components/landing/statistics-section";
 import { FaqSection } from "@/components/landing/faq-section";
 import { NewsletterSignup } from "@/components/landing/newsletter-signup";
 
+import { JsonLd } from "@/components/shared/json-ld";
+import { generateWebsiteJsonLd } from "@/lib/seo";
+
 export const metadata: Metadata = {
   title: "Kaarplus | Autode ost ja müük Eestis - Elektri- ja hübriidautod",
   description:
@@ -16,8 +19,11 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const websiteJsonLd = generateWebsiteJsonLd();
+
   return (
     <main className="flex min-h-screen flex-col">
+      <JsonLd data={websiteJsonLd} />
       {/* 1. Hero Section + Search Bar (integrated) */}
       <HeroSection />
 

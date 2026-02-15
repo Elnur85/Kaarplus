@@ -15,6 +15,9 @@ import { VehicleSummary } from "@/types/vehicle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
+import { JsonLd } from "@/components/shared/json-ld";
+import { generateBreadcrumbJsonLd } from "@/lib/seo";
+import { SITE_URL } from "@/lib/constants";
 
 export default function ListingsPage() {
     const [listings, setListings] = useState<VehicleSummary[]>([]);
@@ -69,8 +72,14 @@ export default function ListingsPage() {
         filters.q
     ]);
 
+    const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+        { name: "Avaleht", item: SITE_URL },
+        { name: "Kasutatud autod", item: `${SITE_URL}/listings` },
+    ]);
+
     return (
         <div className="container py-8 min-h-screen">
+            <JsonLd data={breadcrumbJsonLd} />
             <Suspense fallback={null}>
                 <UrlSync />
             </Suspense>

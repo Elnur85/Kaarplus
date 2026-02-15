@@ -4,6 +4,8 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import { JsonLd } from "@/components/shared/json-ld";
+import { generateFaqJsonLd } from "@/lib/seo";
 
 export function FaqSection() {
     const faqs = [
@@ -25,8 +27,11 @@ export function FaqSection() {
         },
     ];
 
+    const faqJsonLd = generateFaqJsonLd(faqs);
+
     return (
         <section className="container px-4 py-24 md:px-6">
+            <JsonLd data={faqJsonLd} />
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
                     Korduma kippuvad küsimused

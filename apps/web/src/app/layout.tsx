@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
+import { AuthProvider } from "@/components/auth/auth-provider";
+import { JsonLd } from "@/components/shared/json-ld";
+import { Toaster } from "@/components/ui/toaster";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
+import { generateOrganizationJsonLd } from "@/lib/seo";
 
 import "./globals.css";
 
@@ -30,24 +33,23 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Autode ost ja müük Eestis`,
     description: SITE_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
+  icons: {
+    icon: "/favicon.ico",
   },
 };
-
-import { AuthProvider } from "@/components/auth/auth-provider";
-import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const organizationJsonLd = generateOrganizationJsonLd();
+
   return (
     <html lang="et" className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
         <AuthProvider>
+          <JsonLd data={organizationJsonLd} />
           {children}
           <Toaster />
         </AuthProvider>

@@ -11,6 +11,9 @@ import { RelatedCars } from "@/components/car-detail/related-cars";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, Eye } from "lucide-react";
+import { JsonLd } from "@/components/shared/json-ld";
+import { generateVehicleJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo";
+import { SITE_URL } from "@/lib/constants";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -64,8 +67,22 @@ export default async function CarDetailPage({ params }: Props) {
         { label: `${listing.model} ${listing.year}` },
     ];
 
+    const vehicleJsonLd = generateVehicleJsonLd({
+        ...listing,
+        price: Number(listing.price),
+    });
+
+    const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+        { name: "Avaleht", item: SITE_URL },
+        { name: "Kasutatud autod", item: `${SITE_URL}/listings` },
+        { name: listing.make, item: `${SITE_URL}/listings?make=${listing.make}` },
+        { name: `${listing.model} ${listing.year}`, item: `${SITE_URL}/listings/${listing.id}` },
+    ]);
+
     return (
         <div className="container py-8 min-h-screen">
+            <JsonLd data={vehicleJsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
             <Breadcrumbs items={breadcrumbItems} />
 
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
