@@ -43,7 +43,10 @@ interface AddVehicleSheetProps {
     onOpenChange: (open: boolean) => void;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function AddVehicleSheet({ open, onOpenChange }: AddVehicleSheetProps) {
+    const { t } = useTranslation('compare');
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<ListingResult[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -110,7 +113,7 @@ export function AddVehicleSheet({ open, onOpenChange }: AddVehicleSheetProps) {
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent className="w-full max-w-md overflow-y-auto">
                 <SheetHeader>
-                    <SheetTitle>Lisa sõiduk võrdlusesse</SheetTitle>
+                    <SheetTitle>{t('addSheet.title')}</SheetTitle>
                 </SheetHeader>
 
                 <div className="mt-6 space-y-4">
@@ -120,7 +123,7 @@ export function AddVehicleSheet({ open, onOpenChange }: AddVehicleSheetProps) {
                             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                         />
                         <Input
-                            placeholder="Otsi marki, mudelit..."
+                            placeholder={t('addSheet.placeholder')}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             className="pl-9"
@@ -129,13 +132,13 @@ export function AddVehicleSheet({ open, onOpenChange }: AddVehicleSheetProps) {
 
                     {isLoading && (
                         <p className="text-sm text-muted-foreground text-center py-4">
-                            Otsime...
+                            {t('addSheet.loading')}
                         </p>
                     )}
 
                     {!isLoading && results.length === 0 && query.length >= 2 && (
                         <p className="text-sm text-muted-foreground text-center py-4">
-                            Tulemusi ei leitud
+                            {t('addSheet.noResults')}
                         </p>
                     )}
 

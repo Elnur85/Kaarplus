@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Carousel,
     CarouselContent,
@@ -7,8 +9,11 @@ import {
 } from "@/components/ui/carousel";
 import { StarRating } from "@/components/shared/star-rating";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTranslation } from "react-i18next";
+import { Quote } from "lucide-react";
 
 export function ReviewsCarousel() {
+    const { t } = useTranslation('home');
     const reviews = [
         {
             id: 1,
@@ -37,14 +42,14 @@ export function ReviewsCarousel() {
     ];
 
     return (
-        <section className="py-24 bg-secondary/50">
-            <div className="container px-4 md:px-6">
-                <div className="text-center space-y-4 mb-12">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                        Mida kliendid arvavad
+        <section className="py-20 bg-slate-50 dark:bg-slate-900/30">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl font-bold mb-4">
+                        {t('reviews.title')}
                     </h2>
-                    <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                        Üle 1000 rahuloleva kliendi on ostnud oma uue auto Kaarplusi kaudu.
+                    <p className="text-slate-500 max-w-xl mx-auto">
+                        {t('reviews.subtitle')}
                     </p>
                 </div>
 
@@ -55,20 +60,25 @@ export function ReviewsCarousel() {
                     }}
                     className="w-full max-w-5xl mx-auto"
                 >
-                    <CarouselContent className="-ml-2 md:-ml-4">
+                    <CarouselContent className="-ml-4">
                         {reviews.map((review) => (
-                            <CarouselItem key={review.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                                <div className="bg-card text-card-foreground p-6 rounded-xl shadow-sm border border-border h-full flex flex-col items-center text-center">
-                                    <Avatar className="h-16 w-16 mb-4 ring-2 ring-primary/10">
-                                        <AvatarImage src={review.avatar} alt={review.name} />
-                                        <AvatarFallback>{review.name[0]}</AvatarFallback>
-                                    </Avatar>
-                                    <p className="text-sm font-medium text-primary mb-1">{review.car}</p>
-                                    <StarRating rating={review.rating} count={0} showCount={false} />
-                                    <blockquote className="mt-4 text-muted-foreground italic">&quot;{review.text}&quot;</blockquote>
-                                    <div className="mt-auto pt-4">
-                                        <p className="font-semibold text-sm">{review.name}</p>
+                            <CarouselItem key={review.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                                <div className="bg-white dark:bg-slate-800 p-8 rounded-xl border border-slate-200 dark:border-slate-700 h-full flex flex-col relative hover:shadow-lg transition-shadow">
+                                    <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/10" />
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <Avatar className="h-14 w-14 ring-2 ring-primary/20">
+                                            <AvatarImage src={review.avatar} alt={review.name} />
+                                            <AvatarFallback className="bg-primary/10 text-primary font-bold">{review.name[0]}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <p className="font-bold text-slate-900 dark:text-white">{review.name}</p>
+                                            <p className="text-xs font-semibold text-primary">{review.car}</p>
+                                        </div>
                                     </div>
+                                    <StarRating rating={review.rating} count={0} showCount={false} />
+                                    <blockquote className="mt-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-1">
+                                        &quot;{review.text}&quot;
+                                    </blockquote>
                                 </div>
                             </CarouselItem>
                         ))}

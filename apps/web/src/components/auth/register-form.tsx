@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -18,7 +19,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
@@ -81,7 +82,6 @@ export function RegisterForm() {
                 description: t('success.registered'),
             })
 
-            // Attempt to auto login
             const result = await signIn("credentials", {
                 redirect: false,
                 email: values.email,
@@ -89,7 +89,6 @@ export function RegisterForm() {
             });
 
             if (result?.error) {
-                // Should not happen if registration succeeded, but fallback to login
                 router.push("/login")
             } else {
                 router.push("/dashboard")
@@ -107,84 +106,103 @@ export function RegisterForm() {
         }
     }
 
-    return (
-        <Card className="w-full max-w-md mx-auto">
-            <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl text-center">{t('register.title')}</CardTitle>
-                <CardDescription className="text-center">
-                    {t('register.subtitle')}
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('register.name')}</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="John Doe" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('register.email')}</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="name@example.com" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('register.password')}</FormLabel>
-                                    <FormControl>
-                                        <Input type="password" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="confirmPassword"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>{t('register.confirmPassword')}</FormLabel>
-                                    <FormControl>
-                                        <Input type="password" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+    const inputClassName = "px-4 py-2 border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-slate-800"
 
-                        <Button className="w-full" type="submit" disabled={isLoading}>
-                            {isLoading ? t('register.loading') : t('register.submit')}
-                        </Button>
-                    </form>
-                </Form>
-            </CardContent>
-            <CardFooter>
-                <div className="text-sm text-muted-foreground text-center w-full">
-                    {t('register.hasAccount')}{" "}
-                    <a href="/login" className="text-primary hover:underline">
-                        {t('register.login')}
-                    </a>
-                </div>
-            </CardFooter>
-        </Card>
+    return (
+        <div className="w-full max-w-[400px] mx-auto bg-white dark:bg-slate-900 rounded-xl shadow-2xl p-8 border border-slate-200 dark:border-slate-800">
+            {/* Title */}
+            <div className="mb-8">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{t('register.title')}</h2>
+                <p className="text-sm text-slate-500 mt-1">{t('register.subtitle')}</p>
+            </div>
+
+            {/* Form */}
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.name')}</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Jaan Tamm" className={inputClassName} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.email')}</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="nimi@email.ee" className={inputClassName} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.password')}</FormLabel>
+                                <FormControl>
+                                    <Input type="password" placeholder="••••••••" className={inputClassName} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.confirmPassword')}</FormLabel>
+                                <FormControl>
+                                    <Input type="password" placeholder="••••••••" className={inputClassName} {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* Terms Checkbox */}
+                    <div className="pt-2">
+                        <label className="flex items-start space-x-3 cursor-pointer">
+                            <Checkbox className="mt-1 border-slate-300 text-primary" />
+                            <span className="text-sm text-slate-600 dark:text-slate-400">
+                                {t('register.agreeToTerms', { defaultValue: 'Nõustun Kaarplusi' })}{" "}
+                                <a href="/terms" className="text-primary hover:underline">{t('register.termsLink', { defaultValue: 'kasutustingimustega' })}</a>{" "}
+                                {t('register.and', { defaultValue: 'ja' })}{" "}
+                                <a href="/privacy" className="text-primary hover:underline">{t('register.privacyLink', { defaultValue: 'privaatsuspoliitikaga' })}</a>.
+                            </span>
+                        </label>
+                    </div>
+
+                    <Button
+                        className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 rounded-lg mt-4 shadow-sm shadow-primary/20 transition-colors"
+                        type="submit"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
+                        {isLoading ? t('register.loading') : t('register.submit')}
+                    </Button>
+                </form>
+            </Form>
+
+            {/* Login Link */}
+            <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-8">
+                {t('register.hasAccount')}{" "}
+                <a href="/login" className="text-primary font-semibold hover:underline">
+                    {t('register.login')}
+                </a>
+            </p>
+        </div>
     )
 }

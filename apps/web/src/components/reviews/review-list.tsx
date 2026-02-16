@@ -5,6 +5,7 @@ import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReviewCard } from "@/components/reviews/review-card";
+import { useTranslation } from "react-i18next";
 
 interface ReviewData {
   id: string;
@@ -26,6 +27,7 @@ interface ReviewListProps {
 const PAGE_SIZE = 10;
 
 export function ReviewList({ targetId }: ReviewListProps) {
+  const { t } = useTranslation('reviews');
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -81,7 +83,7 @@ export function ReviewList({ targetId }: ReviewListProps) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-muted-foreground">
         <MessageSquare className="h-10 w-10" />
-        <p className="text-sm">Arvustusi pole veel</p>
+        <p className="text-sm">{t('noReviews')}</p>
       </div>
     );
   }
@@ -102,7 +104,7 @@ export function ReviewList({ targetId }: ReviewListProps) {
             disabled={page <= 1}
             onClick={() => setPage((p) => p - 1)}
           >
-            Eelmine
+            {t('previous')}
           </Button>
           <span className="text-sm text-muted-foreground">
             {page} / {totalPages}
@@ -113,7 +115,7 @@ export function ReviewList({ targetId }: ReviewListProps) {
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
           >
-            Jargmine
+            {t('next')}
           </Button>
         </div>
       )}

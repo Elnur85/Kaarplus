@@ -16,37 +16,7 @@ interface SpecRow {
     format?: "number" | "price" | "boolean" | "power" | "text";
 }
 
-const specSections: { title: string; rows: SpecRow[] }[] = [
-    {
-        title: "Põhiandmed",
-        rows: [
-            { label: "Keretüüp", key: "bodyType", getValue: (v) => v.bodyType },
-            { label: "Kütuse liik", key: "fuelType", getValue: (v) => v.fuelType },
-            { label: "Käigukast", key: "transmission", getValue: (v) => v.transmission },
-            { label: "Vedav sild", key: "driveType", getValue: (v) => v.driveType },
-            { label: "Uste arv", key: "doors", getValue: (v) => v.doors, format: "number" },
-            { label: "Istekohti", key: "seats", getValue: (v) => v.seats, format: "number" },
-            { label: "Seisukord", key: "condition", getValue: (v) => v.condition },
-        ],
-    },
-    {
-        title: "Jõudlus ja andmed",
-        rows: [
-            { label: "Võimsus", key: "powerKw", getValue: (v) => v.powerKw, format: "power" },
-            { label: "Läbisõit", key: "mileage", getValue: (v) => v.mileage, format: "number" },
-            { label: "Hind", key: "price", getValue: (v) => v.price, format: "price" },
-            { label: "Aasta", key: "year", getValue: (v) => v.year },
-        ],
-    },
-    {
-        title: "Välimus",
-        rows: [
-            { label: "Värvus (väline)", key: "colorExterior", getValue: (v) => v.colorExterior },
-            { label: "Värvus (sisemine)", key: "colorInterior", getValue: (v) => v.colorInterior },
-            { label: "Asukoht", key: "location", getValue: (v) => v.location },
-        ],
-    },
-];
+import { useTranslation } from "react-i18next";
 
 function getFeatureKeys(vehicles: CompareVehicle[]): string[] {
     const keys = new Set<string>();
@@ -90,19 +60,52 @@ function hasDifference(
 }
 
 export function ComparisonTable({ vehicles, showDifferencesOnly }: ComparisonTableProps) {
+    const { t } = useTranslation('compare');
     const emptySlots = 4 - vehicles.length;
     const featureKeys = getFeatureKeys(vehicles);
 
+    const specSections: { title: string; rows: SpecRow[] }[] = [
+        {
+            title: t('sections.basic'),
+            rows: [
+                { label: t('specs.bodyType'), key: "bodyType", getValue: (v) => v.bodyType },
+                { label: t('specs.fuelType'), key: "fuelType", getValue: (v) => v.fuelType },
+                { label: t('specs.transmission'), key: "transmission", getValue: (v) => v.transmission },
+                { label: t('specs.driveType'), key: "driveType", getValue: (v) => v.driveType },
+                { label: t('specs.doors'), key: "doors", getValue: (v) => v.doors, format: "number" },
+                { label: t('specs.seats'), key: "seats", getValue: (v) => v.seats, format: "number" },
+                { label: t('specs.condition'), key: "condition", getValue: (v) => v.condition },
+            ],
+        },
+        {
+            title: t('sections.performance'),
+            rows: [
+                { label: t('specs.power'), key: "powerKw", getValue: (v) => v.powerKw, format: "power" },
+                { label: t('specs.mileage'), key: "mileage", getValue: (v) => v.mileage, format: "number" },
+                { label: t('specs.price'), key: "price", getValue: (v) => v.price, format: "price" },
+                { label: t('specs.year'), key: "year", getValue: (v) => v.year },
+            ],
+        },
+        {
+            title: t('sections.appearance'),
+            rows: [
+                { label: t('specs.colorExterior'), key: "colorExterior", getValue: (v) => v.colorExterior },
+                { label: t('specs.colorInterior'), key: "colorInterior", getValue: (v) => v.colorInterior },
+                { label: t('specs.location'), key: "location", getValue: (v) => v.location },
+            ],
+        },
+    ];
+
     return (
-        <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
                 <table className="w-full border-collapse min-w-[600px]">
                     <tbody>
                         {specSections.map((section) => {
                             const visibleRows = showDifferencesOnly
                                 ? section.rows.filter((row) =>
-                                      hasDifference(vehicles, row.getValue)
-                                  )
+                                    hasDifference(vehicles, row.getValue)
+                                )
                                 : section.rows;
 
                             if (visibleRows.length === 0) return null;
@@ -122,12 +125,12 @@ export function ComparisonTable({ vehicles, showDifferencesOnly }: ComparisonTab
                         {/* Features section */}
                         {featureKeys.length > 0 && (
                             <>
-                                <tr className="bg-muted/50 border-y border-border">
+                                <tr className="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
                                     <td
-                                        className="py-3 px-6 text-sm font-bold text-foreground uppercase tracking-wider"
+                                        className="py-3 px-6 text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider"
                                         colSpan={vehicles.length + 1 + emptySlots}
                                     >
-                                        Varustus
+                                        {t('sections.features')}
                                     </td>
                                 </tr>
                                 {featureKeys
@@ -155,11 +158,11 @@ export function ComparisonTable({ vehicles, showDifferencesOnly }: ComparisonTab
                                             <tr
                                                 key={key}
                                                 className={cn(
-                                                    "border-b border-border/50 hover:bg-muted/30 transition-colors",
+                                                    "border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors",
                                                     isDiff && "bg-yellow-50"
                                                 )}
                                             >
-                                                <td className="sticky left-0 py-4 px-6 text-sm font-medium text-muted-foreground bg-card w-[240px]">
+                                                <td className="sticky left-0 py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 w-[240px]">
                                                     {key}
                                                 </td>
                                                 {vehicles.map((v) => {
@@ -228,9 +231,9 @@ function SectionBlock({
 }) {
     return (
         <>
-            <tr className="bg-muted/50 border-y border-border">
+            <tr className="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
                 <td
-                    className="py-3 px-6 text-sm font-bold text-foreground uppercase tracking-wider"
+                    className="py-3 px-6 text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider"
                     colSpan={vehicles.length + 1 + emptySlots}
                 >
                     {title}
@@ -243,11 +246,11 @@ function SectionBlock({
                     <tr
                         key={row.key}
                         className={cn(
-                            "border-b border-border/50 hover:bg-muted/30 transition-colors",
+                            "border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 transition-colors",
                             isDiff && showDifferencesOnly && "bg-yellow-50"
                         )}
                     >
-                        <td className="sticky left-0 py-4 px-6 text-sm font-medium text-muted-foreground bg-card w-[240px] z-10">
+                        <td className="sticky left-0 py-4 px-6 text-sm font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 w-[240px] z-10">
                             {row.label}
                         </td>
                         {vehicles.map((v) => {
@@ -263,7 +266,7 @@ function SectionBlock({
                                         (row.format === "number" ||
                                             row.format === "price" ||
                                             row.format === "power") &&
-                                            "tabular-nums"
+                                        "tabular-nums"
                                     )}
                                 >
                                     {isBoolean ? (

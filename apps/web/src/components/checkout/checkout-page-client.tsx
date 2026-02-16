@@ -12,6 +12,7 @@ import { API_URL } from "@/lib/constants";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -20,10 +21,13 @@ interface CheckoutPageClientProps {
 }
 
 export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
+    const { t, i18n } = useTranslation(['checkout', 'common']);
     const { status } = useSession();
     const router = useRouter();
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const currencyLocale = i18n.language === 'et' ? "et-EE" : i18n.language === 'ru' ? "ru-RU" : "en-US";
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -49,16 +53,16 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
                 })
                 .catch((err) => {
                     console.error("Failed to create payment intent:", err);
-                    setError("Makse algatamine ebaõnnestus. Palun proovige uuesti.");
+                    setError(t('initFailed'));
                 });
         }
-    }, [status, listing.id, router]);
+    }, [status, listing.id, router, t]);
 
     if (status === "loading" || (status === "authenticated" && !clientSecret && !error)) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                <p className="text-muted-foreground">Valmistame makset ette...</p>
+                <p className="text-muted-foreground">{t('preparing')}</p>
             </div>
         );
     }
@@ -68,7 +72,7 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
             <div className="container max-w-md py-20">
                 <Card className="border-destructive/20 bg-destructive/5">
                     <CardHeader>
-                        <CardTitle className="text-destructive">Viga</CardTitle>
+                        <CardTitle className="text-destructive">{t('common.error', { ns: 'common' })}</CardTitle>
                         <CardDescription>{error}</CardDescription>
                     </CardHeader>
                 </Card>
@@ -82,9 +86,9 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
                 <div className="md:col-span-3">
                     <Card className="shadow-lg border-primary/10">
                         <CardHeader className="space-y-1">
-                            <CardTitle className="text-2xl font-bold">Turvaline maksmine</CardTitle>
+                            <CardTitle className="text-2xl font-bold">{t('securePayment')}</CardTitle>
                             <CardDescription>
-                                Kinnitage oma ost ja tehke turvaline makse.
+                                {t('confirmPurchase')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -96,7 +100,7 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
                                         appearance: {
                                             theme: 'stripe',
                                             variables: {
-                                                colorPrimary: '#0ea5e9',
+                                                colorPrimary: '#10b77f',
                                             }
                                         }
                                     }}
@@ -111,7 +115,7 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
                 <div className="md:col-span-2">
                     <Card className="bg-muted/30 border-none">
                         <CardHeader>
-                            <CardTitle className="text-lg">Tellimuse kokkuvõte</CardTitle>
+                            <CardTitle className="text-lg">{t('summary')}</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex gap-3">
@@ -134,22 +138,21 @@ export function CheckoutPageClient({ listing }: CheckoutPageClientProps) {
 
                             <div className="border-t pt-4 space-y-2">
                                 <div className="flex justify-between text-sm">
-                                    <span>Hind</span>
-                                    <span>{Number(listing.price).toLocaleString("et-EE")} €</span>
+                                    <span>{t('price')}</span>
+                                    <span>{Number(listing.price).toLocaleString(currencyLocale)} €</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span>Teenustasu</span>
-                                    <span className="text-green-600">Tasuta</span>
+                                    <span>{t('serviceFee')}</span>
+                                    <span className="text-green-600">{t('free')}</span>
                                 </div>
                                 <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
-                                    <span>Kokku</span>
-                                    <span>{Number(listing.price).toLocaleString("et-EE")} €</span>
+                                    <span>{t('total')}</span>
+                                    <span>{Number(listing.price).toLocaleString(currencyLocale)} €</span>
                                 </div>
                             </div>
 
                             <div className="text-[10px] text-muted-foreground mt-4 leading-relaxed">
-                                Vajutades &quot;Maksa&quot;, nõustute Kaarplus kasutustingimuste ja privaatsuspoliitikaga.
-                                Teie makset töödeldakse turvaliselt läbi Stripe makselahenduse.
+                                {t('terms')}
                             </div>
                         </CardContent>
                     </Card>

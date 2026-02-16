@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface WriteReviewDialogProps {
   targetId: string;
@@ -26,6 +27,7 @@ export function WriteReviewDialog({
   onSuccess,
   children,
 }: WriteReviewDialogProps) {
+  const { t } = useTranslation(['reviews', 'common']);
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -60,12 +62,12 @@ export function WriteReviewDialog({
 
       if (!res.ok) {
         const err = await res.json().catch(() => null);
-        throw new Error(err?.error ?? "Arvustuse saatmine ebaonnestus");
+        throw new Error(err?.error ?? t('dialog.sendError'));
       }
 
       toast({
-        title: "Arvustus saadetud",
-        description: "Tanan tagasiside eest!",
+        title: t('dialog.successTitle'),
+        description: t('dialog.successDesc'),
       });
 
       setOpen(false);
@@ -75,9 +77,9 @@ export function WriteReviewDialog({
       onSuccess?.();
     } catch (err) {
       toast({
-        title: "Viga",
+        title: t('common.error', { ns: 'common' }),
         description:
-          err instanceof Error ? err.message : "Arvustuse saatmine ebaonnestus",
+          err instanceof Error ? err.message : t('dialog.sendError'),
         variant: "destructive",
       });
     } finally {
@@ -88,17 +90,17 @@ export function WriteReviewDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {children ?? <Button>Kirjuta arvustus</Button>}
+        {children ?? <Button>{t('dialog.title')}</Button>}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Kirjuta arvustus</DialogTitle>
+          <DialogTitle>{t('dialog.title')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-foreground">
-              Hinne
+              {t('dialog.rating')}
             </label>
             <div className="mt-1 flex gap-1">
               {Array.from({ length: 5 }).map((_, i) => {
@@ -128,38 +130,38 @@ export function WriteReviewDialog({
 
           <div>
             <label htmlFor="review-title" className="text-sm font-medium text-foreground">
-              Pealkiri (valikuline)
+              {t('dialog.reviewTitle')}
             </label>
             <Input
               id="review-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Luhike kokkuvote"
+              placeholder={t('dialog.reviewTitlePlaceholder')}
               className="mt-1"
             />
           </div>
 
           <div>
             <label htmlFor="review-body" className="text-sm font-medium text-foreground">
-              Arvustus
+              {t('dialog.reviewBody')}
             </label>
             <Textarea
               id="review-body"
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder="Kirjeldage oma kogemust (vahemalt 10 tarki)"
+              placeholder={t('dialog.reviewBodyPlaceholder')}
               rows={4}
               className="mt-1"
             />
             {body.length > 0 && body.trim().length < 10 && (
               <p className="mt-1 text-xs text-destructive">
-                Vahemalt 10 tarki on vajalik
+                {t('dialog.minCharsLabel')}
               </p>
             )}
           </div>
 
           <Button type="submit" disabled={!isValid || submitting} className="w-full">
-            {submitting ? "Saadan..." : "Saada arvustus"}
+            {submitting ? t('dialog.submitting') : t('dialog.submit')}
           </Button>
         </form>
       </DialogContent>

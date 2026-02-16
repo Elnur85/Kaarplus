@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { MessageCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { et } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,10 +13,21 @@ interface ConversationListProps {
   onSelect: (conv: Conversation) => void;
 }
 
+import { useTranslation } from "react-i18next";
+import { et, enUS, ru } from "date-fns/locale";
+
+const locales: Record<string, any> = {
+  et,
+  en: enUS,
+  ru,
+};
+
 export function ConversationList({
   currentUserId,
   onSelect,
 }: ConversationListProps) {
+  const { t, i18n } = useTranslation('messages');
+  const dateLocale = locales[i18n.language] || et;
   const { conversations, selectedConversation, isLoadingConversations, loadConversations } =
     useMessageStore();
 
@@ -48,9 +58,9 @@ export function ConversationList({
           <MessageCircle className="size-6 text-muted-foreground" />
         </div>
         <div>
-          <p className="text-sm font-medium text-foreground">Sonumeid pole</p>
+          <p className="text-sm font-medium text-foreground">{t('empty.title')}</p>
           <p className="text-xs text-muted-foreground">
-            Teie vestlused ilmuvad siia
+            {t('empty.subtitle')}
           </p>
         </div>
       </div>
@@ -100,12 +110,12 @@ export function ConversationList({
                     isUnread ? "font-semibold text-foreground" : "font-medium text-foreground"
                   )}
                 >
-                  {otherUser.name ?? "Kasutaja"}
+                  {otherUser.name ?? t('user')}
                 </p>
                 <span className="flex-shrink-0 text-xs text-muted-foreground">
                   {formatDistanceToNow(new Date(conv.createdAt), {
                     addSuffix: true,
-                    locale: et,
+                    locale: dateLocale,
                   })}
                 </span>
               </div>
@@ -131,3 +141,4 @@ export function ConversationList({
     </div>
   );
 }
+

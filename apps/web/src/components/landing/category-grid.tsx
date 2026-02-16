@@ -1,33 +1,40 @@
-import { CarFront, Truck, Bus, Zap } from "lucide-react";
+"use client";
+
+import { CarFront, Truck, Bus, Zap, Car } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export function CategoryGrid() {
+    const { t } = useTranslation('home');
     const categories = [
-        { name: "Sedan", icon: CarFront, href: "/listings?bodyType=Sedan" },
-        { name: "Hatchback", icon: CarFront, href: "/listings?bodyType=Hatchback" },
-        { name: "SUV", icon: Truck, href: "/listings?bodyType=SUV" },
-        { name: "Coupe", icon: CarFront, href: "/listings?bodyType=Coupe" },
-        { name: "Convertible", icon: CarFront, href: "/listings?bodyType=Convertible" },
-        { name: "Electric", icon: Zap, href: "/listings?fuelType=Electric" },
-        { name: "Hybrid", icon: Zap, href: "/listings?fuelType=Hybrid" },
-        { name: "Commercial", icon: Bus, href: "/listings?bodyType=Van" },
+        { key: "sedan", name: t('categories.grid.sedan'), icon: CarFront, href: "/listings?bodyType=Sedan" },
+        { key: "suv", name: t('categories.grid.suv'), icon: Car, href: "/listings?bodyType=SUV" },
+        { key: "coupe", name: t('categories.grid.coupe'), icon: CarFront, href: "/listings?bodyType=Coupe" },
+        { key: "touring", name: t('categories.grid.touring', { defaultValue: 'Touring' }), icon: CarFront, href: "/listings?bodyType=Touring" },
+        { key: "hatchback", name: t('categories.grid.hatchback'), icon: CarFront, href: "/listings?bodyType=Hatchback" },
+        { key: "cabriolet", name: t('categories.grid.cabriolet', { defaultValue: 'Cabriolet' }), icon: CarFront, href: "/listings?bodyType=Cabriolet" },
+        { key: "van", name: t('categories.grid.van', { defaultValue: 'Van' }), icon: Bus, href: "/listings?bodyType=Van" },
+        { key: "pickup", name: t('categories.grid.pickup', { defaultValue: 'Pickup' }), icon: Truck, href: "/listings?bodyType=Pickup" },
     ];
 
     return (
-        <section className="container py-16 px-4 md:px-6">
-            <h2 className="text-3xl font-bold mb-8 text-center">Sirvi kategooriate kaupa</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                {categories.map((cat, index) => (
-                    <Link
-                        key={index}
-                        href={cat.href}
-                        className="flex flex-col items-center justify-center p-6 bg-card hover:bg-muted/50 transition-colors border rounded-lg gap-2 group"
-                    >
-                        <cat.icon className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
-                        <span className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">{cat.name}</span>
-                    </Link>
-                ))}
+        <section className="py-16 bg-white dark:bg-background/50">
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-bold mb-10 text-center">{t('categories.gridTitle')}</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                    {categories.map((cat, index) => (
+                        <Link
+                            key={index}
+                            href={cat.href}
+                            className="group flex flex-col items-center p-6 bg-slate-50 dark:bg-slate-800/50 rounded-xl hover:bg-primary/10 hover:-translate-y-1 transition-all duration-300"
+                        >
+                            <cat.icon className="h-9 w-9 text-slate-400 group-hover:text-primary mb-3 transition-colors" />
+                            <span className="font-semibold text-sm transition-colors group-hover:text-primary">{cat.name}</span>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </section>
     );
 }
+

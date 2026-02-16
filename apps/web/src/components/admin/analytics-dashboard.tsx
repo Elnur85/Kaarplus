@@ -11,11 +11,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
+import { useTranslation } from "react-i18next";
+
 export function AnalyticsDashboard() {
+    const { t, i18n } = useTranslation('admin');
     const { data: session } = useSession();
     const [data, setData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const localeCode = i18n.language === 'et' ? 'et-EE' : i18n.language === 'ru' ? 'ru-RU' : 'en-GB';
 
     const fetchAnalytics = useCallback(async () => {
         if (!session?.user?.apiToken) return;
@@ -28,7 +33,7 @@ export function AnalyticsDashboard() {
                 },
             });
 
-            if (!res.ok) throw new Error("Viga andmete laadimisel");
+            if (!res.ok) throw new Error(t('queue.error.message'));
             const result = await res.json();
             setData(result.data);
         } catch (err: any) {
@@ -36,7 +41,7 @@ export function AnalyticsDashboard() {
         } finally {
             setIsLoading(false);
         }
-    }, [session, setIsLoading, setData, setError]);
+    }, [session, setIsLoading, setData, setError, t]);
 
     useEffect(() => {
         if (session) {
@@ -48,7 +53,7 @@ export function AnalyticsDashboard() {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="animate-spin text-primary" size={40} />
-                <p className="text-muted-foreground animate-pulse">Analüütika laadimine...</p>
+                <p className="text-muted-foreground animate-pulse">{t('dashboard.loading')}</p>
             </div>
         );
     }
@@ -57,9 +62,9 @@ export function AnalyticsDashboard() {
         return (
             <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-8 text-center max-w-lg mx-auto">
                 <AlertCircle className="text-destructive mx-auto mb-4" size={48} />
-                <h3 className="text-xl font-bold text-destructive">Midagi läks valesti</h3>
+                <h3 className="text-xl font-bold text-destructive">{t('queue.error.title')}</h3>
                 <p className="text-muted-foreground mt-2 mb-6">{error}</p>
-                <Button onClick={fetchAnalytics} variant="outline">Proovi uuesti</Button>
+                <Button onClick={fetchAnalytics} variant="outline">{t('queue.error.retry')}</Button>
             </div>
         );
     }
@@ -70,43 +75,43 @@ export function AnalyticsDashboard() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Ülevaade ja Analüütika</h2>
+                    <h2 className="text-3xl font-bold tracking-tight">{t('dashboard.title')}</h2>
                     <p className="text-muted-foreground mt-1">
-                        Platvormi statistika, kasutajad ja finantsnäitajad.
+                        {t('dashboard.description')}
                     </p>
                 </div>
-                <Button variant="outline" size="sm" onClick={fetchAnalytics}>Värskenda</Button>
+                <Button variant="outline" size="sm" onClick={fetchAnalytics}>{t('dashboard.refresh')}</Button>
             </div>
 
             {/* Stats Grid */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatsCard
-                    title="Kogutulu"
-                    value={`${data.summary.totalRevenue.toLocaleString("et-EE")} €`}
+                    title={t('dashboard.stats.revenue.title')}
+                    value={`${data.summary.totalRevenue.toLocaleString(localeCode)} €`}
                     icon={DollarSign}
-                    description="Kogu teenitud tulu"
-                    trend="+12% kuus"
+                    description={t('dashboard.stats.revenue.description')}
+                    trend={t('dashboard.stats.revenue.trend', { trend: "+12%" })}
                     trendUp={true}
                 />
                 <StatsCard
-                    title="Aktiivsed kuulutused"
+                    title={t('dashboard.stats.activeListings.title')}
                     value={data.summary.activeListings}
                     icon={Car}
-                    description={`${data.summary.totalListings} kokku lisatud`}
+                    description={t('dashboard.stats.activeListings.description', { count: data.summary.totalListings })}
                 />
                 <StatsCard
-                    title="Registreeritud kasutajad"
+                    title={t('dashboard.stats.users.title')}
                     value={data.summary.totalUsers}
                     icon={Users}
-                    description="+5 täna"
-                    trend="+4% nädalas"
+                    description={t('dashboard.stats.users.description', { count: 5 })}
+                    trend={t('dashboard.stats.users.trend', { trend: "+4%" })}
                     trendUp={true}
                 />
                 <StatsCard
-                    title="Müüdud sõidukid"
+                    title={t('dashboard.stats.soldVehicles.title')}
                     value={data.summary.soldListings}
                     icon={ShoppingCart}
-                    description="Edukad tehingud"
+                    description={t('dashboard.stats.soldVehicles.description')}
                 />
             </div>
 
@@ -114,7 +119,7 @@ export function AnalyticsDashboard() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <div className="col-span-4">
                     <AnalyticsChart
-                        title="Uued kuulutused (30 päeva)"
+                        title={t('dashboard.charts.newListings')}
                         data={data.charts.listings}
                         dataKey="count"
                         color="#0ea5e9"
@@ -122,7 +127,7 @@ export function AnalyticsDashboard() {
                 </div>
                 <div className="col-span-3">
                     <AnalyticsChart
-                        title="Uued kasutajad (30 päeva)"
+                        title={t('dashboard.charts.newUsers')}
                         data={data.charts.registrations}
                         dataKey="count"
                         color="#10b981"
@@ -133,35 +138,35 @@ export function AnalyticsDashboard() {
             {/* Recent Activity Tabs */}
             <Tabs defaultValue="payments" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="payments">Viimased maksed</TabsTrigger>
-                    <TabsTrigger value="users">Uued kasutajad</TabsTrigger>
+                    <TabsTrigger value="payments">{t('dashboard.tabs.payments')}</TabsTrigger>
+                    <TabsTrigger value="users">{t('dashboard.tabs.users')}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="payments" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Viimased tehingud</CardTitle>
+                            <CardTitle>{t('dashboard.tables.transactions.title')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Kuupäev</TableHead>
-                                        <TableHead>Summa</TableHead>
-                                        <TableHead>Staatus</TableHead>
+                                        <TableHead>{t('dashboard.tables.transactions.date')}</TableHead>
+                                        <TableHead>{t('dashboard.tables.transactions.amount')}</TableHead>
+                                        <TableHead>{t('dashboard.tables.transactions.status')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {data.recent.payments.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                                                Tehingud puuduvad
+                                                {t('dashboard.tables.transactions.empty')}
                                             </TableCell>
                                         </TableRow>
                                     ) : (
                                         data.recent.payments.map((payment: any) => (
                                             <TableRow key={payment.id}>
-                                                <TableCell>{new Date(payment.createdAt).toLocaleDateString("et-EE")}</TableCell>
-                                                <TableCell className="font-medium">{Number(payment.amount).toLocaleString("et-EE")} {payment.currency}</TableCell>
+                                                <TableCell>{new Date(payment.createdAt).toLocaleDateString(localeCode)}</TableCell>
+                                                <TableCell className="font-medium">{Number(payment.amount).toLocaleString(localeCode)} {payment.currency}</TableCell>
                                                 <TableCell>
                                                     <Badge variant={payment.status === "COMPLETED" ? "default" : "secondary"}>
                                                         {payment.status}
@@ -178,16 +183,16 @@ export function AnalyticsDashboard() {
                 <TabsContent value="users" className="space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Viimati liitunud</CardTitle>
+                            <CardTitle>{t('dashboard.tables.recentUsers.title')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Nimi</TableHead>
-                                        <TableHead>Email</TableHead>
-                                        <TableHead>Roll</TableHead>
-                                        <TableHead>Liitus</TableHead>
+                                        <TableHead>{t('dashboard.tables.recentUsers.name')}</TableHead>
+                                        <TableHead>{t('dashboard.tables.recentUsers.email')}</TableHead>
+                                        <TableHead>{t('dashboard.tables.recentUsers.role')}</TableHead>
+                                        <TableHead>{t('dashboard.tables.recentUsers.joined')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -198,7 +203,7 @@ export function AnalyticsDashboard() {
                                             <TableCell>
                                                 <Badge variant="outline">{user.role}</Badge>
                                             </TableCell>
-                                            <TableCell>{new Date(user.createdAt).toLocaleDateString("et-EE")}</TableCell>
+                                            <TableCell>{new Date(user.createdAt).toLocaleDateString(localeCode)}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -210,3 +215,4 @@ export function AnalyticsDashboard() {
         </div>
     );
 }
+

@@ -3,6 +3,7 @@
         "home": "Avaleht",
         "listings": "Kuulutused",
         "sell": "Müü auto",
+        "compare": "Võrdle",
         "favorites": "Lemmikud",
         "messages": "Sõnumid",
         "dashboard": "Töölaud",
@@ -13,10 +14,31 @@
         "profile": "Profiil"
     },
     "footer": {
-        "aboutUs": "Meist",
-        "contact": "Kontakt",
-        "terms": "Tingimused",
-        "privacy": "Privaatsus",
+        "description": "Kaarplus on Eesti suurim ja usaldusväärseim autode ost-müügi platvorm. Aitame teil leida unistuste auto turvaliselt ja kiirelt.",
+        "services": {
+            "title": "Teenused",
+            "allListings": "Kõik kuulutused",
+            "sellYourCar": "Müü oma auto",
+            "advancedSearch": "Täppisotsing",
+            "inspections": "Tehniline kontroll"
+        },
+        "company": {
+            "title": "Ettevõttest",
+            "aboutUs": "Meist",
+            "faq": "KKK",
+            "terms": "Kasutustingimused",
+            "privacy": "Privaatsuspoliitika"
+        },
+        "newsletter": {
+            "title": "Liitu uudiskirjaga",
+            "description": "Saa parimad pakkumised ja automaailma uudised otse oma postkasti.",
+            "placeholder": "teie@email.ee",
+            "success": "Uudiskiri tellitud!",
+            "consent": "Liitudes nõustute meie privaatsustingimustega.",
+            "toastSuccess": "Tellimine õnnestus!",
+            "toastDescription": "Olete nüüd lisatud meie uudiskirja nimekirja.",
+            "toastError": "Viga uudiskirjaga liitumisel."
+        },
         "allRightsReserved": "Kõik õigused kaitstud",
         "followUs": "Jälgi meid"
     },
@@ -48,8 +70,8 @@
     "date": {
         "today": "Täna",
         "yesterday": "Eile",
-        "daysAgo": "{count} päeva tagasi",
-        "weeksAgo": "{count} nädalat tagasi",
-        "monthsAgo": "{count} kuud tagasi"
+        "daysAgo": "{{count}} päeva tagasi",
+        "weeksAgo": "{{count}} nädalat tagasi",
+        "monthsAgo": "{{count}} kuud tagasi"
     }
 }

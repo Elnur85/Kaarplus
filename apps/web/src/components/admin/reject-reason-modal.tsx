@@ -19,21 +19,24 @@ interface RejectReasonModalProps {
     listingTitle: string;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function RejectReasonModal({ isOpen, onClose, onConfirm, listingTitle }: RejectReasonModalProps) {
+    const { t } = useTranslation('admin');
     const [reason, setReason] = useState("");
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Lükka kuulutus tagasi</DialogTitle>
+                    <DialogTitle>{t('rejectModal.title')}</DialogTitle>
                     <DialogDescription>
-                        Palun lisage põhjus, miks kuulutus &ldquo;{listingTitle}&rdquo; tagasi lükatakse. See saadetakse ka kasutajale.
+                        {t('rejectModal.description', { title: listingTitle })}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-4">
                     <Textarea
-                        placeholder="Nt: Pildid ei vasta nõuetele, puudulik kirjeldus..."
+                        placeholder={t('rejectModal.placeholder')}
                         value={reason}
                         onChange={(e) => setReason(e.target.value)}
                         className="min-h-[100px]"
@@ -41,17 +44,18 @@ export function RejectReasonModal({ isOpen, onClose, onConfirm, listingTitle }: 
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Tühista
+                        {t('rejectModal.cancel')}
                     </Button>
                     <Button
                         variant="destructive"
                         onClick={() => onConfirm(reason)}
                         disabled={!reason.trim()}
                     >
-                        Lükka tagasi
+                        {t('rejectModal.confirm')}
                     </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     );
 }
+

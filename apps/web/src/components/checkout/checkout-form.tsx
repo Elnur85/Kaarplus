@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface CheckoutFormProps {
     listingId: string;
@@ -16,12 +17,15 @@ interface CheckoutFormProps {
 }
 
 export function CheckoutForm({ listingId, amount }: CheckoutFormProps) {
+    const { t, i18n } = useTranslation('checkout');
     const stripe = useStripe();
     const elements = useElements();
     const { toast } = useToast();
 
     const [message, setMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const currencyLocale = i18n.language === 'et' ? "et-EE" : i18n.language === 'ru' ? "ru-RU" : "en-US";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,17 +44,17 @@ export function CheckoutForm({ listingId, amount }: CheckoutFormProps) {
         });
 
         if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message || "Midagi läks valesti.");
+            setMessage(error.message || t('form.errorOccurred'));
             toast({
-                title: "Makse ebaõnnestus",
+                title: t('form.paymentFailed'),
                 description: error.message,
                 variant: "destructive",
             });
         } else {
-            setMessage("Ootamatu viga ilmnes.");
+            setMessage(t('form.unexpectedError'));
             toast({
-                title: "Viga",
-                description: "Ootamatu viga ilmnes.",
+                title: t('common.error', { ns: 'common' }),
+                description: t('form.unexpectedError'),
                 variant: "destructive",
             });
         }
@@ -69,15 +73,17 @@ export function CheckoutForm({ listingId, amount }: CheckoutFormProps) {
                     className="w-full h-12 text-lg font-semibold"
                 >
                     {isLoading ? (
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" /> {t('form.paying')}
+                        </>
                     ) : (
-                        `Maksa ${amount.toLocaleString("et-EE")} €`
+                        t('form.pay', { amount: amount.toLocaleString(currencyLocale) })
                     )}
                 </Button>
 
                 <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                     <ShieldCheck size={16} className="text-green-600" />
-                    <span>Turvaline makse krüpteeritud ühendusega</span>
+                    <span>{t('form.secureConnection')}</span>
                 </div>
             </div>
 

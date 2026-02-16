@@ -20,11 +20,14 @@ import { useFilterStore } from "@/store/use-filter-store";
 import { API_URL } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 
+import { useTranslation } from "react-i18next";
+
 interface SaveSearchModalProps {
     trigger?: React.ReactNode;
 }
 
 export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
+    const { t } = useTranslation('search');
     const { data: session } = useSession();
     const filters = useFilterStore();
     const { toast } = useToast();
@@ -38,8 +41,8 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
     const handleSave = async () => {
         if (!session) {
             toast({
-                title: "Vajalik sisselogimine",
-                description: "Otsingu salvestamiseks peate olema sisse logitud.",
+                title: t('saveSearch.errors.loginRequired.title'),
+                description: t('saveSearch.errors.loginRequired.description'),
                 variant: "destructive",
             });
             return;
@@ -47,8 +50,8 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
 
         if (!name.trim()) {
             toast({
-                title: "Nimi puudub",
-                description: "Palun sisestage otsingule nimi.",
+                title: t('saveSearch.errors.nameMissing.title'),
+                description: t('saveSearch.errors.nameMissing.description'),
                 variant: "destructive",
             });
             return;
@@ -96,7 +99,7 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || "Failed to save search");
+                throw new Error(errorData.error || t('saveSearch.errors.saveFailed.default'));
             }
 
             setIsSuccess(true);
@@ -107,14 +110,14 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
             }, 2000);
 
             toast({
-                title: "Otsing salvestatud",
-                description: `Otsing "${name}" on nüüd teie profiilis salvestatud.`,
+                title: t('saveSearch.toast.successTitle'),
+                description: t('saveSearch.toast.successDescription', { name }),
             });
         } catch (error) {
             console.error("Save search error:", error);
             toast({
-                title: "Viga salvestamisel",
-                description: error instanceof Error ? error.message : "Tekkis viga otsingu salvestamisel.",
+                title: t('saveSearch.errors.saveFailed.title'),
+                description: error instanceof Error ? error.message : t('saveSearch.errors.saveFailed.default'),
                 variant: "destructive",
             });
         } finally {
@@ -130,7 +133,7 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
                 {trigger || (
                     <Button variant="outline" size="sm" className="gap-2">
                         <Bookmark size={16} />
-                        Salvesta otsing
+                        {t('saveSearch.trigger')}
                     </Button>
                 )}
             </DialogTrigger>
@@ -141,26 +144,26 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
                             <CheckCircle2 size={32} />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold">Salvestatud!</h3>
+                            <h3 className="text-xl font-bold">{t('saveSearch.successTitle')}</h3>
                             <p className="text-muted-foreground mt-1">
-                                Teie otsing on edukalt salvestatud.
+                                {t('saveSearch.successDescription')}
                             </p>
                         </div>
                     </div>
                 ) : (
                     <>
                         <DialogHeader>
-                            <DialogTitle>Salvesta otsing</DialogTitle>
+                            <DialogTitle>{t('saveSearch.title')}</DialogTitle>
                             <DialogDescription>
-                                Salvestage praegused filtrid, et saaksite need hiljem kiiresti uuesti avada.
+                                {t('saveSearch.description')}
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-6 py-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Otsingu nimi</Label>
+                                <Label htmlFor="name">{t('saveSearch.nameLabel')}</Label>
                                 <Input
                                     id="name"
-                                    placeholder="nt. Neliveolised BMW-d Tallinnas"
+                                    placeholder={t('saveSearch.namePlaceholder')}
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     autoFocus
@@ -170,10 +173,10 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
                                 <div className="space-y-0.5">
                                     <Label className="text-base font-medium flex items-center gap-2">
                                         <Bell size={16} className="text-primary" />
-                                        E-posti teavitused
+                                        {t('saveSearch.emailAlertsLabel')}
                                     </Label>
                                     <p className="text-sm text-muted-foreground">
-                                        Saame teile teada anda, kui lisandub uusi vastavaid autosid.
+                                        {t('saveSearch.emailAlertsDescription')}
                                     </p>
                                 </div>
                                 <Switch
@@ -192,10 +195,10 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
                                 {isSubmitting ? (
                                     <>
                                         <Loader2 size={16} className="mr-2 animate-spin" />
-                                        Salvestamine...
+                                        {t('saveSearch.submitting')}
                                     </>
                                 ) : (
-                                    "Salvesta otsing"
+                                    t('saveSearch.submit')
                                 )}
                             </Button>
                         </DialogFooter>
@@ -205,3 +208,4 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
         </Dialog>
     );
 }
+

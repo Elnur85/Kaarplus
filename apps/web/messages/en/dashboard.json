@@ -1,0 +1,136 @@
+{
+    "overview": {
+        "title": "Dashboard",
+        "welcome": "Welcome back! Here is an overview of your listings.",
+        "addListing": "Add Listing",
+        "recentListings": "Recent Listings",
+        "viewAll": "View all"
+    },
+    "sidebar": {
+        "nav": {
+            "overview": "Overview",
+            "myListings": "My Listings",
+            "favorites": "Favorites",
+            "savedSearches": "Saved searches",
+            "settings": "Settings"
+        },
+        "user": "User",
+        "clientType": "Private client"
+    },
+    "stats": {
+        "activeListings": "Active listings",
+        "totalViews": "Total views",
+        "totalFavorites": "Total favorites",
+        "totalMessages": "Messages",
+        "thisMonth": "this month"
+    },
+    "listings": {
+        "title": "My Listings",
+        "description": "Here you can manage your active and past listings.",
+        "status": {
+            "active": "Active",
+            "pending": "Pending",
+            "sold": "Sold",
+            "rejected": "Rejected",
+            "draft": "Draft",
+            "inactive": "Inactive"
+        },
+        "table": {
+            "listing": "Listing",
+            "price": "Price",
+            "status": "Status",
+            "views": "Views",
+            "favorites": "Favorites",
+            "date": "Date",
+            "actions": "Actions",
+            "empty": "You don't have any listings yet."
+        },
+        "actions": {
+            "edit": "Edit",
+            "markSold": "Mark as sold",
+            "delete": "Delete",
+            "deleteConfirm": "Are you sure? This action cannot be undone."
+        },
+        "pagination": {
+            "page": "Page {{current}}/{{total}}",
+            "total": "{{count}} listings",
+            "previous": "Previous",
+            "next": "Next"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "description": "Manage your account settings and preferences.",
+        "profile": {
+            "title": "Profile Information",
+            "name": "Name",
+            "email": "Email",
+            "phone": "Phone",
+            "help": "To change your profile, please contact customer support."
+        },
+        "notifications": {
+            "title": "Notification Preferences",
+            "email": {
+                "title": "Email Notifications",
+                "description": "Receive listing notifications by email"
+            },
+            "messages": {
+                "title": "New Messages",
+                "description": "Notify me about new messages"
+            },
+            "favorites": {
+                "title": "Favorites",
+                "description": "Notify me about price changes in favorites"
+            },
+            "marketing": {
+                "title": "Marketing",
+                "description": "Send me offers and news"
+            }
+        },
+        "gdpr": {
+            "title": "Data Protection (GDPR)",
+            "export": {
+                "title": "Export Your Data",
+                "description": "Download all data related to your account in JSON format",
+                "button": "Export data"
+            },
+            "delete": {
+                "title": "Delete Account",
+                "description": "Permanently delete your account and all associated data",
+                "button": "Delete account"
+            },
+            "privacy": "For more information on data processing, see our privacy policy."
+        },
+        "save": "Save changes"
+    },
+    "savedSearches": {
+        "title": "Saved searches",
+        "description": "Manage your saved search filters and email notifications.",
+        "empty": {
+            "title": "You don't have any saved searches yet",
+            "description": "Save your favorite searches to stay informed about new listings and save time.",
+            "button": "Start searching"
+        },
+        "card": {
+            "saved": "Saved {{date}}",
+            "allVehicles": "All vehicles",
+            "alerts": "Notifications",
+            "view": "Edit / View"
+        },
+        "delete": {
+            "title": "Are you sure?",
+            "description": "This action will remove the saved search \"{{name}}\". This cannot be undone.",
+            "button": "Delete"
+        },
+        "toasts": {
+            "fetchError": "Failed to load saved searches.",
+            "deleteSuccess": "Search deleted",
+            "deleteSuccessDesc": "Your saved search has been removed.",
+            "deleteError": "Deletion failed.",
+            "alertsUpdate": "Notifications updated",
+            "alertsOn": "Email notifications are now active.",
+            "alertsOff": "Email notifications are turned off.",
+            "updateError": "Update failed."
+        }
+    }
+}

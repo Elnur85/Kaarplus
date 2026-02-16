@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Send, ArrowLeft, Car } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { et } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -17,11 +16,22 @@ interface MessageThreadProps {
   onBack?: () => void;
 }
 
+import { useTranslation } from "react-i18next";
+import { et, enUS, ru } from "date-fns/locale";
+
+const locales: Record<string, any> = {
+  et,
+  en: enUS,
+  ru,
+};
+
 export function MessageThread({
   conversation,
   currentUserId,
   onBack,
 }: MessageThreadProps) {
+  const { t, i18n } = useTranslation('messages');
+  const dateLocale = locales[i18n.language] || et;
   const { currentThread, isLoadingThread, isSending, loadThread, sendMessage } =
     useMessageStore();
   const [messageBody, setMessageBody] = useState("");
@@ -96,7 +106,7 @@ export function MessageThread({
 
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-foreground">
-            {otherUser.name ?? "Kasutaja"}
+            {otherUser.name ?? t('user')}
           </p>
           {conversation.listing && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -134,7 +144,7 @@ export function MessageThread({
         ) : currentThread.length === 0 ? (
           <div className="flex h-full items-center justify-center">
             <p className="text-sm text-muted-foreground">
-              Alustage vestlust, saates sonumi
+              {t('thread.emptyThread')}
             </p>
           </div>
         ) : (
@@ -165,7 +175,7 @@ export function MessageThread({
                     >
                       {formatDistanceToNow(new Date(msg.createdAt), {
                         addSuffix: true,
-                        locale: et,
+                        locale: dateLocale,
                       })}
                     </p>
                   </div>
@@ -184,7 +194,7 @@ export function MessageThread({
             value={messageBody}
             onChange={(e) => setMessageBody(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Kirjutage sonum..."
+            placeholder={t('thread.placeholder')}
             rows={1}
             className="min-h-[40px] max-h-[120px] resize-none"
             disabled={isSending}
@@ -201,3 +211,4 @@ export function MessageThread({
     </div>
   );
 }
+

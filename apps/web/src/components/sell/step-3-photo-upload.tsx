@@ -12,7 +12,10 @@ interface Step3PhotoUploadProps {
     onFilesChange: (files: File[]) => void;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps) {
+    const { t } = useTranslation('sell');
     const onDrop = useCallback((acceptedFiles: File[]) => {
         onFilesChange([...files, ...acceptedFiles]);
     }, [files, onFilesChange]);
@@ -36,9 +39,9 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
     return (
         <div className="space-y-8">
             <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold tracking-tight">Lisage fotod</h2>
+                <h2 className="text-2xl font-bold tracking-tight">{t('step3.title')}</h2>
                 <p className="text-muted-foreground mt-2">
-                    Heade piltidega kuulutus müüb kiiremini. Lisage vähemalt 3 fotot.
+                    {t('step3.description')}
                 </p>
             </div>
 
@@ -56,12 +59,12 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4">
                         <Upload size={32} />
                     </div>
-                    <p className="text-lg font-bold">Lohistage fotod siia või klõpsake</p>
+                    <p className="text-lg font-bold">{t('step3.dropzone.title')}</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                        PNG, JPG või WEBP kuni 10MB (max 30 fotot)
+                        {t('step3.dropzone.subtitle')}
                     </p>
                     <Button variant="secondary" className="mt-6 font-bold">
-                        Vali failid arvutist
+                        {t('step3.dropzone.button')}
                     </Button>
                 </div>
             </div>
@@ -69,14 +72,11 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 flex items-start gap-4">
                 <AlertCircle className="text-blue-500 shrink-0 mt-1" size={24} />
                 <div className="space-y-2">
-                    <p className="font-bold text-blue-900">Nõuanded parimate piltide saamiseks:</p>
+                    <p className="font-bold text-blue-900">{t('step3.tips.title')}</p>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm text-blue-800 list-disc pl-4">
-                        <li>Tehke pilte päevavalguses, vältige pimedust ja varje</li>
-                        <li>Pildistage autot kõigi nurkade alt (esi, taga, küljed)</li>
-                        <li>Lisage pildid salongist, näidikuplokist ja istmetest</li>
-                        <li>Näidake mootoriruumi ja velgi</li>
-                        <li>Vältige udused pilte, hoidke kaamerat kindlalt</li>
-                        <li>Tooge välja kõik kahjustused või erilised lisad</li>
+                        {(t('step3.tips.list', { returnObjects: true }) as string[]).map((tip, i) => (
+                            <li key={i}>{tip}</li>
+                        ))}
                     </ul>
                 </div>
             </div>
@@ -90,7 +90,7 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
                         >
                             <Image
                                 src={URL.createObjectURL(file)}
-                                alt={`Pilt ${index + 1}`}
+                                alt={t('step3.photoNumber', { index: index + 1 })}
                                 fill
                                 className="object-cover"
                             />
@@ -104,7 +104,7 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
                             </div>
                             {index === 0 && (
                                 <div className="absolute bottom-0 left-0 right-0 bg-primary text-white text-[10px] font-extrabold uppercase py-1 text-center tracking-wider">
-                                    Peapilt
+                                    {t('step3.mainPhoto')}
                                 </div>
                             )}
                             <div className="absolute top-2 left-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded backdrop-blur-sm">
@@ -118,7 +118,9 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
                             className="aspect-video bg-muted/50 rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-muted hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer text-muted-foreground hover:text-primary"
                         >
                             <Camera size={24} className="mb-2" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-center px-2">Lisage veel (kuni {30 - files.length})</span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-center px-2">
+                                {t('step3.addMore', { count: 30 - files.length })}
+                            </span>
                         </div>
                     )}
                 </div>
@@ -126,3 +128,4 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
         </div>
     );
 }
+

@@ -17,7 +17,7 @@ export function SortControls() {
         <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground whitespace-nowrap hidden sm:inline">Sorteeri:</span>
             <Select value={sort} onValueChange={(val) => setFilter("sort", val)}>
-                <SelectTrigger className="w-[180px] h-9 text-sm font-medium">
+                <SelectTrigger className="w-[200px] h-10 text-sm font-medium bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-lg focus:ring-primary focus:border-primary">
                     <SelectValue placeholder="Sorteeri" />
                 </SelectTrigger>
                 <SelectContent>

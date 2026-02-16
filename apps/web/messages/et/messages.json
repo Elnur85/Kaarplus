@@ -1,0 +1,18 @@
+{
+    "title": "Sõnumid",
+    "conversations": "Vestlused",
+    "authRequired": "Sisselogimine on vajalik sõnumite vaatamiseks.",
+    "user": "Kasutaja",
+    "noSelected": {
+        "title": "Valige vestlus",
+        "subtitle": "Valige vestlus vasakult, et näha sõnumeid"
+    },
+    "empty": {
+        "title": "Sõnumeid pole",
+        "subtitle": "Teie vestlused ilmuvad siia"
+    },
+    "thread": {
+        "placeholder": "Kirjutage sõnum...",
+        "emptyThread": "Alustage vestlust, saates sõnumi"
+    }
+}

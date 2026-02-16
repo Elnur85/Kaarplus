@@ -1,0 +1,20 @@
+{
+    "noReviews": "Отзывов пока нет",
+    "previous": "Предыдущий",
+    "next": "Следующий",
+    "fetchError": "Ошибка при загрузке отзывов",
+    "dialog": {
+        "title": "Написать отзыв",
+        "rating": "Оценка",
+        "reviewTitle": "Заголовок (необязательно)",
+        "reviewTitlePlaceholder": "Краткое резюме",
+        "reviewBody": "Отзыв",
+        "reviewBodyPlaceholder": "Опишите ваш опыт (минимум 10 символов)",
+        "minCharsLabel": "Требуется минимум 10 символов",
+        "submit": "Отправить отзыв",
+        "submitting": "Отправка...",
+        "successTitle": "Отзыв отправлен",
+        "successDesc": "Спасибо за ваш отзыв!",
+        "sendError": "Не удалось отправить отзыв"
+    }
+}

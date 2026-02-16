@@ -14,21 +14,24 @@ const mockStats = {
   totalMessages: 12,
 };
 
+import { useTranslation } from "react-i18next";
+
 export function DashboardOverview() {
+  const { t } = useTranslation('dashboard');
   return (
     <div className="space-y-8">
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Töölaud</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t('overview.title')}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Tere tulemast tagasi! Siin on teie kuulutuste ülevaade.
+            {t('overview.welcome')}
           </p>
         </div>
         <Button asChild>
           <Link href="/sell">
             <Plus className="mr-2 size-4" />
-            Lisa kuulutus
+            {t('overview.addListing')}
           </Link>
         </Button>
       </div>
@@ -40,11 +43,11 @@ export function DashboardOverview() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">
-            Viimased kuulutused
+            {t('overview.recentListings')}
           </h2>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/dashboard/listings">
-              Vaata kõiki
+              {t('overview.viewAll')}
               <ArrowRight className="ml-1 size-4" />
             </Link>
           </Button>
@@ -54,3 +57,4 @@ export function DashboardOverview() {
     </div>
   );
 }
+

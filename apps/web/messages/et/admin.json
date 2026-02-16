@@ -1,0 +1,114 @@
+{
+    "layout": {
+        "adminPanel": "Admin Panel",
+        "nav": {
+            "overview": "Ülevaade",
+            "queue": "Kinnitamise järjekord",
+            "users": "Kasutajad",
+            "settings": "Seaded"
+        },
+        "backToPortal": "Tagasi portaali",
+        "welcome": "Tere tulemast tagasi, {name}"
+    },
+    "queue": {
+        "title": "Kinnitamise järjekord",
+        "description": "Saabunud kuulutused, mis ootavad ülevaatamist ({count}).",
+        "refresh": "Uuenda nimekirja",
+        "loading": "Andmete laadimine...",
+        "error": {
+            "title": "Midagi läks valesti",
+            "message": "Viga andmete laadimisel",
+            "retry": "Proovi uuesti"
+        },
+        "empty": {
+            "title": "Kõik puhas!",
+            "message": "Hetkel ei ole ühtegi kinnitamist ootavat kuulutust. Head tööd!",
+            "refresh": "Värskenda"
+        },
+        "card": {
+            "photoCount": "{count} pilti",
+            "user": "Kasutaja",
+            "showMore": "Rohkem",
+            "showLess": "Vähem",
+            "reject": "Lükka tagasi",
+            "approve": "Kinnita",
+            "sections": {
+                "specs": "Tehnilised andmed",
+                "description": "Kirjeldus",
+                "vin": "VIN-kood",
+                "photos": "Fotod"
+            },
+            "noDescription": "Kirjeldus puudub.",
+            "noVin": "Puudub",
+            "checkHistory": "Kontrolli ajalugu"
+        },
+        "toasts": {
+            "approved": {
+                "title": "Kinnitatud",
+                "description": "Kuulutus on nüüd avalikult nähtav."
+            },
+            "rejected": {
+                "title": "Tagasi lükatud",
+                "description": "Kuulutus on tagasi lükatud ja teavitus saadetud."
+            },
+            "error": "Viga"
+        }
+    },
+    "rejectModal": {
+        "title": "Lükka kuulutus tagasi",
+        "description": "Palun lisage põhjus, miks kuulutus “{title}” tagasi lükatakse. See saadetakse ka kasutajale.",
+        "placeholder": "Nt: Pildid ei vasta nõuetele, puudulik kirjeldus...",
+        "cancel": "Tühista",
+        "confirm": "Lükka tagasi"
+    },
+    "dashboard": {
+        "title": "Ülevaade ja Analüütika",
+        "description": "Platvormi statistika, kasutajad ja finantsnäitajad.",
+        "refresh": "Värskenda",
+        "loading": "Analüütika laadimine...",
+        "stats": {
+            "revenue": {
+                "title": "Kogutulu",
+                "description": "Kogu teenitud tulu",
+                "trend": "{trend} kuus"
+            },
+            "activeListings": {
+                "title": "Aktiivsed kuulutused",
+                "description": "{count} kokku lisatud"
+            },
+            "users": {
+                "title": "Registreeritud kasutajad",
+                "description": "+{count} täna",
+                "trend": "{trend} nädalas"
+            },
+            "soldVehicles": {
+                "title": "Müüdud sõidukid",
+                "description": "Edukad tehingud"
+            }
+        },
+        "charts": {
+            "newListings": "Uued kuulutused (30 päeva)",
+            "newUsers": "Uued kasutajad (30 päeva)"
+        },
+        "tabs": {
+            "payments": "Viimased maksed",
+            "users": "Uued kasutajad"
+        },
+        "tables": {
+            "transactions": {
+                "title": "Viimased tehingud",
+                "date": "Kuupäev",
+                "amount": "Summa",
+                "status": "Staatus",
+                "empty": "Tehingud puuduvad"
+            },
+            "recentUsers": {
+                "title": "Viimati liitunud",
+                "name": "Nimi",
+                "email": "Email",
+                "role": "Roll",
+                "joined": "Liitus"
+            }
+        }
+    }
+}

@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { VehicleCard } from "@/components/shared/vehicle-card";
 import { VehicleSummary } from "@/types/vehicle";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface RelatedCarsProps {
     listingId: string;
 }
 
 export function RelatedCars({ listingId }: RelatedCarsProps) {
+    const { t } = useTranslation('carDetail');
     const [cars, setCars] = useState<VehicleSummary[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -26,7 +28,7 @@ export function RelatedCars({ listingId }: RelatedCarsProps) {
     return (
         <section className="mt-20">
             <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold tracking-tight">Sarnased kuulutused</h2>
+                <h2 className="text-2xl font-bold tracking-tight">{t('similarListings')}</h2>
                 <div className="flex gap-2">
                     {/* Mock scroll buttons */}
                     <button className="p-2 border border-border rounded-full hover:bg-white transition-colors">

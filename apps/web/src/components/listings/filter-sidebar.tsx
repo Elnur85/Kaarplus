@@ -53,9 +53,9 @@ export function FilterSidebar() {
     const bodyTypes = ["Sedaan", "Universaal", "Maastur", "Kupee", "Kabriolett", "Mahtuniversaal", "Pikap", "Väikeautod"];
 
     return (
-        <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm h-fit">
-            <div className="p-5 border-b border-border flex items-center justify-between bg-card text-foreground">
-                <h2 className="font-bold flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm h-fit">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h2 className="font-bold text-slate-800 dark:text-white flex items-center gap-2">
                     <SlidersHorizontal size={18} className="text-primary" /> Filtrid
                 </h2>
                 <Button
@@ -71,9 +71,9 @@ export function FilterSidebar() {
             <div className="p-5 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
                 {/* Make & Model */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Mark ja mudel</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Mark ja mudel</Label>
                     <Select value={filters.make} onValueChange={(val) => filters.setFilter("make", val)}>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
                             <SelectValue placeholder="Kõik margid" />
                         </SelectTrigger>
                         <SelectContent>
@@ -89,7 +89,7 @@ export function FilterSidebar() {
                         onValueChange={(val) => filters.setFilter("model", val)}
                         disabled={!filters.make}
                     >
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
                             <SelectValue placeholder="Kõik mudelid" />
                         </SelectTrigger>
                         <SelectContent>
@@ -105,19 +105,19 @@ export function FilterSidebar() {
 
                 {/* Price Range */}
                 <div className="space-y-4">
-                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Hind (€)</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Hind (€)</Label>
                     <div className="flex gap-2">
                         <Input
                             placeholder="Min"
                             value={filters.priceMin}
                             onChange={(e) => filters.setFilter("priceMin", e.target.value)}
-                            className="text-sm"
+                            className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
                         />
                         <Input
                             placeholder="Max"
                             value={filters.priceMax}
                             onChange={(e) => filters.setFilter("priceMax", e.target.value)}
-                            className="text-sm"
+                            className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
                         />
                     </div>
                 </div>
@@ -126,7 +126,7 @@ export function FilterSidebar() {
 
                 {/* Year Range */}
                 <div className="space-y-4">
-                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Aasta</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aasta</Label>
                     <div className="flex gap-2">
                         <Select value={filters.yearMin} onValueChange={(val) => filters.setFilter("yearMin", val)}>
                             <SelectTrigger>
@@ -155,7 +155,7 @@ export function FilterSidebar() {
 
                 {/* Fuel Type */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Kütus</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kütus</Label>
                     <div className="space-y-2">
                         {fuelTypes.map((fuel) => (
                             <div key={fuel} className="flex items-center space-x-2">
@@ -166,7 +166,7 @@ export function FilterSidebar() {
                                 />
                                 <label
                                     htmlFor={`fuel-${fuel}`}
-                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                    className="text-sm text-slate-700 dark:text-slate-300 leading-none cursor-pointer hover:text-primary transition-colors"
                                 >
                                     {fuel}
                                 </label>
@@ -179,7 +179,7 @@ export function FilterSidebar() {
 
                 {/* Transmission */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Käigukast</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Käigukast</Label>
                     <RadioGroup value={filters.transmission} onValueChange={(val) => filters.setFilter("transmission", val)}>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="all" id="t-all" />
@@ -200,7 +200,7 @@ export function FilterSidebar() {
 
                 {/* Body Type */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Keretüüp</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Keretüüp</Label>
                     <div className="grid grid-cols-1 gap-2">
                         {bodyTypes.map((body) => (
                             <div key={body} className="flex items-center space-x-2">
@@ -211,7 +211,7 @@ export function FilterSidebar() {
                                 />
                                 <label
                                     htmlFor={`body-${body}`}
-                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                    className="text-sm text-slate-700 dark:text-slate-300 leading-none cursor-pointer hover:text-primary transition-colors"
                                 >
                                     {body}
                                 </label>
@@ -221,8 +221,8 @@ export function FilterSidebar() {
                 </div>
             </div>
 
-            <div className="p-5 bg-muted/50">
-                <Button className="w-full font-bold shadow-md shadow-primary/20">
+            <div className="p-5 bg-slate-50 dark:bg-slate-800/50">
+                <Button className="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-lg shadow-primary/20 hover:brightness-105 transition-all">
                     Näita tulemusi
                 </Button>
             </div>

@@ -6,7 +6,10 @@ interface CompareEmptySlotProps {
     onClick: () => void;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function CompareEmptySlot({ onClick }: CompareEmptySlotProps) {
+    const { t } = useTranslation('compare');
     return (
         <button
             onClick={onClick}
@@ -16,7 +19,7 @@ export function CompareEmptySlot({ onClick }: CompareEmptySlotProps) {
                 <Plus size={20} />
             </div>
             <span className="text-xs font-medium text-muted-foreground uppercase">
-                Lisa sõiduk
+                {t('buttons.addVehicle')}
             </span>
         </button>
     );

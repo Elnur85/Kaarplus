@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { useTranslation, Trans } from "react-i18next";
+import { useSession } from "next-auth/react";
 
 // Mock user data; in production, fetch from API / session
 const mockUser = {
@@ -25,6 +27,8 @@ const mockUser = {
 };
 
 export function SettingsPage() {
+  const { t } = useTranslation('dashboard');
+  const { data: session } = useSession();
   const [notifications, setNotifications] = useState({
     email: true,
     messages: true,
@@ -40,9 +44,9 @@ export function SettingsPage() {
     <div className="space-y-8">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Seaded</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t('settings.title')}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Halda oma profiili ja eelistusi
+          {t('settings.description')}
         </p>
       </div>
 
@@ -53,7 +57,7 @@ export function SettingsPage() {
             <User className="size-5" />
           </div>
           <h2 className="text-lg font-semibold text-foreground">
-            Profiili andmed
+            {t('settings.profile.title')}
           </h2>
         </div>
 
@@ -61,11 +65,11 @@ export function SettingsPage() {
           <div className="space-y-2">
             <Label htmlFor="name" className="flex items-center gap-2">
               <User className="size-4 text-muted-foreground" />
-              Nimi
+              {t('settings.profile.name')}
             </Label>
             <Input
               id="name"
-              defaultValue={mockUser.name}
+              defaultValue={session?.user?.name || mockUser.name}
               readOnly
               className="bg-muted/30"
             />
@@ -73,12 +77,12 @@ export function SettingsPage() {
           <div className="space-y-2">
             <Label htmlFor="email" className="flex items-center gap-2">
               <Mail className="size-4 text-muted-foreground" />
-              E-post
+              {t('settings.profile.email')}
             </Label>
             <Input
               id="email"
               type="email"
-              defaultValue={mockUser.email}
+              defaultValue={session?.user?.email || mockUser.email}
               readOnly
               className="bg-muted/30"
             />
@@ -86,7 +90,7 @@ export function SettingsPage() {
           <div className="space-y-2">
             <Label htmlFor="phone" className="flex items-center gap-2">
               <Phone className="size-4 text-muted-foreground" />
-              Telefon
+              {t('settings.profile.phone')}
             </Label>
             <Input
               id="phone"
@@ -99,7 +103,7 @@ export function SettingsPage() {
         </div>
 
         <p className="mt-4 text-xs text-muted-foreground">
-          Profiili muutmiseks pöörduge klienditoe poole.
+          {t('settings.profile.help')}
         </p>
       </Card>
 
@@ -110,7 +114,7 @@ export function SettingsPage() {
             <Bell className="size-5" />
           </div>
           <h2 className="text-lg font-semibold text-foreground">
-            Teavituste eelistused
+            {t('settings.notifications.title')}
           </h2>
         </div>
 
@@ -118,10 +122,10 @@ export function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-foreground">
-                E-posti teavitused
+                {t('settings.notifications.email.title')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Saada teavitusi kuulutuste kohta e-postiga
+                {t('settings.notifications.email.description')}
               </p>
             </div>
             <Switch
@@ -135,10 +139,10 @@ export function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-foreground">
-                Uued sõnumid
+                {t('settings.notifications.messages.title')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Teavita mind uutest sõnumitest
+                {t('settings.notifications.messages.description')}
               </p>
             </div>
             <Switch
@@ -152,10 +156,10 @@ export function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-foreground">
-                Lemmikud
+                {t('settings.notifications.favorites.title')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Teavita mind lemmikute hinnamuutustest
+                {t('settings.notifications.favorites.description')}
               </p>
             </div>
             <Switch
@@ -169,10 +173,10 @@ export function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-foreground">
-                Turundus
+                {t('settings.notifications.marketing.title')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Saada mulle pakkumisi ja uudiseid
+                {t('settings.notifications.marketing.description')}
               </p>
             </div>
             <Switch
@@ -190,7 +194,7 @@ export function SettingsPage() {
             <Shield className="size-5" />
           </div>
           <h2 className="text-lg font-semibold text-foreground">
-            Andmekaitse (GDPR)
+            {t('settings.gdpr.title')}
           </h2>
         </div>
 
@@ -198,15 +202,15 @@ export function SettingsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium text-foreground">
-                Ekspordi oma andmed
+                {t('settings.gdpr.export.title')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Laadi alla kõik sinu kontoga seotud andmed JSON formaadis
+                {t('settings.gdpr.export.description')}
               </p>
             </div>
             <Button variant="outline" size="sm">
               <Download className="mr-2 size-4" />
-              Ekspordi andmed
+              {t('settings.gdpr.export.button')}
             </Button>
           </div>
 
@@ -215,27 +219,30 @@ export function SettingsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium text-foreground">
-                Kustuta konto
+                {t('settings.gdpr.delete.title')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Kustuta oma konto ja kõik sellega seotud andmed jäädavalt
+                {t('settings.gdpr.delete.description')}
               </p>
             </div>
             <Button variant="destructive" size="sm">
               <Trash2 className="mr-2 size-4" />
-              Kustuta konto
+              {t('settings.gdpr.delete.button')}
             </Button>
           </div>
         </div>
 
         <p className="mt-6 text-xs text-muted-foreground">
-          Lisateavet andmetöötluse kohta leiad meie{" "}
-          <a href="/privacy" className="text-primary underline hover:no-underline">
-            privaatsuspoliitikast
-          </a>
-          .
+          <Trans
+            i18nKey="settings.gdpr.privacy"
+            ns="dashboard"
+            components={{
+              privacy: <a href="/privacy" className="text-primary underline hover:no-underline" />
+            }}
+          />
         </p>
       </Card>
     </div>
   );
 }
+

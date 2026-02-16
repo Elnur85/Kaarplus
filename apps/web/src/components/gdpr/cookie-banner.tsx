@@ -40,7 +40,10 @@ function saveConsent(consent: ConsentState) {
     );
 }
 
+import { useTranslation } from "react-i18next";
+
 export function CookieBanner() {
+    const { t } = useTranslation('legal');
     const [isVisible, setIsVisible] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [consent, setConsent] = useState<ConsentState>(() => {
@@ -105,13 +108,11 @@ export function CookieBanner() {
                         <div className="flex items-center gap-3 mb-2">
                             <Cookie className="h-5 w-5 text-primary" />
                             <h5 className="font-bold text-foreground">
-                                Küpsised ja privaatsus
+                                {t('cookies.banner.title')}
                             </h5>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Kasutame küpsiseid, et parandada teie sirvimiskogemust ja
-                            analüüsida liiklust. Vajutades &quot;Nõustu kõigiga&quot; nõustute
-                            kõigi küpsiste kasutamisega.
+                            {t('cookies.banner.description')}
                         </p>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
@@ -121,7 +122,7 @@ export function CookieBanner() {
                             onClick={() => setShowSettings(true)}
                             className="text-muted-foreground hover:text-foreground"
                         >
-                            Kohanda
+                            {t('buttons.customize')}
                         </Button>
                         <Button
                             variant="ghost"
@@ -129,14 +130,14 @@ export function CookieBanner() {
                             onClick={handleRejectAll}
                             className="text-muted-foreground hover:text-foreground"
                         >
-                            Keeldu
+                            {t('buttons.rejectAll')}
                         </Button>
                         <Button
                             onClick={handleAcceptAll}
                             size="sm"
                             className="shadow-lg shadow-primary/20"
                         >
-                            Nõustu kõigiga
+                            {t('buttons.acceptAll')}
                         </Button>
                     </div>
                 </div>
@@ -152,6 +153,7 @@ export function CookieBanner() {
         </>
     );
 }
+
 
 /**
  * Submit consent to backend API (fire-and-forget).

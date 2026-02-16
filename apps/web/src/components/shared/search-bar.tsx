@@ -5,8 +5,8 @@ import { Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function SearchBar() {
     const router = useRouter();
@@ -28,13 +28,15 @@ export function SearchBar() {
         router.push(`/listings?${params.toString()}`);
     };
 
+    const labelStyle = "text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5 block";
+
     return (
-        <div className="w-full max-w-4xl bg-white p-4 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-3 items-end">
+        <div className="w-full max-w-5xl bg-white dark:bg-slate-900/95 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-2xl grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
             {/* Make */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                <label className="text-xs font-semibold text-muted-foreground mb-1 block">{t('filters.make')}</label>
+            <div className="space-y-1.5">
+                <label className={labelStyle}>{t('filters.make')}</label>
                 <Select value={make} onValueChange={setMake}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
                         <SelectValue placeholder={t('filters.make')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -48,10 +50,10 @@ export function SearchBar() {
             </div>
 
             {/* Model */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                <label className="text-xs font-semibold text-muted-foreground mb-1 block">{t('filters.model')}</label>
+            <div className="space-y-1.5">
+                <label className={labelStyle}>{t('filters.model')}</label>
                 <Select value={model} onValueChange={setModel} disabled={!make}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
                         <SelectValue placeholder={t('filters.model')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -63,10 +65,10 @@ export function SearchBar() {
             </div>
 
             {/* Year Range */}
-            <div className="col-span-1 lg:col-span-1">
-                <label className="text-xs font-semibold text-muted-foreground mb-1 block">{t('filters.year')} {t('filters.from', { defaultValue: 'alates' })}</label>
+            <div className="space-y-1.5">
+                <label className={labelStyle}>{t('filters.year')} {t('filters.from', { defaultValue: 'alates' })}</label>
                 <Select value={yearMin} onValueChange={setYearMin}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
                         <SelectValue placeholder={t('filters.from', { defaultValue: 'Alates' })} />
                     </SelectTrigger>
                     <SelectContent>
@@ -77,10 +79,10 @@ export function SearchBar() {
                 </Select>
             </div>
 
-            <div className="col-span-1 lg:col-span-1">
-                <label className="text-xs font-semibold text-muted-foreground mb-1 block">{t('filters.year')} {t('filters.to', { defaultValue: 'kuni' })}</label>
+            <div className="space-y-1.5">
+                <label className={labelStyle}>{t('filters.year')} {t('filters.to', { defaultValue: 'kuni' })}</label>
                 <Select value={yearMax} onValueChange={setYearMax}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
                         <SelectValue placeholder={t('filters.to', { defaultValue: 'Kuni' })} />
                     </SelectTrigger>
                     <SelectContent>
@@ -92,10 +94,10 @@ export function SearchBar() {
             </div>
 
             {/* Price */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                <label className="text-xs font-semibold text-muted-foreground mb-1 block">{t('filters.price')} (€)</label>
+            <div className="space-y-1.5">
+                <label className={labelStyle}>{t('filters.price')} Max</label>
                 <Select value={priceMax} onValueChange={setPriceMax}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
                         <SelectValue placeholder={t('filters.price')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -104,15 +106,18 @@ export function SearchBar() {
                         <SelectItem value="15000">15 000 €</SelectItem>
                         <SelectItem value="20000">20 000 €</SelectItem>
                         <SelectItem value="30000">30 000 €</SelectItem>
-                        <SelectItem value="50000">50 000 €</SelectItem>
+                        <SelectItem value="50000">5 0000 €</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
 
             {/* Button */}
-            <div className="col-span-1 md:col-span-4 lg:col-span-1">
-                <Button className="w-full bg-primary hover:bg-primary/90" onClick={handleSearch}>
-                    <Search className="mr-2 h-4 w-4" /> {t('home:hero.cta')}
+            <div className="flex items-end">
+                <Button
+                    className="w-full bg-primary hover:bg-primary/90 h-[42px] rounded-lg font-bold transition-all shadow-lg shadow-primary/30 gap-2"
+                    onClick={handleSearch}
+                >
+                    <Search className="h-4 w-4" /> {t('home:hero.cta')}
                 </Button>
             </div>
         </div>

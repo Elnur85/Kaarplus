@@ -1,0 +1,53 @@
+{
+    "specs": {
+        "condition": "Condition",
+        "firstRegistration": "First registration",
+        "mileage": "Mileage",
+        "engine": "Engine",
+        "power": "Power",
+        "transmission": "Transmission",
+        "driveType": "Drivetrain",
+        "bodyType": "Body type",
+        "doorsSeats": "Doors / Seats",
+        "exteriorColor": "Exterior color",
+        "interiorColor": "Interior color",
+        "vin": "VIN code",
+        "notSpecified": "Not specified",
+        "frontWheelDrive": "FWD",
+        "addedOn": "Listing added: {{date}}"
+    },
+    "priceCard": {
+        "goodPrice": "Good price",
+        "withVat": "Incl. VAT",
+        "withoutVat": "Excl. VAT",
+        "excellentChoice": "Excellent choice!",
+        "saveCompared": "Save compared to market price",
+        "buyNow": "Buy now",
+        "contactSeller": "Contact seller",
+        "share": "Share",
+        "save": "Save",
+        "marketAverage": "Market average",
+        "yourGain": "Your savings"
+    },
+    "features": {
+        "title": "Features",
+        "notSpecified": "No equipment specified"
+    },
+    "similarListings": "Similar Listings",
+    "description": {
+        "title": "Description",
+        "none": "No description provided."
+    },
+    "seller": {
+        "title": "Seller Info",
+        "dealership": "Dealership",
+        "verifiedSeller": "Verified seller since 2024",
+        "officialPartner": "Official Partner",
+        "privateSeller": "Private Seller",
+        "viewAllListings": "View all listings",
+        "history": "History",
+        "warranty": "Warranty",
+        "verified": "Verified",
+        "locationEstonia": "{{location}}, Estonia"
+    }
+}

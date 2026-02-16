@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { formatNumber } from "@/lib/utils";
 
-const Counter = ({ end, label }: { end: number, label: string }) => {
+const Counter = ({ end, label, suffix = "+" }: { end: number, label: string, suffix?: string }) => {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
@@ -25,28 +26,30 @@ const Counter = ({ end, label }: { end: number, label: string }) => {
     }, [end]);
 
     return (
-        <div className="flex flex-col items-center gap-2">
-            <span className="text-4xl md:text-5xl font-bold text-primary tabular-nums">
-                {formatNumber(count)}+
-            </span>
-            <span className="text-sm md:text-base text-muted-foreground font-medium uppercase tracking-wide">
+        <div className="text-center">
+            <div className="text-4xl font-extrabold mb-1 tabular-nums">
+                {formatNumber(count)}{suffix}
+            </div>
+            <div className="text-white/80 text-sm font-medium uppercase tracking-wider">
                 {label}
-            </span>
+            </div>
         </div>
     );
 };
 
 export function StatisticsSection() {
+    const { t } = useTranslation('home');
     return (
-        <section className="bg-secondary/30 py-16 border-y border-border/50">
-            <div className="container px-4 md:px-6">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                    <Counter end={1200} label="Aktiivset Kuulutust" />
-                    <Counter end={8500} label="Rahulolevat Klienti" />
-                    <Counter end={150} label="Usaldusväärset Müllerit" />
-                    <Counter end={45} label="Auto Marki" />
+        <section className="py-12 bg-primary text-white">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <Counter end={5000} label={t('statistics.activeListings', { defaultValue: 'CARS AVAILABLE' })} />
+                    <Counter end={12000} label={t('statistics.happyClients', { defaultValue: 'HAPPY USERS' })} suffix="k" />
+                    <Counter end={8} label={t('statistics.yearsInMarket', { defaultValue: 'IN MARKET' })} suffix=" Yrs" />
+                    <Counter end={14} label={t('statistics.avgSaleTime', { defaultValue: 'AVG SALE TIME' })} suffix=" Days" />
                 </div>
             </div>
         </section>
     );
 }
+

@@ -10,7 +10,10 @@ interface CompareVehicleCardProps {
     vehicle: CompareVehicle;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function CompareVehicleCard({ vehicle }: CompareVehicleCardProps) {
+    const { t } = useTranslation('compare');
     const removeVehicle = useCompareStore((s) => s.removeVehicle);
 
     return (
@@ -18,7 +21,7 @@ export function CompareVehicleCard({ vehicle }: CompareVehicleCardProps) {
             <button
                 onClick={() => removeVehicle(vehicle.id)}
                 className="absolute -top-2 -right-2 w-6 h-6 bg-muted border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors shadow-sm z-10"
-                aria-label="Eemalda võrdlusest"
+                aria-label={t('buttons.removeFromCompare')}
             >
                 <X size={14} />
             </button>
@@ -34,7 +37,7 @@ export function CompareVehicleCard({ vehicle }: CompareVehicleCardProps) {
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-                            Pilt puudub
+                            {t('placeholders.noImage')}
                         </div>
                     )}
                 </div>

@@ -1,0 +1,172 @@
+{
+    "title": "Täppisotsing",
+    "filters": {
+        "count_one": "{{count}} filter",
+        "count_other": "{{count}} filtrit",
+        "reset": "Lähtesta kõik",
+        "showResults": "Näita tulemusi"
+    },
+    "sections": {
+        "basic": "Põhiotsing",
+        "price": "Hind",
+        "yearMileage": "Aasta ja läbisõit",
+        "technical": "Tehniline",
+        "appearance": "Välimus",
+        "conditionLocation": "Seisukord ja asukoht"
+    },
+    "fields": {
+        "query": {
+            "label": "Otsingusõna",
+            "placeholder": "Otsi margi, mudeli, kirjelduse järgi..."
+        },
+        "make": {
+            "label": "Mark",
+            "placeholder": "Kõik margid"
+        },
+        "model": {
+            "label": "Mudel",
+            "placeholder": "Kõik mudelid"
+        },
+        "price": {
+            "min": "Min",
+            "max": "Max"
+        },
+        "year": {
+            "label": "Aasta",
+            "min": "Alates",
+            "max": "Kuni",
+            "all": "Kõik"
+        },
+        "mileage": {
+            "label": "Läbisõit (km)",
+            "min": "Min",
+            "max": "Max"
+        },
+        "fuel": {
+            "label": "Kütus",
+            "types": {
+                "Petrol": "Bensiin",
+                "Diesel": "Diisel",
+                "Hybrid": "Hübriid",
+                "Electric": "Elekter",
+                "Gas": "Gaas"
+            }
+        },
+        "transmission": {
+            "label": "Käigukast",
+            "options": {
+                "all": "Kõik",
+                "automatic": "Automaat",
+                "manual": "Manuaal"
+            }
+        },
+        "body": {
+            "label": "Keretüüp",
+            "types": {
+                "Sedan": "Sedaan",
+                "Wagon": "Universaal",
+                "SUV": "Maastur",
+                "Coupe": "Kupee",
+                "Convertible": "Kabriolett",
+                "Minivan": "Mahtuniversaal",
+                "Pickup": "Pikap",
+                "Hatchback": "Väikeautod"
+            }
+        },
+        "drive": {
+            "label": "Veoskeem",
+            "placeholder": "Kõik",
+            "options": {
+                "FWD": "Esivedu (FWD)",
+                "RWD": "Tagavedu (RWD)",
+                "AWD": "Nelikvedu (AWD)",
+                "4WD": "Nelikvedu (4WD)"
+            }
+        },
+        "power": {
+            "label": "Võimsus (kW)",
+            "min": "Min",
+            "max": "Max"
+        },
+        "color": {
+            "label": "Värvus",
+            "placeholder": "Kõik värvid",
+            "options": {
+                "Black": "Must",
+                "White": "Valge",
+                "Grey": "Hall",
+                "Silver": "Hõbedane",
+                "Blue": "Sinine",
+                "Red": "Punane",
+                "Green": "Roheline",
+                "Brown": "Pruun",
+                "Beige": "Beež",
+                "Yellow": "Kollane",
+                "Orange": "Oranž"
+            }
+        },
+        "doors": {
+            "label": "Uste arv",
+            "placeholder": "Kõik"
+        },
+        "seats": {
+            "label": "Istekohtade arv",
+            "placeholder": "Kõik"
+        },
+        "condition": {
+            "label": "Seisukord",
+            "placeholder": "Kõik",
+            "options": {
+                "new": "Uus",
+                "used": "Kasutatud",
+                "certified": "Sertifitseeritud"
+            }
+        },
+        "location": {
+            "label": "Asukoht",
+            "placeholder": "Kogu Eesti",
+            "options": {
+                "Tallinn": "Tallinn",
+                "Tartu": "Tartu",
+                "Pärnu": "Pärnu",
+                "Narva": "Narva",
+                "Haapsalu": "Haapsalu",
+                "Viljandi": "Viljandi",
+                "Rakvere": "Rakvere",
+                "Kuressaare": "Kuressaare",
+                "Jõhvi": "Jõhvi"
+            }
+        }
+    },
+    "saveSearch": {
+        "trigger": "Salvesta otsing",
+        "title": "Salvesta otsing",
+        "description": "Salvestage praegused filtrid, et saaksite need hiljem kiiresti uuesti avada.",
+        "nameLabel": "Otsingu nimi",
+        "namePlaceholder": "nt. Neliveolised BMW-d Tallinnas",
+        "emailAlertsLabel": "E-posti teavitused",
+        "emailAlertsDescription": "Saame teile teada anda, kui lisandub uusi vastavaid autosid.",
+        "submit": "Salvesta otsing",
+        "submitting": "Salvestamine...",
+        "successTitle": "Salvestatud!",
+        "successDescription": "Teie otsing on edukalt salvestatud.",
+        "errors": {
+            "loginRequired": {
+                "title": "Vajalik sisselogimine",
+                "description": "Otsingu salvestamiseks peate olema sisse logitud."
+            },
+            "nameMissing": {
+                "title": "Nimi puudub",
+                "description": "Palun sisestage otsingule nimi."
+            },
+            "saveFailed": {
+                "title": "Viga salvestamisel",
+                "default": "Tekkis viga otsingu salvestamisel."
+            }
+        },
+        "toast": {
+            "successTitle": "Otsing salvestatud",
+            "successDescription": "Otsing \"{{name}}\" on nüüd teie profiilis salvestatud."
+        }
+    }
+}

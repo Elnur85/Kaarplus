@@ -60,11 +60,14 @@ const statusConfig: Record<
   },
 };
 
+import { useTranslation } from "react-i18next";
+
 function StatusBadge({ status }: { status: ListingStatus }) {
+  const { t } = useTranslation('dashboard');
   const config = statusConfig[status];
   return (
     <Badge variant="outline" className={cn("font-medium", config.className)}>
-      {config.label}
+      {t(`listings.status.${status.toLowerCase()}`)}
     </Badge>
   );
 }
@@ -94,7 +97,7 @@ const mockListings: UserListing[] = [
     priceVatIncluded: true,
     status: "ACTIVE",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?q=80&w=400",
+      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=400",
     viewCount: 189,
     favoriteCount: 12,
     createdAt: "2025-12-20T14:30:00Z",
@@ -122,7 +125,7 @@ const mockListings: UserListing[] = [
     priceVatIncluded: true,
     status: "SOLD",
     thumbnailUrl:
-      "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?q=80&w=400",
+      "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=400",
     viewCount: 512,
     favoriteCount: 34,
     createdAt: "2025-11-10T08:00:00Z",
@@ -169,9 +172,11 @@ export function MyListingsTable({
   limit,
   showPagination = false,
 }: MyListingsTableProps) {
+  const { t, i18n } = useTranslation('dashboard');
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading] = useState(false);
   const pageSize = limit || 10;
+  const localeCode = i18n.language === 'et' ? 'et-EE' : i18n.language === 'ru' ? 'ru-RU' : 'en-GB';
 
   // Use mock data; in production, fetch from API
   const allListings = mockListings;
@@ -189,20 +194,20 @@ export function MyListingsTable({
     return (
       <Card className="flex flex-col items-center justify-center gap-4 rounded-xl border p-12 text-center">
         <p className="text-lg font-medium text-foreground">
-          Teil pole veel kuulutusi
+          {t('listings.table.empty')}
         </p>
         <p className="text-sm text-muted-foreground">
-          Alustage oma esimese kuulutuse lisamist
+          {t('listings.description')}
         </p>
         <Button asChild>
-          <Link href="/sell">Lisa kuulutus</Link>
+          <Link href="/sell">{t('overview.addListing')}</Link>
         </Button>
       </Card>
     );
   }
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString("et-EE", {
+    return new Date(dateStr).toLocaleDateString(localeCode, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -217,13 +222,13 @@ export function MyListingsTable({
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
-                <TableHead className="w-[300px]">Kuulutus</TableHead>
-                <TableHead>Hind</TableHead>
-                <TableHead>Staatus</TableHead>
-                <TableHead className="text-center">Vaatamised</TableHead>
-                <TableHead className="text-center">Lemmikud</TableHead>
-                <TableHead>Kuupäev</TableHead>
-                <TableHead className="text-right">Tegevused</TableHead>
+                <TableHead className="w-[300px]">{t('listings.table.listing')}</TableHead>
+                <TableHead>{t('listings.table.price')}</TableHead>
+                <TableHead>{t('listings.table.status')}</TableHead>
+                <TableHead className="text-center">{t('listings.table.views')}</TableHead>
+                <TableHead className="text-center">{t('listings.table.favorites')}</TableHead>
+                <TableHead>{t('listings.table.date')}</TableHead>
+                <TableHead className="text-right">{t('listings.table.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -271,16 +276,16 @@ export function MyListingsTable({
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <Button variant="ghost" size="icon" asChild>
+                      <Button variant="ghost" size="icon" asChild title={t('listings.actions.edit')}>
                         <Link href={`/dashboard/listings/${listing.id}/edit`}>
                           <Pencil className="size-4" />
-                          <span className="sr-only">Muuda</span>
+                          <span className="sr-only">{t('listings.actions.edit')}</span>
                         </Link>
                       </Button>
-                      <Button variant="ghost" size="icon" asChild>
+                      <Button variant="ghost" size="icon" asChild title={t('overview.viewAll')}>
                         <Link href={`/listings/${listing.id}`}>
                           <ExternalLink className="size-4" />
-                          <span className="sr-only">Vaata</span>
+                          <span className="sr-only">{t('overview.viewAll')}</span>
                         </Link>
                       </Button>
                     </div>
@@ -317,7 +322,7 @@ export function MyListingsTable({
                 <div className="mt-2 flex items-center gap-2">
                   <StatusBadge status={listing.status} />
                   <span className="text-xs text-muted-foreground">
-                    {formatNumber(listing.viewCount)} vaatamist
+                    {formatNumber(listing.viewCount)} {t('listings.table.views')}
                   </span>
                 </div>
               </div>
@@ -330,13 +335,13 @@ export function MyListingsTable({
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/dashboard/listings/${listing.id}/edit`}>
                     <Pencil className="mr-1 size-3" />
-                    Muuda
+                    {t('listings.actions.edit')}
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href={`/listings/${listing.id}`}>
                     <ExternalLink className="mr-1 size-3" />
-                    Vaata
+                    {t('overview.viewAll')}
                   </Link>
                 </Button>
               </div>
@@ -349,7 +354,7 @@ export function MyListingsTable({
       {showPagination && totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
           <p className="text-sm text-muted-foreground">
-            Lehekülg {currentPage}/{totalPages} ({allListings.length} kuulutust)
+            {t('listings.pagination.page', { current: currentPage, total: totalPages })} ({t('listings.pagination.total', { count: allListings.length })})
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -359,7 +364,7 @@ export function MyListingsTable({
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             >
               <ChevronLeft className="size-4" />
-              <span className="sr-only">Eelmine</span>
+              <span className="sr-only">{t('listings.pagination.previous')}</span>
             </Button>
             <Button
               variant="outline"
@@ -370,7 +375,7 @@ export function MyListingsTable({
               }
             >
               <ChevronRight className="size-4" />
-              <span className="sr-only">Järgmine</span>
+              <span className="sr-only">{t('listings.pagination.next')}</span>
             </Button>
           </div>
         </div>
@@ -378,3 +383,4 @@ export function MyListingsTable({
     </div>
   );
 }
+

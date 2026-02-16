@@ -11,11 +11,16 @@ interface ChartProps {
     color: string;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function AnalyticsChart({ data, title, description, dataKey, color }: ChartProps) {
+    const { i18n } = useTranslation();
+    const localeCode = i18n.language === 'et' ? 'et-EE' : i18n.language === 'ru' ? 'ru-RU' : 'en-GB';
+
     // Format dates for display
     const formattedData = data.map(item => ({
         ...item,
-        date: new Date(item.date).toLocaleDateString('et-EE', { month: 'short', day: 'numeric' })
+        date: new Date(item.date).toLocaleDateString(localeCode, { month: 'short', day: 'numeric' })
     }));
 
     return (

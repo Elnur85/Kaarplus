@@ -23,43 +23,57 @@ import {
 import { RotateCcw, Search } from "lucide-react";
 import { API_URL } from "@/lib/constants";
 
-const fuelTypes = ["Bensiin", "Diisel", "Hübriid", "Elekter", "Gaas"];
+import { useTranslation } from "react-i18next";
+
+const fuelTypes = [
+    { value: "Bensiin", key: "Petrol" },
+    { value: "Diisel", key: "Diesel" },
+    { value: "Hübriid", key: "Hybrid" },
+    { value: "Elekter", key: "Electric" },
+    { value: "Gaas", key: "Gas" },
+];
+
 const bodyTypes = [
-    "Sedaan",
-    "Universaal",
-    "Maastur",
-    "Kupee",
-    "Kabriolett",
-    "Mahtuniversaal",
-    "Pikap",
-    "Väikeautod",
+    { value: "Sedaan", key: "Sedan" },
+    { value: "Universaal", key: "Wagon" },
+    { value: "Maastur", key: "SUV" },
+    { value: "Kupee", key: "Coupe" },
+    { value: "Kabriolett", key: "Convertible" },
+    { value: "Mahtuniversaal", key: "Minivan" },
+    { value: "Pikap", key: "Pickup" },
+    { value: "Väikeautod", key: "Hatchback" },
 ];
+
 const driveTypes = [
-    { value: "FWD", label: "Esivedu (FWD)" },
-    { value: "RWD", label: "Tagavedu (RWD)" },
-    { value: "AWD", label: "Nelikvedu (AWD)" },
-    { value: "4WD", label: "Nelikvedu (4WD)" },
+    { value: "FWD", key: "FWD" },
+    { value: "RWD", key: "RWD" },
+    { value: "AWD", key: "AWD" },
+    { value: "4WD", key: "4WD" },
 ];
+
 const colorOptions = [
-    "Must",
-    "Valge",
-    "Hall",
-    "Hõbedane",
-    "Sinine",
-    "Punane",
-    "Roheline",
-    "Pruun",
-    "Beež",
-    "Kollane",
-    "Oranž",
+    { value: "Must", key: "Black" },
+    { value: "Valge", key: "White" },
+    { value: "Hall", key: "Grey" },
+    { value: "Hõbedane", key: "Silver" },
+    { value: "Sinine", key: "Blue" },
+    { value: "Punane", key: "Red" },
+    { value: "Roheline", key: "Green" },
+    { value: "Pruun", key: "Brown" },
+    { value: "Beež", key: "Beige" },
+    { value: "Kollane", key: "Yellow" },
+    { value: "Oranž", key: "Orange" },
 ];
+
 const doorOptions = ["2", "3", "4", "5"];
 const seatOptions = ["2", "4", "5", "6", "7", "8+"];
+
 const conditionOptions = [
-    { value: "new", label: "Uus" },
-    { value: "used", label: "Kasutatud" },
-    { value: "certified", label: "Sertifitseeritud" },
+    { value: "new", key: "new" },
+    { value: "used", key: "used" },
+    { value: "certified", key: "certified" },
 ];
+
 const locationOptions = [
     "Tallinn",
     "Tartu",
@@ -73,6 +87,7 @@ const locationOptions = [
 ];
 
 export function AdvancedFilters() {
+    const { t } = useTranslation('search');
     const filters = useFilterStore();
     const [makes, setMakes] = useState<string[]>([]);
     const [models, setModels] = useState<string[]>([]);
@@ -87,7 +102,6 @@ export function AdvancedFilters() {
 
     useEffect(() => {
         if (!currentMake || currentMake === "none") {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setModels([]);
             return;
         }
@@ -112,12 +126,12 @@ export function AdvancedFilters() {
             <div className="p-5 border-b border-border flex items-center justify-between">
                 <h2 className="font-bold text-lg flex items-center gap-2">
                     <Search size={18} className="text-primary" />
-                    Täppisotsing
+                    {t('title')}
                 </h2>
                 <div className="flex items-center gap-3">
                     {activeFilterCount > 0 && (
                         <span className="text-xs font-medium text-muted-foreground">
-                            {activeFilterCount} filtrit
+                            {t('filters.count', { count: activeFilterCount })}
                         </span>
                     )}
                     <Button
@@ -126,7 +140,7 @@ export function AdvancedFilters() {
                         className="text-xs font-semibold text-primary hover:text-primary/80 hover:bg-primary/5 p-0 h-auto"
                         onClick={filters.resetFilters}
                     >
-                        <RotateCcw size={12} className="mr-1" /> Lähtesta kõik
+                        <RotateCcw size={12} className="mr-1" /> {t('filters.reset')}
                     </Button>
                 </div>
             </div>
@@ -140,15 +154,15 @@ export function AdvancedFilters() {
                     {/* Basic Search */}
                     <AccordionItem value="basic">
                         <AccordionTrigger className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:no-underline">
-                            Põhiotsing
+                            {t('sections.basic')}
                         </AccordionTrigger>
                         <AccordionContent className="space-y-3 pb-4">
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Otsingusõna
+                                    {t('fields.query.label')}
                                 </Label>
                                 <Input
-                                    placeholder="Otsi margi, mudeli, kirjelduse järgi..."
+                                    placeholder={t('fields.query.placeholder')}
                                     value={filters.q}
                                     onChange={(e) => filters.setFilter("q", e.target.value)}
                                     className="text-sm"
@@ -156,7 +170,7 @@ export function AdvancedFilters() {
                             </div>
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Mark
+                                    {t('fields.make.label')}
                                 </Label>
                                 <Select
                                     value={filters.make}
@@ -166,10 +180,10 @@ export function AdvancedFilters() {
                                     }}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik margid" />
+                                        <SelectValue placeholder={t('fields.make.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik margid</SelectItem>
+                                        <SelectItem value="none">{t('fields.make.placeholder')}</SelectItem>
                                         {makes.map((make) => (
                                             <SelectItem key={make} value={make}>
                                                 {make}
@@ -180,7 +194,7 @@ export function AdvancedFilters() {
                             </div>
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Mudel
+                                    {t('fields.model.label')}
                                 </Label>
                                 <Select
                                     value={filters.model}
@@ -188,10 +202,10 @@ export function AdvancedFilters() {
                                     disabled={!filters.make || filters.make === "none"}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik mudelid" />
+                                        <SelectValue placeholder={t('fields.model.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik mudelid</SelectItem>
+                                        <SelectItem value="none">{t('fields.model.placeholder')}</SelectItem>
                                         {models.map((model) => (
                                             <SelectItem key={model} value={model}>
                                                 {model}
@@ -206,13 +220,13 @@ export function AdvancedFilters() {
                     {/* Price */}
                     <AccordionItem value="price">
                         <AccordionTrigger className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:no-underline">
-                            Hind
+                            {t('sections.price')}
                         </AccordionTrigger>
                         <AccordionContent className="pb-4">
                             <div className="flex gap-2 items-center">
                                 <div className="relative flex-1">
                                     <Input
-                                        placeholder="Min"
+                                        placeholder={t('fields.price.min')}
                                         value={filters.priceMin}
                                         onChange={(e) =>
                                             filters.setFilter("priceMin", e.target.value)
@@ -227,7 +241,7 @@ export function AdvancedFilters() {
                                 <span className="text-muted-foreground text-sm">-</span>
                                 <div className="relative flex-1">
                                     <Input
-                                        placeholder="Max"
+                                        placeholder={t('fields.price.max')}
                                         value={filters.priceMax}
                                         onChange={(e) =>
                                             filters.setFilter("priceMax", e.target.value)
@@ -246,12 +260,12 @@ export function AdvancedFilters() {
                     {/* Year & Mileage */}
                     <AccordionItem value="year-mileage">
                         <AccordionTrigger className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:no-underline">
-                            Aasta ja läbisõit
+                            {t('sections.yearMileage')}
                         </AccordionTrigger>
                         <AccordionContent className="space-y-4 pb-4">
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Aasta
+                                    {t('fields.year.label')}
                                 </Label>
                                 <div className="flex gap-2">
                                     <Select
@@ -261,10 +275,10 @@ export function AdvancedFilters() {
                                         }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Alates" />
+                                            <SelectValue placeholder={t('fields.year.min')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="none">Kõik</SelectItem>
+                                            <SelectItem value="none">{t('fields.year.all')}</SelectItem>
                                             {Array.from(
                                                 { length: 30 },
                                                 (_, i) => new Date().getFullYear() - i
@@ -282,10 +296,10 @@ export function AdvancedFilters() {
                                         }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Kuni" />
+                                            <SelectValue placeholder={t('fields.year.max')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="none">Kõik</SelectItem>
+                                            <SelectItem value="none">{t('fields.year.all')}</SelectItem>
                                             {Array.from(
                                                 { length: 30 },
                                                 (_, i) => new Date().getFullYear() - i
@@ -300,11 +314,11 @@ export function AdvancedFilters() {
                             </div>
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Läbisõit (km)
+                                    {t('fields.mileage.label')}
                                 </Label>
                                 <div className="flex gap-2 items-center">
                                     <Input
-                                        placeholder="Min"
+                                        placeholder={t('fields.mileage.min')}
                                         value={filters.mileageMin}
                                         onChange={(e) =>
                                             filters.setFilter("mileageMin", e.target.value)
@@ -314,7 +328,7 @@ export function AdvancedFilters() {
                                     />
                                     <span className="text-muted-foreground text-sm">-</span>
                                     <Input
-                                        placeholder="Max"
+                                        placeholder={t('fields.mileage.max')}
                                         value={filters.mileageMax}
                                         onChange={(e) =>
                                             filters.setFilter("mileageMax", e.target.value)
@@ -330,32 +344,32 @@ export function AdvancedFilters() {
                     {/* Technical */}
                     <AccordionItem value="technical">
                         <AccordionTrigger className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:no-underline">
-                            Tehniline
+                            {t('sections.technical')}
                         </AccordionTrigger>
                         <AccordionContent className="space-y-5 pb-4">
                             {/* Fuel Type */}
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-2 block">
-                                    Kütus
+                                    {t('fields.fuel.label')}
                                 </Label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {fuelTypes.map((fuel) => (
                                         <div
-                                            key={fuel}
+                                            key={fuel.value}
                                             className="flex items-center space-x-2"
                                         >
                                             <Checkbox
-                                                id={`adv-fuel-${fuel}`}
-                                                checked={filters.fuelType.includes(fuel)}
+                                                id={`adv-fuel-${fuel.value}`}
+                                                checked={filters.fuelType.includes(fuel.value)}
                                                 onCheckedChange={() =>
-                                                    filters.toggleFuelType(fuel)
+                                                    filters.toggleFuelType(fuel.value)
                                                 }
                                             />
                                             <label
-                                                htmlFor={`adv-fuel-${fuel}`}
+                                                htmlFor={`adv-fuel-${fuel.value}`}
                                                 className="text-sm leading-none cursor-pointer"
                                             >
-                                                {fuel}
+                                                {t(`fields.fuel.types.${fuel.key}`)}
                                             </label>
                                         </div>
                                     ))}
@@ -365,7 +379,7 @@ export function AdvancedFilters() {
                             {/* Transmission */}
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-2 block">
-                                    Käigukast
+                                    {t('fields.transmission.label')}
                                 </Label>
                                 <RadioGroup
                                     value={filters.transmission}
@@ -380,7 +394,7 @@ export function AdvancedFilters() {
                                             htmlFor="adv-t-all"
                                             className="text-sm font-normal"
                                         >
-                                            Kõik
+                                            {t('fields.transmission.options.all')}
                                         </Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
@@ -389,7 +403,7 @@ export function AdvancedFilters() {
                                             htmlFor="adv-t-auto"
                                             className="text-sm font-normal"
                                         >
-                                            Automaat
+                                            {t('fields.transmission.options.automatic')}
                                         </Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
@@ -398,7 +412,7 @@ export function AdvancedFilters() {
                                             htmlFor="adv-t-manual"
                                             className="text-sm font-normal"
                                         >
-                                            Manuaal
+                                            {t('fields.transmission.options.manual')}
                                         </Label>
                                     </div>
                                 </RadioGroup>
@@ -407,26 +421,26 @@ export function AdvancedFilters() {
                             {/* Body Type */}
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-2 block">
-                                    Keretüüp
+                                    {t('fields.body.label')}
                                 </Label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {bodyTypes.map((body) => (
                                         <div
-                                            key={body}
+                                            key={body.value}
                                             className="flex items-center space-x-2"
                                         >
                                             <Checkbox
-                                                id={`adv-body-${body}`}
-                                                checked={filters.bodyType.includes(body)}
+                                                id={`adv-body-${body.value}`}
+                                                checked={filters.bodyType.includes(body.value)}
                                                 onCheckedChange={() =>
-                                                    filters.toggleBodyType(body)
+                                                    filters.toggleBodyType(body.value)
                                                 }
                                             />
                                             <label
-                                                htmlFor={`adv-body-${body}`}
+                                                htmlFor={`adv-body-${body.value}`}
                                                 className="text-sm leading-none cursor-pointer"
                                             >
-                                                {body}
+                                                {t(`fields.body.types.${body.key}`)}
                                             </label>
                                         </div>
                                     ))}
@@ -436,7 +450,7 @@ export function AdvancedFilters() {
                             {/* Drive Type */}
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Veoskeem
+                                    {t('fields.drive.label')}
                                 </Label>
                                 <Select
                                     value={filters.driveType}
@@ -445,13 +459,13 @@ export function AdvancedFilters() {
                                     }
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik" />
+                                        <SelectValue placeholder={t('fields.drive.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik</SelectItem>
+                                        <SelectItem value="none">{t('fields.drive.placeholder')}</SelectItem>
                                         {driveTypes.map((dt) => (
                                             <SelectItem key={dt.value} value={dt.value}>
-                                                {dt.label}
+                                                {t(`fields.drive.options.${dt.key}`)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -461,11 +475,11 @@ export function AdvancedFilters() {
                             {/* Power */}
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Võimsus (kW)
+                                    {t('fields.power.label')}
                                 </Label>
                                 <div className="flex gap-2 items-center">
                                     <Input
-                                        placeholder="Min"
+                                        placeholder={t('fields.power.min')}
                                         value={filters.powerMin}
                                         onChange={(e) =>
                                             filters.setFilter("powerMin", e.target.value)
@@ -475,7 +489,7 @@ export function AdvancedFilters() {
                                     />
                                     <span className="text-muted-foreground text-sm">-</span>
                                     <Input
-                                        placeholder="Max"
+                                        placeholder={t('fields.power.max')}
                                         value={filters.powerMax}
                                         onChange={(e) =>
                                             filters.setFilter("powerMax", e.target.value)
@@ -491,12 +505,12 @@ export function AdvancedFilters() {
                     {/* Appearance */}
                     <AccordionItem value="appearance">
                         <AccordionTrigger className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:no-underline">
-                            Välimus
+                            {t('sections.appearance')}
                         </AccordionTrigger>
                         <AccordionContent className="space-y-3 pb-4">
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Värvus
+                                    {t('fields.color.label')}
                                 </Label>
                                 <Select
                                     value={filters.color}
@@ -505,13 +519,13 @@ export function AdvancedFilters() {
                                     }
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik värvid" />
+                                        <SelectValue placeholder={t('fields.color.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik värvid</SelectItem>
+                                        <SelectItem value="none">{t('fields.color.placeholder')}</SelectItem>
                                         {colorOptions.map((c) => (
-                                            <SelectItem key={c} value={c}>
-                                                {c}
+                                            <SelectItem key={c.value} value={c.value}>
+                                                {t(`fields.color.options.${c.key}`)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -519,7 +533,7 @@ export function AdvancedFilters() {
                             </div>
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Uste arv
+                                    {t('fields.doors.label')}
                                 </Label>
                                 <Select
                                     value={filters.doors}
@@ -528,10 +542,10 @@ export function AdvancedFilters() {
                                     }
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik" />
+                                        <SelectValue placeholder={t('fields.doors.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik</SelectItem>
+                                        <SelectItem value="none">{t('fields.doors.placeholder')}</SelectItem>
                                         {doorOptions.map((d) => (
                                             <SelectItem key={d} value={d}>
                                                 {d}
@@ -542,7 +556,7 @@ export function AdvancedFilters() {
                             </div>
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Istekohtade arv
+                                    {t('fields.seats.label')}
                                 </Label>
                                 <Select
                                     value={filters.seats}
@@ -551,10 +565,10 @@ export function AdvancedFilters() {
                                     }
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik" />
+                                        <SelectValue placeholder={t('fields.seats.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik</SelectItem>
+                                        <SelectItem value="none">{t('fields.seats.placeholder')}</SelectItem>
                                         {seatOptions.map((s) => (
                                             <SelectItem key={s} value={s}>
                                                 {s}
@@ -569,12 +583,12 @@ export function AdvancedFilters() {
                     {/* Condition & Location */}
                     <AccordionItem value="condition-location">
                         <AccordionTrigger className="text-sm font-bold uppercase tracking-wider text-muted-foreground hover:no-underline">
-                            Seisukord ja asukoht
+                            {t('sections.conditionLocation')}
                         </AccordionTrigger>
                         <AccordionContent className="space-y-3 pb-4">
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Seisukord
+                                    {t('fields.condition.label')}
                                 </Label>
                                 <Select
                                     value={filters.condition}
@@ -583,13 +597,13 @@ export function AdvancedFilters() {
                                     }
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kõik" />
+                                        <SelectValue placeholder={t('fields.condition.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kõik</SelectItem>
+                                        <SelectItem value="none">{t('fields.condition.placeholder')}</SelectItem>
                                         {conditionOptions.map((c) => (
                                             <SelectItem key={c.value} value={c.value}>
-                                                {c.label}
+                                                {t(`fields.condition.options.${c.key}`)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -597,7 +611,7 @@ export function AdvancedFilters() {
                             </div>
                             <div>
                                 <Label className="text-xs text-muted-foreground mb-1.5 block">
-                                    Asukoht
+                                    {t('fields.location.label')}
                                 </Label>
                                 <Select
                                     value={filters.location}
@@ -606,13 +620,13 @@ export function AdvancedFilters() {
                                     }
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Kogu Eesti" />
+                                        <SelectValue placeholder={t('fields.location.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="none">Kogu Eesti</SelectItem>
+                                        <SelectItem value="none">{t('fields.location.placeholder')}</SelectItem>
                                         {locationOptions.map((loc) => (
                                             <SelectItem key={loc} value={loc}>
-                                                {loc}
+                                                {t(`fields.location.options.${loc}`)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -625,12 +639,13 @@ export function AdvancedFilters() {
 
             <div className="p-5 border-t border-border bg-muted/50">
                 <Button className="w-full font-bold shadow-md shadow-primary/20">
-                    Näita tulemusi
+                    {t('filters.showResults')}
                 </Button>
             </div>
         </div>
     );
 }
+
 
 function getActiveFilterCount(filters: ReturnType<typeof useFilterStore.getState>): number {
     let count = 0;

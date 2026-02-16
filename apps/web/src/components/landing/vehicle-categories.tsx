@@ -6,8 +6,11 @@ import { VehicleSummary } from "@/types/vehicle";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function VehicleCategories() {
+    const { t } = useTranslation('home');
+
     // Mock data for initial implementation
     const mockVehicles: VehicleSummary[] = [
         {
@@ -81,49 +84,52 @@ export function VehicleCategories() {
     ];
 
     const categories = [
-        { value: "buy", label: "Osta auto", query: "" },
-        { value: "electric", label: "Elektriautod", query: "?fuelType=Electric" },
-        { value: "hybrid", label: "Hübriidautod", query: "?fuelType=Hybrid" },
+        { value: "buy", label: t('categories.tabs.buy'), query: "" },
+        { value: "electric", label: t('categories.tabs.electric'), query: "?fuelType=Electric" },
+        { value: "hybrid", label: t('categories.tabs.hybrid'), query: "?fuelType=Hybrid" },
     ];
 
     return (
-        <section className="container py-16 px-4 md:px-6">
-            <Tabs defaultValue="buy" className="w-full">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-                    <h2 className="text-3xl font-bold tracking-tight">Avasta parimad pakkumised</h2>
-                    <TabsList className="grid w-full grid-cols-3 md:inline-flex md:w-auto p-1 bg-muted">
-                        {categories.map((cat) => (
-                            <TabsTrigger key={cat.value} value={cat.value} className="px-6">
-                                {cat.label}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                </div>
+        <section className="py-16">
+            <div className="container mx-auto px-4">
+                <Tabs defaultValue="buy" className="w-full">
+                    <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+                        <h2 className="text-3xl font-bold tracking-tight">{t('categories.title')}</h2>
+                        <TabsList className="grid w-full grid-cols-3 md:inline-flex md:w-auto p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                            {categories.map((cat) => (
+                                <TabsTrigger key={cat.value} value={cat.value} className="px-6 font-semibold data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md">
+                                    {cat.label}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+                    </div>
 
-                {categories.map((cat) => (
-                    <TabsContent key={cat.value} value={cat.value} className="mt-0">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {mockVehicles
-                                .filter((v) => {
-                                    if (cat.value === "electric") return v.fuelType === "Elekter";
-                                    if (cat.value === "hybrid") return v.fuelType === "Hübriid";
-                                    return true;
-                                })
-                                .map((vehicle) => (
-                                    <VehicleCard key={vehicle.id} vehicle={vehicle} />
-                                ))}
-                        </div>
+                    {categories.map((cat) => (
+                        <TabsContent key={cat.value} value={cat.value} className="mt-0">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                                {mockVehicles
+                                    .filter((v) => {
+                                        if (cat.value === "electric") return v.fuelType === "Elekter";
+                                        if (cat.value === "hybrid") return v.fuelType === "Hübriid";
+                                        return true;
+                                    })
+                                    .map((vehicle) => (
+                                        <VehicleCard key={vehicle.id} vehicle={vehicle} />
+                                    ))}
+                            </div>
 
-                        <div className="mt-12 flex justify-center">
-                            <Link href={`/listings${cat.query}`}>
-                                <Button variant="outline" size="lg" className="rounded-full px-8">
-                                    Vaata kõiki {cat.label.toLowerCase()} <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </Link>
-                        </div>
-                    </TabsContent>
-                ))}
-            </Tabs>
+                            <div className="mt-12 flex justify-center">
+                                <Link href={`/listings${cat.query}`}>
+                                    <Button variant="outline" size="lg" className="rounded-full px-10 font-bold border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary transition-all gap-2">
+                                        {t('categories.viewAll', { category: cat.label.toLowerCase() })} <ArrowRight className="h-4 w-4" />
+                                    </Button>
+                                </Link>
+                            </div>
+                        </TabsContent>
+                    ))}
+                </Tabs>
+            </div>
         </section>
     );
 }
+

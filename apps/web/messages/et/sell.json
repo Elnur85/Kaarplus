@@ -1,0 +1,191 @@
+{
+    "steps": {
+        "type": "Sõiduki tüüp",
+        "data": "Andmed",
+        "photos": "Fotod",
+        "confirmation": "Kinnitus"
+    },
+    "step1": {
+        "title": "Valige sõiduki tüüp",
+        "description": "See aitab meil pakkuda õigeid andmevälju järgmises sammus.",
+        "types": {
+            "sedan": "Sedaan",
+            "suv": "Maastur (SUV)",
+            "hatchback": "Luukpära",
+            "wagon": "Universaal",
+            "coupe": "Kupee",
+            "convertible": "Kabriolett",
+            "minivan": "Mahtuniversaal",
+            "pickup": "Pikap"
+        }
+    },
+    "step2": {
+        "sections": {
+            "main": "Põhiandmed",
+            "specs": "Tehnilised andmed",
+            "features": "Varustus",
+            "description": "Kirjeldus"
+        },
+        "labels": {
+            "make": "Automark *",
+            "model": "Mudel *",
+            "variant": "Variant / Lisanimetus",
+            "year": "Aasta *",
+            "price": "Hind (€) *",
+            "priceVatIncluded": "KM-ga hind",
+            "mileage": "Läbisõit (km) *",
+            "location": "Asukoht (Linn/Maakond) *",
+            "fuelType": "Kütus *",
+            "transmission": "Käigukast *",
+            "powerKw": "Võimsus (kW) *",
+            "powerHj": "{count} hj",
+            "driveType": "Vedu *",
+            "doors": "Uksed *",
+            "seats": "Istekohad *",
+            "colorExterior": "Välisvärv *",
+            "condition": "Seisukord *",
+            "vin": "VIN-kood (17 tähemärki)",
+            "description": "Lühiajalugu, hooldusinfo jms"
+        },
+        "placeholders": {
+            "make": "Valige mark",
+            "model": "nt. 520d",
+            "variant": "nt. xDrive Luxury Line",
+            "year": "2024",
+            "price": "0",
+            "mileage": "0",
+            "location": "nt. Tallinn, Harjumaa",
+            "fuel": "Valige kütus",
+            "transmission": "Valige käigukast",
+            "drive": "Valige vedu",
+            "doors": "Arv",
+            "seats": "Arv",
+            "color": "nt. Must metallik",
+            "condition": "Valige seisukord",
+            "vin": "VIN1234567890ABCD",
+            "description": "Räägi oma autost lähemalt..."
+        },
+        "charCount": "{count} / 5000 tähemärki"
+    },
+    "step3": {
+        "title": "Lisage fotod",
+        "description": "Heade piltidega kuulutus müüb kiiremini. Lisage vähemalt 3 fotot.",
+        "dropzone": {
+            "title": "Lohistage fotod siia või klõpsake",
+            "subtitle": "PNG, JPG või WEBP kuni 10MB (max 30 fotot)",
+            "button": "Vali failid arvutist"
+        },
+        "tips": {
+            "title": "Nõuanded parimate piltide saamiseks:",
+            "list": [
+                "Tehke pilte päevavalguses, vältige pimedust ja varje",
+                "Pildistage autot kõigi nurkade alt (esi, taga, küljed)",
+                "Lisage pildid salongist, näidikuplokist ja istmetest",
+                "Näidake mootoriruumi ja velgi",
+                "Vältige udused pilte, hoidke kaamerat kindlalt",
+                "Tooge välja kõik kahjustused või erilised lisad"
+            ]
+        },
+        "mainPhoto": "Peapilt",
+        "addMore": "Lisage veel (kuni {count})",
+        "photoNumber": "Pilt {index}"
+    },
+    "step4": {
+        "success": "Kuulutus on edukalt esitatud!",
+        "idText": "Teie kuulutus (ID: #{id}) on nüüd ülevaatusel.",
+        "nextSteps": {
+            "title": "Mis edasi saab?",
+            "items": [
+                "Kontrollime andmed ja fotod üle (tavaliselt 2-4h jooksul).",
+                "Saadame Teile e-kirja, kui kuulutus on avalik.",
+                "Kuulutus on aktiivne 30 päeva."
+            ]
+        },
+        "preview": "Vaata eelvaadet",
+        "myListings": "Minu kuulutused",
+        "addAnother": "Lisa veel üks sõiduk",
+        "backHome": "Tagasi esilehele"
+    },
+    "toasts": {
+        "errorTitle": "Viga",
+        "selectType": "Palun valige sõiduki tüüp",
+        "fillRequired": "Palun täitke kõik kohustuslikud väljad vigadeta",
+        "minPhotos": "Palun lisage vähemalt 3 fotot",
+        "createError": "Viga kuulutuse loomisel",
+        "uploadingTitle": "Piltide üleslaadimine...",
+        "uploadingDesc": "Laadime üles {count} pilti. Palun oodake.",
+        "attachError": "Viga piltide sidumisel kuulutusega",
+        "successTitle": "Edu!",
+        "successDesc": "Kuulutus on edukalt esitatud koos piltidega!",
+        "saveError": "Viga kuulutuse salvestamisel. Proovige uuesti."
+    },
+    "buttons": {
+        "back": "Tagasi",
+        "next": "Edasi",
+        "saving": "Salvestamine...",
+        "publish": "Avalda kuulutus"
+    },
+    "footer": {
+        "termsText": "Klõpsates “Avalda kuulutus”, nõustute Kaarplus kasutustingimuste ja privaatsuspoliitikaga."
+    },
+    "features": {
+        "comfort": "Mugavus",
+        "safety": "Turvalisus",
+        "entertainment": "Meelelahutus",
+        "interior": "Sisu ja välimus",
+        "items": {
+            "Kliimaseade": "Kliimaseade",
+            "Püsikiiruse hoidja": "Püsikiiruse hoidja",
+            "Parkimisandurid": "Parkimisandurid",
+            "Tagurduskaamera": "Tagurduskaamera",
+            "Võtmeta käivitus": "Võtmeta käivitus",
+            "Elektrilised aknad": "Elektrilised aknad",
+            "Katuseluuk": "Katuseluuk",
+            "ABS": "ABS",
+            "ESP": "ESP",
+            "Turvapadjad": "Turvapadjad",
+            "Sõiduraja hoidik": "Sõiduraja hoidik",
+            "Pimenurga hoiatus": "Pimenurga hoiatus",
+            "Liiklusmärkide tuvastus": "Liiklusmärkide tuvastus",
+            "Automaatpidurdus": "Automaatpidurdus",
+            "Navigatsiooniseade": "Navigatsiooniseade",
+            "Bluetooth": "Bluetooth",
+            "Apple CarPlay": "Apple CarPlay",
+            "Android Auto": "Android Auto",
+            "USB pesa": "USB pesa",
+            "Käed-vabad süsteem": "Käed-vabad süsteem",
+            "Nahkpolster": "Nahkpolster",
+            "Soojendusega istmed": "Soojendusega istmed",
+            "Valuveljed": "Valuveljed",
+            "LED tuled": "LED tuled",
+            "Katuseraamid": "Katuseraamid",
+            "Toonitud klaasid": "Toonitud klaasid"
+        }
+    },
+    "options": {
+        "fuel": {
+            "Bensiin": "Bensiin",
+            "Diisel": "Diisel",
+            "Hübriid": "Hübriid",
+            "Elekter": "Elekter",
+            "CNG": "CNG",
+            "LPG": "LPG"
+        },
+        "transmission": {
+            "Manuaal": "Manuaal",
+            "Automaat": "Automaat"
+        },
+        "drive": {
+            "Esivedu": "Esivedu",
+            "Tagavedu": "Tagavedu",
+            "Nelivedu (AWD)": "Nelivedu (AWD)",
+            "Nelivedu (4WD)": "Nelivedu (4WD)"
+        },
+        "condition": {
+            "Uus": "Uus",
+            "Uueväärne": "Uueväärne",
+            "Kasutatud": "Kasutatud",
+            "Vigastatud": "Vigastatud"
+        }
+    }
+}

@@ -13,7 +13,7 @@ export function ViewToggle() {
     const { view, setFilter } = useFilterStore();
 
     return (
-        <div className="flex bg-background border border-border rounded-lg p-1">
+        <div className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-1">
             <button
                 onClick={() => setFilter("view", "grid")}
                 className={`p-1.5 rounded transition-colors ${view === "grid"

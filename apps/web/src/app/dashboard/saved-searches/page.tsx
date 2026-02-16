@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import {
     Bookmark,
     Trash2,
@@ -29,7 +30,7 @@ import {
 import { API_URL } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
-import { et } from "date-fns/locale";
+import { et, enGB, ru } from "date-fns/locale";
 
 interface SavedSearch {
     id: string;
@@ -40,9 +41,12 @@ interface SavedSearch {
 }
 
 export default function SavedSearchesPage() {
+    const { t, i18n } = useTranslation('dashboard');
     const [searches, setSearches] = useState<SavedSearch[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { toast } = useToast();
+
+    const currentLocale = i18n.language === 'et' ? et : i18n.language === 'ru' ? ru : enGB;
 
     const fetchSearches = useCallback(async () => {
         setIsLoading(true);
@@ -52,20 +56,20 @@ export default function SavedSearchesPage() {
                     "Cache-Control": "no-cache"
                 }
             });
-            if (!response.ok) throw new Error("Failed to fetch saved searches");
+            if (!response.ok) throw new Error(t('savedSearches.toasts.fetchError'));
             const json = await response.json();
             setSearches(json.data || []);
         } catch (error) {
             console.error("Fetch error:", error);
             toast({
-                title: "Viga",
-                description: "Salvestatud otsingute laadimine ebaõnnestus.",
+                title: t('common.error'),
+                description: t('savedSearches.toasts.fetchError'),
                 variant: "destructive",
             });
         } finally {
             setIsLoading(false);
         }
-    }, [toast]);
+    }, [toast, t]);
 
     useEffect(() => {
         fetchSearches();
@@ -80,13 +84,13 @@ export default function SavedSearchesPage() {
 
             setSearches(searches.filter(s => s.id !== id));
             toast({
-                title: "Otsing kustutatud",
-                description: "Teie salvestatud otsing on eemaldatud.",
+                title: t('savedSearches.toasts.deleteSuccess'),
+                description: t('savedSearches.toasts.deleteSuccessDesc'),
             });
         } catch (error) {
             toast({
-                title: "Viga",
-                description: "Kustutamine ebaõnnestus.",
+                title: t('common.error'),
+                description: t('savedSearches.toasts.deleteError'),
                 variant: "destructive",
             });
         }
@@ -103,13 +107,13 @@ export default function SavedSearchesPage() {
 
             setSearches(searches.map(s => s.id === id ? { ...s, emailAlerts: !currentStatus } : s));
             toast({
-                title: "Teavitused uuendatud",
-                description: !currentStatus ? "E-posti teavitused on nüüd aktiivsed." : "E-posti teavitused on välja lülitatud.",
+                title: t('savedSearches.toasts.alertsUpdate'),
+                description: !currentStatus ? t('savedSearches.toasts.alertsOn') : t('savedSearches.toasts.alertsOff'),
             });
         } catch (error) {
             toast({
-                title: "Viga",
-                description: "Uuendamine ebaõnnestus.",
+                title: t('common.error'),
+                description: t('savedSearches.toasts.updateError'),
                 variant: "destructive",
             });
         }
@@ -136,15 +140,15 @@ export default function SavedSearchesPage() {
         }
         if (filters.location) parts.push(filters.location);
 
-        return parts.join(" • ") || "Kõik sõidukid";
+        return parts.join(" • ") || t('savedSearches.card.allVehicles');
     };
 
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold">Salvestatud otsingud</h1>
-                    <p className="text-muted-foreground">Hallake oma salvestatud otsingufiltreid ja e-posti teavitusi.</p>
+                    <h1 className="text-2xl font-bold">{t('savedSearches.title')}</h1>
+                    <p className="text-muted-foreground">{t('savedSearches.description')}</p>
                 </div>
                 <Bookmark className="text-primary/20 size-8 hidden sm:block" />
             </div>
@@ -180,20 +184,20 @@ export default function SavedSearchesPage() {
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>
-                                                <DialogTitle>Kas olete kindel?</DialogTitle>
+                                                <DialogTitle>{t('savedSearches.delete.title')}</DialogTitle>
                                                 <DialogDescription>
-                                                    See tegevus eemaldab salvestatud otsingu &quot;{search.name}&quot;. Seda ei saa tagasi võtta.
+                                                    {t('savedSearches.delete.description', { name: search.name })}
                                                 </DialogDescription>
                                             </DialogHeader>
                                             <DialogFooter className="gap-2 sm:gap-0">
                                                 <DialogClose asChild>
-                                                    <Button variant="outline">Tühista</Button>
+                                                    <Button variant="outline">{t('common.cancel')}</Button>
                                                 </DialogClose>
                                                 <Button
                                                     variant="destructive"
                                                     onClick={() => handleDelete(search.id)}
                                                 >
-                                                    Kustuta
+                                                    {t('savedSearches.delete.button')}
                                                 </Button>
                                             </DialogFooter>
                                         </DialogContent>
@@ -201,7 +205,7 @@ export default function SavedSearchesPage() {
                                 </div>
                                 <CardDescription className="flex items-center gap-1.5">
                                     <Clock size={12} />
-                                    Salvestatud {formatDistanceToNow(new Date(search.createdAt), { addSuffix: true, locale: et })}
+                                    {t('savedSearches.card.saved', { date: formatDistanceToNow(new Date(search.createdAt), { addSuffix: true, locale: currentLocale }) })}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="pb-3">
@@ -221,12 +225,12 @@ export default function SavedSearchesPage() {
                                         className="text-xs font-medium cursor-pointer flex items-center gap-1"
                                     >
                                         {search.emailAlerts ? <Bell size={12} className="text-primary" /> : <BellOff size={12} />}
-                                        Teavitused
+                                        {t('savedSearches.card.alerts')}
                                     </label>
                                 </div>
                                 <Button asChild size="sm" variant="secondary" className="gap-1.5 h-8">
                                     <Link href={buildSearchUrl(search.filters)}>
-                                        Muuda / Vaata
+                                        {t('savedSearches.card.view')}
                                         <ArrowRight size={14} />
                                     </Link>
                                 </Button>
@@ -239,12 +243,12 @@ export default function SavedSearchesPage() {
                     <div className="inline-flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary mb-4">
                         <Search size={32} />
                     </div>
-                    <h3 className="text-xl font-bold">Teil pole veel salvestatud otsinguid</h3>
+                    <h3 className="text-xl font-bold">{t('savedSearches.empty.title')}</h3>
                     <p className="text-muted-foreground mt-2 max-w-sm mx-auto">
-                        Salvestage oma lemmikud otsingud, et olla kursis uute kuulutustega ja säästa aega.
+                        {t('savedSearches.empty.description')}
                     </p>
                     <Button asChild className="mt-8">
-                        <Link href="/search">Alusta otsimist</Link>
+                        <Link href="/search">{t('savedSearches.empty.button')}</Link>
                     </Button>
                 </div>
             )}

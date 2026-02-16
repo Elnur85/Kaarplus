@@ -1,0 +1,136 @@
+{
+    "overview": {
+        "title": "Töölaud",
+        "welcome": "Tere tulemast tagasi! Siin on teie kuulutuste ülevaade.",
+        "addListing": "Lisa kuulutus",
+        "recentListings": "Viimased kuulutused",
+        "viewAll": "Vaata kõiki"
+    },
+    "sidebar": {
+        "nav": {
+            "overview": "Ülevaade",
+            "myListings": "Minu kuulutused",
+            "favorites": "Lemmikud",
+            "savedSearches": "Salvestatud otsingud",
+            "settings": "Seaded"
+        },
+        "user": "Kasutaja",
+        "clientType": "Eraklient"
+    },
+    "stats": {
+        "activeListings": "Aktiivsed kuulutused",
+        "totalViews": "Vaatamisi kokku",
+        "totalFavorites": "Lemmikutesse lisatud",
+        "totalMessages": "Sõnumid",
+        "thisMonth": "sellel kuul"
+    },
+    "listings": {
+        "title": "Minu kuulutused",
+        "description": "Siin saad hallata oma aktiivseid ja varasemaid kuulutusi.",
+        "status": {
+            "active": "Aktiivne",
+            "pending": "Ootel",
+            "sold": "Müüdud",
+            "rejected": "Tagasi lükatud",
+            "draft": "Mustand",
+            "inactive": "Mitteaktiivne"
+        },
+        "table": {
+            "listing": "Kuulutus",
+            "price": "Hind",
+            "status": "Staatus",
+            "views": "Vaatamised",
+            "favorites": "Lemmikud",
+            "date": "Kuupäev",
+            "actions": "Tegevused",
+            "empty": "Teil ei ole veel ühtegi kuulutust."
+        },
+        "actions": {
+            "edit": "Muuda",
+            "markSold": "Märgi müüduks",
+            "delete": "Kustuta",
+            "deleteConfirm": "Kas olete kindel? Seda tegevust ei saa tagasi võtta."
+        },
+        "pagination": {
+            "page": "Lehekülg {{current}}/{{total}}",
+            "total": "{{count}} kuulutust",
+            "previous": "Eelmine",
+            "next": "Järgmine"
+        }
+    },
+    "settings": {
+        "title": "Seaded",
+        "description": "Halda oma konto seadeid ja eelistusi.",
+        "profile": {
+            "title": "Profiili andmed",
+            "name": "Nimi",
+            "email": "E-post",
+            "phone": "Telefon",
+            "help": "Profiili muutmiseks pöörduge klienditoe poole."
+        },
+        "notifications": {
+            "title": "Teavituste eelistused",
+            "email": {
+                "title": "E-posti teavitused",
+                "description": "Saada teavitusi kuulutuste kohta e-postiga"
+            },
+            "messages": {
+                "title": "Uued sõnumid",
+                "description": "Teavita mind uutest sõnumitest"
+            },
+            "favorites": {
+                "title": "Lemmikud",
+                "description": "Teavita mind lemmikute hinnamuutustest"
+            },
+            "marketing": {
+                "title": "Turundus",
+                "description": "Saada mulle pakkumisi ja uudiseid"
+            }
+        },
+        "gdpr": {
+            "title": "Andmekaitse (GDPR)",
+            "export": {
+                "title": "Ekspordi oma andmed",
+                "description": "Laadi alla kõik sinu kontoga seotud andmed JSON formaadis",
+                "button": "Ekspordi andmed"
+            },
+            "delete": {
+                "title": "Kustuta konto",
+                "description": "Kustuta oma konto ja kõik sellega seotud andmed jäädavalt",
+                "button": "Kustuta konto"
+            },
+            "privacy": "Lisateavet andmetöötluse kohta leiad meie privaatsuspoliitikast."
+        },
+        "save": "Salvesta muudatused"
+    },
+    "savedSearches": {
+        "title": "Salvestatud otsingud",
+        "description": "Hallake oma salvestatud otsingufiltreid ja e-posti teavitusi.",
+        "empty": {
+            "title": "Teil pole veel salvestatud otsinguid",
+            "description": "Salvestage oma lemmikud otsingud, et olla kursis uute kuulutustega ja säästa aega.",
+            "button": "Alusta otsimist"
+        },
+        "card": {
+            "saved": "Salvestatud {{date}}",
+            "allVehicles": "Kõik sõidukid",
+            "alerts": "Teavitused",
+            "view": "Muuda / Vaata"
+        },
+        "delete": {
+            "title": "Kas olete kindel?",
+            "description": "See tegevus eemaldab salvestatud otsingu \"{{name}}\". Seda ei saa tagasi võtta.",
+            "button": "Kustuta"
+        },
+        "toasts": {
+            "fetchError": "Salvestatud otsingute laadimine ebaõnnestus.",
+            "deleteSuccess": "Otsing kustutatud",
+            "deleteSuccessDesc": "Teie salvestatud otsing on eemaldatud.",
+            "deleteError": "Kustutamine ebaõnnestus.",
+            "alertsUpdate": "Teavitused uuendatud",
+            "alertsOn": "E-posti teavitused on nüüd aktiivsed.",
+            "alertsOff": "E-posti teavitused on välja lülitatud.",
+            "updateError": "Uuendamine ebaõnnestus."
+        }
+    }
+}

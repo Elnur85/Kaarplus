@@ -12,23 +12,21 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-
-interface NavItem {
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
-
-const navItems: NavItem[] = [
-  { label: "Ülevaade", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Minu kuulutused", href: "/dashboard/listings", icon: List },
-  { label: "Lemmikud", href: "/favorites", icon: Heart },
-  { label: "Salvestatud otsingud", href: "/dashboard/saved-searches", icon: Bookmark },
-  { label: "Seaded", href: "/dashboard/settings", icon: Settings },
-];
+import { useTranslation } from "react-i18next";
+import { useSession } from "next-auth/react";
 
 export function DashboardSidebar() {
+  const { t } = useTranslation('dashboard');
+  const { data: session } = useSession();
   const pathname = usePathname();
+
+  const navItems = [
+    { label: t('sidebar.nav.overview'), href: "/dashboard", icon: LayoutDashboard },
+    { label: t('sidebar.nav.myListings'), href: "/dashboard/listings", icon: List },
+    { label: t('sidebar.nav.favorites'), href: "/favorites", icon: Heart },
+    { label: t('sidebar.nav.savedSearches'), href: "/dashboard/saved-searches", icon: Bookmark },
+    { label: t('sidebar.nav.settings'), href: "/dashboard/settings", icon: Settings },
+  ];
 
   return (
     <aside className="space-y-6">
@@ -39,10 +37,10 @@ export function DashboardSidebar() {
         </div>
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-foreground">
-            Kasutaja
+            {session?.user?.name || t('sidebar.user')}
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            Eraklient
+            {t('sidebar.clientType')}
           </p>
         </div>
       </div>
@@ -77,3 +75,4 @@ export function DashboardSidebar() {
     </aside>
   );
 }
+

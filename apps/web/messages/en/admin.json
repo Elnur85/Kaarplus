@@ -1,0 +1,114 @@
+{
+    "layout": {
+        "adminPanel": "Admin Panel",
+        "nav": {
+            "overview": "Overview",
+            "queue": "Verification Queue",
+            "users": "Users",
+            "settings": "Settings"
+        },
+        "backToPortal": "Back to Portal",
+        "welcome": "Welcome back, {name}"
+    },
+    "queue": {
+        "title": "Verification Queue",
+        "description": "New listings waiting for review ({count}).",
+        "refresh": "Refresh list",
+        "loading": "Loading data...",
+        "error": {
+            "title": "Something went wrong",
+            "message": "Error loading data",
+            "retry": "Try again"
+        },
+        "empty": {
+            "title": "All clear!",
+            "message": "There are currently no listings waiting for verification. Good job!",
+            "refresh": "Refresh"
+        },
+        "card": {
+            "photoCount": "{count} photos",
+            "user": "User",
+            "showMore": "More",
+            "showLess": "Less",
+            "reject": "Reject",
+            "approve": "Approve",
+            "sections": {
+                "specs": "Technical Data",
+                "description": "Description",
+                "vin": "VIN Code",
+                "photos": "Photos"
+            },
+            "noDescription": "No description provided.",
+            "noVin": "Missing",
+            "checkHistory": "Check history"
+        },
+        "toasts": {
+            "approved": {
+                "title": "Approved",
+                "description": "Listing is now publicly visible."
+            },
+            "rejected": {
+                "title": "Rejected",
+                "description": "Listing has been rejected and notification sent."
+            },
+            "error": "Error"
+        }
+    },
+    "rejectModal": {
+        "title": "Reject Listing",
+        "description": "Please add a reason why listing “{title}” is rejected. This will be sent to the user.",
+        "placeholder": "E.g.: Photos do not meet requirements, incomplete description...",
+        "cancel": "Cancel",
+        "confirm": "Reject"
+    },
+    "dashboard": {
+        "title": "Overview and Analytics",
+        "description": "Platform statistics, users and financial indicators.",
+        "refresh": "Refresh",
+        "loading": "Loading analytics...",
+        "stats": {
+            "revenue": {
+                "title": "Total Revenue",
+                "description": "Total earned revenue",
+                "trend": "{trend} per month"
+            },
+            "activeListings": {
+                "title": "Active Listings",
+                "description": "{count} total added"
+            },
+            "users": {
+                "title": "Registered Users",
+                "description": "+{count} today",
+                "trend": "{trend} per week"
+            },
+            "soldVehicles": {
+                "title": "Sold Vehicles",
+                "description": "Successful transactions"
+            }
+        },
+        "charts": {
+            "newListings": "New Listings (30 days)",
+            "newUsers": "New Users (30 days)"
+        },
+        "tabs": {
+            "payments": "Latest Payments",
+            "users": "New Users"
+        },
+        "tables": {
+            "transactions": {
+                "title": "Recent Transactions",
+                "date": "Date",
+                "amount": "Amount",
+                "status": "Status",
+                "empty": "No transactions"
+            },
+            "recentUsers": {
+                "title": "Recently Joined",
+                "name": "Name",
+                "email": "Email",
+                "role": "Role",
+                "joined": "Joined"
+            }
+        }
+    }
+}

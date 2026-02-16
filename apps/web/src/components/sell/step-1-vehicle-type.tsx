@@ -4,16 +4,7 @@ import { Car, Truck, Bike, Bus, ShoppingCart, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 
-const vehicleTypes = [
-    { id: "Sedaan", name: "Sedaan", icon: Car },
-    { id: "SUV", name: "Maastur (SUV)", icon: Car },
-    { id: "Hatchback", name: "Luukpära", icon: Car },
-    { id: "Universaal", name: "Universaal", icon: Car },
-    { id: "Kupee", name: "Kupee", icon: Car },
-    { id: "Kabriolett", name: "Kabriolett", icon: Car },
-    { id: "Mahtuniversaal", name: "Mahtuniversaal", icon: Bus },
-    { id: "Pikap", name: "Pikap", icon: Truck },
-];
+import { useTranslation } from "react-i18next";
 
 interface Step1VehicleTypeProps {
     selectedType: string;
@@ -21,12 +12,25 @@ interface Step1VehicleTypeProps {
 }
 
 export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypeProps) {
+    const { t } = useTranslation('sell');
+
+    const vehicleTypes = [
+        { id: "Sedaan", key: "sedan", icon: Car },
+        { id: "SUV", key: "suv", icon: Car },
+        { id: "Hatchback", key: "hatchback", icon: Car },
+        { id: "Universaal", key: "wagon", icon: Car },
+        { id: "Kupee", key: "coupe", icon: Car },
+        { id: "Kabriolett", key: "convertible", icon: Car },
+        { id: "Mahtuniversaal", key: "minivan", icon: Bus },
+        { id: "Pikap", key: "pickup", icon: Truck },
+    ];
+
     return (
         <div className="space-y-6">
             <div className="text-center mb-10">
-                <h2 className="text-2xl font-bold tracking-tight">Valige sõiduki tüüp</h2>
+                <h2 className="text-2xl font-bold tracking-tight">{t('step1.title')}</h2>
                 <p className="text-muted-foreground mt-2">
-                    See aitab meil pakkuda õigeid andmevälju järgmises sammus.
+                    {t('step1.description')}
                 </p>
             </div>
 
@@ -55,7 +59,7 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
                                 <Icon size={32} />
                             </div>
                             <span className={cn("font-bold text-sm", isSelected ? "text-primary" : "text-slate-600")}>
-                                {type.name}
+                                {t(`step1.types.${type.key}`)}
                             </span>
                             {isSelected && (
                                 <div className="absolute top-2 right-2 text-primary">
@@ -83,3 +87,4 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
         </div>
     );
 }
+

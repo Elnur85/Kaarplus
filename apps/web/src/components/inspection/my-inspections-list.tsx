@@ -3,23 +3,26 @@
 import * as React from "react";
 import { ClipboardList } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { et } from "date-fns/locale";
+import { et, enGB, ru } from "date-fns/locale";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   InspectionStatusCard,
   type Inspection,
 } from "@/components/inspection/inspection-status-card";
 import { cn } from "@/lib/utils";
-
-// Re-export formatDistanceToNow wrapper for Estonian locale
-function timeAgo(date: string): string {
-  return formatDistanceToNow(new Date(date), { addSuffix: true, locale: et });
-}
+import { useTranslation } from "react-i18next";
 
 export function MyInspectionsList() {
+  const { t, i18n } = useTranslation('inspection');
   const [inspections, setInspections] = React.useState<Inspection[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+
+  const currentLocale = i18n.language === 'et' ? et : i18n.language === 'ru' ? ru : enGB;
+
+  const timeAgo = (date: string) => {
+    return formatDistanceToNow(new Date(date), { addSuffix: true, locale: currentLocale });
+  };
 
   React.useEffect(() => {
     const fetchInspections = async () => {
@@ -30,7 +33,7 @@ export function MyInspectionsList() {
         );
 
         if (!response.ok) {
-          throw new Error("Ülevaatuste laadimine ebaõnnestus");
+          throw new Error(t('error'));
         }
 
         const result = await response.json();
@@ -39,7 +42,7 @@ export function MyInspectionsList() {
         setError(
           err instanceof Error
             ? err.message
-            : "Ülevaatuste laadimine ebaõnnestus"
+            : t('error')
         );
       } finally {
         setIsLoading(false);
@@ -47,7 +50,7 @@ export function MyInspectionsList() {
     };
 
     fetchInspections();
-  }, []);
+  }, [t]);
 
   if (isLoading) {
     return (
@@ -86,10 +89,9 @@ export function MyInspectionsList() {
         )}
       >
         <ClipboardList className="mb-4 h-12 w-12 text-muted-foreground" />
-        <h3 className="text-lg font-semibold">Ülevaatusi pole tellitud</h3>
+        <h3 className="text-lg font-semibold">{t('empty.title')}</h3>
         <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-          Siin kuvatakse teie tellitud sõidukite ülevaatused. Ülevaatuse saate
-          tellida sõiduki detailvaates.
+          {t('empty.description')}
         </p>
       </div>
     );
@@ -99,7 +101,7 @@ export function MyInspectionsList() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">
-          Minu ülevaatused ({inspections.length})
+          {t('count', { count: inspections.length })}
         </h2>
       </div>
       <div className="space-y-4">

@@ -50,52 +50,58 @@ interface InspectionStatusCardProps {
   inspection: Inspection;
 }
 
-const STATUS_CONFIG: Record<
-  InspectionStatus,
-  { label: string; className: string; icon: React.ElementType }
-> = {
-  PENDING: {
-    label: "Ootel",
-    className: "bg-amber-100 text-amber-800 border-amber-200",
-    icon: Clock,
-  },
-  SCHEDULED: {
-    label: "Planeeritud",
-    className: "bg-blue-100 text-blue-800 border-blue-200",
-    icon: Calendar,
-  },
-  IN_PROGRESS: {
-    label: "Käimas",
-    className: "bg-primary/10 text-primary border-primary/20",
-    icon: FileText,
-  },
-  COMPLETED: {
-    label: "Lõpetatud",
-    className: "bg-green-100 text-green-800 border-green-200",
-    icon: CheckCircle2,
-  },
-  CANCELLED: {
-    label: "Tühistatud",
-    className: "bg-red-100 text-red-800 border-red-200",
-    icon: XCircle,
-  },
-};
-
-function formatDate(dateString: string): string {
-  return new Intl.DateTimeFormat("et-EE", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(dateString));
-}
+import { useTranslation } from "react-i18next";
 
 export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) {
+  const { t, i18n } = useTranslation('inspection');
   const { listing, status } = inspection;
+
+  const STATUS_CONFIG: Record<
+    InspectionStatus,
+    { label: string; className: string; icon: React.ElementType }
+  > = {
+    PENDING: {
+      label: t('status.labels.PENDING'),
+      className: "bg-amber-100 text-amber-800 border-amber-200",
+      icon: Clock,
+    },
+    SCHEDULED: {
+      label: t('status.labels.SCHEDULED'),
+      className: "bg-blue-100 text-blue-800 border-blue-200",
+      icon: Calendar,
+    },
+    IN_PROGRESS: {
+      label: t('status.labels.IN_PROGRESS'),
+      className: "bg-primary/10 text-primary border-primary/20",
+      icon: FileText,
+    },
+    COMPLETED: {
+      label: t('status.labels.COMPLETED'),
+      className: "bg-green-100 text-green-800 border-green-200",
+      icon: CheckCircle2,
+    },
+    CANCELLED: {
+      label: t('status.labels.CANCELLED'),
+      className: "bg-red-100 text-red-800 border-red-200",
+      icon: XCircle,
+    },
+  };
+
   const config = STATUS_CONFIG[status];
   const StatusIcon = config.icon;
   const thumbnailUrl = listing.images?.[0]?.url;
+
+  const localeCode = i18n.language === 'et' ? 'et-EE' : i18n.language === 'ru' ? 'ru-RU' : 'en-GB';
+
+  const formatDate = (dateString: string) => {
+    return new Intl.DateTimeFormat(localeCode, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(dateString));
+  };
 
   return (
     <Card>
@@ -118,7 +124,7 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
                 {listing.year} {listing.make} {listing.model}
               </CardTitle>
               <p className="mt-1 text-sm text-muted-foreground">
-                Tellitud: {formatDate(inspection.createdAt)}
+                {t('status.ordered')} {formatDate(inspection.createdAt)}
               </p>
             </div>
           </div>
@@ -136,7 +142,7 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
         {inspection.scheduledAt && (
           <div className="flex items-center gap-2 text-sm">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Planeeritud:</span>
+            <span className="text-muted-foreground">{t('status.scheduled')}</span>
             <span className="font-medium">
               {formatDate(inspection.scheduledAt)}
             </span>
@@ -146,7 +152,7 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
         {inspection.completedAt && (
           <div className="flex items-center gap-2 text-sm">
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">Lõpetatud:</span>
+            <span className="text-muted-foreground">{t('status.completed')}</span>
             <span className="font-medium">
               {formatDate(inspection.completedAt)}
             </span>
@@ -156,7 +162,7 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
         {inspection.inspectorNotes && (
           <div className="rounded-lg border bg-muted/50 p-3">
             <p className="mb-1 text-xs font-medium text-muted-foreground">
-              Inspektori märkused
+              {t('notes')}
             </p>
             <p className="text-sm">{inspection.inspectorNotes}</p>
           </div>
@@ -170,7 +176,7 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
               rel="noopener noreferrer"
             >
               <Download className="h-4 w-4" />
-              Laadi aruanne alla
+              {t('downloadReport')}
             </a>
           </Button>
         )}
@@ -178,5 +184,6 @@ export function InspectionStatusCard({ inspection }: InspectionStatusCardProps) 
     </Card>
   );
 }
+
 
 export type { Inspection, InspectionStatus, InspectionStatusCardProps };

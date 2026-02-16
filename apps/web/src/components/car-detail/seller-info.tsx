@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { Star, MapPin, ShieldCheck, Phone, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTranslation } from "react-i18next";
 
 interface SellerInfoProps {
     seller: {
@@ -17,16 +20,17 @@ interface SellerInfoProps {
 }
 
 export function SellerInfo({ seller, location }: SellerInfoProps) {
+    const { t } = useTranslation('carDetail');
     const isDealership = seller.role === "DEALERSHIP";
 
     // Determine avatar URL
     const avatarUrl = seller.image || `https://ui-avatars.com/api/?name=${seller.name || "User"}&background=random`;
 
     return (
-        <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-6">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
-                <span>Müüja info</span>
-                {isDealership && <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px]">Esindus</span>}
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <span>{t('seller.title')}</span>
+                {isDealership && <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px]">{t('seller.dealership')}</span>}
             </h3>
 
             <div className="flex items-center gap-4">
@@ -38,10 +42,10 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
                     <div className="font-bold text-lg leading-tight">
                         {isDealership ? (
                             <Link href={`/dealers/${seller.id}`} className="hover:underline hover:text-primary transition-colors">
-                                {seller.name || "Erakasutaja"}
+                                {seller.name || t('seller.privateSeller')}
                             </Link>
                         ) : (
-                            seller.name || "Erakasutaja"
+                            seller.name || t('seller.privateSeller')
                         )}
                     </div>
                     {/* ... star rating ... */}
@@ -51,23 +55,23 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
                                 <Star key={i} size={14} className={i < 4 ? "fill-current" : i < 4.5 ? "fill-current opacity-50" : ""} />
                             ))}
                         </div>
-                        <span className="text-xs font-semibold text-muted-foreground ml-1">(4.8/5)</span>
+                        <span className="text-xs font-semibold text-slate-500 ml-1">(4.8/5)</span>
                     </div>
                 </div>
             </div>
 
             <div className="space-y-3 pt-2">
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                     <ShieldCheck size={16} className="text-primary" />
-                    <span>{isDealership ? "Ametlik koostööpartner" : "Kontrollitud müüja alates 2024"}</span>
+                    <span>{isDealership ? t('seller.officialPartner') : t('seller.verifiedSeller')}</span>
                 </div>
                 {/* ... location and phone ... */}
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                     <MapPin size={16} className="text-primary" />
-                    <span>{location}, Eesti</span>
+                    <span>{t('seller.locationEstonia', { location })}</span>
                 </div>
                 {seller.phone && (
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                         <Phone size={16} className="text-primary" />
                         <a href={`tel:${seller.phone}`} className="hover:text-primary transition-colors">{seller.phone}</a>
                     </div>
@@ -75,25 +79,25 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
             </div>
 
             {isDealership && (
-                <Button variant="secondary" className="w-full gap-2 font-bold h-11 bg-muted/50 hover:bg-muted" asChild>
+                <Button variant="secondary" className="w-full gap-2 font-bold h-11 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-sm transition-colors" asChild>
                     <Link href={`/dealers/${seller.id}`}>
-                        Vaata kõiki kuulutusi <ChevronRight size={16} />
+                        {t('seller.viewAllListings')} <ChevronRight size={16} />
                     </Link>
                 </Button>
             )}
 
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/50">
-                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title="Tasuta ajaloo kontroll">
+            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title={t('seller.history')}>
                     <ShieldCheck size={28} className="text-slate-700" />
-                    <span className="text-[9px] font-extrabold uppercase text-center">Ajalugu</span>
+                    <span className="text-[9px] font-extrabold uppercase text-center">{t('seller.history')}</span>
                 </div>
-                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title="7-päevane tagastusõigus">
+                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title={t('seller.warranty')}>
                     <Star size={28} className="text-slate-700" />
-                    <span className="text-[9px] font-extrabold uppercase text-center">Garantii</span>
+                    <span className="text-[9px] font-extrabold uppercase text-center">{t('seller.warranty')}</span>
                 </div>
-                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title="Professionaalselt kontrollitud">
+                <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity cursor-help" title={t('seller.verified')}>
                     <MapPin size={28} className="text-slate-700" />
-                    <span className="text-[9px] font-extrabold uppercase text-center">Kontrollitud</span>
+                    <span className="text-[9px] font-extrabold uppercase text-center">{t('seller.verified')}</span>
                 </div>
             </div>
         </div>

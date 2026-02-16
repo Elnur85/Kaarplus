@@ -16,14 +16,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const steps = [
-    { id: 1, name: "Sõiduki tüüp" },
-    { id: 2, name: "Andmed" },
-    { id: 3, name: "Fotod" },
-    { id: 4, name: "Kinnitus" },
-];
+import { useTranslation } from "react-i18next";
 
 export function SellWizard() {
+    const { t } = useTranslation('sell');
     const { data: session } = useSession();
     const { toast } = useToast();
     const [currentStep, setCurrentStep] = useState(1);
@@ -31,6 +27,13 @@ export function SellWizard() {
     const [listingId, setListingId] = useState<string | null>(null);
     const [images, setImages] = useState<File[]>([]);
     const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+
+    const steps = [
+        { id: 1, name: t('steps.type') },
+        { id: 2, name: t('steps.data') },
+        { id: 3, name: t('steps.photos') },
+        { id: 4, name: t('steps.confirmation') },
+    ];
 
     const form = useForm({
         resolver: zodResolver(sellFormSchema),
@@ -56,8 +59,8 @@ export function SellWizard() {
             if (!isValid) {
                 toast({
                     variant: "destructive",
-                    title: "Viga",
-                    description: "Palun valige sõiduki tüüp",
+                    title: t('toasts.errorTitle'),
+                    description: t('toasts.selectType'),
                 });
             }
         } else if (currentStep === 2) {
@@ -65,8 +68,8 @@ export function SellWizard() {
             if (!isValid) {
                 toast({
                     variant: "destructive",
-                    title: "Viga",
-                    description: "Palun täitke kõik kohustuslikud väljad vigadeta",
+                    title: t('toasts.errorTitle'),
+                    description: t('toasts.fillRequired'),
                 });
             }
         } else if (currentStep === 3) {
@@ -74,8 +77,8 @@ export function SellWizard() {
             if (!isValid) {
                 toast({
                     variant: "destructive",
-                    title: "Viga",
-                    description: "Palun lisage vähemalt 3 fotot",
+                    title: t('toasts.errorTitle'),
+                    description: t('toasts.minPhotos'),
                 });
             }
         }
@@ -164,7 +167,7 @@ export function SellWizard() {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.message || "Viga kuulutuse loomisel");
+                throw new Error(errorData.message || t('toasts.createError'));
             }
 
             const result = await res.json();
@@ -173,8 +176,8 @@ export function SellWizard() {
 
             // 3. Upload images to S3
             toast({
-                title: "Piltide üleslaadimine...",
-                description: `Laadime üles ${images.length} pilti. Palun oodake.`,
+                title: t('toasts.uploadingTitle'),
+                description: t('toasts.uploadingDesc', { count: images.length }),
             });
 
             const imageUrls = await Promise.all(
@@ -192,20 +195,20 @@ export function SellWizard() {
             });
 
             if (!attachRes.ok) {
-                throw new Error("Viga piltide sidumisel kuulutusega");
+                throw new Error(t('toasts.attachError'));
             }
 
             setCurrentStep(4);
             toast({
-                title: "Edu!",
-                description: "Kuulutus on edukalt esitatud koos piltidega!",
+                title: t('toasts.successTitle'),
+                description: t('toasts.successDesc'),
             });
         } catch (error: any) {
             console.error(error);
             toast({
                 variant: "destructive",
-                title: "Viga",
-                description: error.message || "Viga kuulutuse salvestamisel. Proovige uuesti.",
+                title: t('toasts.errorTitle'),
+                description: error.message || t('toasts.saveError'),
             });
         } finally {
             setIsSubmitting(false);
@@ -214,7 +217,7 @@ export function SellWizard() {
 
     if (currentStep === 4 && listingId) {
         return (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-border p-8 md:p-12 transition-all">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
                 <Step4Confirmation listingId={listingId} />
             </div>
         );
@@ -224,7 +227,7 @@ export function SellWizard() {
         <div className="space-y-8">
             <StepIndicator currentStep={currentStep} steps={steps} />
 
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-border overflow-hidden transition-all duration-300">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-300">
                 <div className="p-8 md:p-12">
                     {currentStep === 1 && (
                         <Step1VehicleType
@@ -242,20 +245,20 @@ export function SellWizard() {
                     )}
                 </div>
 
-                <div className="p-8 bg-muted/30 border-t flex items-center justify-between">
+                <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <Button
                         variant="ghost"
                         onClick={prevStep}
                         disabled={currentStep === 1 || isSubmitting}
                         className={cn("gap-2 font-bold", currentStep === 1 && "invisible")}
                     >
-                        <ArrowLeft size={18} /> Tagasi
+                        <ArrowLeft size={18} /> {t('buttons.back')}
                     </Button>
 
                     <div className="flex gap-4">
                         {currentStep < 3 ? (
                             <Button onClick={nextStep} className="px-8 font-bold gap-2 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
-                                Edasi <ArrowRight size={18} />
+                                {t('buttons.next')} <ArrowRight size={18} />
                             </Button>
                         ) : (
                             <Button
@@ -265,11 +268,11 @@ export function SellWizard() {
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <Loader2 size={18} className="animate-spin" /> Salvestamine...
+                                        <Loader2 size={18} className="animate-spin" /> {t('buttons.saving')}
                                     </>
                                 ) : (
                                     <>
-                                        <Sparkles size={18} /> Avalda kuulutus
+                                        <Sparkles size={18} /> {t('buttons.publish')}
                                     </>
                                 )}
                             </Button>
@@ -279,8 +282,9 @@ export function SellWizard() {
             </div>
 
             <p className="text-center text-xs text-muted-foreground pt-4">
-                Klõpsates &ldquo;Avalda kuulutus&rdquo;, nõustute Kaarplus <a href="/terms" className="underline hover:text-primary">kasutustingimuste</a> ja <a href="/privacy" className="underline hover:text-primary">privaatsuspoliitikaga</a>.
+                {t('footer.termsText')}
             </p>
         </div>
     );
 }
+

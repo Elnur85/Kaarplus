@@ -5,60 +5,64 @@ import { Label } from "@/components/ui/label";
 import { UseFormReturn } from "react-hook-form";
 import { SellFormValues } from "@/schemas/sell-form";
 
-const featureGroups = [
-    {
-        title: "Mugavus",
-        features: [
-            "Kliimaseade",
-            "Püsikiiruse hoidja",
-            "Parkimisandurid",
-            "Tagurduskaamera",
-            "Võtmeta käivitus",
-            "Elektrilised aknad",
-            "Katuseluuk",
-        ],
-    },
-    {
-        title: "Turvalisus",
-        features: [
-            "ABS",
-            "ESP",
-            "Turvapadjad",
-            "Sõiduraja hoidik",
-            "Pimenurga hoiatus",
-            "Liiklusmärkide tuvastus",
-            "Automaatpidurdus",
-        ],
-    },
-    {
-        title: "Meelelahutus",
-        features: [
-            "Navigatsiooniseade",
-            "Bluetooth",
-            "Apple CarPlay",
-            "Android Auto",
-            "USB pesa",
-            "Käed-vabad süsteem",
-        ],
-    },
-    {
-        title: "Sisu ja välimus",
-        features: [
-            "Nahkpolster",
-            "Soojendusega istmed",
-            "Valuveljed",
-            "LED tuled",
-            "Katuseraamid",
-            "Toonitud klaasid",
-        ],
-    },
-];
+import { useTranslation } from "react-i18next";
 
 interface EquipmentCheckboxesProps {
     form: UseFormReturn<SellFormValues>;
 }
 
 export function EquipmentCheckboxes({ form }: EquipmentCheckboxesProps) {
+    const { t } = useTranslation('sell');
+
+    const featureGroups = [
+        {
+            title: t('features.comfort'),
+            features: [
+                "Kliimaseade",
+                "Püsikiiruse hoidja",
+                "Parkimisandurid",
+                "Tagurduskaamera",
+                "Võtmeta käivitus",
+                "Elektrilised aknad",
+                "Katuseluuk",
+            ],
+        },
+        {
+            title: t('features.safety'),
+            features: [
+                "ABS",
+                "ESP",
+                "Turvapadjad",
+                "Sõiduraja hoidik",
+                "Pimenurga hoiatus",
+                "Liiklusmärkide tuvastus",
+                "Automaatpidurdus",
+            ],
+        },
+        {
+            title: t('features.entertainment'),
+            features: [
+                "Navigatsiooniseade",
+                "Bluetooth",
+                "Apple CarPlay",
+                "Android Auto",
+                "USB pesa",
+                "Käed-vabad süsteem",
+            ],
+        },
+        {
+            title: t('features.interior'),
+            features: [
+                "Nahkpolster",
+                "Soojendusega istmed",
+                "Valuveljed",
+                "LED tuled",
+                "Katuseraamid",
+                "Toonitud klaasid",
+            ],
+        },
+    ];
+
     return (
         <div className="space-y-8">
             {featureGroups.map((group) => (
@@ -82,7 +86,7 @@ export function EquipmentCheckboxes({ form }: EquipmentCheckboxesProps) {
                                     htmlFor={`feature-${feature}`}
                                     className="text-sm font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
                                 >
-                                    {feature}
+                                    {t(`features.items.${feature}`)}
                                 </Label>
                             </div>
                         ))}
@@ -92,3 +96,4 @@ export function EquipmentCheckboxes({ form }: EquipmentCheckboxesProps) {
         </div>
     );
 }
+

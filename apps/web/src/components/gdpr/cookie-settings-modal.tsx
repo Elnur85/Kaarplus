@@ -26,6 +26,8 @@ interface CookieSettingsModalProps {
     onRejectAll: () => void;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function CookieSettingsModal({
     open,
     onOpenChange,
@@ -33,6 +35,7 @@ export function CookieSettingsModal({
     onSave,
     onRejectAll,
 }: CookieSettingsModalProps) {
+    const { t } = useTranslation('legal');
     const [localConsent, setLocalConsent] = useState<ConsentState>(consent);
 
     const handleOpenChange = (newOpen: boolean) => {
@@ -47,7 +50,7 @@ export function CookieSettingsModal({
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="text-lg font-bold">
-                        Küpsiste eelistused
+                        {t('cookies.settingsTitle')}
                     </DialogTitle>
                 </DialogHeader>
 
@@ -57,18 +60,17 @@ export function CookieSettingsModal({
                         <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-bold">
-                                    Vajalikud küpsised
+                                    {t('cookies.essential.title')}
                                 </span>
                                 <Badge
                                     variant="secondary"
                                     className="text-[10px] uppercase font-bold"
                                 >
-                                    Nõutud
+                                    {t('cookies.essential.badge')}
                                 </Badge>
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                Vajalikud veebisaidi nõuetekohaseks toimimiseks. Neid ei saa
-                                keelata.
+                                {t('cookies.essential.description')}
                             </p>
                         </div>
                         <Switch checked disabled className="cursor-not-allowed" />
@@ -80,11 +82,10 @@ export function CookieSettingsModal({
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                             <span className="text-sm font-bold block mb-1">
-                                Analüütilised küpsised
+                                {t('cookies.analytics.title')}
                             </span>
                             <p className="text-xs text-muted-foreground">
-                                Aitavad meil mõista, kuidas külastajad meie veebisaidiga
-                                suhtlevad, kogudes anonüümseid andmeid.
+                                {t('cookies.analytics.description')}
                             </p>
                         </div>
                         <Switch
@@ -101,11 +102,10 @@ export function CookieSettingsModal({
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                             <span className="text-sm font-bold block mb-1">
-                                Turundusküpsised
+                                {t('cookies.marketing.title')}
                             </span>
                             <p className="text-xs text-muted-foreground">
-                                Kasutatakse külastajate jälgimiseks veebisaitidel, et kuvada
-                                asjakohaseid ja kaasahaaravaid reklaame.
+                                {t('cookies.marketing.description')}
                             </p>
                         </div>
                         <Switch
@@ -127,7 +127,7 @@ export function CookieSettingsModal({
                         }}
                         className="text-muted-foreground"
                     >
-                        Keeldu kõigist
+                        {t('buttons.rejectAll')}
                     </Button>
                     <Button
                         size="sm"
@@ -135,10 +135,11 @@ export function CookieSettingsModal({
                             onSave({ ...localConsent, essential: true })
                         }
                     >
-                        Salvesta eelistused
+                        {t('buttons.savePreferences')}
                     </Button>
                 </div>
             </DialogContent>
         </Dialog>
     );
 }
+

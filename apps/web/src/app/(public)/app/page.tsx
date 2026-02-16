@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Smartphone, Bell, Search, Star, MessageSquare, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function MobileAppPage() {
+    const { t } = useTranslation('mobileApp');
+
     return (
         <div className="min-h-screen">
             {/* Hero */}
@@ -14,21 +17,21 @@ export default function MobileAppPage() {
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="space-y-8 animate-in slide-in-from-left duration-700">
                             <Badge variant="secondary" className="px-4 py-1.5 text-sm bg-primary/10 text-primary border-primary/20 rounded-full">
-                                Investor Preview • Version 1.0
+                                {t('hero.badge')}
                             </Badge>
                             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
-                                The future of car buying<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">in your pocket.</span>
+                                {t('hero.title')}<br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">{t('hero.titleAccent')}</span>
                             </h1>
                             <p className="text-xl text-muted-foreground max-w-[600px] leading-relaxed">
-                                Experience the seamless marketplace with real-time notifications, instant messaging, and exclusive mobile-first features.
+                                {t('hero.description')}
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                 <div className="flex-1 max-w-sm flex gap-2">
-                                    <Input placeholder="Enter your email" className="h-12 bg-background/50 border-input/50" />
+                                    <Input placeholder={t('hero.waitlist.placeholder')} className="h-12 bg-background/50 border-input/50" />
                                     <Button size="lg" className="h-12 px-8 font-semibold">
-                                        Join Waitlist
+                                        {t('hero.waitlist.button')}
                                     </Button>
                                 </div>
                             </div>
@@ -38,7 +41,7 @@ export default function MobileAppPage() {
                                         <div key={i} className={`w-8 h-8 rounded-full border-2 border-background bg-slate-${i * 100 + 200}`} />
                                     ))}
                                 </div>
-                                <p>Join 2,000+ others on the waitlist</p>
+                                <p>{t('hero.waitlist.count')}</p>
                             </div>
                         </div>
 
@@ -72,14 +75,14 @@ export default function MobileAppPage() {
                                 <div className="flex-1 overflow-hidden p-4 space-y-4 pb-20">
                                     <div className="relative group">
                                         <Search className="absolute left-3 top-2.5 text-muted-foreground group-focus-within:text-primary transition-colors" size={16} />
-                                        <Input className="pl-9 h-10 bg-secondary/50 border-none rounded-xl" placeholder="Search BMW..." />
+                                        <Input className="pl-9 h-10 bg-secondary/50 border-none rounded-xl" placeholder={t('mockup.searchPlaceholder')} />
                                     </div>
 
                                     {/* Categories */}
                                     <div className="flex gap-3 overflow-hidden pb-1">
-                                        {['All', 'SUV', 'Sedan', 'Sport'].map((cat, i) => (
+                                        {['all', 'suv', 'sedan', 'sport'].map((cat, i) => (
                                             <div key={cat} className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap ${i === 0 ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
-                                                {cat}
+                                                {t(`mockup.categories.${cat}`)}
                                             </div>
                                         ))}
                                     </div>
@@ -87,7 +90,7 @@ export default function MobileAppPage() {
                                     {/* Car Card 1 */}
                                     <div className="border border-border/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-card">
                                         <div className="h-32 bg-slate-200 dark:bg-slate-800 relative group">
-                                            <Badge className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm">New</Badge>
+                                            <Badge className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm">{t('mockup.badge')}</Badge>
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
                                         </div>
                                         <div className="p-3">

@@ -2,7 +2,8 @@
 
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-import { et } from "date-fns/locale";
+import { et, enUS, ru } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 interface SpecsGridProps {
     listing: {
@@ -26,19 +27,22 @@ interface SpecsGridProps {
 }
 
 export function SpecsGrid({ listing }: SpecsGridProps) {
+    const { t, i18n } = useTranslation(['carDetail', 'sell']);
+    const currentLocale = i18n.language === 'ru' ? ru : i18n.language === 'en' ? enUS : et;
+
     const specItems = [
-        { label: "Seisukord", value: listing.condition },
-        { label: "Esmaregistreerimine", value: listing.year.toString() },
-        { label: "Läbisõit", value: `${listing.mileage.toLocaleString("et-EE")} km` },
-        { label: "Mootor", value: listing.fuelType },
-        { label: "Võimsus", value: `${listing.powerKw} kW (${Math.round(listing.powerKw * 1.341)} hj)` },
-        { label: "Käigukast", value: listing.transmission },
-        { label: "Vedu", value: listing.driveType || "Esivedu" },
-        { label: "Keretüüp", value: listing.bodyType },
-        { label: "Uksi / Kohti", value: `${listing.doors || "—"} / ${listing.seats || "—"}` },
-        { label: "Välisvärv", value: listing.colorExterior },
-        { label: "Sisevärv", value: listing.colorInterior || "—" },
-        { label: "VIN-kood", value: listing.vin || "Määramata", isUppercase: true },
+        { label: t('specs.condition'), value: t(`options.condition.${listing.condition}`, { ns: 'sell', defaultValue: listing.condition }) },
+        { label: t('specs.firstRegistration'), value: listing.year.toString() },
+        { label: t('specs.mileage'), value: `${listing.mileage.toLocaleString(i18n.language === 'et' ? "et-EE" : i18n.language === 'ru' ? "ru-RU" : "en-US")} km` },
+        { label: t('specs.engine'), value: t(`options.fuel.${listing.fuelType}`, { ns: 'sell', defaultValue: listing.fuelType }) },
+        { label: t('specs.power'), value: `${listing.powerKw} kW (${Math.round(listing.powerKw * 1.341)} hj)` },
+        { label: t('specs.transmission'), value: t(`options.transmission.${listing.transmission}`, { ns: 'sell', defaultValue: listing.transmission }) },
+        { label: t('specs.driveType'), value: listing.driveType ? t(`options.drive.${listing.driveType}`, { ns: 'sell', defaultValue: listing.driveType }) : t('specs.frontWheelDrive') },
+        { label: t('specs.bodyType'), value: t(`step1.types.${listing.bodyType.toLowerCase()}`, { ns: 'sell', defaultValue: listing.bodyType }) },
+        { label: t('specs.doorsSeats'), value: `${listing.doors || "—"} / ${listing.seats || "—"}` },
+        { label: t('specs.exteriorColor'), value: listing.colorExterior },
+        { label: t('specs.interiorColor'), value: listing.colorInterior || "—" },
+        { label: t('specs.vin'), value: listing.vin || t('specs.notSpecified'), isUppercase: true },
     ];
 
     return (
@@ -55,7 +59,11 @@ export function SpecsGrid({ listing }: SpecsGridProps) {
             </div>
 
             <div className="flex items-center gap-6 text-xs text-muted-foreground pt-2">
-                <span>Kuulutus lisatud: {format(new Date(listing.createdAt), "dd. MMMM yyyy", { locale: et })}</span>
+                <span>
+                    {t('specs.addedOn', {
+                        date: format(new Date(listing.createdAt), "dd. MMMM yyyy", { locale: currentLocale })
+                    })}
+                </span>
                 <span>ID: {listing.id?.substring(0, 8).toUpperCase()}</span>
             </div>
         </div>

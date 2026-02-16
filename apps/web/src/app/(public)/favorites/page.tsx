@@ -10,10 +10,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { VehicleSummary } from "@/types/vehicle";
 import { API_URL } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 12;
 
 export function FavoritesPage() {
+    const { t } = useTranslation('favorites');
     const [favorites, setFavorites] = useState<VehicleSummary[]>([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
@@ -56,10 +58,10 @@ export function FavoritesPage() {
 
     return (
         <div className="container py-8 min-h-screen">
-            <Breadcrumbs items={[{ label: "Lemmikud" }]} />
+            <Breadcrumbs items={[{ label: t('breadcrumb') }]} />
 
             <h1 className="text-2xl font-bold text-slate-800 mb-8">
-                Minu lemmikud
+                {t('title')}
             </h1>
 
             {isLoading ? (
@@ -71,7 +73,7 @@ export function FavoritesPage() {
             ) : favorites.length > 0 ? (
                 <>
                     <p className="text-sm text-muted-foreground mb-6">
-                        {total} {total === 1 ? "lemmik" : "lemmikut"}
+                        {total} {total === 1 ? t('count', { count: total }) : t('count_plural', { count: total })}
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -87,9 +89,11 @@ export function FavoritesPage() {
                     {totalPages > 1 && (
                         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border pt-8">
                             <p className="text-sm text-muted-foreground">
-                                Näitan {(page - 1) * PAGE_SIZE + 1} kuni{" "}
-                                {Math.min(page * PAGE_SIZE, total)} lemmikut{" "}
-                                {total}-st
+                                {t('showing', {
+                                    start: (page - 1) * PAGE_SIZE + 1,
+                                    end: Math.min(page * PAGE_SIZE, total),
+                                    total: total
+                                })}
                             </p>
                             <Pagination
                                 currentPage={page}
@@ -107,16 +111,15 @@ export function FavoritesPage() {
                         className="mx-auto text-muted-foreground/40 mb-4"
                     />
                     <h3 className="text-lg font-semibold text-slate-800">
-                        Teil pole veel lemmikuid
+                        {t('empty.title')}
                     </h3>
                     <p className="text-muted-foreground mt-2 max-w-md mx-auto">
-                        Sirvige meie kuulutusi ja lisage sõidukeid lemmikutesse,
-                        vajutades südame ikoonile.
+                        {t('empty.description')}
                     </p>
                     <Button asChild className="mt-6" variant="default">
                         <Link href="/listings">
                             <Search size={16} className="mr-2" />
-                            Sirvi kuulutusi
+                            {t('empty.button')}
                         </Link>
                     </Button>
                 </div>

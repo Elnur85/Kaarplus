@@ -8,7 +8,10 @@ import { ConversationList } from "@/components/messages/conversation-list";
 import { MessageThread } from "@/components/messages/message-thread";
 import { useMessageStore, type Conversation } from "@/store/use-message-store";
 
+import { useTranslation } from "react-i18next";
+
 export function MessagesPageClient() {
+  const { t } = useTranslation('messages');
   const { data: session, status } = useSession();
   const currentUserId = session?.user?.id || "";
 
@@ -42,14 +45,14 @@ export function MessagesPageClient() {
   if (status === "unauthenticated") {
     return (
       <div className="flex h-[400px] flex-col items-center justify-center gap-4 text-center">
-        <p className="text-muted-foreground">Sisselogimine on vajalik sõnumite vaatamiseks.</p>
+        <p className="text-muted-foreground">{t('authRequired')}</p>
       </div>
     );
   }
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-foreground">Sõnumid</h1>
+      <h1 className="mb-6 text-2xl font-bold text-foreground">{t('title')}</h1>
 
       <div className="overflow-hidden rounded-lg border border-border bg-card">
         <div className="flex h-[600px]">
@@ -62,7 +65,7 @@ export function MessagesPageClient() {
           >
             <div className="border-b border-border px-4 py-3">
               <h2 className="text-sm font-semibold text-foreground">
-                Vestlused
+                {t('conversations')}
               </h2>
             </div>
             <ConversationList
@@ -91,10 +94,10 @@ export function MessagesPageClient() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-foreground">
-                    Valige vestlus
+                    {t('noSelected.title')}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Valige vestlus vasakult, et naha sonumeid
+                    {t('noSelected.subtitle')}
                   </p>
                 </div>
               </div>
@@ -105,3 +108,4 @@ export function MessagesPageClient() {
     </div>
   );
 }
+

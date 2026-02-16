@@ -1,9 +1,14 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation, Trans } from "react-i18next";
+import { Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function NewsletterSignup() {
     const { toast } = useToast();
+    const { t } = useTranslation('home');
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -14,43 +19,52 @@ export function NewsletterSignup() {
         console.log("Newsletter signup:", email);
 
         toast({
-            title: "Tellitud!",
-            description: "Olete liitunud meie uudiskirjaga.",
+            title: t('newsletter.toastSuccess'),
+            description: t('newsletter.toastDescription'),
         });
 
         e.currentTarget.reset();
     };
 
     return (
-        <div className="bg-primary/5 py-16">
-            <div className="container px-4 md:px-6">
-                <div className="flex flex-col items-center text-center space-y-4 max-w-2xl mx-auto">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-foreground">
-                        Liituge meie uudiskirjaga
-                    </h2>
-                    <p className="text-muted-foreground md:text-lg">
-                        Saa esimesena teada parimatest pakkumistest ja uutest autodest.
-                    </p>
-                    <form onSubmit={handleSubmit} className="flex w-full max-w-sm items-center space-x-2">
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Sisestage oma e-post"
-                            required
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        />
-                        <button
-                            type="submit"
-                            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-                        >
-                            Liitu
-                        </button>
-                    </form>
-                    <p className="text-xs text-muted-foreground">
-                        Liitudes nõustute meie <a href="/privacy" className="underline underline-offset-2">privaatsuspoliitikaga</a>.
-                    </p>
-                </div>
+        <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
+            {/* Background Icon Decoration */}
+            <div className="absolute right-0 top-0 opacity-10 pointer-events-none">
+                <Mail size={300} className="-rotate-12 translate-x-20 translate-y-20" />
             </div>
-        </div>
+
+            <div className="container mx-auto px-4 relative z-10 text-center">
+                <h2 className="text-3xl font-bold mb-4">
+                    {t('newsletter.title')}
+                </h2>
+                <p className="text-slate-400 mb-10 max-w-xl mx-auto">
+                    {t('newsletter.description')}
+                </p>
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+                    <Input
+                        type="email"
+                        name="email"
+                        placeholder={t('newsletter.placeholder')}
+                        required
+                        className="flex-1 px-6 py-4 h-auto rounded-lg bg-white/10 border-white/20 text-white focus:border-primary focus:ring-primary placeholder-slate-500"
+                    />
+                    <Button
+                        type="submit"
+                        className="px-8 py-4 h-auto bg-primary hover:bg-primary/90 text-white rounded-lg font-bold transition-all shadow-xl shadow-primary/20"
+                    >
+                        {t('newsletter.button')}
+                    </Button>
+                </form>
+                <p className="mt-6 text-xs text-slate-500">
+                    <Trans
+                        i18nKey="newsletter.consent"
+                        ns="home"
+                        components={{
+                            privacy: <a href="/privacy" className="underline underline-offset-2" />
+                        }}
+                    />
+                </p>
+            </div>
+        </section>
     );
 }

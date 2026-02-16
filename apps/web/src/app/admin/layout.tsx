@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 import Link from "next/link";
 import {
@@ -10,17 +12,22 @@ import {
     Car
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { useSession } from "next-auth/react";
 
 interface AdminLayoutProps {
     children: ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+    const { t } = useTranslation('admin');
+    const { data: session } = useSession();
+
     const navItems = [
-        { name: "Ülevaade", href: "/admin", icon: LayoutDashboard },
-        { name: "Kinnitamise järjekord", href: "/admin/listings", icon: ClipboardList },
-        { name: "Kasutajad", href: "/admin/users", icon: Users },
-        { name: "Seaded", href: "/admin/settings", icon: Settings },
+        { name: t('layout.nav.overview'), href: "/admin", icon: LayoutDashboard },
+        { name: t('layout.nav.queue'), href: "/admin/listings", icon: ClipboardList },
+        { name: t('layout.nav.users'), href: "/admin/users", icon: Users },
+        { name: t('layout.nav.settings'), href: "/admin/settings", icon: Settings },
     ];
 
     return (
@@ -33,7 +40,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     </div>
                     <div>
                         <h1 className="text-lg font-bold tracking-tight">Kaarplus</h1>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Admin Panel</p>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{t('layout.adminPanel')}</p>
                     </div>
                 </div>
 
@@ -59,7 +66,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                         className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     >
                         <LogOut size={18} />
-                        Tagasi portaali
+                        {t('layout.backToPortal')}
                     </Link>
                 </div>
             </aside>
@@ -73,15 +80,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     </div>
 
                     <div className="hidden md:block text-sm text-muted-foreground">
-                        Tere tulemast tagasi, <span className="font-semibold text-foreground italic">Admin</span>
+                        {t('layout.welcome', { name: session?.user?.name || "Admin" })}
                     </div>
 
                     <div className="flex items-center gap-4">
                         <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-xs font-bold border border-border">
-                            A
+                            {session?.user?.name?.[0] || 'A'}
                         </div>
                     </div>
                 </header>
+
 
                 <main className="flex-1 overflow-y-auto p-8 lg:p-12">
                     {children}

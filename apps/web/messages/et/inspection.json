@@ -1,0 +1,27 @@
+{
+    "title": "Minu ülevaatused",
+    "description": "Vaadake ja jälgige oma ülevaatuste staatust.",
+    "count": "Minu ülevaatused ({{count}})",
+    "empty": {
+        "title": "Ülevaatusi pole tellitud",
+        "description": "Siin kuvatakse teie tellitud sõidukite ülevaatused. Ülevaatuse saate tellida sõiduki detailvaates."
+    },
+    "status": {
+        "ordered": "Tellitud:",
+        "scheduled": "Planeeritud:",
+        "completed": "Lõpetatud:",
+        "cancelled": "Tühistatud:",
+        "in_progress": "Käimas:",
+        "pending": "Ootel",
+        "labels": {
+            "PENDING": "Ootel",
+            "SCHEDULED": "Planeeritud",
+            "IN_PROGRESS": "Käimas",
+            "COMPLETED": "Lõpetatud",
+            "CANCELLED": "Tühistatud"
+        }
+    },
+    "notes": "Inspektori märkused",
+    "downloadReport": "Laadi aruanne alla",
+    "error": "Ülevaatuste laadimine ebaõnnestus"
+}

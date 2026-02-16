@@ -20,7 +20,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { PriceDisplay } from "@/components/shared/price-display";
 import { format } from "date-fns";
-import { et } from "date-fns/locale";
+import { et, ru, enGB } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 interface ListingReviewCardProps {
     listing: any;
@@ -29,9 +30,11 @@ interface ListingReviewCardProps {
 }
 
 export function ListingReviewCard({ listing, onApprove, onReject }: ListingReviewCardProps) {
+    const { t, i18n } = useTranslation('admin');
     const [isExpanded, setIsExpanded] = useState(false);
 
     const title = `${listing.make} ${listing.model} ${listing.variant || ""}`;
+    const currentLocale = i18n.language === 'ru' ? ru : i18n.language === 'en' ? enGB : et;
 
     return (
         <Card className="overflow-hidden border-border/50 shadow-sm hover:border-primary/30 transition-colors">
@@ -52,7 +55,7 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                             </div>
                         )}
                         <Badge className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm border-none">
-                            {listing.images?.length || 0} pilti
+                            {t('queue.card.photoCount', { count: listing.images?.length || 0 })}
                         </Badge>
                     </div>
 
@@ -67,11 +70,11 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
                                 <User size={14} />
-                                <span className="truncate max-w-[150px]">{listing.user?.name || "Kasutaja"}</span>
+                                <span className="truncate max-w-[150px]">{listing.user?.name || t('queue.card.user')}</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <Calendar size={14} />
-                                <span>{format(new Date(listing.createdAt), "d. MMMM yyyy", { locale: et })}</span>
+                                <span>{format(new Date(listing.createdAt), "d. MMMM yyyy", { locale: currentLocale })}</span>
                             </div>
                             <div className="flex items-center gap-1">
                                 <MapPin size={14} />
@@ -92,7 +95,7 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                             onClick={() => setIsExpanded(!isExpanded)}
                         >
                             {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                            {isExpanded ? "Vähem" : "Rohkem"}
+                            {isExpanded ? t('queue.card.showLess') : t('queue.card.showMore')}
                         </Button>
                         <Button
                             variant="outline"
@@ -100,14 +103,14 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                             className="text-destructive hover:bg-destructive hover:text-white border-destructive/30"
                             onClick={() => onReject(listing.id, title)}
                         >
-                            <X size={16} className="mr-2" /> Lükka tagasi
+                            <X size={16} className="mr-2" /> {t('queue.card.reject')}
                         </Button>
                         <Button
                             size="sm"
                             className="bg-primary hover:bg-primary/90 text-white"
                             onClick={() => onApprove(listing.id)}
                         >
-                            <Check size={16} className="mr-2" /> Kinnita
+                            <Check size={16} className="mr-2" /> {t('queue.card.approve')}
                         </Button>
                     </div>
                 </div>
@@ -117,7 +120,7 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                     <div className="px-6 pb-6 pt-2 border-t border-border/50 bg-slate-50/50 space-y-6 animate-in slide-in-from-top-2 duration-200">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                             <div className="space-y-1">
-                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Tehnilised andmed</p>
+                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('queue.card.sections.specs')}</p>
                                 <div className="space-y-2 pt-2">
                                     <div className="flex items-center gap-2 text-sm">
                                         <Gauge size={16} className="text-muted-foreground" />
@@ -139,21 +142,21 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                             </div>
 
                             <div className="col-span-2 space-y-1">
-                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Kirjeldus</p>
+                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('queue.card.sections.description')}</p>
                                 <p className="text-sm pt-2 leading-relaxed">
-                                    {listing.description || "Kirjeldus puudub."}
+                                    {listing.description || t('queue.card.noDescription')}
                                 </p>
                             </div>
 
                             <div className="space-y-1">
-                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">VIN-kood</p>
+                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('queue.card.sections.vin')}</p>
                                 <div className="pt-2">
                                     <code className="bg-slate-100 px-2 py-1 rounded text-xs select-all">
-                                        {listing.vin || "Puudub"}
+                                        {listing.vin || t('queue.card.noVin')}
                                     </code>
                                     <div className="mt-4">
                                         <Button variant="link" size="sm" className="h-auto p-0 text-primary gap-1">
-                                            Kontrolli ajalugu <ExternalLink size={12} />
+                                            {t('queue.card.checkHistory')} <ExternalLink size={12} />
                                         </Button>
                                     </div>
                                 </div>
@@ -161,7 +164,7 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                         </div>
 
                         <div className="space-y-3">
-                            <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Fotod</p>
+                            <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">{t('queue.card.sections.photos')}</p>
                             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                                 {listing.images?.map((img: any, i: number) => (
                                     <div
@@ -170,7 +173,7 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
                                     >
                                         <Image
                                             src={img.url}
-                                            alt={`Auto pilt ${i + 1}`}
+                                            alt={t('queue.card.photoCount', { count: i + 1 })}
                                             fill
                                             className="object-cover group-hover:scale-110 transition-transform duration-300"
                                         />
@@ -184,3 +187,4 @@ export function ListingReviewCard({ listing, onApprove, onReject }: ListingRevie
         </Card>
     );
 }
+

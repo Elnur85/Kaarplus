@@ -14,7 +14,10 @@ interface DealershipProfileProps {
     listings: ListingDetailed[];
 }
 
+import { useTranslation } from "react-i18next";
+
 export function DealershipProfile({ dealership, listings }: DealershipProfileProps) {
+    const { t } = useTranslation('dealership');
     return (
         <div className="container py-8 min-h-screen">
             {/* Cover Image */}
@@ -60,24 +63,24 @@ export function DealershipProfile({ dealership, listings }: DealershipProfilePro
                         <div className="flex items-center gap-3 mb-1">
                             <h1 className="text-3xl font-bold tracking-tight">{dealership.name}</h1>
                             <Badge variant="default" className="bg-primary text-primary-foreground">
-                                Ametlik esindus
+                                {t('badges.official')}
                             </Badge>
                         </div>
                         <div className="flex items-center text-muted-foreground gap-2">
                             <MapPin size={16} />
-                            <span>{dealership.address || "Asukoht määramata"}</span>
+                            <span>{dealership.address || t('placeholders.noLocation')}</span>
                         </div>
                     </div>
 
                     <p className="text-muted-foreground leading-relaxed">
-                        {dealership.bio || "Sellel esindusel ei ole veel kirjeldust lisatud."}
+                        {dealership.bio || t('placeholders.noBio')}
                     </p>
 
                     <div className="flex flex-wrap gap-4 pt-2">
                         {dealership.website && (
                             <a href={dealership.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors">
                                 <Globe size={16} className="text-primary" />
-                                Veebileht
+                                {t('links.website')}
                             </a>
                         )}
                         {dealership.phone && (
@@ -89,7 +92,7 @@ export function DealershipProfile({ dealership, listings }: DealershipProfilePro
                         {dealership.email && (
                             <a href={`mailto:${dealership.email}`} className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors">
                                 <Mail size={16} className="text-primary" />
-                                Saada email
+                                {t('links.email')}
                             </a>
                         )}
                     </div>
@@ -99,17 +102,17 @@ export function DealershipProfile({ dealership, listings }: DealershipProfilePro
                     <div className="bg-muted/30 p-4 rounded-lg border">
                         <h3 className="font-semibold mb-3 flex items-center gap-2">
                             <Clock size={16} className="text-primary" />
-                            Lahtiolekuajad
+                            {t('sections.openingHours')}
                         </h3>
                         {dealership.openingHours ? (
                             <p className="text-sm whitespace-pre-line text-muted-foreground">{dealership.openingHours}</p>
                         ) : (
-                            <p className="text-sm text-muted-foreground italic">Lahtiolekuajad puuduvad</p>
+                            <p className="text-sm text-muted-foreground italic">{t('placeholders.noOpeningHours')}</p>
                         )}
                     </div>
 
                     <Button className="w-full font-bold h-12 gap-2">
-                        <MessageSquare size={18} /> Võta ühendust
+                        <MessageSquare size={18} /> {t('buttons.contact')}
                     </Button>
                 </div>
             </div>
@@ -117,9 +120,9 @@ export function DealershipProfile({ dealership, listings }: DealershipProfilePro
             {/* Inventory */}
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">Müügis olevad sõidukid</h2>
+                    <h2 className="text-2xl font-bold">{t('inventory.title')}</h2>
                     <Badge variant="outline" className="px-3 py-1">
-                        {listings.length} kuulutust
+                        {listings.length === 1 ? t('inventory.count', { count: listings.length }) : t('inventory.count_plural', { count: listings.length })}
                     </Badge>
                 </div>
 
@@ -128,11 +131,12 @@ export function DealershipProfile({ dealership, listings }: DealershipProfilePro
                 {listings.length === 0 && (
                     <div className="text-center py-20 bg-muted/10 rounded-xl border border-dashed">
                         <Car className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
-                        <h3 className="text-lg font-medium">Kuulutusi ei leitud</h3>
-                        <p className="text-muted-foreground">Sellel esindusel ei ole hetkel aktiivseid müügikuulutusi.</p>
+                        <h3 className="text-lg font-medium">{t('inventory.empty.title')}</h3>
+                        <p className="text-muted-foreground">{t('inventory.empty.description')}</p>
                     </div>
                 )}
             </div>
         </div>
     );
 }
+

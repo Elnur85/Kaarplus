@@ -1,20 +1,18 @@
-import { Metadata } from "next";
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { MyInspectionsList } from "@/components/inspection/my-inspections-list";
 
-export const metadata: Metadata = {
-    title: "Minu ülevaatused | Kaarplus",
-    description: "Teie tellitud sõiduki ülevaatused.",
-    robots: { index: false, follow: false },
-};
-
 export default function InspectionsPage() {
+    const { t } = useTranslation('inspection');
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl font-bold">Minu ülevaatused</h1>
-                <p className="text-muted-foreground mt-1">Vaadake ja jälgige oma ülevaatuste staatust.</p>
+                <h1 className="text-2xl font-bold">{t('title')}</h1>
+                <p className="text-muted-foreground mt-1">{t('description')}</p>
             </div>
             <MyInspectionsList />
         </div>
     );
 }
+
