@@ -4,15 +4,23 @@ import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/components/shared/search-bar";
 import { StarRating } from "@/components/shared/star-rating";
 
+import Image from "next/image";
+
 export function HeroSection() {
     const { t } = useTranslation('home');
 
     return (
         <section className="relative w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-[#10221c] to-[#0d1a16] text-white overflow-hidden">
-            {/* Background Image Placeholder or actual image */}
+            {/* Background Image Optimized for LCP */}
             <div className="absolute inset-0 z-0 opacity-40">
-                {/* Ideally an Image component here, using a gradient for now */}
-                <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2560&auto=format&fit=crop')] bg-cover bg-center" />
+                <Image
+                    src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2560&auto=format&fit=crop"
+                    alt="Luxury car background"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="100vw"
+                />
             </div>
 
             <div className="container relative z-10 px-4 md:px-6 flex flex-col items-center text-center space-y-8">

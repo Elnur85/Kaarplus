@@ -38,6 +38,7 @@ export function PopularBrands() {
                                 alt={brand.name}
                                 fill
                                 className="object-contain"
+                                sizes="48px"
                             />
                         </div>
                         <span className="font-semibold text-sm">{brand.name}</span>

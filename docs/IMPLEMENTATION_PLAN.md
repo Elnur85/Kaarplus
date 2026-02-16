@@ -113,7 +113,7 @@ Performance optimization, testing, monitoring, and internationalization.
 
 | ID     | Task                                | Status | Dependencies | Est. |
 | ------ | ----------------------------------- | ------ | ------------ | ---- |
-| P4-T01 | i18n setup (Estonian + Russian + English) | ⬜     | P1-T06       | 5h   |
+| P4-T01 | i18n setup (Estonian + Russian + English) | ✅     | P1-T06       | 5h   |
 | P4-T02 | Core Web Vitals optimization              | ⬜     | Phase 1      | 3h   |
 | P4-T03 | E2E test suite (Playwright)               | ⬜     | Phase 1      | 4h   |
 | P4-T04 | Error tracking (Sentry integration)       | ⬜     | P1-T01       | 2h   |

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 import {
@@ -19,13 +20,15 @@ const languages = [
 export function LanguageSwitcher() {
     const { i18n } = useTranslation();
 
+    useEffect(() => {
+        document.documentElement.lang = i18n.language;
+    }, [i18n.language]);
+
     const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
     const changeLanguage = (langCode: string) => {
         i18n.changeLanguage(langCode);
         localStorage.setItem('kaarplus-lang', langCode);
-        // Update HTML lang attribute
-        document.documentElement.lang = langCode;
     };
 
     return (
