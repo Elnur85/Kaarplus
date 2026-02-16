@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/components/auth/auth-provider";
+import { LanguageProvider } from "@/components/i18n/language-provider";
 import { CookieBanner } from "@/components/gdpr/cookie-banner";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Toaster } from "@/components/ui/toaster";
@@ -49,12 +50,14 @@ export default function RootLayout({
   return (
     <html lang="et" className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <AuthProvider>
-          <JsonLd data={organizationJsonLd} />
-          {children}
-          <Toaster />
-          <CookieBanner />
-        </AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <JsonLd data={organizationJsonLd} />
+            {children}
+            <Toaster />
+            <CookieBanner />
+          </AuthProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

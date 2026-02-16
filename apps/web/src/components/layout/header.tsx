@@ -1,6 +1,6 @@
 import Link from "next/link";
-
 import { SITE_NAME } from "@/lib/constants";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 
 export function Header() {
   return (
@@ -24,8 +24,9 @@ export function Header() {
           </Link>
         </nav>
 
-        {/* Auth buttons - placeholder, implemented in P1-T05 */}
+        {/* Auth buttons and language switcher */}
         <div className="flex items-center space-x-4">
+          <LanguageSwitcher />
           <Link
             href="/login"
             className="text-sm font-medium transition-colors hover:text-primary"

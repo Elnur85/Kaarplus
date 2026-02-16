@@ -1,0 +1,41 @@
+{
+    "hero": {
+        "title": "Leia oma unistuste auto",
+        "subtitle": "Eesti suurim autode müügiplatvorm",
+        "searchPlaceholder": "Otsi margi, mudeli või linnapiirkonna järgi...",
+        "cta": "Alusta otsimist",
+        "sellCta": "Müü oma auto"
+    },
+    "features": {
+        "title": "Miks valida Kaarplus?",
+        "subtitle": "Parim viis auto ostmiseks ja müümiseks Eestis",
+        "verified": {
+            "title": "Kontrollitud kuulutused",
+            "description": "Kõik kuulutused läbivad meie põhjaliku kontrollimise"
+        },
+        "secure": {
+            "title": "Turvaline makse",
+            "description": "Turvaline maksesüsteem Stripe'i kaudu"
+        },
+        "support": {
+            "title": "24/7 Tugi",
+            "description": "Meie meeskond on alati valmis aitama"
+        },
+        "easy": {
+            "title": "Lihtne kasutada",
+            "description": "Intuitiivne platvorm kõigile kasutajatele"
+        }
+    },
+    "stats": {
+        "listings": "Aktiivset kuulutust",
+        "users": "Registreeritud kasutajat",
+        "sold": "Müüdud autot",
+        "dealers": "Edasimüüjat"
+    },
+    "cta": {
+        "title": "Valmis alustama?",
+        "subtitle": "Liitu tuhandete rahulolev kasutajatega juba täna",
+        "getStarted": "Alusta kohe",
+        "learnMore": "Lisateave"
+    }
+}

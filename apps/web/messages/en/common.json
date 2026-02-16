@@ -1,0 +1,55 @@
+{
+    "nav": {
+        "home": "Home",
+        "listings": "Listings",
+        "sell": "Sell Car",
+        "favorites": "Favorites",
+        "messages": "Messages",
+        "dashboard": "Dashboard",
+        "admin": "Admin",
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "profile": "Profile"
+    },
+    "footer": {
+        "aboutUs": "About Us",
+        "contact": "Contact",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "allRightsReserved": "All rights reserved",
+        "followUs": "Follow us"
+    },
+    "common": {
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "close": "Close",
+        "submit": "Submit",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "yes": "Yes",
+        "no": "No",
+        "more": "More",
+        "less": "Less",
+        "showMore": "Show more",
+        "showLess": "Show less"
+    },
+    "currency": {
+        "eur": "€",
+        "price": "Price"
+    },
+    "date": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "daysAgo": "{count} days ago",
+        "weeksAgo": "{count} weeks ago",
+        "monthsAgo": "{count} months ago"
+    }
+}

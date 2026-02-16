@@ -1,0 +1,41 @@
+{
+    "hero": {
+        "title": "Find Your Dream Car",
+        "subtitle": "Estonia's largest car marketplace",
+        "searchPlaceholder": "Search by make, model, or location...",
+        "cta": "Start Searching",
+        "sellCta": "Sell Your Car"
+    },
+    "features": {
+        "title": "Why Choose Kaarplus?",
+        "subtitle": "The best way to buy and sell cars in Estonia",
+        "verified": {
+            "title": "Verified Listings",
+            "description": "All listings go through our thorough verification process"
+        },
+        "secure": {
+            "title": "Secure Payment",
+            "description": "Safe payment system powered by Stripe"
+        },
+        "support": {
+            "title": "24/7 Support",
+            "description": "Our team is always ready to help"
+        },
+        "easy": {
+            "title": "Easy to Use",
+            "description": "Intuitive platform for all users"
+        }
+    },
+    "stats": {
+        "listings": "Active Listings",
+        "users": "Registered Users",
+        "sold": "Cars Sold",
+        "dealers": "Dealers"
+    },
+    "cta": {
+        "title": "Ready to Get Started?",
+        "subtitle": "Join thousands of satisfied users today",
+        "getStarted": "Get Started Now",
+        "learnMore": "Learn More"
+    }
+}

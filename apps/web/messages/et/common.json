@@ -1,0 +1,55 @@
+{
+    "nav": {
+        "home": "Avaleht",
+        "listings": "Kuulutused",
+        "sell": "Müü auto",
+        "favorites": "Lemmikud",
+        "messages": "Sõnumid",
+        "dashboard": "Töölaud",
+        "admin": "Haldus",
+        "login": "Logi sisse",
+        "register": "Registreeru",
+        "logout": "Logi välja",
+        "profile": "Profiil"
+    },
+    "footer": {
+        "aboutUs": "Meist",
+        "contact": "Kontakt",
+        "terms": "Tingimused",
+        "privacy": "Privaatsus",
+        "allRightsReserved": "Kõik õigused kaitstud",
+        "followUs": "Jälgi meid"
+    },
+    "common": {
+        "search": "Otsi",
+        "filter": "Filtreeri",
+        "sort": "Sorteeri",
+        "cancel": "Tühista",
+        "save": "Salvesta",
+        "delete": "Kustuta",
+        "edit": "Muuda",
+        "view": "Vaata",
+        "close": "Sulge",
+        "submit": "Esita",
+        "loading": "Laadimine...",
+        "error": "Viga",
+        "success": "Õnnestus",
+        "yes": "Jah",
+        "no": "Ei",
+        "more": "Rohkem",
+        "less": "Vähem",
+        "showMore": "Näita rohkem",
+        "showLess": "Näita vähem"
+    },
+    "currency": {
+        "eur": "€",
+        "price": "Hind"
+    },
+    "date": {
+        "today": "Täna",
+        "yesterday": "Eile",
+        "daysAgo": "{count} päeva tagasi",
+        "weeksAgo": "{count} nädalat tagasi",
+        "monthsAgo": "{count} kuud tagasi"
+    }
+}

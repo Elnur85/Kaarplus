@@ -1,0 +1,55 @@
+{
+    "nav": {
+        "home": "Главная",
+        "listings": "Объявления",
+        "sell": "Продать авто",
+        "favorites": "Избранное",
+        "messages": "Сообщения",
+        "dashboard": "Панель",
+        "admin": "Админ",
+        "login": "Войти",
+        "register": "Регистрация",
+        "logout": "Выйти",
+        "profile": "Профиль"
+    },
+    "footer": {
+        "aboutUs": "О нас",
+        "contact": "Контакты",
+        "terms": "Условия",
+        "privacy": "Конфиденциальность",
+        "allRightsReserved": "Все права защищены",
+        "followUs": "Следите за нами"
+    },
+    "common": {
+        "search": "Поиск",
+        "filter": "Фильтр",
+        "sort": "Сортировка",
+        "cancel": "Отмена",
+        "save": "Сохранить",
+        "delete": "Удалить",
+        "edit": "Изменить",
+        "view": "Просмотр",
+        "close": "Закрыть",
+        "submit": "Отправить",
+        "loading": "Загрузка...",
+        "error": "Ошибка",
+        "success": "Успешно",
+        "yes": "Да",
+        "no": "Нет",
+        "more": "Больше",
+        "less": "Меньше",
+        "showMore": "Показать больше",
+        "showLess": "Показать меньше"
+    },
+    "currency": {
+        "eur": "€",
+        "price": "Цена"
+    },
+    "date": {
+        "today": "Сегодня",
+        "yesterday": "Вчера",
+        "daysAgo": "{count} дней назад",
+        "weeksAgo": "{count} недель назад",
+        "monthsAgo": "{count} месяцев назад"
+    }
+}
