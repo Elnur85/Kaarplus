@@ -44,6 +44,18 @@ async function main() {
         },
     });
 
+    // Create Demo User for Mobile App Preview
+    const demoUser = await prisma.user.upsert({
+        where: { email: 'demo@kaarplus.ee' },
+        update: { passwordHash },
+        create: {
+            email: 'demo@kaarplus.ee',
+            name: 'Demo User',
+            role: UserRole.BUYER,
+            passwordHash,
+        },
+    });
+
     // Create sample listings
     await prisma.listing.create({
         data: {
@@ -111,7 +123,7 @@ async function main() {
     ];
 
     for (const car of turboCars) {
-        await prisma.listing.create({
+        const listing = await prisma.listing.create({
             data: {
                 ...car,
                 userId: seller.id,
@@ -126,6 +138,23 @@ async function main() {
                 }
             }
         });
+
+        // Add first 3 cars as favorites for Demo User
+        if (turboCars.indexOf(car) < 3) {
+            await prisma.favorite.upsert({
+                where: {
+                    userId_listingId: {
+                        userId: demoUser.id,
+                        listingId: listing.id
+                    }
+                },
+                update: {},
+                create: {
+                    userId: demoUser.id,
+                    listingId: listing.id
+                }
+            });
+        }
     }
 
     console.log('Seed finished.');
