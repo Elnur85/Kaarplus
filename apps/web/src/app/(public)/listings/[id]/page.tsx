@@ -10,10 +10,12 @@ import { FeatureBadges } from "@/components/car-detail/feature-badges";
 import { RelatedCars } from "@/components/car-detail/related-cars";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Eye } from "lucide-react";
+import { MapPin, Clock, Eye, ShieldCheck, Mail, Phone, ChevronRight, Star } from "lucide-react";
 import { JsonLd } from "@/components/shared/json-ld";
 import { generateVehicleJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo";
 import { SITE_URL } from "@/lib/constants";
+import { SellerReviewsSection } from "@/components/reviews/seller-reviews-section";
+import { RequestInspectionButton } from "@/components/inspections/request-inspection-button";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -154,12 +156,20 @@ export default async function CarDetailPage({ params }: Props) {
                             </div>
                         </Tabs>
                     </section>
+
+                    <section className="bg-card border border-border rounded-xl p-8 shadow-sm">
+                        <SellerReviewsSection
+                            sellerId={listing.user.id}
+                            sellerName={listing.user.name || "Müüja"}
+                        />
+                    </section>
                 </div>
 
                 {/* Right Column: Sidebar */}
                 <div className="lg:col-span-1">
                     <div className="sticky top-24 space-y-6">
                         <PriceCard
+                            listingId={listing.id}
                             price={Number(listing.price)}
                             includeVat={listing.priceVatIncluded}
                             isFavorited={listing.isFavorited}
@@ -167,6 +177,11 @@ export default async function CarDetailPage({ params }: Props) {
                         <SellerInfo
                             seller={listing.user}
                             location={listing.location}
+                        />
+
+                        <RequestInspectionButton
+                            listingId={listing.id}
+                            listingTitle={`${listing.year} ${listing.make} ${listing.model}`}
                         />
 
                         <div className="flex items-center justify-center gap-8 p-4 bg-muted/30 rounded-xl border border-dashed">

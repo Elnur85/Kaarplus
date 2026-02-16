@@ -22,6 +22,15 @@ export interface ListingQuery {
     color?: string;
     q?: string;
     status?: string;
+    mileageMin?: number;
+    mileageMax?: number;
+    powerMin?: number;
+    powerMax?: number;
+    driveType?: string;
+    doors?: number;
+    seats?: number;
+    condition?: string;
+    location?: string;
 }
 
 export class ListingService {
@@ -42,6 +51,15 @@ export class ListingService {
             color,
             q,
             status,
+            mileageMin,
+            mileageMax,
+            powerMin,
+            powerMax,
+            driveType,
+            doors,
+            seats,
+            condition,
+            location,
         } = query;
 
         const skip = (page - 1) * pageSize;
@@ -77,6 +95,23 @@ export class ListingService {
         if (transmission) where.transmission = transmission;
         if (bodyType) where.bodyType = bodyType;
         if (color) where.colorExterior = { equals: color, mode: "insensitive" };
+        if (mileageMin || mileageMax) {
+            where.mileage = {
+                gte: mileageMin,
+                lte: mileageMax,
+            };
+        }
+        if (powerMin || powerMax) {
+            where.powerKw = {
+                gte: powerMin,
+                lte: powerMax,
+            };
+        }
+        if (driveType && driveType !== "none") where.driveType = driveType;
+        if (doors) where.doors = doors;
+        if (seats) where.seats = seats;
+        if (condition && condition !== "none") where.condition = condition;
+        if (location && location !== "none") where.location = { equals: location, mode: "insensitive" };
 
         if (q) {
             where.OR = [

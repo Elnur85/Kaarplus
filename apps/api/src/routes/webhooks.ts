@@ -1,6 +1,9 @@
 import { Router } from "express";
 
+import { handleStripeWebhook } from "../controllers/webhookController";
+
 export const webhooksRouter = Router();
 
-// POST /api/webhooks/stripe — P3-T01
-// Note: Stripe webhooks need raw body, configured separately in app.ts
+// Stripe webhook (public)
+// Note: Signature is verified in the controller
+webhooksRouter.post("/stripe", handleStripeWebhook);

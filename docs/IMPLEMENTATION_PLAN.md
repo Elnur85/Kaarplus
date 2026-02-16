@@ -66,25 +66,25 @@ After MVP launch, add features that drive user retention and interaction.
 | ------ | --------------------------------------- | ------ | -------------- | ---- |
 | P2-T01 | Favorites system (API + UI)             | ✅     | P1-T05, P1-T07 | 3h   |
 | P2-T02 | Car comparison page                     | ✅     | P1-T08         | 3h   |
-| P2-T03 | Advanced search page                    | ⬜     | P1-T08         | 4h   |
-| P2-T04 | Saved searches with email alerts        | ⬜     | P2-T03, P1-T05 | 3h   |
-| P2-T05 | User dashboard (overview + my listings) | ⬜     | P1-T05, P1-T10 | 4h   |
-| P2-T06 | Messaging system (buyer-seller)         | ⬜     | P1-T05         | 4h   |
-| P2-T07 | Email notifications (transactional)     | ⬜     | P1-T03         | 3h   |
-| P2-T08 | Newsletter signup                       | ⬜     | P2-T07         | 1h   |
-| P2-T09 | **Reviews system (Carvago-style)**      | ⬜     | P1-T05, P1-T07 | 4h   |
-| P2-T10 | **Vehicle inspection service**          | ⬜     | P1-T07         | 3h   |
+| P2-T03 | Advanced search page                    | ✅     | P1-T08         | 4h   |
+| P2-T04 | Saved searches with email alerts        | ✅     | P2-T03, P1-T05 | 3h   |
+| P2-T05 | User dashboard (overview + my listings) | ✅     | P1-T05, P1-T10 | 4h   |
+| P2-T06 | Messaging system (buyer-seller)         | ✅     | P1-T05         | 4h   |
+| P2-T07 | Email notifications (transactional)     | ✅     | P1-T03         | 3h   |
+| P2-T08 | Newsletter signup                       | ✅     | P2-T07         | 1h   |
+| P2-T09 | **Reviews system (Carvago-style)**      | ✅     | P1-T05, P1-T07 | 4h   |
+| P2-T10 | **Vehicle inspection service**          | ✅     | P1-T07         | 3h   |
 
 ### Phase 2 — Acceptance Criteria
 
-- [ ] Users can save/remove favorites and see them on `/favorites`
-- [ ] Users can compare up to 4 cars side-by-side
-- [ ] Advanced search with all filter categories works
-- [ ] Users receive email notifications for key events
-- [ ] Users can message sellers through the platform
-- [ ] Dashboard shows listing stats and management tools
-- [ ] **Carvago-style reviews are functional (rating + comments)**
-- [ ] **Vehicle inspection service can be requested and reports generated**
+- [x] Users can save/remove favorites and see them on `/favorites`
+- [x] Users can compare up to 4 cars side-by-side
+- [x] Advanced search with all filter categories works
+- [x] Users receive email notifications for key events
+- [x] Users can message sellers through the platform
+- [x] Dashboard shows listing stats and management tools
+- [x] **Carvago-style reviews are functional (rating + comments)**
+- [x] **Vehicle inspection service can be requested and reports generated**
 
 ---
 
@@ -94,7 +94,7 @@ Introduce payment processing and premium features.
 
 | ID     | Task                           | Status | Dependencies   | Est. |
 | ------ | ------------------------------ | ------ | -------------- | ---- |
-| P3-T01 | Stripe payment integration     | ⬜     | P1-T05, P1-T07 | 5h   |
+| P3-T01 | Stripe payment integration     | ✅     | P1-T05, P1-T07 | 5h   |
 | P3-T02 | Dealership accounts & profiles | ⬜     | P1-T05         | 3h   |
 | P3-T03 | Admin analytics dashboard      | ⬜     | P1-T12         | 3h   |
 

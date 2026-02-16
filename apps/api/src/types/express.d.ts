@@ -9,8 +9,9 @@ declare global {
         role: UserRole;
         name?: string | null;
       };
+      rawBody?: Buffer;
     }
   }
 }
 
-export {};
+export { };

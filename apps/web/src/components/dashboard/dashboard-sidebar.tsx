@@ -8,6 +8,7 @@ import {
   Heart,
   Settings,
   User,
+  Bookmark,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
@@ -22,6 +23,7 @@ const navItems: NavItem[] = [
   { label: "Ülevaade", href: "/dashboard", icon: LayoutDashboard },
   { label: "Minu kuulutused", href: "/dashboard/listings", icon: List },
   { label: "Lemmikud", href: "/favorites", icon: Heart },
+  { label: "Salvestatud otsingud", href: "/dashboard/saved-searches", icon: Bookmark },
   { label: "Seaded", href: "/dashboard/settings", icon: Settings },
 ];
 

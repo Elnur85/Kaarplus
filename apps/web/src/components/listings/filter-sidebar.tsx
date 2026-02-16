@@ -11,7 +11,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
-import { Trash2, RotateCcw, SlidersHorizontal } from "lucide-react";
+import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { API_URL } from "@/lib/constants";
 
 export function FilterSidebar() {
     const filters = useFilterStore();
@@ -21,7 +22,7 @@ export function FilterSidebar() {
 
     // Fetch makes on mount
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search/makes`)
+        fetch(`${API_URL}/api/search/makes`)
             .then((res) => res.json())
             .then((json) => setMakes(json.data || []))
             .catch(console.error);
@@ -29,20 +30,22 @@ export function FilterSidebar() {
 
     // Fetch models when make changes
     useEffect(() => {
-        let cancelled = false;
-        if (!currentMake) {
-            // No fetch needed, but we still want to reset via the cleanup
-            return () => { cancelled = true; };
+        if (!currentMake || currentMake === "none") {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setModels([]);
+            return;
         }
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search/models?make=${currentMake}`)
+
+        let cancelled = false;
+        fetch(`${API_URL}/api/search/models?make=${currentMake}`)
             .then((res) => res.json())
             .then((json) => {
                 if (!cancelled) setModels(json.data || []);
             })
             .catch(console.error);
+
         return () => {
             cancelled = true;
-            setModels([]);
         };
     }, [currentMake]);
 

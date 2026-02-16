@@ -1,19 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Share2, Calendar, MessageSquare } from "lucide-react";
+import { Heart, Share2, CreditCard, MessageSquare } from "lucide-react";
 import { PriceDisplay } from "@/components/shared/price-display";
 import { cn } from "@/lib/utils";
 
 interface PriceCardProps {
+    listingId: string;
     price: number;
     includeVat: boolean;
     status?: string;
     isFavorited?: boolean;
 }
 
-export function PriceCard({ price, includeVat, status, isFavorited }: PriceCardProps) {
+export function PriceCard({ listingId, price, includeVat, status, isFavorited }: PriceCardProps) {
     return (
         <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-6">
             <div className="flex items-start justify-between">
@@ -41,11 +43,13 @@ export function PriceCard({ price, includeVat, status, isFavorited }: PriceCardP
             </p>
 
             <div className="space-y-3">
-                <Button className="w-full h-12 font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 gap-2">
-                    <MessageSquare size={18} /> Võta müüjaga ühendust
+                <Button asChild className="w-full h-12 font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 gap-2">
+                    <Link href={`/listings/${listingId}/purchase`}>
+                        <CreditCard size={18} /> Osta kohe
+                    </Link>
                 </Button>
                 <Button variant="outline" className="w-full h-12 border-2 text-primary border-primary hover:bg-primary/5 font-bold gap-2">
-                    <Calendar size={18} /> Broneeri proovisõit
+                    <MessageSquare size={18} /> Võta müüjaga ühendust
                 </Button>
             </div>
 

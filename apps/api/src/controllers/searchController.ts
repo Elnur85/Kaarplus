@@ -23,3 +23,18 @@ export const getFilterOptions = async (_req: Request, res: Response) => {
     const options = await searchService.getFilterOptions();
     res.json({ data: options });
 };
+
+export const getLocations = async (_req: Request, res: Response) => {
+    const locations = await searchService.getLocations();
+    res.json({ data: locations });
+};
+
+export const getColors = async (_req: Request, res: Response) => {
+    const colors = await searchService.getColors();
+    res.json({ data: colors });
+};
+
+export const getDriveTypes = async (_req: Request, res: Response) => {
+    const driveTypes = await searchService.getDriveTypes();
+    res.json({ data: driveTypes });
+};

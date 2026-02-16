@@ -14,6 +14,23 @@ import {
     getFavoriteIds,
 } from "../controllers/favoriteController";
 import { saveConsent, exportData, deleteAccount } from "../controllers/gdprController";
+import {
+    requestInspection,
+    getMyInspections,
+    getInspection,
+} from "../controllers/inspectionController";
+import {
+    getConversations,
+    getThread,
+    getUnreadCount,
+    sendMessage,
+} from "../controllers/messageController";
+import {
+    getSavedSearches,
+    createSavedSearch,
+    updateSavedSearch,
+    deleteSavedSearch,
+} from "../controllers/savedSearchController";
 import { requireAuth } from "../middleware/auth";
 import { readLimiter, writeLimiter } from "../middleware/rateLimiter";
 
@@ -40,5 +57,19 @@ userRouter.get("/listings", readLimiter, getMyListings);
 userRouter.get("/profile", readLimiter, getProfile);
 userRouter.patch("/profile", writeLimiter, patchProfile);
 
-// GET    /api/user/messages — P2-T06
-// POST   /api/user/messages — P2-T06
+// Saved searches
+userRouter.get("/saved-searches", readLimiter, getSavedSearches);
+userRouter.post("/saved-searches", writeLimiter, createSavedSearch);
+userRouter.patch("/saved-searches/:id", writeLimiter, updateSavedSearch);
+userRouter.delete("/saved-searches/:id", writeLimiter, deleteSavedSearch);
+
+// Inspection endpoints
+userRouter.post("/inspections", writeLimiter, requestInspection);
+userRouter.get("/inspections", readLimiter, getMyInspections);
+userRouter.get("/inspections/:id", readLimiter, getInspection);
+
+// Messaging endpoints
+userRouter.get("/messages", readLimiter, getConversations);
+userRouter.get("/messages/thread", readLimiter, getThread);
+userRouter.get("/messages/unread-count", readLimiter, getUnreadCount);
+userRouter.post("/messages", writeLimiter, sendMessage);

@@ -1,5 +1,6 @@
 import { prisma } from "@kaarplus/database";
 
+import { emailService } from "../services/emailService";
 import { NotFoundError, BadRequestError } from "../utils/errors";
 
 export class AdminService {
@@ -55,13 +56,12 @@ export class AdminService {
         }
 
         if (action === "approve") {
-            return prisma.listing.update({
+            const updated = await prisma.listing.update({
                 where: { id },
                 data: {
                     status: "ACTIVE",
                     verifiedAt: new Date(),
                     publishedAt: new Date(),
-                    // Automatically verify all images when listing is approved
                     images: {
                         updateMany: {
                             where: { listingId: id },
@@ -70,14 +70,23 @@ export class AdminService {
                     },
                 },
             });
+
+            // Send notification email (non-blocking)
+            if (listing.user.email) {
+                emailService.sendListingApprovedEmail(
+                    listing.user.email,
+                    `${listing.year} ${listing.make} ${listing.model}`,
+                    listing.id
+                ).catch(() => { });
+            }
+
+            return updated;
         } else {
             // rejection logic
             return prisma.listing.update({
                 where: { id },
                 data: {
                     status: "REJECTED",
-                    // In a real app, we would store the reason in the database or send an email
-                    // For now, we just update the status
                 },
             });
         }

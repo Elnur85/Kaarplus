@@ -42,6 +42,16 @@ export const listingQuerySchema = z.object({
     color: z.string().optional(),
     q: z.string().optional(),
     status: z.string().optional(),
+    // Advanced filters
+    mileageMin: z.coerce.number().int().optional(),
+    mileageMax: z.coerce.number().int().optional(),
+    powerMin: z.coerce.number().int().optional(),
+    powerMax: z.coerce.number().int().optional(),
+    driveType: z.string().optional(),
+    doors: z.coerce.number().int().optional(),
+    seats: z.coerce.number().int().optional(),
+    condition: z.string().optional(),
+    location: z.string().optional(),
 });
 
 export const contactSellerSchema = z.object({

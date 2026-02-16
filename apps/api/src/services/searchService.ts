@@ -55,4 +55,44 @@ export class SearchService {
             }
         };
     }
+
+    async getLocations() {
+        const locations = await prisma.listing.findMany({
+            where: { status: "ACTIVE" },
+            select: { location: true },
+            distinct: ["location"],
+            orderBy: { location: "asc" },
+        });
+        return locations.map((l) => l.location).filter(Boolean);
+    }
+
+    async getColors() {
+        const colors = await prisma.listing.findMany({
+            where: { status: "ACTIVE" },
+            select: { colorExterior: true },
+            distinct: ["colorExterior"],
+            orderBy: { colorExterior: "asc" },
+        });
+        return colors.map((c) => c.colorExterior).filter(Boolean);
+    }
+
+    async getDriveTypes() {
+        const driveTypes = await prisma.listing.findMany({
+            where: { status: "ACTIVE" },
+            select: { driveType: true },
+            distinct: ["driveType"],
+            orderBy: { driveType: "asc" },
+        });
+        return driveTypes.map((d) => d.driveType).filter(Boolean);
+    }
+
+    async getBodyTypes() {
+        const bodyTypes = await prisma.listing.findMany({
+            where: { status: "ACTIVE" },
+            select: { bodyType: true },
+            distinct: ["bodyType"],
+            orderBy: { bodyType: "asc" },
+        });
+        return bodyTypes.map((b) => b.bodyType).filter(Boolean);
+    }
 }

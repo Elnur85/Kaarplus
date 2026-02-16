@@ -29,6 +29,16 @@ export function UrlSync() {
             if (params.view) filters.setFilter("view", params.view as "grid" | "list");
             if (params.page) filters.setPage(parseInt(params.page));
             if (params.q) filters.setFilter("q", params.q);
+            if (params.mileageMin) filters.setFilter("mileageMin", params.mileageMin);
+            if (params.mileageMax) filters.setFilter("mileageMax", params.mileageMax);
+            if (params.powerMin) filters.setFilter("powerMin", params.powerMin);
+            if (params.powerMax) filters.setFilter("powerMax", params.powerMax);
+            if (params.driveType) filters.setFilter("driveType", params.driveType);
+            if (params.doors) filters.setFilter("doors", params.doors);
+            if (params.seats) filters.setFilter("seats", params.seats);
+            if (params.condition) filters.setFilter("condition", params.condition);
+            if (params.location) filters.setFilter("location", params.location);
+            if (params.color) filters.setFilter("color", params.color);
 
             isInitialMount.current = false;
         }
@@ -54,6 +64,16 @@ export function UrlSync() {
         if (filters.view !== "grid") params.set("view", filters.view);
         if (filters.page > 1) params.set("page", filters.page.toString());
         if (filters.q) params.set("q", filters.q);
+        if (filters.mileageMin) params.set("mileageMin", filters.mileageMin);
+        if (filters.mileageMax) params.set("mileageMax", filters.mileageMax);
+        if (filters.powerMin) params.set("powerMin", filters.powerMin);
+        if (filters.powerMax) params.set("powerMax", filters.powerMax);
+        if (filters.driveType && filters.driveType !== "none") params.set("driveType", filters.driveType);
+        if (filters.doors && filters.doors !== "none") params.set("doors", filters.doors);
+        if (filters.seats && filters.seats !== "none") params.set("seats", filters.seats);
+        if (filters.condition && filters.condition !== "none") params.set("condition", filters.condition);
+        if (filters.location && filters.location !== "none") params.set("location", filters.location);
+        if (filters.color && filters.color !== "none") params.set("color", filters.color);
 
         const query = params.toString();
         const url = query ? `${pathname}?${query}` : pathname;
@@ -73,6 +93,16 @@ export function UrlSync() {
         filters.view,
         filters.page,
         filters.q,
+        filters.mileageMin,
+        filters.mileageMax,
+        filters.powerMin,
+        filters.powerMax,
+        filters.driveType,
+        filters.doors,
+        filters.seats,
+        filters.condition,
+        filters.location,
+        filters.color,
         pathname,
         router
     ]);

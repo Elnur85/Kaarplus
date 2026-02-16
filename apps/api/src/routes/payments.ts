@@ -1,7 +1,10 @@
 import { Router } from "express";
 
+import { createPaymentIntent } from "../controllers/paymentController";
+import { requireAuth } from "../middleware/auth";
+import { writeLimiter } from "../middleware/rateLimiter";
 
 export const paymentsRouter = Router();
 
-// POST /api/payments/create-intent — P3-T01 (auth required)
-// POST /api/payments/confirm — P3-T01 (auth required)
+// Create payment intent (authenticated)
+paymentsRouter.post("/create-intent", requireAuth, writeLimiter, createPaymentIntent);

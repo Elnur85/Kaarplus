@@ -51,6 +51,10 @@ model User {
   messagesReceived Message[]    @relation("ReceivedMessages")
   sessions        Session[]
   gdprConsent     GdprConsent?
+  savedSearches   SavedSearch[]
+  reviewsGiven    Review[]      @relation("ReviewsGiven")
+  reviewsReceived Review[]      @relation("ReviewsReceived")
+  inspections     VehicleInspection[]
 }
 
 model Listing {
@@ -90,6 +94,8 @@ model Listing {
   images             ListingImage[]
   favorites          Favorite[]
   messages           Message[]
+  reviews            Review[]
+  inspections        VehicleInspection[]
 
   @@index([make, model])
   @@index([price])
@@ -169,4 +175,72 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SavedSearch {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  filters       Json     // Stored filter criteria
+  emailAlerts   Boolean  @default(false)
+  lastNotified  DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  reviewerId  String
+  targetId    String   // seller being reviewed
+  listingId   String?
+  rating      Int      // 1-5
+  title       String?
+  body        String   @db.Text
+  verified    Boolean  @default(false) // verified purchase
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  reviewer    User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  target      User     @relation("ReviewsReceived", fields: [targetId], references: [id])
+  listing     Listing? @relation(fields: [listingId], references: [id])
+
+  @@unique([reviewerId, listingId])
+  @@index([targetId])
+}
+
+model VehicleInspection {
+  id            String            @id @default(cuid())
+  listingId     String
+  requesterId   String
+  status        InspectionStatus  @default(PENDING)
+  inspectorNotes String?         @db.Text
+  reportUrl     String?
+  scheduledAt   DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  listing       Listing           @relation(fields: [listingId], references: [id])
+  requester     User              @relation(fields: [requesterId], references: [id])
+
+  @@index([listingId])
+  @@index([requesterId])
+}
+
+model Newsletter {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  language    String   @default("et")
+  active      Boolean  @default(true)
+  token       String   @unique @default(cuid()) // for unsubscribe
+  createdAt   DateTime @default(now())
+}
+
+enum InspectionStatus {
+  PENDING
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }

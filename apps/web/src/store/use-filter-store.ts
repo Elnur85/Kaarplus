@@ -15,6 +15,15 @@ export interface FilterState {
     sort: string;
     view: "grid" | "list";
     page: number;
+    mileageMin: string;
+    mileageMax: string;
+    powerMin: string;
+    powerMax: string;
+    driveType: string;
+    doors: string;
+    seats: string;
+    condition: string;
+    location: string;
 }
 
 interface FilterStore extends FilterState {
@@ -40,6 +49,15 @@ const initialFilters: FilterState = {
     sort: "newest",
     view: "grid",
     page: 1,
+    mileageMin: "",
+    mileageMax: "",
+    powerMin: "",
+    powerMax: "",
+    driveType: "",
+    doors: "",
+    seats: "",
+    condition: "",
+    location: "",
 };
 
 export const useFilterStore = create<FilterStore>((set) => ({
