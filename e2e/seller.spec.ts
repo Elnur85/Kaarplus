@@ -85,8 +85,12 @@ test.describe('Seller Flow', () => {
         await triggers.nth(0).click(); // Doors
         await page.getByRole('option', { name: '4' }).click();
 
+        // Wait for dropdown to close
+        await expect(page.getByRole('option', { name: '4' })).not.toBeVisible();
+
         await triggers.nth(1).click(); // Seats
         await page.getByRole('option', { name: '5' }).click();
+        await expect(page.getByRole('option', { name: '5' })).not.toBeVisible();
 
         await page.fill('input[name="colorExterior"]', 'Must');
         await selectOption('Valige seisukord', 'Kasutatud');
