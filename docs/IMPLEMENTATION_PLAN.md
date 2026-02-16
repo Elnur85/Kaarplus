@@ -1,8 +1,8 @@
 # Kaarplus — Implementation Plan
 
-> **Last Updated:** 2026-02-15
-> **Status:** Project Layout Complete ✅
-> **Total Tasks:** 27 across 4 phases
+> **Last Updated:** 2026-02-16
+> **Status:** Phase 5 — Production Readiness (In Progress)
+> **Total Tasks:** 27 original + 7 remediation = 34
 
 ---
 
@@ -22,6 +22,12 @@ This document is the **single source of truth** for project progress. Each task:
 3. Implement, test, and verify
 4. Mark task as ✅ in this file and in the task file
 5. Commit with message: `feat(<scope>): <description> [<task-id>]`
+
+**Quality standard:** A task is only ✅ when:
+- Code compiles without errors
+- All user-facing strings use translation keys (no hardcoded text)
+- Unit/integration tests exist for the feature
+- The feature works in all 3 languages (et, ru, en)
 
 ---
 
@@ -48,12 +54,12 @@ The goal of Phase 1 is a working, deployable application with core listing brows
 
 ### Phase 1 — Acceptance Criteria
 
-- [ ] Visitor can browse car listings with filters and pagination
-- [ ] Visitor can view a detailed car page with image gallery
-- [ ] Authenticated user can create a listing via multi-step wizard
-- [ ] Admin can approve/reject pending listings
-- [ ] All public pages have proper SEO meta tags and JSON-LD
-- [ ] Cookie consent banner is functional
+- [x] Visitor can browse car listings with filters and pagination
+- [x] Visitor can view a detailed car page with image gallery
+- [x] Authenticated user can create a listing via multi-step wizard
+- [x] Admin can approve/reject pending listings
+- [x] All public pages have proper SEO meta tags and JSON-LD
+- [x] Cookie consent banner is functional
 - [ ] Application is deployable to Vercel (web) and Railway (API)
 
 ---
@@ -111,23 +117,56 @@ Introduce payment processing and premium features.
 
 Performance optimization, testing, monitoring, and internationalization.
 
-| ID     | Task                                | Status | Dependencies | Est. |
-| ------ | ----------------------------------- | ------ | ------------ | ---- |
-| P4-T01 | i18n setup (Estonian + Russian + English) | ✅     | P1-T06       | 5h   |
-| P4-T02 | Core Web Vitals optimization              | ✅     | Phase 1      | 3h   |
-| P4-T03 | E2E test suite (Playwright)               | ✅     | Phase 1      | 4h   |
-| P4-T04 | Error tracking (Sentry integration)       | ✅     | P1-T01       | 2h   |
-| P4-T05 | CI/CD pipeline (GitHub Actions)           | ✅     | P1-T01       | 2h   |
-| P4-T06 | **Mobile app preparation (investor screens)** | ✅     | Phase 1      | 3h   |
+| ID     | Task                                              | Status | Dependencies | Est. |
+| ------ | ------------------------------------------------- | ------ | ------------ | ---- |
+| P4-T01 | i18n setup (Estonian + Russian + English)          | ⚠️     | P1-T06       | 5h   |
+| P4-T02 | Core Web Vitals optimization                      | ✅     | Phase 1      | 3h   |
+| P4-T03 | E2E test suite (Playwright)                       | ⚠️     | Phase 1      | 4h   |
+| P4-T04 | Error tracking (Sentry integration)               | ✅     | P1-T01       | 2h   |
+| P4-T05 | CI/CD pipeline (GitHub Actions)                   | ✅     | P1-T01       | 2h   |
+| P4-T06 | **Mobile app preparation (investor screens)**     | ✅     | Phase 1      | 3h   |
+
+> **P4-T01 Note:** Library installed, provider configured, switcher working, but only ~6/60+ components use `useTranslation()`. Remediated in P5-T01.
+> **P4-T03 Note:** 4 E2E specs exist, 1 skipped (admin), seller flaky. No unit tests. Remediated in P5-T03.
 
 ### Phase 4 — Acceptance Criteria
 
-- [x] Application supports **Estonian, Russian, and English** languages
+- [ ] Application supports **Estonian, Russian, and English** languages ← NOT MET
 - [x] Core Web Vitals pass (LCP < 2.5s, FID < 100ms, CLS < 0.1)
-- [x] Critical user flows covered by E2E tests
+- [ ] Critical user flows covered by E2E tests ← PARTIAL
 - [x] Errors automatically reported to Sentry
 - [x] PRs trigger automated tests and preview deployments
 - [x] **API prepared for mobile app consumption with investor screens**
+
+---
+
+## Phase 5 — Production Readiness (NEW)
+
+Remediation phase to bring the project to actual production quality.
+
+| ID     | Task                                                        | Status | Dependencies       | Est. |
+| ------ | ----------------------------------------------------------- | ------ | ------------------ | ---- |
+| P5-T01 | i18n completion — all components translated (et/en/ru)      | ⬜     | P4-T01             | 8h   |
+| P5-T02 | Stitch design fidelity audit & fixes                        | ⬜     | Phase 1            | 4h   |
+| P5-T03 | Test infrastructure setup (Vitest) + API unit tests         | ⬜     | P1-T03, P1-T07     | 6h   |
+| P5-T04 | Web component tests + E2E fixes                             | ⬜     | P5-T03             | 5h   |
+| P5-T05 | Bug fixes & broken assets cleanup                           | ⬜     | Phase 1            | 3h   |
+| P5-T06 | Environment documentation & deployment readiness            | ⬜     | All previous       | 2h   |
+| P5-T07 | Final integration test & quality gate                       | ⬜     | P5-T01 to P5-T06   | 2h   |
+
+### Phase 5 — Acceptance Criteria
+
+- [ ] Every user-facing string uses translation keys — ZERO hardcoded text
+- [ ] Language switcher changes ALL text on every page in real-time
+- [ ] All 3 languages (et, en, ru) have complete JSON files with no missing keys
+- [ ] Each stitch design reference has been compared and implementation matches
+- [ ] Vitest configured and running for both API and Web workspaces
+- [ ] API controllers have unit tests with >80% coverage
+- [ ] Key UI components have render/interaction tests
+- [ ] E2E suite fully green (no skipped, no flaky)
+- [ ] All image URLs resolve (no 404s)
+- [ ] `.env.example` files document ALL required environment variables
+- [ ] Production build succeeds with zero warnings
 
 ---
 
@@ -159,7 +198,13 @@ P1-T01 (Monorepo Setup)
 │       └── P2-T07 (Email) ── P2-T08 (Newsletter)
 │
 ├── P4-T04 (Sentry)
-└── P4-T05 (CI/CD)
+├── P4-T05 (CI/CD)
+│
+└── P5-T01 (i18n completion)
+    P5-T02 (Stitch audit)
+    P5-T03 (Test infra) ── P5-T04 (Web tests + E2E)
+    P5-T05 (Bug fixes)
+    P5-T06 (Env docs) ── P5-T07 (Final quality gate)
 ```
 
 ---
@@ -175,7 +220,7 @@ docs(scope): description
 chore(scope): description
 ```
 
-**Scopes:** `web`, `api`, `db`, `auth`, `listings`, `search`, `payments`, `admin`, `seo`, `gdpr`, `infra`
+**Scopes:** `web`, `api`, `db`, `auth`, `listings`, `search`, `payments`, `admin`, `seo`, `gdpr`, `infra`, `i18n`, `test`
 
 ---
 
@@ -188,3 +233,5 @@ chore(scope): description
 | Stripe Estonia requirements        | Medium | Verify Stripe Connect availability for Estonian businesses early |
 | Image storage costs                | Low    | Implement client-side compression before upload                  |
 | GDPR legal review                  | High   | Have legal counsel review privacy policy before launch           |
+| i18n incomplete                    | HIGH   | Phase 5 remediation — P5-T01 is top priority                    |
+| No unit tests                      | HIGH   | Phase 5 remediation — P5-T03/P5-T04                             |
