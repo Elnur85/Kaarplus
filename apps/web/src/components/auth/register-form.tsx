@@ -6,6 +6,7 @@ import { z } from "zod"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -42,6 +43,7 @@ const registerSchema = z.object({
 export function RegisterForm() {
     const router = useRouter()
     const { toast } = useToast()
+    const { t } = useTranslation('auth')
     const [isLoading, setIsLoading] = useState(false)
 
     const form = useForm<z.infer<typeof registerSchema>>({
@@ -71,12 +73,12 @@ export function RegisterForm() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Registration failed");
+                throw new Error(data.message || t('errors.registerFailed'));
             }
 
             toast({
-                title: "Account created",
-                description: "You have successfully registered.",
+                title: t('success.registered'),
+                description: t('success.registered'),
             })
 
             // Attempt to auto login
@@ -97,8 +99,8 @@ export function RegisterForm() {
         } catch (error: any) {
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: error.message || "Something went wrong. Please try again.",
+                title: t('errors.somethingWrong'),
+                description: error.message || t('errors.somethingWrong'),
             })
         } finally {
             setIsLoading(false)
@@ -108,9 +110,9 @@ export function RegisterForm() {
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl text-center">Create an account</CardTitle>
+                <CardTitle className="text-2xl text-center">{t('register.title')}</CardTitle>
                 <CardDescription className="text-center">
-                    Enter your email below to create your account
+                    {t('register.subtitle')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -121,7 +123,7 @@ export function RegisterForm() {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>{t('register.name')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="John Doe" {...field} />
                                     </FormControl>
@@ -134,7 +136,7 @@ export function RegisterForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{t('register.email')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="name@example.com" {...field} />
                                     </FormControl>
@@ -147,7 +149,7 @@ export function RegisterForm() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{t('register.password')}</FormLabel>
                                     <FormControl>
                                         <Input type="password" {...field} />
                                     </FormControl>
@@ -160,7 +162,7 @@ export function RegisterForm() {
                             name="confirmPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Confirm Password</FormLabel>
+                                    <FormLabel>{t('register.confirmPassword')}</FormLabel>
                                     <FormControl>
                                         <Input type="password" {...field} />
                                     </FormControl>
@@ -170,16 +172,16 @@ export function RegisterForm() {
                         />
 
                         <Button className="w-full" type="submit" disabled={isLoading}>
-                            {isLoading ? "Creating account..." : "Create account"}
+                            {isLoading ? t('register.loading') : t('register.submit')}
                         </Button>
                     </form>
                 </Form>
             </CardContent>
             <CardFooter>
                 <div className="text-sm text-muted-foreground text-center w-full">
-                    Already have an account?{" "}
+                    {t('register.hasAccount')}{" "}
                     <a href="/login" className="text-primary hover:underline">
-                        Login
+                        {t('register.login')}
                     </a>
                 </div>
             </CardFooter>

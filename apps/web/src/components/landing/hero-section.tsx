@@ -1,7 +1,12 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/components/shared/search-bar";
 import { StarRating } from "@/components/shared/star-rating";
 
 export function HeroSection() {
+    const { t } = useTranslation('home');
+
     return (
         <section className="relative w-full py-20 md:py-32 lg:py-40 bg-gradient-to-b from-[#10221c] to-[#0d1a16] text-white overflow-hidden">
             {/* Background Image Placeholder or actual image */}
@@ -18,11 +23,11 @@ export function HeroSection() {
                     </div>
 
                     <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/70">
-                        Leia oma unistuste auto
+                        {t('hero.title')}
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-                        Eesti kõige usaldusväärsem autode ostu- ja müügikeskkond. Kontrollitud sõidukid ja turvalised tehingud.
+                        {t('hero.subtitle')}
                     </p>
                 </div>
 
@@ -32,13 +37,13 @@ export function HeroSection() {
 
                 <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-gray-400 pt-4">
                     <span className="flex items-center gap-2">
-                        ✅ Kontrollitud ajalugu
+                        ✅ {t('features.verified.title')}
                     </span>
                     <span className="flex items-center gap-2">
-                        ✅ 14-päevane tagastusõigus
+                        ✅ {t('features.secure.title')}
                     </span>
                     <span className="flex items-center gap-2">
-                        ✅ Garantii kuni 2 aastat
+                        ✅ {t('features.support.title')}
                     </span>
                 </div>
             </div>

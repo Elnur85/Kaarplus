@@ -6,6 +6,7 @@ import { z } from "zod"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -32,6 +33,7 @@ const loginSchema = z.object({
 export function LoginForm() {
     const router = useRouter()
     const { toast } = useToast()
+    const { t } = useTranslation('auth')
     const [isLoading, setIsLoading] = useState(false)
 
     const form = useForm<z.infer<typeof loginSchema>>({
@@ -55,23 +57,23 @@ export function LoginForm() {
             if (result?.error) {
                 toast({
                     variant: "destructive",
-                    title: "Error",
-                    description: "Invalid email or password.",
+                    title: t('errors.loginFailed'),
+                    description: t('errors.loginFailed'),
                 })
                 return
             }
 
             toast({
-                title: "Success",
-                description: "Logged in successfully.",
+                title: t('success.loggedIn'),
+                description: t('success.loggedIn'),
             })
             router.push("/dashboard")
             router.refresh()
         } catch (error) {
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "Something went wrong. Please try again.",
+                title: t('errors.somethingWrong'),
+                description: t('errors.somethingWrong'),
             })
         } finally {
             setIsLoading(false)
@@ -81,9 +83,9 @@ export function LoginForm() {
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl text-center">Login</CardTitle>
+                <CardTitle className="text-2xl text-center">{t('login.title')}</CardTitle>
                 <CardDescription className="text-center">
-                    Enter your email below to login to your account
+                    {t('login.subtitle')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -94,7 +96,7 @@ export function LoginForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{t('login.email')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="name@example.com" {...field} />
                                     </FormControl>
@@ -107,7 +109,7 @@ export function LoginForm() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{t('login.password')}</FormLabel>
                                     <FormControl>
                                         <Input type="password" {...field} />
                                     </FormControl>
@@ -116,21 +118,21 @@ export function LoginForm() {
                             )}
                         />
                         <Button className="w-full" type="submit" disabled={isLoading}>
-                            {isLoading ? "Logging in..." : "Login"}
+                            {isLoading ? t('login.loading') : t('login.submit')}
                         </Button>
                     </form>
                 </Form>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
                 <div className="text-sm text-muted-foreground text-center">
-                    Don&apos;t have an account?{" "}
+                    {t('login.noAccount')}{" "}
                     <a href="/register" className="text-primary hover:underline">
-                        Register
+                        {t('login.register')}
                     </a>
                 </div>
                 <div className="text-center text-sm">
                     <a href="/forgot-password" className="text-muted-foreground hover:text-primary transition-colors">
-                        Forgot password?
+                        {t('login.forgotPassword')}
                     </a>
                 </div>
             </CardFooter>
