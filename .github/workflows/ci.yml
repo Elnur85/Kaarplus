@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --workspaces --if-present
+
+      - name: Typecheck
+        run: npm run typecheck --workspaces --if-present
+
+      - name: Unit Tests
+        run: npm run test --workspaces --if-present
+
+  e2e:
+    name: Playwright E2E Tests
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: kaarplus
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: kaarplus
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Helper - Create .env files
+        run: |
+          echo "DATABASE_URL=postgresql://kaarplus:password@localhost:5432/kaarplus" >> .env
+          echo "NEXT_PUBLIC_API_URL=http://localhost:4000" >> .env
+          echo "NEXT_PUBLIC_SITE_URL=http://localhost:3000" >> .env
+          echo "NEXTAUTH_URL=http://localhost:3000" >> .env
+          echo "NEXTAUTH_SECRET=supersecret" >> .env
+          
+          # Apps might need specific .env too
+          cp .env apps/web/.env
+          cp .env apps/api/.env
+
+      - name: Setup Database
+        run: npx prisma db push --schema=packages/database/prisma/schema.prisma
+
+      - name: Seed Database
+        run: npm run db:seed
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npm run test:e2e
+        env:
+          DATABASE_URL: postgresql://kaarplus:password@localhost:5432/kaarplus
+          CI: true
