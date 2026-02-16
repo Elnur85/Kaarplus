@@ -116,7 +116,7 @@ Performance optimization, testing, monitoring, and internationalization.
 | P4-T01 | i18n setup (Estonian + Russian + English) | ✅     | P1-T06       | 5h   |
 | P4-T02 | Core Web Vitals optimization              | ✅     | Phase 1      | 3h   |
 | P4-T03 | E2E test suite (Playwright)               | ✅     | Phase 1      | 4h   |
-| P4-T04 | Error tracking (Sentry integration)       | ⬜     | P1-T01       | 2h   |
+| P4-T04 | Error tracking (Sentry integration)       | ✅     | P1-T01       | 2h   |
 | P4-T05 | CI/CD pipeline (GitHub Actions)           | ⬜     | P1-T01       | 2h   |
 | P4-T06 | **Mobile app preparation (investor screens)** | ⬜     | Phase 1      | 3h   |
 
@@ -125,7 +125,7 @@ Performance optimization, testing, monitoring, and internationalization.
 - [ ] Application supports **Estonian, Russian, and English** languages
 - [ ] Core Web Vitals pass (LCP < 2.5s, FID < 100ms, CLS < 0.1)
 - [x] Critical user flows covered by E2E tests
-- [ ] Errors automatically reported to Sentry
+- [x] Errors automatically reported to Sentry
 - [ ] PRs trigger automated tests and preview deployments
 - [ ] **API prepared for mobile app consumption with investor screens**
 

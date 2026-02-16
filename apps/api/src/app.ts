@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import cookieParser from "cookie-parser";
 import express from "express";
 
@@ -32,6 +33,9 @@ export function createApp() {
   app.use("/api", apiRouter);
 
   // --- Error handling (must be last) ---
+  // Sentry error handler must be before any other error middleware
+  Sentry.setupExpressErrorHandler(app);
+
   app.use(errorHandler);
 
   return app;
