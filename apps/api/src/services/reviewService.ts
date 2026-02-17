@@ -162,7 +162,7 @@ export class ReviewService {
         return review;
     }
 
-    async deleteReview(id: string, reviewerId: string) {
+    async deleteReview(id: string, reviewerId: string, isAdmin: boolean = false) {
         const review = await prisma.review.findUnique({
             where: { id },
         });
@@ -171,7 +171,8 @@ export class ReviewService {
             throw new NotFoundError("Review not found");
         }
 
-        if (review.reviewerId !== reviewerId) {
+        // Allow admins to delete any review, otherwise only the reviewer can delete
+        if (!isAdmin && review.reviewerId !== reviewerId) {
             throw new ForbiddenError("You can only delete your own reviews");
         }
 
