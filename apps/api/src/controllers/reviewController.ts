@@ -1,7 +1,5 @@
-import { prisma } from "@kaarplus/database";
 import { Request, Response, NextFunction } from "express";
 
-import { emailService } from "../services/emailService";
 import { reviewService } from "../services/reviewService";
 import { BadRequestError } from "../utils/errors";
 
@@ -65,17 +63,6 @@ export async function createReview(req: Request, res: Response, next: NextFuncti
             title,
             body,
         });
-
-        // Send email notification to the reviewed user (non-blocking)
-        const targetUser = await prisma.user.findUnique({
-            where: { id: targetId },
-            select: { email: true },
-        });
-        if (targetUser?.email) {
-            emailService
-                .sendReviewNotificationEmail(targetUser.email, req.user!.name || "A user", Number(rating))
-                .catch(() => {});
-        }
 
         res.status(201).json({ data: review });
     } catch (error) {

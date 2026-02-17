@@ -1,5 +1,6 @@
 import { prisma } from "@kaarplus/database";
 
+import { emailService } from "./emailService";
 import { BadRequestError, NotFoundError, ForbiddenError } from "../utils/errors";
 
 interface CreateReviewInput {
@@ -149,6 +150,14 @@ export class ReviewService {
                 },
             },
         });
+
+        // Send email notification to the reviewed user (non-blocking)
+        if (targetUser.email) {
+            const reviewerName = review.reviewer?.name || "A user";
+            emailService
+                .sendReviewNotificationEmail(targetUser.email, reviewerName, data.rating)
+                .catch(() => {});
+        }
 
         return review;
     }

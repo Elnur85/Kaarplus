@@ -21,7 +21,6 @@ async function loginUser(credentials: any) {
         if (data.user) {
             return {
                 ...data.user,
-                apiToken: data.token, // Store JWT token from backend
             };
         }
         return null;
@@ -57,7 +56,6 @@ const config = {
             if (user) {
                 token.role = user.role;
                 token.id = user.id;
-                token.apiToken = user.apiToken;
             }
             return token;
         },
@@ -65,7 +63,6 @@ const config = {
             if (token && session.user) {
                 session.user.role = token.role;
                 session.user.id = token.id;
-                session.apiToken = token.apiToken;
             }
             return session;
         },

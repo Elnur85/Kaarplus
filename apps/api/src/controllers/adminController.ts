@@ -34,3 +34,8 @@ export const getAnalytics = async (req: Request, res: Response) => {
     const result = await adminService.getAnalytics();
     res.json({ data: result });
 };
+
+export const getStats = async (_req: Request, res: Response) => {
+    const result = await adminService.getStats();
+    res.json({ data: result });
+};

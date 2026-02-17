@@ -211,4 +211,33 @@ export class AdminService {
             }
         };
     }
+
+    async getStats() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const [
+            pendingListings,
+            activeUsers,
+            totalListings,
+            verifiedToday
+        ] = await Promise.all([
+            prisma.listing.count({ where: { status: "PENDING" } }),
+            prisma.user.count({ where: { deletedAt: null } }),
+            prisma.listing.count(),
+            prisma.listing.count({
+                where: {
+                    status: "ACTIVE",
+                    verifiedAt: { gte: today }
+                }
+            })
+        ]);
+
+        return {
+            pendingListings,
+            activeUsers,
+            totalListings,
+            verifiedToday
+        };
+    }
 }

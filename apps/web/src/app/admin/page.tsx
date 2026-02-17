@@ -1,20 +1,180 @@
-import {
-    ClipboardList,
-    Users,
-    TrendingUp,
-    CheckCircle2
-} from "lucide-react";
+"use client";
+
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { ClipboardList, Users, TrendingUp, CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function AdminPage() {
-    const stats = [
-        { name: "Kinnitamist ootavad", value: "12", icon: ClipboardList, color: "text-amber-500", bg: "bg-amber-50" },
-        { name: "Aktiivsed kasutajad", value: "1,280", icon: Users, color: "text-blue-500", bg: "bg-blue-50" },
-        { name: "Kuulutusi kokku", value: "3,452", icon: TrendingUp, color: "text-primary", bg: "bg-green-50" },
-        { name: "Kinnitatud täna", value: "24", icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-50" },
-    ];
+interface StatsData {
+    pendingListings: number;
+    activeUsers: number;
+    totalListings: number;
+    verifiedToday: number;
+}
 
+function StatsCard({ 
+    name, 
+    value, 
+    icon: Icon, 
+    color, 
+    bg,
+    subtext 
+}: { 
+    name: string; 
+    value: string | number; 
+    icon: React.ElementType; 
+    color: string; 
+    bg: string;
+    subtext?: string;
+}) {
+    return (
+        <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                    {name}
+                </CardTitle>
+                <div className={`${bg} ${color} p-2 rounded-lg`}>
+                    <Icon size={16} />
+                </div>
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">{value}</div>
+                {subtext && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                        {subtext}
+                    </p>
+                )}
+            </CardContent>
+        </Card>
+    );
+}
+
+function StatsSkeleton() {
+    return (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[1, 2, 3, 4].map((i) => (
+                <Card key={i} className="border-border/50 shadow-sm">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-2">
+                                <div className="h-4 w-24 bg-muted rounded animate-pulse" />
+                                <div className="h-8 w-16 bg-muted rounded animate-pulse" />
+                            </div>
+                            <div className="h-10 w-10 bg-muted rounded-lg animate-pulse" />
+                        </div>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    );
+}
+
+function AdminStats() {
+    const [stats, setStats] = useState<StatsData | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
+    const fetchStats = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/stats`, {
+                credentials: "include",
+            });
+            
+            if (!res.ok) throw new Error("Failed to fetch stats");
+            const data = await res.json();
+            setStats(data.data);
+        } catch (e) {
+            setError("Failed to load stats");
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+    
+    useEffect(() => {
+        fetchStats();
+    }, [fetchStats]);
+    
+    if (isLoading) return <StatsSkeleton />;
+    
+    if (error) {
+        return (
+            <div className="p-4 border border-destructive/50 rounded-lg bg-destructive/10 text-destructive">
+                {error}
+            </div>
+        );
+    }
+    
+    const statItems = [
+        { 
+            name: "Kinnitamist ootavad", 
+            value: stats?.pendingListings ?? "-", 
+            icon: ClipboardList, 
+            color: "text-amber-500", 
+            bg: "bg-amber-50",
+            subtext: "Ootab ülevaatamist"
+        },
+        { 
+            name: "Aktiivsed kasutajad", 
+            value: stats?.activeUsers ?? "-", 
+            icon: Users, 
+            color: "text-blue-500", 
+            bg: "bg-blue-50",
+            subtext: "Registreeritud kasutajad"
+        },
+        { 
+            name: "Kuulutusi kokku", 
+            value: stats?.totalListings ?? "-", 
+            icon: TrendingUp, 
+            color: "text-primary", 
+            bg: "bg-green-50",
+            subtext: "Kõik kuulutused"
+        },
+        { 
+            name: "Kinnitatud täna", 
+            value: stats?.verifiedToday ?? "-", 
+            icon: CheckCircle2, 
+            color: "text-emerald-500", 
+            bg: "bg-emerald-50",
+            subtext: "Täna kinnitatud"
+        },
+    ];
+    
+    return (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {statItems.map((stat) => (
+                <StatsCard key={stat.name} {...stat} />
+            ))}
+        </div>
+    );
+}
+
+export default function AdminPage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    
+    useEffect(() => {
+        if (status === "loading") return;
+        
+        if (!session?.user || session.user.role !== "ADMIN") {
+            router.push("/login");
+        }
+    }, [session, status, router]);
+    
+    if (status === "loading") {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Loader2 className="animate-spin" size={32} />
+            </div>
+        );
+    }
+    
+    if (!session?.user || session.user.role !== "ADMIN") {
+        return null;
+    }
+    
     return (
         <div className="space-y-8">
             <div>
@@ -24,26 +184,9 @@ export default function AdminPage() {
                 </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {stats.map((stat) => (
-                    <Card key={stat.name} className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">
-                                {stat.name}
-                            </CardTitle>
-                            <div className={`${stat.bg} ${stat.color} p-2 rounded-lg`}>
-                                <stat.icon size={16} />
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stat.value}</div>
-                            <p className="text-xs text-muted-foreground mt-1">
-                                <span className="text-emerald-500 font-medium">+12%</span> eelmisest kuust
-                            </p>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
+            <Suspense fallback={<StatsSkeleton />}>
+                <AdminStats />
+            </Suspense>
 
             <div className="grid gap-6 md:grid-cols-2">
                 <Card className="border-border/50 shadow-sm">
@@ -61,7 +204,7 @@ export default function AdminPage() {
                                 </div>
                                 <div>
                                     <p className="font-semibold">Vaata kinnitusjärjekorda</p>
-                                    <p className="text-sm text-muted-foreground">12 kuulutust ootab ülevaatamist</p>
+                                    <p className="text-sm text-muted-foreground">Kuulutuste ülevaatamine ja kinnitamine</p>
                                 </div>
                             </div>
                             <div className="text-muted-foreground group-hover:text-primary transform transition-transform group-hover:translate-x-1">

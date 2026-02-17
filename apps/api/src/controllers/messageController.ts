@@ -3,15 +3,25 @@ import { Request, Response, NextFunction } from "express";
 import { messageService } from "../services/messageService";
 
 /**
+ * Parse pagination parameters from query string
+ */
+function getPaginationParams(req: Request): { page: number; pageSize: number } {
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize as string) || 20));
+    return { page, pageSize };
+}
+
+/**
  * GET /api/user/messages
- * Get all conversations for the authenticated user.
+ * Get all conversations for the authenticated user with pagination.
  */
 export async function getConversations(req: Request, res: Response, next: NextFunction) {
     try {
         const userId = req.user!.id;
-        const conversations = await messageService.getConversations(userId);
+        const pagination = getPaginationParams(req);
+        const result = await messageService.getConversations(userId, pagination);
 
-        res.json({ data: conversations });
+        res.json(result);
     } catch (error) {
         next(error);
     }
@@ -19,7 +29,7 @@ export async function getConversations(req: Request, res: Response, next: NextFu
 
 /**
  * GET /api/user/messages/thread?userId=X&listingId=Y
- * Get messages in a conversation thread with another user.
+ * Get messages in a conversation thread with another user with pagination.
  */
 export async function getThread(req: Request, res: Response, next: NextFunction) {
     try {
@@ -32,9 +42,10 @@ export async function getThread(req: Request, res: Response, next: NextFunction)
             return;
         }
 
-        const messages = await messageService.getThread(currentUserId, otherUserId, listingId);
+        const pagination = getPaginationParams(req);
+        const result = await messageService.getThread(currentUserId, otherUserId, listingId, pagination);
 
-        res.json({ data: messages });
+        res.json(result);
     } catch (error) {
         next(error);
     }

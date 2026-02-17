@@ -17,6 +17,7 @@ adminRouter.patch("/listings/:id/verify", adminController.verifyListing);
 // Users
 adminRouter.get("/users", adminController.getUsers);
 
-// Analytics
+// Analytics & Stats
 adminRouter.get("/analytics", adminController.getAnalytics);
+adminRouter.get("/stats", adminController.getStats);
 

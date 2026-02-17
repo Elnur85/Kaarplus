@@ -8,9 +8,9 @@ export const listingsRouter = Router();
 
 // Public routes
 listingsRouter.get("/", readLimiter, listingController.getAllListings);
-listingsRouter.get("/:id", listingController.getListingById);
+listingsRouter.get("/:id", readLimiter, listingController.getListingById);
 listingsRouter.get("/:id/similar", listingController.getSimilarListings);
-listingsRouter.post("/:id/contact", listingController.contactSeller);
+listingsRouter.post("/:id/contact", writeLimiter, listingController.contactSeller);
 
 // Protected routes (Seller/Dealership/Admin)
 listingsRouter.post(
@@ -22,8 +22,8 @@ listingsRouter.post(
 );
 
 // Protected routes (Owner/Admin)
-listingsRouter.patch("/:id", requireAuth, listingController.updateListing);
-listingsRouter.delete("/:id", requireAuth, listingController.deleteListing);
+listingsRouter.patch("/:id", requireAuth, writeLimiter, listingController.updateListing);
+listingsRouter.delete("/:id", requireAuth, writeLimiter, listingController.deleteListing);
 
 // Image management (Owner/Admin)
 listingsRouter.post("/:id/images", requireAuth, writeLimiter, listingController.addImages);

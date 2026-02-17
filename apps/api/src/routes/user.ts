@@ -40,9 +40,8 @@ export const userRouter = Router();
 userRouter.use(requireAuth);
 
 // GDPR endpoints
-userRouter.post("/gdpr/consent", saveConsent);
-userRouter.get("/gdpr/export", exportData);
-userRouter.delete("/gdpr/delete", deleteAccount);
+userRouter.post("/gdpr/consent", writeLimiter, saveConsent);
+userRouter.delete("/gdpr/delete", writeLimiter, deleteAccount);
 
 // Favorites endpoints
 userRouter.get("/favorites", readLimiter, getUserFavorites);
@@ -73,3 +72,6 @@ userRouter.get("/messages", readLimiter, getConversations);
 userRouter.get("/messages/thread", readLimiter, getThread);
 userRouter.get("/messages/unread-count", readLimiter, getUnreadCount);
 userRouter.post("/messages", writeLimiter, sendMessage);
+
+// GDPR export is expensive - add stricter rate limit
+userRouter.get("/gdpr/export", readLimiter, exportData);
