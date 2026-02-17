@@ -26,9 +26,7 @@ export function ListingQueue() {
         setIsLoading(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/listings/pending`, {
-                headers: {
-                    "Authorization": `Bearer ${session?.user?.apiToken}`,
-                },
+                credentials: "include",
             });
 
             if (!res.ok) throw new Error(t('queue.error.message'));
@@ -39,13 +37,13 @@ export function ListingQueue() {
         } finally {
             setIsLoading(false);
         }
-    }, [session?.user?.apiToken, t]);
+    }, [t]);
 
     useEffect(() => {
-        if (session?.user?.apiToken) {
+        if (session?.user) {
             fetchPending();
         }
-    }, [session?.user?.apiToken, fetchPending]);
+    }, [session?.user, fetchPending]);
 
     const handleApprove = async (id: string) => {
         try {
@@ -53,8 +51,8 @@ export function ListingQueue() {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${session?.user?.apiToken}`,
                 },
+                credentials: "include",
                 body: JSON.stringify({ action: "approve" }),
             });
 
@@ -87,8 +85,8 @@ export function ListingQueue() {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${session?.user?.apiToken}`,
                 },
+                credentials: "include",
                 body: JSON.stringify({ action: "reject", reason }),
             });
 

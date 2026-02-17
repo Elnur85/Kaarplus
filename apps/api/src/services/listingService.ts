@@ -272,20 +272,30 @@ export class ListingService {
         });
     }
 
-    async contactSeller(id: string, contactData: { name: string; email: string; phone?: string; message: string }) {
+    async contactSeller(
+        id: string, 
+        contactData: { name: string; email: string; phone?: string; message: string },
+        senderId?: string
+    ) {
         const listing = await prisma.listing.findUnique({
             where: { id },
             include: { user: true },
         });
         if (!listing) throw new NotFoundError("Listing not found");
 
+        // For anonymous users, create a system message with contact details
+        // For logged-in users, use their user ID as sender
+        const messageBody = senderId 
+            ? contactData.message
+            : `Nimi: ${contactData.name}\nEmail: ${contactData.email}\nTelefon: ${contactData.phone || "Puudub"}\n\nSõnum:\n${contactData.message}`;
+
         return prisma.message.create({
             data: {
-                senderId: listing.userId,
+                senderId: senderId || "system",
                 recipientId: listing.userId,
                 listingId: listing.id,
                 subject: `Päring kuulutuse kohta: ${listing.make} ${listing.model}`,
-                body: `Nimi: ${contactData.name}\nEmail: ${contactData.email}\nTelefon: ${contactData.phone || "Puudub"}\n\nSõnum:\n${contactData.message}`,
+                body: messageBody,
             },
         });
     }

@@ -100,8 +100,8 @@ export function SellWizard() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${session?.user?.apiToken}`,
             },
+            credentials: "include",
             body: JSON.stringify({
                 fileName: file.name,
                 fileType: file.type,
@@ -160,8 +160,8 @@ export function SellWizard() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${session?.user?.apiToken}`,
                 },
+                credentials: "include",
                 body: JSON.stringify(listingData),
             });
 
@@ -189,8 +189,8 @@ export function SellWizard() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${session?.user?.apiToken}`,
                 },
+                credentials: "include",
                 body: JSON.stringify({ images: imageUrls }),
             });
 

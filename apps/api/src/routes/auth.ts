@@ -13,7 +13,10 @@ export const authRouter = Router();
 // Apply rate limiter to all auth routes
 authRouter.use(authLimiter);
 
-const JWT_SECRET = process.env.JWT_SECRET || "development_secret_do_not_use_in_production";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
 const JWT_EXPIRES_IN = "24h";
 
 // Zod schemas
@@ -141,18 +144,60 @@ authRouter.get("/session", requireAuth, (req: Request, res: Response) => {
     res.json({ user: req.user });
 });
 
-// POST /api/auth/forgot-password (Stub)
+// POST /api/auth/forgot-password
+const forgotPasswordSchema = z.object({
+    email: z.string().email("Invalid email address"),
+});
+
 authRouter.post("/forgot-password", async (req: Request, res: Response) => {
-    const { email } = req.body;
-    // In a real app, generate token, save to DB, send email
-    // For MVP, just acknowledge
-    console.log(`[Stub] Password reset requested for ${email}`);
+    const result = forgotPasswordSchema.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.issues[0].message);
+    }
+
+    const { email } = result.data;
+    
+    // Find user by email
+    const user = await prisma.user.findUnique({ where: { email } });
+    
+    // Always return success to prevent email enumeration attacks
+    if (!user) {
+        res.json({ message: "If an account exists, a password reset email has been sent." });
+        return;
+    }
+    
+    // TODO: Implement actual password reset email sending
+    // 1. Generate secure random token
+    // 2. Save token hash to database with expiration
+    // 3. Send email with reset link
+    // 4. Log the request for security audit
+    
     res.json({ message: "If an account exists, a password reset email has been sent." });
 });
 
-// POST /api/auth/reset-password (Stub)
-authRouter.post("/reset-password", async (req: Request, res: Response) => {
-    // const { token, newPassword } = req.body;
-    // Validate token, update password
-    res.json({ message: "Password reset functionality pending implementation." });
+// POST /api/auth/reset-password
+const resetPasswordSchema = z.object({
+    token: z.string().min(1, "Reset token is required"),
+    newPassword: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+        .regex(/[0-9]/, "Password must contain at least one number"),
+});
+
+authRouter.post("/reset-password", async (req: Request, _res: Response) => {
+    const result = resetPasswordSchema.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.issues[0].message);
+    }
+
+    // TODO: Implement actual password reset
+    // 1. Validate token against database
+    // 2. Check token expiration
+    // 3. Hash new password
+    // 4. Update user password
+    // 5. Invalidate token
+    // 6. Log password change
+    
+    throw new BadRequestError("Password reset functionality is not yet implemented");
 });

@@ -3,10 +3,11 @@ import { Router, Request, Response } from "express";
 import { adminRouter } from "./admin";
 import { authRouter } from "./auth";
 import { dealershipRouter } from "./dealerships";
-import { debugSentryRouter } from "./debug-sentry";
 import { listingsRouter } from "./listings";
 import { mobileRouter } from "./mobile";
+import { newsletterRouter } from "./newsletter";
 import { paymentsRouter } from "./payments";
+import { reviewsRouter } from "./reviews";
 import { searchRouter } from "./search";
 import { uploadsRouter } from "./uploads";
 import { userRouter } from "./user";
@@ -34,4 +35,11 @@ apiRouter.use("/webhooks", webhooksRouter);
 apiRouter.use("/uploads", uploadsRouter);
 apiRouter.use("/dealerships", dealershipRouter);
 apiRouter.use("/mobile", mobileRouter);
-apiRouter.use("/", debugSentryRouter);
+apiRouter.use("/newsletter", newsletterRouter);
+apiRouter.use("/reviews", reviewsRouter);
+// Debug routes only available in non-production environments
+if (process.env.NODE_ENV !== "production") {
+  import("./debug-sentry").then(({ debugSentryRouter }) => {
+    apiRouter.use("/debug", debugSentryRouter);
+  });
+}

@@ -23,14 +23,12 @@ export function AnalyticsDashboard() {
     const localeCode = i18n.language === 'et' ? 'et-EE' : i18n.language === 'ru' ? 'ru-RU' : 'en-GB';
 
     const fetchAnalytics = useCallback(async () => {
-        if (!session?.user?.apiToken) return;
+        if (!session?.user) return;
 
         setIsLoading(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/analytics`, {
-                headers: {
-                    "Authorization": `Bearer ${session.user.apiToken}`,
-                },
+                credentials: "include",
             });
 
             if (!res.ok) throw new Error(t('queue.error.message'));
