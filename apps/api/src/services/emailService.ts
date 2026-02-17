@@ -185,6 +185,69 @@ export class EmailService {
         `;
         await this.sendEmail(email, subject, html);
     }
+
+    async sendPasswordResetEmail(email: string, resetToken: string, language: string = "et"): Promise<void> {
+        const resetUrl = `${FRONTEND_URL}/reset-password?token=${encodeURIComponent(resetToken)}`;
+
+        const subjects: Record<string, string> = {
+            et: "Parooli taastamine | Kaarplus",
+            en: "Password Reset | Kaarplus",
+            ru: "Vosstanovlenie parolya | Kaarplus",
+        };
+
+        const bodies: Record<string, { title: string; greeting: string; instruction: string; button: string; expiry: string; ignore: string }> = {
+            et: {
+                title: "Parooli taastamine",
+                greeting: "Tere",
+                instruction: "Saime taotluse teie Kaarplus konto parooli lähtestamiseks. Kui te seda taotlust ei esitanud, võite selle e-kirja ignoreerida.",
+                button: "Lähtesta parool",
+                expiry: "See link aegub 24 tunni pärast.",
+                ignore: "Kui te ei soovi parooli muuta, ignoreerige lihtsalt seda e-kirja.",
+            },
+            en: {
+                title: "Password Reset",
+                greeting: "Hello",
+                instruction: "We received a request to reset your Kaarplus account password. If you didn't make this request, you can ignore this email.",
+                button: "Reset Password",
+                expiry: "This link will expire in 24 hours.",
+                ignore: "If you don't want to change your password, simply ignore this email.",
+            },
+            ru: {
+                title: "Vosstanovlenie parolya",
+                greeting: "Zdravstvuyte",
+                instruction: "My poluchili zapros na sbros parolya dlya vashego akkaunta Kaarplus. Yesli vy ne otpravlyali etot zapros, mozhete proignorirovat' eto pis'mo.",
+                button: "Sbrosit' parol'",
+                expiry: "Eta ssylka istechet cherez 24 chasa.",
+                ignore: "Yesli vy ne khotite menyat' parol', prosto proignoriruyte eto pis'mo.",
+            },
+        };
+
+        const t = bodies[language] || bodies["et"];
+        const subject = subjects[language] || subjects["et"];
+
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <h2 style="color: #333;">${t.title}</h2>
+                <p>${t.greeting},</p>
+                <p>${t.instruction}</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${resetUrl}" 
+                       style="background-color: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                        ${t.button}
+                    </a>
+                </div>
+                <p style="color: #666; font-size: 14px;">${t.expiry}</p>
+                <p style="color: #666; font-size: 14px;">${t.ignore}</p>
+                <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;" />
+                <p style="color: #999; font-size: 12px;">
+                    Kui nupp ei tööta, kopeerige see link oma brauserisse:<br>
+                    ${resetUrl}
+                </p>
+            </div>
+        `;
+
+        await this.sendEmail(email, subject, html);
+    }
 }
 
 export const emailService = new EmailService();

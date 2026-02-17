@@ -7,6 +7,8 @@ import { z } from "zod";
 import { requireAuth } from "../middleware/auth";
 import { authLimiter } from "../middleware/rateLimiter";
 import { AuthError, BadRequestError } from "../utils/errors";
+import { passwordResetService } from "../services/passwordResetService";
+import { emailService } from "../services/emailService";
 
 export const authRouter = Router();
 
@@ -15,7 +17,7 @@ authRouter.use(authLimiter);
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET environment variable is required");
+    throw new Error("JWT_SECRET environment variable is required");
 }
 const JWT_EXPIRES_IN = "24h";
 
@@ -166,13 +168,29 @@ authRouter.post("/forgot-password", async (req: Request, res: Response) => {
         return;
     }
     
-    // TODO: Implement actual password reset email sending
-    // 1. Generate secure random token
-    // 2. Save token hash to database with expiration
-    // 3. Send email with reset link
-    // 4. Log the request for security audit
-    
-    res.json({ message: "If an account exists, a password reset email has been sent." });
+    try {
+        // Generate secure reset token
+        const resetToken = await passwordResetService.createResetToken(email);
+        
+        if (!resetToken) {
+            // Log error but don't expose to client
+            console.error("[Password Reset] Failed to create reset token for:", email);
+            res.json({ message: "If an account exists, a password reset email has been sent." });
+            return;
+        }
+        
+        // Send password reset email
+        await emailService.sendPasswordResetEmail(email, resetToken, "et");
+        
+        // Log for security audit
+        console.log(`[Password Reset] Token generated and email sent to: ${email}`);
+        
+        res.json({ message: "If an account exists, a password reset email has been sent." });
+    } catch (error) {
+        console.error("[Password Reset] Error processing forgot-password request:", error);
+        // Still return success to prevent enumeration
+        res.json({ message: "If an account exists, a password reset email has been sent." });
+    }
 });
 
 // POST /api/auth/reset-password
@@ -185,19 +203,105 @@ const resetPasswordSchema = z.object({
         .regex(/[0-9]/, "Password must contain at least one number"),
 });
 
-authRouter.post("/reset-password", async (req: Request, _res: Response) => {
+authRouter.post("/reset-password", async (req: Request, res: Response) => {
     const result = resetPasswordSchema.safeParse(req.body);
     if (!result.success) {
         throw new BadRequestError(result.error.issues[0].message);
     }
 
-    // TODO: Implement actual password reset
-    // 1. Validate token against database
-    // 2. Check token expiration
-    // 3. Hash new password
-    // 4. Update user password
-    // 5. Invalidate token
-    // 6. Log password change
-    
-    throw new BadRequestError("Password reset functionality is not yet implemented");
+    const { token, newPassword } = result.data;
+
+    try {
+        // Validate the reset token
+        const email = await passwordResetService.validateToken(token);
+        
+        if (!email) {
+            throw new BadRequestError("Invalid or expired reset token");
+        }
+        
+        // Find the user
+        const user = await prisma.user.findUnique({ where: { email } });
+        
+        if (!user) {
+            // This shouldn't happen if token validation passed, but handle it gracefully
+            throw new BadRequestError("Invalid or expired reset token");
+        }
+        
+        // Hash the new password
+        const passwordHash = await bcrypt.hash(newPassword, 12);
+        
+        // Update user's password in a transaction
+        await prisma.$transaction(async (tx) => {
+            // Update password
+            await tx.user.update({
+                where: { id: user.id },
+                data: { passwordHash },
+            });
+            
+            // Mark token as used
+            await tx.passwordResetToken.updateMany({
+                where: { token },
+                data: { used: true },
+            });
+        });
+        
+        // Log for security audit
+        console.log(`[Password Reset] Password successfully reset for user: ${email}`);
+        
+        res.json({ message: "Password has been reset successfully. You can now log in with your new password." });
+    } catch (error) {
+        if (error instanceof BadRequestError) {
+            throw error;
+        }
+        console.error("[Password Reset] Error resetting password:", error);
+        throw new BadRequestError("Failed to reset password. Please try again.");
+    }
+});
+
+// POST /api/auth/change-password (authenticated)
+const changePasswordSchema = z.object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+        .regex(/[0-9]/, "Password must contain at least one number"),
+});
+
+authRouter.post("/change-password", requireAuth, async (req: Request, res: Response) => {
+    const result = changePasswordSchema.safeParse(req.body);
+    if (!result.success) {
+        throw new BadRequestError(result.error.issues[0].message);
+    }
+
+    const { currentPassword, newPassword } = result.data;
+    const userId = req.user!.id;
+
+    // Get user with password hash
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, passwordHash: true, email: true },
+    });
+
+    if (!user || !user.passwordHash) {
+        throw new BadRequestError("User not found or password not set");
+    }
+
+    // Verify current password
+    const isValidPassword = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isValidPassword) {
+        throw new AuthError("Current password is incorrect");
+    }
+
+    // Hash and update new password
+    const newPasswordHash = await bcrypt.hash(newPassword, 12);
+    await prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash: newPasswordHash },
+    });
+
+    // Log for security audit
+    console.log(`[Password Change] Password changed for user: ${user.email}`);
+
+    res.json({ message: "Password changed successfully" });
 });
