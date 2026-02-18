@@ -19,6 +19,7 @@ vi.mock('@kaarplus/database', () => ({
 }));
 
 import { gdprService } from './gdprService';
+
 import { prisma } from '@kaarplus/database';
 
 describe('GdprService', () => {

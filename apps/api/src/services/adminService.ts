@@ -1,9 +1,14 @@
 import { prisma } from "@kaarplus/database";
 
 import { emailService } from "../services/emailService";
+import { cacheService } from "../utils/cache";
 import { NotFoundError, BadRequestError } from "../utils/errors";
 
 export class AdminService {
+    private invalidateSearchCache() {
+        cacheService.invalidatePattern("search:");
+    }
+
     async getPendingListings(page: number = 1, pageSize: number = 20) {
         const skip = (page - 1) * pageSize;
         const take = pageSize;
@@ -80,15 +85,19 @@ export class AdminService {
                 ).catch(() => { });
             }
 
+            this.invalidateSearchCache();
             return updated;
         } else {
             // rejection logic
-            return prisma.listing.update({
+            const updated = await prisma.listing.update({
                 where: { id },
                 data: {
                     status: "REJECTED",
                 },
             });
+
+            this.invalidateSearchCache();
+            return updated;
         }
     }
 
@@ -181,16 +190,22 @@ export class AdminService {
         ]);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const safeDailyRegistrations = (dailyRegistrations as any[]).map(r => ({
-            date: r.date,
-            count: Number(r.count)
-        }));
+        const safeDailyRegistrations = (dailyRegistrations as unknown[]).map(r => {
+            const row = r as { date: Date; count: bigint };
+            return {
+                date: row.date,
+                count: Number(row.count)
+            };
+        });
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const safeDailyListings = (dailyListings as any[]).map(r => ({
-            date: r.date,
-            count: Number(r.count)
-        }));
+        const safeDailyListings = (dailyListings as unknown[]).map(r => {
+            const row = r as { date: Date; count: bigint };
+            return {
+                date: row.date,
+                count: Number(row.count)
+            };
+        });
 
         return {
             summary: {
@@ -212,7 +227,11 @@ export class AdminService {
         };
     }
 
-    async getStats() {
+    async getStats(): Promise<any> {
+        const cacheKey = "admin:stats";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as any;
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -233,11 +252,14 @@ export class AdminService {
             })
         ]);
 
-        return {
+        const result = {
             pendingListings,
             activeUsers,
             totalListings,
             verifiedToday
         };
+
+        cacheService.set(cacheKey, result, 60); // 1 minute cache
+        return result;
     }
 }

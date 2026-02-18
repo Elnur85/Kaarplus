@@ -1,0 +1,61 @@
+
+> kaarplus@1.0.0 test:e2e
+> DISABLE_RATE_LIMIT=true playwright test e2e/seller.spec.ts
+
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+
+Running 1 test using 1 worker
+
+[1A[2K[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[1A[2K[1/1] [chromium] › e2e/seller.spec.ts:24:9 › Seller Flow › should be able to create a new listing with mocked image upload
+[1A[2K  1) [chromium] › e2e/seller.spec.ts:24:9 › Seller Flow › should be able to create a new listing with mocked image upload 
+
+    [31mTest timeout of 180000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 180000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('option', { name: 'Automaat' }).first()[22m
+    [2m    - locator resolved to <div role="option" tabindex="-1" aria-selected="false" data-state="unchecked" aria-labelledby="radix-:r2c:" data-radix-collection-item="" class="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">…</div>[22m
+    [2m  - attempting click action[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is not stable[22m
+    [2m    - retrying click action[22m
+    [2m    - waiting 20ms[22m
+    [2m    - waiting for element to be visible, enabled and stable[22m
+    [2m    - element is not stable[22m
+    [2m  2 × retrying click action[22m
+    [2m      - waiting 100ms[22m
+    [2m      - waiting for element to be visible, enabled and stable[22m
+    [2m      - element is visible, enabled and stable[22m
+    [2m      - scrolling into view if needed[22m
+    [2m      - done scrolling[22m
+    [2m      - <p class="text-sm text-muted-foreground">Kasutame küpsiseid, et parandada teie sirvimiskog…</p> from <div aria-hidden="true" data-aria-hidden="true" class="fixed bottom-0 left-0 right-0 z-[60] p-4 pointer-events-none">…</div> subtree intercepts pointer events[22m
+    [2m  337 × retrying click action[22m
+    [2m        - waiting 500ms[22m
+    [2m        - waiting for element to be visible, enabled and stable[22m
+    [2m        - element is visible, enabled and stable[22m
+    [2m        - scrolling into view if needed[22m
+    [2m        - done scrolling[22m
+    [2m        - <p class="text-sm text-muted-foreground">Kasutame küpsiseid, et parandada teie sirvimiskog…</p> from <div aria-hidden="true" data-aria-hidden="true" class="fixed bottom-0 left-0 right-0 z-[60] p-4 pointer-events-none">…</div> subtree intercepts pointer events[22m
+    [2m  - retrying click action[22m
+    [2m    - waiting 500ms[22m
+
+
+      104 |             const optionLocator = page.getByRole('option', { name: option }).first();
+      105 |             await optionLocator.waitFor({ state: 'visible', timeout: 5000 });
+    > 106 |             await optionLocator.click();
+          |                                 ^
+      107 |
+      108 |             // Wait for the popover to close
+      109 |             await page.waitForTimeout(300);
+        at selectOptionByLabel (/Users/elnuraghabayli/Desktop/Kaarplus/e2e/seller.spec.ts:106:33)
+        at /Users/elnuraghabayli/Desktop/Kaarplus/e2e/seller.spec.ts:132:9
+
+    Error Context: test-results/seller-Seller-Flow-should--9b378-ng-with-mocked-image-upload-chromium/error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › e2e/seller.spec.ts:24:9 › Seller Flow › should be able to create a new listing with mocked image upload 
+
+[36m  Serving HTML report at http://localhost:58147. Press Ctrl+C to quit.[39m

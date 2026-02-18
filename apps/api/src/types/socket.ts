@@ -3,7 +3,9 @@
  * These types are shared between backend and frontend to ensure consistency.
  */
 
-import { Message, User } from "@kaarplus/database";
+// Note: Message and User types from @kaarplus/database are intentionally not imported here;
+// this file defines its own socket-specific payload types (MessageWithSender, MessageSender)
+// to avoid coupling the socket layer directly to the Prisma schema.
 
 // ============================================================================
 // Socket Events - Server to Client

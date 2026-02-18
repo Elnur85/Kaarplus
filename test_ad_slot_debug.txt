@@ -1,0 +1,278 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/Users/elnuraghabayli/Desktop/Kaarplus[39m
+
+[90mstderr[2m | apps/web/src/components/shared/ad-slot.test.tsx[2m > [22m[2mAdSlot[2m > [22m[2mbanner ad rendering[2m > [22m[2mshould render banner image with correct attributes
+[22m[39mWarning: Received `false` for a non-boolean attribute `priority`.
+
+If you want to write it to the DOM, pass a string instead: priority="false" or priority={value.toString()}.
+
+If you used to conditionally omit it with priority={condition && value}, pass priority={condition ? value : undefined} instead.
+    at img
+    at default
+    at div
+    at AdSlot (/Users/elnuraghabayli/Desktop/Kaarplus/apps/web/src/components/shared/ad-slot.tsx:15:19)
+
+ [31m❯[39m apps/web/src/components/shared/ad-slot.test.tsx [2m([22m[2m20 tests[22m[2m | [22m[31m18 failed[39m[2m)[22m[33m 90075[2mms[22m[39m
+       [32m✓[39m should show skeleton while fetching[32m 11[2mms[22m[39m
+       [32m✓[39m should apply custom className during loading[32m 1[2mms[22m[39m
+[31m       [31m×[31m should render banner image with correct attributes[39m[33m 5007[2mms[22m[39m
+[31m       [31m×[31m should set role and aria-label for accessibility[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should have clickable cursor style[39m[33m 5003[2mms[22m[39m
+[31m       [31m×[31m should render nothing when no ad and no fallback[39m[33m 5003[2mms[22m[39m
+[31m       [31m×[31m should render fallback component when no ad available[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should render fallback on network error[39m[33m 5002[2mms[22m[39m
+[31m       [31m×[31m should fetch from correct content-blocks URL[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should include targeting context as query params[39m[33m 5002[2mms[22m[39m
+[31m       [31m×[31m should omit empty context fields from query[39m[33m 5003[2mms[22m[39m
+[31m       [31m×[31m should fire IMPRESSION after 1s of 50%+ visibility[39m[33m 5003[2mms[22m[39m
+[31m       [31m×[31m should NOT fire impression if element leaves viewport before 1s[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should fire impression only once even with multiple intersections[39m[33m 5002[2mms[22m[39m
+[31m       [31m×[31m should fire CLICK event and open link on ad click[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should not open link when linkUrl is null[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should render AdSense snippet via dangerouslySetInnerHTML[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should not render image for AdSense type[39m[33m 5001[2mms[22m[39m
+[31m       [31m×[31m should report desktop for wide viewports[39m[33m 5004[2mms[22m[39m
+[31m       [31m×[31m should report mobile for narrow viewports[39m[33m 5003[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 18 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mbanner ad rendering[2m > [22mshould render banner image with correct attributes
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m168:5[22m[39m
+    [90m166| [39m
+    [90m167| [39m  [34mdescribe[39m([32m"banner ad rendering"[39m[33m,[39m () [33m=>[39m {
+    [90m168| [39m    it("should render banner image with correct attributes", async () …
+    [90m   | [39m    [31m^[39m
+    [90m169| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m170| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mbanner ad rendering[2m > [22mshould set role and aria-label for accessibility
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m182:5[22m[39m
+    [90m180| [39m    })[33m;[39m
+    [90m181| [39m
+    [90m182| [39m    it("should set role and aria-label for accessibility", async () =>…
+    [90m   | [39m    [31m^[39m
+    [90m183| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m184| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mbanner ad rendering[2m > [22mshould have clickable cursor style
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m193:5[22m[39m
+    [90m191| [39m    })[33m;[39m
+    [90m192| [39m
+    [90m193| [39m    [34mit[39m([32m"should have clickable cursor style"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m194| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m195| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mfallback behavior[2m > [22mshould render nothing when no ad and no fallback
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m208:5[22m[39m
+    [90m206| [39m
+    [90m207| [39m  [34mdescribe[39m([32m"fallback behavior"[39m[33m,[39m () [33m=>[39m {
+    [90m208| [39m    it("should render nothing when no ad and no fallback", async () =>…
+    [90m   | [39m    [31m^[39m
+    [90m209| [39m      [34mmockFetchSuccess[39m([35mnull[39m)[33m;[39m
+    [90m210| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mfallback behavior[2m > [22mshould render fallback component when no ad available
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m218:5[22m[39m
+    [90m216| [39m    })[33m;[39m
+    [90m217| [39m
+    [90m218| [39m    it("should render fallback component when no ad available", async …
+    [90m   | [39m    [31m^[39m
+    [90m219| [39m      [34mmockFetchSuccess[39m([35mnull[39m)[33m;[39m
+    [90m220| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mfallback behavior[2m > [22mshould render fallback on network error
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m234:5[22m[39m
+    [90m232| [39m    })[33m;[39m
+    [90m233| [39m
+    [90m234| [39m    [34mit[39m([32m"should render fallback on network error"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m235| [39m      [34mmockFetchError[39m()[33m;[39m
+    [90m236| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mAPI requests[2m > [22mshould fetch from correct content-blocks URL
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m253:5[22m[39m
+    [90m251| [39m
+    [90m252| [39m  [34mdescribe[39m([32m"API requests"[39m[33m,[39m () [33m=>[39m {
+    [90m253| [39m    [34mit[39m([32m"should fetch from correct content-blocks URL"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m254| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m255| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mAPI requests[2m > [22mshould include targeting context as query params
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m265:5[22m[39m
+    [90m263| [39m    })[33m;[39m
+    [90m264| [39m
+    [90m265| [39m    it("should include targeting context as query params", async () =>…
+    [90m   | [39m    [31m^[39m
+    [90m266| [39m      [34mmockFetchSuccess[39m(mockNativeAd)[33m;[39m
+    [90m267| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mAPI requests[2m > [22mshould omit empty context fields from query
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m283:5[22m[39m
+    [90m281| [39m    })[33m;[39m
+    [90m282| [39m
+    [90m283| [39m    [34mit[39m([32m"should omit empty context fields from query"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m284| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m285| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mimpression tracking[2m > [22mshould fire IMPRESSION after 1s of 50%+ visibility
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m304:5[22m[39m
+    [90m302| [39m
+    [90m303| [39m  [34mdescribe[39m([32m"impression tracking"[39m[33m,[39m () [33m=>[39m {
+    [90m304| [39m    it("should fire IMPRESSION after 1s of 50%+ visibility", async () …
+    [90m   | [39m    [31m^[39m
+    [90m305| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m306| [39m      [90m// Second fetch call for the IMPRESSION event[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mimpression tracking[2m > [22mshould NOT fire impression if element leaves viewport before 1s
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m349:5[22m[39m
+    [90m347| [39m    })[33m;[39m
+    [90m348| [39m
+    [90m349| [39m    it("should NOT fire impression if element leaves viewport before 1…
+    [90m   | [39m    [31m^[39m
+    [90m350| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m351| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mimpression tracking[2m > [22mshould fire impression only once even with multiple intersections
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m385:5[22m[39m
+    [90m383| [39m    })[33m;[39m
+    [90m384| [39m
+    [90m385| [39m    it("should fire impression only once even with multiple intersecti…
+    [90m   | [39m    [31m^[39m
+    [90m386| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m387| [39m      [90m// Mock engage calls[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mclick tracking[2m > [22mshould fire CLICK event and open link on ad click
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m428:5[22m[39m
+    [90m426| [39m
+    [90m427| [39m  [34mdescribe[39m([32m"click tracking"[39m[33m,[39m () [33m=>[39m {
+    [90m428| [39m    it("should fire CLICK event and open link on ad click", async () =…
+    [90m   | [39m    [31m^[39m
+    [90m429| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+    [90m430| [39m      [90m// Mock the click engage call[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mclick tracking[2m > [22mshould not open link when linkUrl is null
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m466:5[22m[39m
+    [90m464| [39m    })[33m;[39m
+    [90m465| [39m
+    [90m466| [39m    [34mit[39m([32m"should not open link when linkUrl is null"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m467| [39m      [35mconst[39m adWithoutLink[33m:[39m [33mAdData[39m [33m=[39m {
+    [90m468| [39m        [33m...[39mmockBannerAd[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mAdSense rendering[2m > [22mshould render AdSense snippet via dangerouslySetInnerHTML
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m490:5[22m[39m
+    [90m488| [39m
+    [90m489| [39m  [34mdescribe[39m([32m"AdSense rendering"[39m[33m,[39m () [33m=>[39m {
+    [90m490| [39m    it("should render AdSense snippet via dangerouslySetInnerHTML", as…
+    [90m   | [39m    [31m^[39m
+    [90m491| [39m      [34mmockFetchSuccess[39m(mockAdSenseAd)[33m;[39m
+    [90m492| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mAdSense rendering[2m > [22mshould not render image for AdSense type
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m502:5[22m[39m
+    [90m500| [39m    })[33m;[39m
+    [90m501| [39m
+    [90m502| [39m    [34mit[39m([32m"should not render image for AdSense type"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m503| [39m      [34mmockFetchSuccess[39m(mockAdSenseAd)[33m;[39m
+    [90m504| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mdevice detection[2m > [22mshould report desktop for wide viewports
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m517:5[22m[39m
+    [90m515| [39m
+    [90m516| [39m  [34mdescribe[39m([32m"device detection"[39m[33m,[39m () [33m=>[39m {
+    [90m517| [39m    [34mit[39m([32m"should report desktop for wide viewports"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m518| [39m      Object.defineProperty(window, "innerWidth", { value: 1440, writa…
+    [90m519| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/18]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m apps/web/src/components/shared/ad-slot.test.tsx[2m > [22mAdSlot[2m > [22mdevice detection[2m > [22mshould report mobile for narrow viewports
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m apps/web/src/components/shared/ad-slot.test.tsx:[2m543:5[22m[39m
+    [90m541| [39m    })[33m;[39m
+    [90m542| [39m
+    [90m543| [39m    [34mit[39m([32m"should report mobile for narrow viewports"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   | [39m    [31m^[39m
+    [90m544| [39m      Object.defineProperty(window, "innerWidth", { value: 375, writab…
+    [90m545| [39m      [34mmockFetchSuccess[39m(mockBannerAd)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/18]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m18 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 11:32:40
+[2m   Duration [22m 90.47s[2m (transform 53ms, setup 38ms, import 95ms, tests 90.08s, environment 205ms)[22m
+

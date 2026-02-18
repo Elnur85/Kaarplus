@@ -16,6 +16,8 @@
         "from": "От",
         "to": "До",
         "allMakes": "Все марки",
+        "min": "Мин",
+        "max": "Макс",
         "allModels": "Все модели",
         "showResults": "Показать результаты"
     },
@@ -76,7 +78,8 @@
     "badges": {
         "hotDeal": "ВЫГОДНО",
         "new": "НОВОЕ",
-        "certified": "ПРОВЕРЕНО"
+        "certified": "ПРОВЕРЕНО",
+        "sponsored": "СПОНСИРУЕМЫЙ"
     },
     "status": {
         "sold": "ПРОДАНО",

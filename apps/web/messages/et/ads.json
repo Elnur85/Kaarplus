@@ -1,0 +1,99 @@
+{
+  "badges": {
+    "sponsored": "Sponsoreeritud",
+    "ad": "Reklaam",
+    "partner": "Partner"
+  },
+  "admin": {
+    "title": "Reklaamihaldus",
+    "campaigns": {
+      "title": "Kampaaniad",
+      "create": "Uus kampaania",
+      "name": "Kampaania nimi",
+      "budget": "Eelarve",
+      "dailyBudget": "Päevaeelarve",
+      "spent": "Kulutatud",
+      "startDate": "Alguskuupäev",
+      "endDate": "Lõppkuupäev",
+      "status": "Staatus",
+      "priority": "Prioriteet",
+      "targeting": "Sihtimine",
+      "advertiser": "Reklaamija",
+      "ads": "Reklaamid",
+      "statuses": {
+        "DRAFT": "Mustand",
+        "ACTIVE": "Aktiivne",
+        "PAUSED": "Peatatud",
+        "COMPLETED": "Lõppenud",
+        "ARCHIVED": "Arhiveeritud"
+      },
+      "priorities": {
+        "1": "Ülevõtmine",
+        "2": "Oma reklaam",
+        "3": "Programmeerimislik"
+      },
+      "empty": "Kampaaniad puuduvad",
+      "archive": "Arhiveeri",
+      "archiveConfirm": "Kas olete kindel, et soovite selle kampaania arhiveerida?",
+      "form": {
+        "namePlaceholder": "nt. LHV Liising Q1 2026",
+        "advertiserPlaceholder": "Reklaamija kasutaja ID",
+        "budgetPlaceholder": "5000",
+        "dailyBudgetPlaceholder": "200",
+        "cancel": "Tühista",
+        "creating": "Loomisel...",
+        "create": "Loo kampaania"
+      },
+      "toasts": {
+        "success": "Kampaania edukalt loodud",
+        "error": "Viga kampaania loomisel"
+      }
+    },
+    "advertisements": {
+      "title": "Reklaamid",
+      "create": "Uus reklaam",
+      "ad": "Reklaam",
+      "unit": "Reklaamiplats",
+      "active": "Aktiivne",
+      "inactive": "Mitteaktiivne",
+      "empty": "Reklaamid puuduvad",
+      "form": {
+        "title": "Pealkiri",
+        "titlePlaceholder": "nt. LHV Autoliisingu Bänner",
+        "unitPlaceholder": "Vali reklaamiplats",
+        "imageDesktop": "Pildi URL (Desktop)",
+        "imageMobile": "Pildi URL (Mobiil)",
+        "urlPlaceholder": "https://...",
+        "linkUrl": "Sihtlehe URL",
+        "linkPlaceholder": "https://partner.example.com/pakkumine",
+        "cancel": "Tühista",
+        "creating": "Loomisel...",
+        "create": "Loo reklaam"
+      },
+      "toasts": {
+        "success": "Reklaam edukalt loodud",
+        "error": "Viga reklaami loomisel"
+      }
+    },
+    "units": {
+      "title": "Reklaamiplatsid",
+      "occupancy": "Täituvus",
+      "placement": "Platsikood",
+      "type": "Tüüp",
+      "dimensions": "Mõõtmed",
+      "active": "Aktiivne",
+      "inactive": "Mitteaktiivne"
+    },
+    "analytics": {
+      "title": "Analüütika",
+      "overview": "Ülevaade",
+      "impressions": "Kuvamised",
+      "clicks": "Klikid",
+      "ctr": "CTR",
+      "activeCampaigns": "Aktiivsed kampaaniad",
+      "totalBudget": "Kogu eelarve",
+      "totalSpent": "Kogu kulutus",
+      "chartTitle": "Kampaania tulemused"
+    }
+  }
+}

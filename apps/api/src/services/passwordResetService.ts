@@ -1,5 +1,6 @@
-import { prisma } from "@kaarplus/database";
 import crypto from "crypto";
+
+import { prisma } from "@kaarplus/database";
 
 const RESET_TOKEN_EXPIRY_HOURS = 24;
 

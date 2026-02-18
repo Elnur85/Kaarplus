@@ -15,6 +15,7 @@ export interface VehicleSummary {
     status: "ACTIVE" | "PENDING" | "SOLD" | "REJECTED" | "EXPIRED";
     badges?: Array<"new" | "hot_deal" | "certified" | "verified">;
     isFavorited?: boolean;
+    isSponsored?: boolean;
     createdAt: string;
     location?: string;
     user?: {

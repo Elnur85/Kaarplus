@@ -6,9 +6,9 @@ import { z } from "zod";
 
 import { requireAuth } from "../middleware/auth";
 import { authLimiter } from "../middleware/rateLimiter";
-import { AuthError, BadRequestError } from "../utils/errors";
-import { passwordResetService } from "../services/passwordResetService";
 import { emailService } from "../services/emailService";
+import { passwordResetService } from "../services/passwordResetService";
+import { AuthError, BadRequestError } from "../utils/errors";
 import { logger } from "../utils/logger";
 
 export const authRouter = Router();

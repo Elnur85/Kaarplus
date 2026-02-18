@@ -31,6 +31,34 @@
     --warning: 38 92% 50%;
     --info: 217 91% 60%;
   }
+
+  /* Dark mode: mirrors light theme — MVP is light-only, dark mode planned for future */
+  .dark {
+    --background: 155 18% 10%;
+    --foreground: 150 13% 95%;
+    --card: 155 18% 13%;
+    --card-foreground: 150 13% 95%;
+    --popover: 155 18% 13%;
+    --popover-foreground: 150 13% 95%;
+    --primary: 158 84% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 155 15% 18%;
+    --secondary-foreground: 150 13% 95%;
+    --muted: 155 15% 18%;
+    --muted-foreground: 155 10% 55%;
+    --accent: 155 20% 20%;
+    --accent-foreground: 150 13% 95%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 155 12% 22%;
+    --input: 155 12% 22%;
+    --ring: 158 84% 45%;
+
+    /* Semantic status colors */
+    --success: 158 84% 45%;
+    --warning: 38 92% 55%;
+    --info: 217 91% 65%;
+  }
 }
 
 @layer base {

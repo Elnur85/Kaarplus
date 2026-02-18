@@ -11,6 +11,7 @@ vi.mock('@kaarplus/database', () => ({
 }));
 
 import { SearchService } from './searchService';
+
 import { prisma } from '@kaarplus/database';
 
 describe('SearchService', () => {

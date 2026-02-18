@@ -21,6 +21,7 @@ import inspectionEt from '../messages/et/inspection.json';
 import legalEt from '../messages/et/legal.json';
 import dealershipEt from '../messages/et/dealership.json';
 import mobileAppEt from '../messages/et/mobileApp.json';
+import adsEt from '../messages/et/ads.json';
 
 // Import translation files - Russian
 import commonRu from '../messages/ru/common.json';
@@ -42,6 +43,7 @@ import inspectionRu from '../messages/ru/inspection.json';
 import legalRu from '../messages/ru/legal.json';
 import dealershipRu from '../messages/ru/dealership.json';
 import mobileAppRu from '../messages/ru/mobileApp.json';
+import adsRu from '../messages/ru/ads.json';
 
 // Import translation files - English
 import commonEn from '../messages/en/common.json';
@@ -63,6 +65,7 @@ import inspectionEn from '../messages/en/inspection.json';
 import legalEn from '../messages/en/legal.json';
 import dealershipEn from '../messages/en/dealership.json';
 import mobileAppEn from '../messages/en/mobileApp.json';
+import adsEn from '../messages/en/ads.json';
 
 const resources = {
     et: {
@@ -85,6 +88,7 @@ const resources = {
         legal: legalEt,
         dealership: dealershipEt,
         mobileApp: mobileAppEt,
+        ads: adsEt,
     },
     ru: {
         common: commonRu,
@@ -106,6 +110,7 @@ const resources = {
         legal: legalRu,
         dealership: dealershipRu,
         mobileApp: mobileAppRu,
+        ads: adsRu,
     },
     en: {
         common: commonEn,
@@ -127,6 +132,7 @@ const resources = {
         legal: legalEn,
         dealership: dealershipEn,
         mobileApp: mobileAppEn,
+        ads: adsEn,
     },
 };
 

@@ -1,7 +1,8 @@
+import { createServer } from "http";
+
 import * as Sentry from "@sentry/node";
 import cookieParser from "cookie-parser";
 import express from "express";
-import { createServer } from "http";
 
 import { corsMiddleware } from "./middleware/cors";
 import { errorHandler } from "./middleware/errorHandler";

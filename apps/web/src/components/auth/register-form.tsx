@@ -126,7 +126,7 @@ export function RegisterForm() {
 							<FormItem>
 								<FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.name')}</FormLabel>
 								<FormControl>
-									<Input placeholder="Jaan Tamm" className={inputClassName} {...field} />
+									<Input placeholder={t("register.namePlaceholder")} className={inputClassName} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -139,7 +139,7 @@ export function RegisterForm() {
 							<FormItem>
 								<FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.email')}</FormLabel>
 								<FormControl>
-									<Input placeholder="nimi@email.ee" className={inputClassName} {...field} />
+									<Input placeholder={t("register.emailPlaceholder")} className={inputClassName} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -152,7 +152,7 @@ export function RegisterForm() {
 							<FormItem>
 								<FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.password')}</FormLabel>
 								<FormControl>
-									<Input type="password" placeholder="••••••••" className={inputClassName} {...field} />
+									<Input type="password" placeholder={t("register.passwordPlaceholder")} className={inputClassName} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -165,7 +165,7 @@ export function RegisterForm() {
 							<FormItem>
 								<FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('register.confirmPassword')}</FormLabel>
 								<FormControl>
-									<Input type="password" placeholder="••••••••" className={inputClassName} {...field} />
+									<Input type="password" placeholder={t("register.passwordPlaceholder")} className={inputClassName} {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -177,10 +177,10 @@ export function RegisterForm() {
 						<label className="flex items-start space-x-3 cursor-pointer">
 							<Checkbox className="mt-1 border-slate-300 text-primary" />
 							<span className="text-sm text-slate-600 dark:text-slate-400">
-								{t('register.agreeToTerms', { defaultValue: 'Nõustun Kaarplusi' })}{" "}
-								<a href="/terms" className="text-primary hover:underline">{t('register.termsLink', { defaultValue: 'kasutustingimustega' })}</a>{" "}
-								{t('register.and', { defaultValue: 'ja' })}{" "}
-								<a href="/privacy" className="text-primary hover:underline">{t('register.privacyLink', { defaultValue: 'privaatsuspoliitikaga' })}</a>.
+								{t('register.agreeToTerms')}{" "}
+								<a href="/terms" className="text-primary hover:underline">{t('register.termsLink')}</a>{" "}
+								{t('register.and')}{" "}
+								<a href="/privacy" className="text-primary hover:underline">{t('register.privacyLink')}</a>.
 							</span>
 						</label>
 					</div>

@@ -1,7 +1,20 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Admin Flow', () => {
-    test.skip('should view pending listings and approve one', async ({ page }) => {
+    test.beforeEach(async ({ page }) => {
+        await page.addInitScript(() => {
+            localStorage.setItem(
+                "kaarplus_cookie_consent",
+                JSON.stringify({
+                    version: "1.0",
+                    consent: { essential: true, analytics: true, marketing: true },
+                    timestamp: new Date().toISOString(),
+                })
+            );
+        });
+    });
+
+    test('should view pending listings and approve one', async ({ page }) => {
         // Mock API response for pending listings
         await page.route('**/api/admin/listings/pending', async route => {
             const json = {
@@ -63,8 +76,9 @@ test.describe('Admin Flow', () => {
         await page.getByRole('button', { name: 'Kinnita' }).click();
 
         // Success toast "Kinnitatud"
-        await expect(page.getByText('Kinnitatud')).toBeVisible();
-        await expect(page.getByText('Kuulutus on nüüd avalikult nähtav.')).toBeVisible();
+        // Use exact match for title to distinguish from notification container
+        await expect(page.getByText('Kinnitatud', { exact: true })).toBeVisible();
+        await expect(page.getByText('Kuulutus on nüüd avalikult nähtav', { exact: false }).first()).toBeVisible();
 
         // Listing should disappear
         await expect(page.getByText('Mock Car')).not.toBeVisible();

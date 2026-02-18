@@ -1,0 +1,42 @@
+
+> kaarplus@1.0.0 test:e2e
+> DISABLE_RATE_LIMIT=true playwright test e2e/admin.spec.ts
+
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+Running 1 test using 1 worker
+
+[1A[2K[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[1A[2K[1/1] [chromium] › e2e/admin.spec.ts:4:9 › Admin Flow › should view pending listings and approve one
+[1A[2K  1) [chromium] › e2e/admin.spec.ts:4:9 › Admin Flow › should view pending listings and approve one 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('Kinnitatud')
+    Expected: visible
+    Error: strict mode violation: getByText('Kinnitatud') resolved to 2 elements:
+        1) <div class="text-sm font-semibold">Kinnitatud</div> aka getByText('Kinnitatud', { exact: true })
+        2) <span role="status" aria-live="assertive">Notification KinnitatudKuulutus on nüüd avalikult…</span> aka getByText('Notification')
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('Kinnitatud')[22m
+
+
+      64 |
+      65 |         // Success toast "Kinnitatud"
+    > 66 |         await expect(page.getByText('Kinnitatud', { exact: false })).toBeVisible();
+         |                                                                      ^
+      67 |         await expect(page.getByText('Kuulutus on nüüd avalikult nähtav.', { exact: false })).toBeVisible();
+      68 |
+      69 |         // Listing should disappear
+        at /Users/elnuraghabayli/Desktop/Kaarplus/e2e/admin.spec.ts:66:70
+
+    Error Context: test-results/admin-Admin-Flow-should-vi-a86e4-ng-listings-and-approve-one-chromium/error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › e2e/admin.spec.ts:4:9 › Admin Flow › should view pending listings and approve one ─
+
+[36m  Serving HTML report at http://localhost:57528. Press Ctrl+C to quit.[39m

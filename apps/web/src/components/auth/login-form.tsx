@@ -111,7 +111,7 @@ export function LoginForm() {
                                 <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('login.email')}</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="nimi@email.ee"
+                                        placeholder={t('login.emailPlaceholder')}
                                         className="px-4 py-2 border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-slate-800"
                                         {...field}
                                     />
@@ -129,7 +129,7 @@ export function LoginForm() {
                                 <FormControl>
                                     <Input
                                         type="password"
-                                        placeholder="••••••••"
+                                        placeholder={t('login.passwordPlaceholder')}
                                         className="px-4 py-2 border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-slate-800"
                                         {...field}
                                     />
@@ -143,7 +143,7 @@ export function LoginForm() {
                     <div className="flex items-center justify-between text-sm">
                         <label className="flex items-center space-x-2 cursor-pointer">
                             <Checkbox className="border-slate-300 text-primary" />
-                            <span className="text-slate-600 dark:text-slate-400">{t('login.rememberMe', { defaultValue: 'Mäleta mind' })}</span>
+                            <span className="text-slate-600 dark:text-slate-400">{t('login.rememberMe')}</span>
                         </label>
                         <a href="/forgot-password" className="text-primary hover:underline font-medium">
                             {t('login.forgotPassword')}
@@ -167,7 +167,7 @@ export function LoginForm() {
                     <div className="w-full border-t border-slate-200 dark:border-slate-800" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white dark:bg-slate-900 px-2 text-slate-500">{t('login.orContinue', { defaultValue: 'Või jätka' })}</span>
+                    <span className="bg-white dark:bg-slate-900 px-2 text-slate-500">{t('login.orContinue')}</span>
                 </div>
             </div>
 

@@ -1,43 +1,40 @@
 "use client";
 
-import { VehicleSummary } from "@/types/vehicle";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { formatDistanceToNow } from "date-fns";
 import { Heart, MapPin, Clock, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
+
 import { PriceDisplay } from "@/components/shared/price-display";
 import { SpecIcons } from "@/components/shared/spec-icons";
-import { formatDistanceToNow } from "date-fns";
-import { et, enUS, ru } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import { useFavoritesStore } from "@/store/use-favorites-store";
-import { useSession } from "next-auth/react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useLocale } from "@/hooks/use-locale";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { useFavoritesStore } from "@/store/use-favorites-store";
+import type { VehicleSummary } from "@/types/vehicle";
 
 interface VehicleCardProps {
   vehicle: VehicleSummary;
   variant?: "grid" | "list";
   showFavorite?: boolean;
+  sponsored?: boolean;
 }
 
-export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: VehicleCardProps) {
-  const { t, i18n } = useTranslation(['common', 'listings']);
+export function VehicleCard({ vehicle, variant = "grid", showFavorite = true, sponsored = false }: VehicleCardProps) {
+  const { t } = useTranslation(['common', 'listings']);
   const { data: session } = useSession();
   const { toast } = useToast();
   const router = useRouter();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const currentLocale = useLocale();
 
   const isGrid = variant === "grid";
-  const localeMap = {
-    et: et,
-    en: enUS,
-    ru: ru
-  };
-  const currentLocale = localeMap[i18n.language as keyof typeof localeMap] || et;
 
   const timeAgo = formatDistanceToNow(new Date(vehicle.createdAt), { addSuffix: true, locale: currentLocale });
   const favorited = isFavorite(vehicle.id);
@@ -83,9 +80,14 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
       )}>
         {/* status badges helper */}
         <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+          {sponsored && (
+            <Badge className="bg-amber-500 text-white uppercase text-[10px] font-bold px-2 py-1 rounded tracking-wider shadow-sm border-none">
+              {t('listings:badges.sponsored')}
+            </Badge>
+          )}
           {vehicle.status === "SOLD" && (
             <Badge variant="destructive" className="uppercase text-[10px] font-bold px-2 py-1 rounded tracking-wider shadow-sm">
-              {t('listings:status.sold', { defaultValue: 'Müüdud' })}
+              {t('listings:status.sold')}
             </Badge>
           )}
           {vehicle.badges?.map((badge) => (
@@ -98,9 +100,9 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                     badge === "certified" ? "bg-blue-500 text-white" : "bg-primary text-white"
               )}
             >
-              {badge === "hot_deal" ? t('listings:badges.hotDeal', { defaultValue: 'TASUV DIIL' }) :
-                badge === "new" ? t('listings:badges.new', { defaultValue: 'UUS' }) :
-                  badge === "certified" ? t('listings:badges.certified', { defaultValue: 'KONTROLLITUD' }) : badge.replace("_", " ")}
+              {badge === "hot_deal" ? t('listings:badges.hotDeal') :
+                badge === "new" ? t('listings:badges.new') :
+                  badge === "certified" ? t('listings:badges.certified') : badge.replace("_", " ")}
             </Badge>
           ))}
         </div>
@@ -166,7 +168,7 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
           {/* List View Description - only in list variant */}
           {!isGrid && (
             <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-6 hidden md:block leading-relaxed">
-              {t('listings:noDescription', { defaultValue: 'Suurepärases tehnilises ja visuaalses seisukorras sõiduk. Hooldusajalugu kontrollitud.' })}
+              {t('listings:noDescription')}
             </p>
           )}
 
@@ -182,7 +184,7 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                   className="text-2xl font-black"
                 />
                 <span className="text-primary text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                  {t('common:details', { defaultValue: 'Detailid' })} <ChevronRight size={16} />
+                  {t('common:details')} <ChevronRight size={16} />
                 </span>
               </>
             ) : (
@@ -215,7 +217,7 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                     size="sm"
                     className="px-6 font-bold bg-primary hover:bg-primary/90 text-white rounded-lg shadow-lg shadow-primary/20 transition-all"
                   >
-                    {t('common:buttons.contact', { defaultValue: 'Võta ühendust' })}
+                    {t('common:buttons.contact')}
                   </Button>
                 </div>
               </>

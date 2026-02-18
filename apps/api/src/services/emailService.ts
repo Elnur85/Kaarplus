@@ -1,5 +1,6 @@
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
-const FROM_EMAIL = process.env.FROM_EMAIL || "noreply@kaarplus.ee";
+const FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || "noreply@kaarplus.ee";
+const FROM_NAME = process.env.SENDGRID_FROM_NAME || "Kaarplus";
 const FRONTEND_URL = process.env.CORS_ORIGIN || "http://localhost:3000";
 
 /**
@@ -52,7 +53,10 @@ export class EmailService {
         try {
             await this.sgMail.send({
                 to,
-                from: FROM_EMAIL,
+                from: {
+                    email: FROM_EMAIL,
+                    name: FROM_NAME,
+                },
                 subject,
                 html,
             });

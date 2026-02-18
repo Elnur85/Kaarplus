@@ -16,6 +16,8 @@
         "from": "From",
         "to": "To",
         "allMakes": "All makes",
+        "min": "Min",
+        "max": "Max",
         "allModels": "All models",
         "showResults": "Show results"
     },
@@ -76,7 +78,8 @@
     "badges": {
         "hotDeal": "HOT DEAL",
         "new": "NEW",
-        "certified": "CERTIFIED"
+        "certified": "CERTIFIED",
+        "sponsored": "SPONSORED"
     },
     "status": {
         "sold": "SOLD",

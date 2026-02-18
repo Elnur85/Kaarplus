@@ -21,6 +21,20 @@ test.describe('Seller Flow', () => {
         await page.close();
     });
 
+    test.beforeEach(async ({ page }) => {
+        // Inject cookie consent to avoid banner intercepting clicks
+        await page.addInitScript(() => {
+            localStorage.setItem(
+                "kaarplus_cookie_consent",
+                JSON.stringify({
+                    version: "1.0",
+                    consent: { essential: true, analytics: true, marketing: true },
+                    timestamp: new Date().toISOString(),
+                })
+            );
+        });
+    });
+
     test('should be able to create a new listing with mocked image upload', async ({ page }) => {
         // Mock S3 upload endpoints to avoid dependency on external services/credentials
         await page.route('**/api/uploads/presign', async route => {
@@ -91,50 +105,22 @@ test.describe('Seller Flow', () => {
         // Step 2 filling
         // Helper to find select trigger by associated label text
         const selectOptionByLabel = async (label: string, option: string) => {
-            console.log(`Selecting '${option}' for '${label}'...`);
-
-            // Safety click to close any open popovers
-            await page.mouse.click(0, 0);
-            await page.waitForTimeout(100);
-
             const labelLocator = page.locator('label').filter({ hasText: label }).first();
             await labelLocator.scrollIntoViewIfNeeded();
 
-            // Use specific parent container (FormItem) instead of generic div search
-            // This prevents finding the main wrapper div which contains the first button (Automark)
             const container = labelLocator.locator('xpath=..');
             const trigger = container.locator('button').first();
 
-            // debug trigger
-            const triggerHTML = await trigger.evaluate(el => el.outerHTML).catch(() => 'Trigger not found');
-            console.log(`Trigger for ${label}:`, triggerHTML);
+            await trigger.click();
 
-            await trigger.click({ force: true });
-            await page.waitForTimeout(1000); // Increased wait
+            // Wait for the option to appear and click it
+            // Shadcn/Radix select items have role="option"
+            const optionLocator = page.getByRole('option', { name: option }).first();
+            await optionLocator.waitFor({ state: 'visible', timeout: 5000 });
+            await optionLocator.click();
 
-            // Verify if opened
-            let isExpanded = await trigger.getAttribute('aria-expanded');
-            if (isExpanded === 'false') {
-                console.log(`Dropdown for ${label} did not open. Retrying with Keyboard Space...`);
-                await trigger.focus();
-                await page.keyboard.press('Space');
-                await page.waitForTimeout(1000);
-            }
-
-            // Use keyboard to select
-            console.log(`Typing '${option}'...`);
-            await page.keyboard.type(option);
-            await page.waitForTimeout(500);
-            await page.keyboard.press('Enter');
-            await page.waitForTimeout(500);
-
-            // Verify selection stuck
-            const updatedTriggerHTML = await trigger.evaluate(el => el.textContent);
-            if (!updatedTriggerHTML?.includes(option)) {
-                console.error(`Selection failed! Trigger text is '${updatedTriggerHTML}', expected '${option}'`);
-            } else {
-                console.log(`Selected '${option}' successfully.`);
-            }
+            // Wait for the popover to close
+            await page.waitForTimeout(300);
         };
 
         const fillAndBlur = async (id: string, value: string) => {
@@ -172,22 +158,7 @@ test.describe('Seller Flow', () => {
 
         // Ensure we actually moved to Step 3
         const heading = page.getByRole('heading', { name: 'Lisage fotod' });
-
-        try {
-            await expect(heading).toBeVisible({ timeout: 20000 });
-        } catch (e) {
-            console.log('Step 3 title NOT visible. Checking for validation errors...');
-            // Capture validation errors
-            const alerts = await page.getByRole('alert').allTextContents();
-            const destructive = await page.locator('.text-destructive').allTextContents();
-            const errors = [...alerts, ...destructive];
-            console.log('Validation Errors found:', errors);
-
-            const bodyText = await page.textContent('body');
-            console.log('Body Text (Snapshot):', bodyText?.substring(0, 1000));
-
-            throw e;
-        }
+        await expect(heading).toBeVisible({ timeout: 20000 });
 
         // Upload 3 fake images
         await page.setInputFiles('input[type="file"]', [
@@ -202,17 +173,7 @@ test.describe('Seller Flow', () => {
         await page.getByRole('button', { name: 'Avalda kuulutus' }).click();
 
         // Verification
-        try {
-            await expect(page.getByText('Kuulutus on edukalt esitatud!')).toBeVisible({ timeout: 30000 });
-            await expect(page.getByText('on nüüd ülevaatusel')).toBeVisible();
-        } catch (e) {
-            console.log('Submission failed. Checking for errors...');
-            const alerts = await page.getByRole('alert').allTextContents();
-            const destructive = await page.locator('.text-destructive').allTextContents();
-            console.log('Submission Errors:', [...alerts, ...destructive]);
-            const body = await page.textContent('body');
-            console.log('Final Body:', body?.substring(0, 1000));
-            throw e;
-        }
+        await expect(page.getByText('Kuulutus on edukalt esitatud!')).toBeVisible({ timeout: 30000 });
+        await expect(page.getByText('on nüüd ülevaatusel')).toBeVisible();
     });
 });

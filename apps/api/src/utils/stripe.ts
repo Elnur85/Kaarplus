@@ -2,7 +2,7 @@ import Stripe from "stripe";
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
-if (!STRIPE_SECRET_KEY) {
+if (!STRIPE_SECRET_KEY && process.env.NODE_ENV === "production") {
     console.warn("[Stripe] STRIPE_SECRET_KEY is not set. Payments will fail.");
 }
 

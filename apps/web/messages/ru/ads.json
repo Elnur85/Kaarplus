@@ -1,0 +1,99 @@
+{
+  "badges": {
+    "sponsored": "Спонсируемый",
+    "ad": "Реклама",
+    "partner": "Партнер"
+  },
+  "admin": {
+    "title": "Управление рекламой",
+    "campaigns": {
+      "title": "Кампании",
+      "create": "Новая кампания",
+      "name": "Название кампании",
+      "budget": "Бюджет",
+      "dailyBudget": "Дневной бюджет",
+      "spent": "Потрачено",
+      "startDate": "Дата начала",
+      "endDate": "Дата окончания",
+      "status": "Статус",
+      "priority": "Приоритет",
+      "targeting": "Таргетинг",
+      "advertiser": "Рекламодатель",
+      "ads": "Объявления",
+      "statuses": {
+        "DRAFT": "Черновик",
+        "ACTIVE": "Активная",
+        "PAUSED": "Приостановлена",
+        "COMPLETED": "Завершена",
+        "ARCHIVED": "Архивирована"
+      },
+      "priorities": {
+        "1": "Захват",
+        "2": "Собственная реклама",
+        "3": "Программатическая"
+      },
+      "empty": "Нет кампаний",
+      "archive": "Архивировать",
+      "archiveConfirm": "Вы уверены, что хотите архивировать эту кампанию?",
+      "form": {
+        "namePlaceholder": "напр. Лизинг LHV Q1 2026",
+        "advertiserPlaceholder": "ID пользователя рекламодателя",
+        "budgetPlaceholder": "5000",
+        "dailyBudgetPlaceholder": "200",
+        "cancel": "Отмена",
+        "creating": "Создание...",
+        "create": "Создать кампанию"
+      },
+      "toasts": {
+        "success": "Кампания успешно создана",
+        "error": "Не удалось создать кампанию"
+      }
+    },
+    "advertisements": {
+      "title": "Объявления",
+      "create": "Новое объявление",
+      "ad": "Объявление",
+      "unit": "Рекламное место",
+      "active": "Активное",
+      "inactive": "Неактивное",
+      "empty": "Нет объявлений",
+      "form": {
+        "title": "Заголовок",
+        "titlePlaceholder": "напр. Баннер автолизинга LHV",
+        "unitPlaceholder": "Выберите рекламное место",
+        "imageDesktop": "URL изображения (ПК)",
+        "imageMobile": "URL изображения (Мобильный)",
+        "urlPlaceholder": "https://...",
+        "linkUrl": "URL перехода",
+        "linkPlaceholder": "https://partner.example.com/offer",
+        "cancel": "Отмена",
+        "creating": "Создание...",
+        "create": "Создать объявление"
+      },
+      "toasts": {
+        "success": "Объявление успешно создано",
+        "error": "Не удалось создать объявление"
+      }
+    },
+    "units": {
+      "title": "Рекламные места",
+      "occupancy": "Заполненность",
+      "placement": "Код места",
+      "type": "Тип",
+      "dimensions": "Размеры",
+      "active": "Активное",
+      "inactive": "Неактивное"
+    },
+    "analytics": {
+      "title": "Аналитика",
+      "overview": "Обзор",
+      "impressions": "Показы",
+      "clicks": "Клики",
+      "ctr": "CTR",
+      "activeCampaigns": "Активные кампании",
+      "totalBudget": "Общий бюджет",
+      "totalSpent": "Общие расходы",
+      "chartTitle": "Результаты кампании"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { prisma, ListingStatus, Prisma } from "@kaarplus/database";
 
+import { cacheService } from "../utils/cache";
 import { ForbiddenError, NotFoundError } from "../utils/errors";
 
 import { UploadService } from "./uploadService";
@@ -33,8 +34,31 @@ export interface ListingQuery {
     location?: string;
 }
 
+const LISTING_SUMMARY_SELECT = {
+    id: true,
+    make: true,
+    model: true,
+    variant: true,
+    year: true,
+    price: true,
+    priceVatIncluded: true,
+    mileage: true,
+    fuelType: true,
+    transmission: true,
+    bodyType: true,
+    status: true,
+    location: true,
+    createdAt: true,
+    publishedAt: true,
+    verifiedAt: true,
+} satisfies Prisma.ListingSelect;
+
 export class ListingService {
-    async getAllListings(query: ListingQuery, isAdmin: boolean = false) {
+    private invalidateSearchCache() {
+        cacheService.invalidatePattern("search:");
+    }
+
+    async getAllListings(query: ListingQuery, isAdmin: boolean = false): Promise<any> {
         const {
             page,
             pageSize,
@@ -127,14 +151,23 @@ export class ListingService {
         if (sort === "price_desc") orderBy = { price: "desc" };
         if (sort === "newest") orderBy = { publishedAt: "desc" };
 
+        // Only cache public searches
+        const cacheKey = !isAdmin ? `search:results:${JSON.stringify(query)}` : null;
+        if (cacheKey) {
+            const cached = cacheService.get(cacheKey);
+            if (cached) return cached as any;
+        }
+
         const [listings, total] = await Promise.all([
             prisma.listing.findMany({
                 where,
-                include: {
+                select: {
+                    ...LISTING_SUMMARY_SELECT,
                     images: {
                         where: { verified: true },
                         orderBy: { order: "asc" },
                         take: 1,
+                        select: { url: true },
                     },
                     user: {
                         select: {
@@ -152,7 +185,7 @@ export class ListingService {
             prisma.listing.count({ where }),
         ]);
 
-        return {
+        const result = {
             data: listings,
             meta: {
                 page,
@@ -161,9 +194,21 @@ export class ListingService {
                 totalPages: Math.ceil(total / pageSize),
             },
         };
+
+        if (cacheKey) {
+            cacheService.set(cacheKey, result, 300); // 5 minutes cache for results
+        }
+
+        return result;
     }
 
-    async getListingById(id: string) {
+
+
+    async getListingById(id: string): Promise<any> {
+        const cacheKey = `search:listing:${id}`;
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as any;
+
         const listing = await prisma.listing.findUnique({
             where: { id },
             include: {
@@ -178,6 +223,7 @@ export class ListingService {
                         phone: true,
                         role: true,
                         dealershipId: true,
+                        image: true,
                     },
                 },
             },
@@ -187,12 +233,13 @@ export class ListingService {
             throw new NotFoundError("Listing not found");
         }
 
-        // Increment view count
-        await prisma.listing.update({
+        // Increment view count (async, don't block)
+        prisma.listing.update({
             where: { id },
             data: { viewCount: { increment: 1 } },
-        });
+        }).catch(err => console.error("Failed to increment view count:", err));
 
+        cacheService.set(cacheKey, listing, 600); // 10 minutes cache for details
         return listing;
     }
 
@@ -213,13 +260,16 @@ export class ListingService {
             }
         }
 
-        return prisma.listing.create({
+        const result = await prisma.listing.create({
             data: {
                 ...data,
                 userId,
                 status: "PENDING",
             },
         });
+
+        this.invalidateSearchCache();
+        return result;
     }
 
     async updateListing(id: string, userId: string, isAdmin: boolean, data: Prisma.ListingUpdateInput) {
@@ -230,10 +280,14 @@ export class ListingService {
             throw new ForbiddenError("You don't have permission to update this listing");
         }
 
-        return prisma.listing.update({
+        const result = await prisma.listing.update({
             where: { id },
             data,
         });
+
+        this.invalidateSearchCache();
+        cacheService.delete(`search:listing:${id}`);
+        return result;
     }
 
     async deleteListing(id: string, userId: string, isAdmin: boolean) {
@@ -244,7 +298,11 @@ export class ListingService {
             throw new ForbiddenError("You don't have permission to delete this listing");
         }
 
-        return prisma.listing.delete({ where: { id } });
+        const result = await prisma.listing.delete({ where: { id } });
+
+        this.invalidateSearchCache();
+        cacheService.delete(`search:listing:${id}`);
+        return result;
     }
 
     async getSimilarListings(id: string) {
@@ -273,7 +331,7 @@ export class ListingService {
     }
 
     async contactSeller(
-        id: string, 
+        id: string,
         contactData: { name: string; email: string; phone?: string; message: string },
         senderId?: string
     ) {
@@ -285,7 +343,7 @@ export class ListingService {
 
         // For anonymous users, create a system message with contact details
         // For logged-in users, use their user ID as sender
-        const messageBody = senderId 
+        const messageBody = senderId
             ? contactData.message
             : `Nimi: ${contactData.name}\nEmail: ${contactData.email}\nTelefon: ${contactData.phone || "Puudub"}\n\nSõnum:\n${contactData.message}`;
 

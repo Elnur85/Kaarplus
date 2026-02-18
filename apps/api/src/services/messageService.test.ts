@@ -23,6 +23,7 @@ vi.mock('@kaarplus/database', () => ({
 }));
 
 import { messageService } from './messageService';
+
 import { prisma } from '@kaarplus/database';
 
 describe('MessageService', () => {

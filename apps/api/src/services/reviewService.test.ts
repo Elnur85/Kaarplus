@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { BadRequestError, NotFoundError, ForbiddenError } from '../utils/errors';
 
 // Mock must be before importing the service
@@ -24,9 +25,10 @@ vi.mock('./emailService', () => ({
     }
 }));
 
-import { ReviewService } from './reviewService';
-import { prisma } from '@kaarplus/database';
 import { emailService } from './emailService';
+import { ReviewService } from './reviewService';
+
+import { prisma } from '@kaarplus/database';
 
 describe('ReviewService', () => {
     let service: ReviewService;

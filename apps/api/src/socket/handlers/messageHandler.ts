@@ -1,15 +1,17 @@
+import { prisma } from "@kaarplus/database";
 import { Socket } from "socket.io";
 
-import { socketService } from "../../services/socketService";
 import { messageService } from "../../services/messageService";
-import { prisma } from "@kaarplus/database";
-import { logger } from "../../utils/logger";
+import { socketService } from "../../services/socketService";
 import {
   ClientToServerEvents,
+  MessageSendCallback,
+  MessageWithSender,
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
 } from "../../types/socket";
+import { logger } from "../../utils/logger";
 
 /**
  * Handle message:send event
@@ -23,12 +25,7 @@ export async function handleSendMessage(
     body: string;
     tempId?: string;
   },
-  callback: (response: {
-    success: boolean;
-    message?: unknown;
-    error?: string;
-    tempId?: string;
-  }) => void
+  callback: MessageSendCallback
 ): Promise<void> {
   const { userId } = socket.data;
 
@@ -78,7 +75,7 @@ export async function handleSendMessage(
     }
 
     // Send success response to sender
-    callback({ success: true, message: message as { id: string; [key: string]: unknown }, tempId: payload.tempId });
+    callback({ success: true, message: message as unknown as MessageWithSender, tempId: payload.tempId });
 
     logger.debug(`[SocketHandler] Message sent from ${userId} to ${payload.recipientId}`);
   } catch (error) {
