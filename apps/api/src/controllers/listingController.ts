@@ -10,10 +10,12 @@ import {
 } from "../schemas/listing";
 import { AdService } from "../services/adService";
 import { ListingService, ListingQuery } from "../services/listingService";
+import { SearchService } from "../services/searchService";
 import { BadRequestError } from "../utils/errors";
 
 const listingService = new ListingService();
 const adService = new AdService();
+const searchService = new SearchService();
 
 export const getAllListings = async (req: Request, res: Response) => {
     const result = listingQuerySchema.safeParse(req.query);
@@ -139,4 +141,46 @@ export const deleteImage = async (req: Request, res: Response) => {
     const isAdmin = req.user!.role === "ADMIN";
     await listingService.deleteImage(req.params.id as string, req.params.imageId as string, userId, isAdmin);
     res.status(204).send();
+};
+
+/**
+ * Get all filter options for the search functionality
+ * Returns makes, models grouped by make, years, body types, fuel types, etc.
+ */
+export const getFilterOptions = async (req: Request, res: Response) => {
+    const options = await searchService.getFilterOptions();
+    res.json({ data: options });
+};
+
+/**
+ * Get featured listings for the home page (newest, electric, hybrid)
+ */
+export const getFeaturedListings = async (req: Request, res: Response) => {
+    const { category = 'all', limit = '8' } = req.query;
+    const limitNum = Math.min(parseInt(limit as string, 10) || 8, 20);
+
+    let listings;
+    
+    switch (category) {
+        case 'electric':
+            listings = await listingService.getListingsByFuelType('Electric', limitNum);
+            break;
+        case 'hybrid':
+            listings = await listingService.getListingsByFuelType('Hybrid', limitNum);
+            break;
+        case 'newest':
+        default:
+            listings = await listingService.getNewestListings(limitNum);
+            break;
+    }
+
+    res.json({ data: listings });
+};
+
+/**
+ * Get body type counts for category grid
+ */
+export const getBodyTypeCounts = async (_req: Request, res: Response) => {
+    const bodyTypes = await listingService.getBodyTypeCounts();
+    res.json({ data: bodyTypes });
 };

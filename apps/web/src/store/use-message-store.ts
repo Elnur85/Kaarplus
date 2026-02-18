@@ -70,7 +70,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
   loadConversations: async () => {
     set({ isLoadingConversations: true, error: null });
     try {
-      const response = await fetch(`${API_URL}/api/user/messages`, {
+      const response = await fetch(`${API_URL}/user/messages`, {
         credentials: "include",
       });
 
@@ -97,7 +97,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
       }
 
       const response = await fetch(
-        `${API_URL}/api/user/messages/thread?${params.toString()}`,
+        `${API_URL}/user/messages/thread?${params.toString()}`,
         { credentials: "include" }
       );
 
@@ -118,7 +118,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
   sendMessage: async (data) => {
     set({ isSending: true, error: null });
     try {
-      const response = await fetch(`${API_URL}/api/user/messages`, {
+      const response = await fetch(`${API_URL}/user/messages`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -153,7 +153,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 
   loadUnreadCount: async () => {
     try {
-      const response = await fetch(`${API_URL}/api/user/messages/unread-count`, {
+      const response = await fetch(`${API_URL}/user/messages/unread-count`, {
         credentials: "include",
       });
 

@@ -1,23 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, ArrowRight } from "lucide-react";
+import { Plus, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardStats } from "@/components/dashboard/dashboard-stats";
 import { MyListingsTable } from "@/components/dashboard/my-listings-table";
-
-// Mock stats data; in production, fetch from API
-const mockStats = {
-  activeListings: 3,
-  totalViews: 946,
-  totalFavorites: 64,
-  totalMessages: 12,
-};
-
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
+
+interface DashboardStatsData {
+  activeListings: number;
+  totalViews: number;
+  totalFavorites: number;
+  totalMessages: number;
+}
 
 export function DashboardOverview() {
   const { t } = useTranslation('dashboard');
+  const { data: session } = useSession();
+  const [stats, setStats] = useState<DashboardStatsData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!session?.user) return;
+
+    // Fetch dashboard stats
+    fetch(`${API_URL}/user/dashboard/stats`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        setStats(json.data);
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  }, [session?.user]);
+
   return (
     <div className="space-y-8">
       {/* Page header */}
@@ -37,7 +57,17 @@ export function DashboardOverview() {
       </div>
 
       {/* Stats cards */}
-      <DashboardStats stats={mockStats} />
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-24 bg-muted animate-pulse rounded-lg" />
+          ))}
+        </div>
+      ) : (
+        <DashboardStats 
+          stats={stats || { activeListings: 0, totalViews: 0, totalFavorites: 0, totalMessages: 0 }} 
+        />
+      )}
 
       {/* Recent listings */}
       <div className="space-y-4">
@@ -57,4 +87,3 @@ export function DashboardOverview() {
     </div>
   );
 }
-

@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useToast } from "@/hooks/use-toast";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
 
 const registerSchema = z.object({
 	name: z.string().min(2, {
@@ -61,7 +61,8 @@ export function RegisterForm() {
 		setIsLoading(true)
 
 		try {
-			const response = await fetch(`${API_URL}/api/auth/register`, {
+			// Phase 1: Call registration through the proxy to ensure browser receives HttpOnly cookies
+			const response = await fetch("/api/v1/auth/register", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
@@ -79,7 +80,6 @@ export function RegisterForm() {
 
 			toast({
 				title: t('success.registered'),
-				description: t('success.registered'),
 			})
 
 			const result = await signIn("credentials", {

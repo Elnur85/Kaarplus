@@ -94,7 +94,7 @@ export function AdvancedFilters() {
     const currentMake = filters.make;
 
     useEffect(() => {
-        fetch(`${API_URL}/api/search/makes`)
+        fetch(`${API_URL}/search/makes`)
             .then((res) => res.json())
             .then((json) => setMakes(json.data || []))
             .catch(console.error);
@@ -108,7 +108,7 @@ export function AdvancedFilters() {
         }
 
         let cancelled = false;
-        fetch(`${API_URL}/api/search/models?make=${encodeURIComponent(currentMake)}`)
+        fetch(`${API_URL}/search/models?make=${encodeURIComponent(currentMake)}`)
             .then((res) => res.json())
             .then((json) => {
                 if (!cancelled) setModels(json.data || []);

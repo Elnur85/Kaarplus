@@ -87,7 +87,6 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
 				name: user.name,
 				role: user.role,
 			},
-			token, // Return token for client-side use if needed (usually redundant with cookie but helpful for debugging/mobile)
 		});
 	} catch (error) {
 		logger.error("Registration failed", error);
@@ -137,7 +136,6 @@ authRouter.post("/login", async (req: Request, res: Response) => {
 			name: user.name,
 			role: user.role,
 		},
-		token,
 	});
 });
 

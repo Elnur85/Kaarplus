@@ -1,9 +1,9 @@
 {
     "title": "Minu lemmikud",
     "breadcrumb": "Lemmikud",
-    "count": "{{count}} lemmik",
-    "count_plural": "{{count}} lemmikut",
-    "showing": "Näitan {{start}} kuni {{end}} lemmikut {{total}}-st",
+    "count": "{count} lemmik",
+    "count_plural": "{count} lemmikut",
+    "showing": "Näitan {start} kuni {end} lemmikut {total}-st",
     "empty": {
         "title": "Teil pole veel lemmikuid",
         "description": "Sirvige meie kuulutusi ja lisage sõidukeid lemmikutesse, vajutades südame ikoonile.",

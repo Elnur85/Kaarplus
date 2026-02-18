@@ -35,7 +35,7 @@ export function AdSlot({ placementId, className, fallback, context }: AdSlotProp
       if (context?.location) params.set("location", context.location);
 
       const qs = params.toString();
-      const url = `${API_URL}/api/content-blocks/${placementId}${qs ? `?${qs}` : ""}`;
+      const url = `${API_URL}/content-blocks/${placementId}${qs ? `?${qs}` : ""}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch ad");
       const json = await res.json();
@@ -86,7 +86,7 @@ export function AdSlot({ placementId, className, fallback, context }: AdSlotProp
   const fireEvent = async (eventType: "IMPRESSION" | "CLICK") => {
     if (!ad) return;
     try {
-      await fetch(`${API_URL}/api/content-blocks/${ad.id}/engage`, {
+      await fetch(`${API_URL}/content-blocks/${ad.id}/engage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

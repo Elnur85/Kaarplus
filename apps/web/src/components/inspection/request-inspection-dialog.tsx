@@ -41,7 +41,7 @@ export function RequestInspectionDialog({
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user/inspections`,
+        `/api/v1/user/inspections`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

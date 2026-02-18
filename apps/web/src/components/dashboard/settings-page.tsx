@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   User,
   Mail,
@@ -9,6 +9,7 @@ import {
   Shield,
   Download,
   Trash2,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,17 +19,29 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useTranslation, Trans } from "react-i18next";
 import { useSession } from "next-auth/react";
+import { API_URL } from "@/lib/constants";
+import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Mock user data; in production, fetch from API / session
-const mockUser = {
-  name: "Mart Tamm",
-  email: "mart.tamm@email.ee",
-  phone: "+372 5555 1234",
-};
+interface UserProfile {
+  id: string;
+  name: string | null;
+  email: string;
+  phone: string | null;
+  image: string | null;
+  role: string;
+  createdAt: string;
+}
 
 export function SettingsPage() {
   const { t } = useTranslation('dashboard');
   const { data: session } = useSession();
+  const { toast } = useToast();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   const [notifications, setNotifications] = useState({
     email: true,
     messages: true,
@@ -36,9 +49,110 @@ export function SettingsPage() {
     marketing: false,
   });
 
+  useEffect(() => {
+    if (!session?.user) return;
+
+    // Fetch user profile
+    fetch(`${API_URL}/user/profile`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        setProfile(json.data);
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  }, [session?.user]);
+
   const toggleNotification = (key: keyof typeof notifications) => {
     setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
+  const handleExportData = async () => {
+    setIsExporting(true);
+    try {
+      const res = await fetch(`${API_URL}/user/gdpr/export`, {
+        credentials: "include",
+      });
+      
+      if (!res.ok) throw new Error('Export failed');
+      
+      const data = await res.json();
+      
+      // Download as JSON file
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kaarplus-data-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast({
+        title: t('settings.gdpr.export.success', { defaultValue: 'Andmed eksporditud' }),
+        description: t('settings.gdpr.export.successDesc', { defaultValue: 'Teie andmed on alla laaditud' }),
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t('settings.gdpr.export.error', { defaultValue: 'Eksport ebaõnnestus' }),
+        description: t('settings.gdpr.export.errorDesc', { defaultValue: 'Proovige uuesti hiljem' }),
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!confirm(t('settings.gdpr.delete.confirm', { defaultValue: 'Kas olete kindel? See tegevus on pöördumatu.' }))) {
+      return;
+    }
+    
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`${API_URL}/user/gdpr/delete`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      
+      if (!res.ok) throw new Error('Delete failed');
+      
+      toast({
+        title: t('settings.gdpr.delete.success', { defaultValue: 'Konto kustutatud' }),
+        description: t('settings.gdpr.delete.successDesc', { defaultValue: 'Teie konto on edukalt kustutatud' }),
+      });
+      
+      // Redirect to home
+      window.location.href = '/';
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t('settings.gdpr.delete.error', { defaultValue: 'Kustutamine ebaõnnestus' }),
+        description: t('settings.gdpr.delete.errorDesc', { defaultValue: 'Proovige uuesti hiljem' }),
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <Skeleton className="h-8 w-48 mb-2" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <Card className="rounded-xl border p-6">
+          <div className="space-y-6">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -69,7 +183,7 @@ export function SettingsPage() {
             </Label>
             <Input
               id="name"
-              defaultValue={session?.user?.name || mockUser.name}
+              value={profile?.name || ''}
               readOnly
               className="bg-muted/30"
             />
@@ -82,7 +196,7 @@ export function SettingsPage() {
             <Input
               id="email"
               type="email"
-              defaultValue={session?.user?.email || mockUser.email}
+              value={profile?.email || ''}
               readOnly
               className="bg-muted/30"
             />
@@ -95,9 +209,10 @@ export function SettingsPage() {
             <Input
               id="phone"
               type="tel"
-              defaultValue={mockUser.phone}
+              value={profile?.phone || ''}
               readOnly
               className="bg-muted/30"
+              placeholder={t('settings.profile.noPhone', { defaultValue: 'Telefoninumber puudub' })}
             />
           </div>
         </div>
@@ -208,8 +323,17 @@ export function SettingsPage() {
                 {t('settings.gdpr.export.description')}
               </p>
             </div>
-            <Button variant="outline" size="sm">
-              <Download className="mr-2 size-4" />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleExportData}
+              disabled={isExporting}
+            >
+              {isExporting ? (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              ) : (
+                <Download className="mr-2 size-4" />
+              )}
               {t('settings.gdpr.export.button')}
             </Button>
           </div>
@@ -225,8 +349,17 @@ export function SettingsPage() {
                 {t('settings.gdpr.delete.description')}
               </p>
             </div>
-            <Button variant="destructive" size="sm">
-              <Trash2 className="mr-2 size-4" />
+            <Button 
+              variant="destructive" 
+              size="sm" 
+              onClick={handleDeleteAccount}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              ) : (
+                <Trash2 className="mr-2 size-4" />
+              )}
               {t('settings.gdpr.delete.button')}
             </Button>
           </div>
@@ -245,4 +378,3 @@ export function SettingsPage() {
     </div>
   );
 }
-

@@ -5,89 +5,51 @@ import { VehicleCard } from "@/components/shared/vehicle-card";
 import { VehicleSummary } from "@/types/vehicle";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { API_URL } from "@/lib/constants";
 
 export function VehicleCategories() {
     const { t } = useTranslation('home');
+    const [activeListings, setActiveListings] = useState<VehicleSummary[]>([]);
+    const [electricListings, setElectricListings] = useState<VehicleSummary[]>([]);
+    const [hybridListings, setHybridListings] = useState<VehicleSummary[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Mock data for initial implementation
-    const mockVehicles: VehicleSummary[] = [
-        {
-            id: "1",
-            make: "BMW",
-            model: "520d",
-            variant: "xDrive Luxury Line",
-            year: 2021,
-            price: 38500,
-            priceVatIncluded: true,
-            mileage: 42000,
-            fuelType: "Diiesel",
-            transmission: "Automaat",
-            bodyType: "Sedaan",
-            thumbnailUrl: "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=800&auto=format&fit=crop",
-            status: "ACTIVE",
-            badges: ["verified", "new"],
-            createdAt: new Date().toISOString(),
-        },
-        {
-            id: "2",
-            make: "Tesla",
-            model: "Model 3",
-            variant: "Long Range AWD",
-            year: 2022,
-            price: 45000,
-            priceVatIncluded: false,
-            mileage: 15000,
-            fuelType: "Elekter",
-            transmission: "Automaat",
-            bodyType: "Sedaan",
-            thumbnailUrl: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=800&auto=format&fit=crop",
-            status: "ACTIVE",
-            badges: ["hot_deal"],
-            createdAt: new Date().toISOString(),
-        },
-        {
-            id: "3",
-            make: "Audi",
-            model: "Q5",
-            variant: "40 TDI quattro",
-            year: 2020,
-            price: 32900,
-            priceVatIncluded: true,
-            mileage: 68000,
-            fuelType: "Hübriid",
-            transmission: "Automaat",
-            bodyType: "SUV",
-            thumbnailUrl: "https://images.unsplash.com/photo-1606152421702-821294830f63?q=80&w=800&auto=format&fit=crop",
-            status: "ACTIVE",
-            badges: ["certified"],
-            createdAt: new Date().toISOString(),
-        },
-        {
-            id: "4",
-            make: "Porsche",
-            model: "Taycan",
-            variant: "4S Business Edition",
-            year: 2023,
-            price: 115000,
-            priceVatIncluded: true,
-            mileage: 5000,
-            fuelType: "Elekter",
-            transmission: "Automaat",
-            bodyType: "Sedaan",
-            thumbnailUrl: "https://images.unsplash.com/photo-1614200028447-906033bb56ee?q=80&w=800&auto=format&fit=crop",
-            status: "ACTIVE",
-            badges: ["new"],
-            createdAt: new Date().toISOString(),
-        },
-    ];
+    useEffect(() => {
+        // Fetch featured listings for each category
+        Promise.all([
+            fetch(`${API_URL}/listings/metadata/featured?category=newest&limit=8`).then(r => r.json()),
+            fetch(`${API_URL}/listings/metadata/featured?category=electric&limit=8`).then(r => r.json()),
+            fetch(`${API_URL}/listings/metadata/featured?category=hybrid&limit=8`).then(r => r.json()),
+        ])
+            .then(([newestData, electricData, hybridData]) => {
+                setActiveListings(newestData.data || []);
+                setElectricListings(electricData.data || []);
+                setHybridListings(hybridData.data || []);
+            })
+            .catch(console.error)
+            .finally(() => setIsLoading(false));
+    }, []);
 
     const categories = [
-        { value: "buy", label: t('categories.tabs.buy'), query: "" },
-        { value: "electric", label: t('categories.tabs.electric'), query: "?fuelType=Electric" },
-        { value: "hybrid", label: t('categories.tabs.hybrid'), query: "?fuelType=Hybrid" },
+        { value: "buy", label: t('categories.tabs.buy'), query: "", data: activeListings },
+        { value: "electric", label: t('categories.tabs.electric'), query: "?fuelType=Electric", data: electricListings },
+        { value: "hybrid", label: t('categories.tabs.hybrid'), query: "?fuelType=Hybrid", data: hybridListings },
     ];
+
+    if (isLoading) {
+        return (
+            <section className="py-16">
+                <div className="container mx-auto px-4">
+                    <div className="flex items-center justify-center py-20">
+                        <Loader2 className="animate-spin text-primary h-8 w-8" />
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-16">
@@ -106,25 +68,27 @@ export function VehicleCategories() {
 
                     {categories.map((cat) => (
                         <TabsContent key={cat.value} value={cat.value} className="mt-0">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-                                {mockVehicles
-                                    .filter((v) => {
-                                        if (cat.value === "electric") return v.fuelType === "Elekter";
-                                        if (cat.value === "hybrid") return v.fuelType === "Hübriid";
-                                        return true;
-                                    })
-                                    .map((vehicle) => (
-                                        <VehicleCard key={vehicle.id} vehicle={vehicle} />
-                                    ))}
-                            </div>
+                            {cat.data.length === 0 ? (
+                                <div className="text-center py-12 text-muted-foreground">
+                                    {t('categories.noListings', { defaultValue: 'Hetkel ei ole selles kategoorias kuulutusi' })}
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                                        {cat.data.slice(0, 4).map((vehicle) => (
+                                            <VehicleCard key={vehicle.id} vehicle={vehicle} />
+                                        ))}
+                                    </div>
 
-                            <div className="mt-12 flex justify-center">
-                                <Link href={`/listings${cat.query}`}>
-                                    <Button variant="outline" size="lg" className="rounded-full px-10 font-bold border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary transition-all gap-2">
-                                        {t('categories.viewAll', { category: cat.label.toLowerCase() })} <ArrowRight className="h-4 w-4" />
-                                    </Button>
-                                </Link>
-                            </div>
+                                    <div className="mt-12 flex justify-center">
+                                        <Link href={`/listings${cat.query}`}>
+                                            <Button variant="outline" size="lg" className="rounded-full px-10 font-bold border-slate-300 dark:border-slate-700 hover:border-primary hover:text-primary transition-all gap-2">
+                                                {t('categories.viewAll', { category: cat.label.toLowerCase() })} <ArrowRight className="h-4 w-4" />
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </>
+                            )}
                         </TabsContent>
                     ))}
                 </Tabs>
@@ -132,4 +96,3 @@ export function VehicleCategories() {
         </section>
     );
 }
-

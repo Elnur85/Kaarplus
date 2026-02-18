@@ -32,7 +32,7 @@ export default function AdminAdsPage() {
       params.set("pageSize", "20");
       if (statusFilter !== "ALL") params.set("status", statusFilter);
 
-      const res = await fetch(`${API_URL}/api/admin/campaigns?${params.toString()}`, {
+      const res = await fetch(`${API_URL}/admin/campaigns?${params.toString()}`, {
         credentials: "include",
       });
       const json = await res.json();
@@ -53,7 +53,7 @@ export default function AdminAdsPage() {
     if (!confirm(t("admin.campaigns.archiveConfirm"))) return;
 
     try {
-      const res = await fetch(`${API_URL}/api/admin/campaigns/${id}`, {
+      const res = await fetch(`${API_URL}/admin/campaigns/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

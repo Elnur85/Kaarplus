@@ -1,28 +1,96 @@
 {
-    "cookies": {
-        "banner": {
-            "title": "Cookies & Privacy",
-            "description": "We use cookies to improve your browsing experience and analyze traffic. By clicking \"Accept All\", you consent to our use of all cookies."
-        },
-        "settingsTitle": "Cookie Preferences",
-        "essential": {
-            "title": "Essential Cookies",
-            "badge": "Required",
-            "description": "Necessary for the website to function properly. These cannot be disabled."
-        },
-        "analytics": {
-            "title": "Analytical Cookies",
-            "description": "Help us understand how visitors interact with our website by collecting anonymous data."
-        },
-        "marketing": {
-            "title": "Marketing Cookies",
-            "description": "Used to track visitors across websites to display relevant and engaging advertisements."
-        }
-    },
-    "buttons": {
-        "acceptAll": "Accept All",
-        "customize": "Customize",
-        "rejectAll": "Reject All",
-        "savePreferences": "Save Preferences"
-    }
+	"cookies": {
+		"banner": {
+			"title": "Cookies & Privacy",
+			"description": "We use cookies to improve your browsing experience and analyze traffic. By clicking \"Accept All\", you consent to our use of all cookies."
+		},
+		"settingsTitle": "Cookie Preferences",
+		"essential": {
+			"title": "Essential Cookies",
+			"badge": "Required",
+			"description": "Necessary for the website to function properly. These cannot be disabled."
+		},
+		"analytics": {
+			"title": "Analytical Cookies",
+			"description": "Help us understand how visitors interact with our website by collecting anonymous data."
+		},
+		"marketing": {
+			"title": "Marketing Cookies",
+			"description": "Used to track visitors across websites to display relevant and engaging advertisements."
+		}
+	},
+	"buttons": {
+		"acceptAll": "Accept All",
+		"customize": "Customize",
+		"rejectAll": "Reject All",
+		"savePreferences": "Save Preferences"
+	},
+	"terms": {
+		"title": "Terms of Service",
+		"effectiveDate": "Effective Date: January 1, 2026",
+		"sections": {
+			"description": {
+				"title": "1. Service Description",
+				"content": "Kaarplus is a web platform that enables individuals and companies to sell and buy vehicles in Estonia. The platform provides listing publication, search, and communication tools."
+			},
+			"registration": {
+				"title": "2. User Registration",
+				"items": [
+					"Only persons 18 years and older can register",
+					"Provided information must be truthful and up-to-date",
+					"Each person is allowed to have one account",
+					"You are responsible for your account security"
+				]
+			},
+			"listings": {
+				"title": "3. Listing Rules",
+				"items": [
+					"A listing must describe the actual vehicle",
+					"Photos must be authentic and recently taken",
+					"Prices are displayed in euros (EUR), with or without VAT",
+					"Individuals: up to 5 active listings",
+					"All listings undergo manual verification before publication",
+					"Fraud, misleading info, and illegal activities are prohibited"
+				]
+			},
+			"payments": {
+				"title": "4. Payments",
+				"content": "Payments are processed by Stripe. Kaarplus does not store card data. All transactions are in euros. Refunds are handled according to the terms of the specific service."
+			},
+			"liability": {
+				"title": "5. Limitation of Liability",
+				"content": "Kaarplus is an intermediary platform and is not a party to the purchase-sale agreement. We are not responsible for the vehicle's condition, the seller's honesty, or the transaction's outcome. We always recommend checking the vehicle before purchase."
+			},
+			"termination": {
+				"title": "6. Account Termination",
+				"content": "You can delete your account at any time under settings. We reserve the right to suspend or close accounts that violate the terms of service."
+			},
+			"contact": {
+				"title": "7. Contact",
+				"content": "For questions: info@kaarplus.ee"
+			}
+		}
+	},
+	"privacy": {
+		"title": "Privacy Policy",
+		"effectiveDate": "Effective Date: January 1, 2026",
+		"sections": {
+			"intro": {
+				"title": "General Privacy Policy",
+				"content": "Kaarplus is committed to protecting your privacy. This policy explains how we collect, use, and protect your personal data."
+			},
+			"dataCollection": {
+				"title": "Data Collection",
+				"content": "We collect the data you provide when creating an account (name, email, phone) and using the platform (listings, messages)."
+			},
+			"dataUsage": {
+				"title": "Data Usage",
+				"content": "We use your data to provide the service, ensure security, and fulfill legal obligations."
+			},
+			"rights": {
+				"title": "Your Rights",
+				"content": "You have the right to access your data, correct errors, and request data deletion."
+			}
+		}
+	}
 }

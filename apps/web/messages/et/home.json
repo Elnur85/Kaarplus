@@ -36,7 +36,7 @@
             "hybrid": "Hübriid",
             "commercial": "Tarbesõiduk"
         },
-        "viewAll": "Vaata kõiki {{category}}"
+        "viewAll": "Vaata kõiki {category}"
     },
     "valueProps": {
         "history": {
@@ -60,7 +60,7 @@
         "title": "Populaarsed margid",
         "subtitle": "Sirvi sõidukeid eelistatud tootja järgi",
         "viewAll": "Vaata kõiki",
-        "listingCount": "{{count}} kuulutust"
+        "listingCount": "{count} kuulutust"
     },
     "reviews": {
         "title": "Mida kliendid arvavad",

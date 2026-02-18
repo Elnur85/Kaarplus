@@ -1,132 +1,143 @@
 {
-    "nav": {
-        "home": "Home",
-        "listings": "Listings",
-        "sell": "Sell Car",
-        "compare": "Compare",
-        "favorites": "Favorites",
-        "messages": "Messages",
-        "dashboard": "Dashboard",
-        "admin": "Admin",
-        "login": "Login",
-        "register": "Register",
-        "logout": "Logout",
-        "profile": "Profile"
+  "nav": {
+    "home": "Home",
+    "listings": "Listings",
+    "sell": "Sell Car",
+    "compare": "Compare",
+    "favorites": "Favorites",
+    "messages": "Messages",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "footer": {
+    "description": "Kaarplus is Estonia's largest and most reliable car buying and selling platform. We help you find your dream car safely and quickly.",
+    "allRightsReserved": "All rights reserved",
+    "services": {
+      "title": "Services",
+      "allListings": "All Listings",
+      "sellYourCar": "Sell Your Car",
+      "inspections": "Inspections",
+      "electricVehicles": "Electric Vehicles",
+      "newListings": "New Listings"
     },
-    "footer": {
-        "description": "Kaarplus is Estonia's largest and most reliable car buying and selling platform. We help you find your dream car safely and quickly.",
-        "allRightsReserved": "All rights reserved",
-        "services": {
-            "title": "Services",
-            "allListings": "All Listings",
-            "sellYourCar": "Sell Your Car",
-            "inspections": "Inspections",
-            "electricVehicles": "Electric Vehicles",
-            "newListings": "New Listings"
-        },
-        "company": {
-            "title": "Company",
-            "aboutUs": "About Us",
-            "faq": "FAQ",
-            "terms": "Terms of Use",
-            "privacy": "Privacy Policy",
-            "careers": "Careers",
-            "cookies": "Cookies Policy"
-        },
-        "support": {
-            "title": "Support",
-            "helpCenter": "Help Center",
-            "safetyAdvice": "Safety Advice",
-            "contactSupport": "Contact Support",
-            "fraudProtection": "Fraud Protection",
-            "sitemap": "Sitemap"
-        },
-        "newsletter": {
-            "title": "Join our newsletter",
-            "description": "Get the best offers and car world news directly to your inbox.",
-            "placeholder": "your@email.com",
-            "success": "Newsletter subscribed!",
-            "consent": "By joining, you agree to our privacy terms.",
-            "toastSuccess": "Subscription successful!",
-            "toastDescription": "You have been added to our newsletter list.",
-            "toastError": "Error joining newsletter."
-        },
-        "followUs": "Follow us"
+    "company": {
+      "title": "Company",
+      "aboutUs": "About Us",
+      "faq": "FAQ",
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "careers": "Careers",
+      "cookies": "Cookies Policy"
     },
-    "common": {
-        "search": "Search",
-        "filter": "Filter",
-        "sort": "Sort",
-        "cancel": "Cancel",
-        "save": "Save",
-        "delete": "Delete",
-        "edit": "Edit",
-        "view": "View",
-        "close": "Close",
-        "submit": "Submit",
-        "loading": "Loading...",
-        "error": "Error",
-        "success": "Success",
-        "yes": "Yes",
-        "no": "No",
-        "all": "All",
-        "more": "More",
-        "less": "Less",
-        "showMore": "Show more",
-        "showLess": "Show less"
-    },
-    "currency": {
-        "eur": "€",
-        "price": "Price"
-    },
-    "date": {
-        "today": "Today",
-        "yesterday": "Yesterday",
-        "daysAgo": "{{count}} days ago",
-        "weeksAgo": "{{count}} weeks ago",
-        "monthsAgo": "{{count}} months ago"
-    },
-    "details": "Details",
-    "saved": "Saved",
-    "buttons": {
-        "save": "Save",
-        "contact": "Contact"
+    "support": {
+      "title": "Support",
+      "helpCenter": "Help Center",
+      "safetyAdvice": "Safety Advice",
+      "contactSupport": "Contact Support",
+      "fraudProtection": "Fraud Protection",
+      "sitemap": "Sitemap"
     },
     "newsletter": {
-        "title": "Subscribe to newsletter",
-        "description": "Be the first to know about new offers and automotive news.",
-        "placeholder": "your@email.com",
-        "button": "Subscribe",
-        "successTitle": "Thank you! You have successfully subscribed.",
-        "successDescription": "We will send you the best offers and news.",
-        "errors": {
-            "invalidEmail": "Please enter a valid email address.",
-            "alreadySubscribed": "This email address is already subscribed.",
-            "generic": "Something went wrong. Please try again.",
-            "connection": "Connection error. Please try again."
-        },
-        "languages": {
-            "et": "Estonian",
-            "ru": "Russian",
-            "en": "English"
-        },
-        "unsubscribe": {
-            "title": "Newsletter Unsubscribe",
-            "confirm": "Are you sure you want to unsubscribe from our newsletter?",
-            "button": "Yes, unsubscribe",
-            "success": "You have successfully unsubscribed from the newsletter. We will no longer send you emails.",
-            "invalidToken": "Invalid link. Please use the link provided in your email.",
-            "wait": "Please wait...",
-            "error": "Error"
-        }
+      "title": "Join our newsletter",
+      "description": "Get the best offers and car world news directly to your inbox.",
+      "placeholder": "your@email.com",
+      "success": "Newsletter subscribed!",
+      "consent": "By joining, you agree to our privacy terms.",
+      "toastSuccess": "Subscription successful!",
+      "toastDescription": "You have been added to our newsletter list.",
+      "toastError": "Error joining newsletter."
     },
-    "specs": {
-        "year": "Year",
-        "mileage": "Mileage",
-        "fuelType": "Fuel Type",
-        "transmission": "Transmission",
-        "power": "Power",
-        "auto": "Automatic",
-        "manual": "Manual"
+    "followUs": "Follow us"
+  },
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "more": "More",
+    "less": "Less",
+    "showMore": "Show more",
+    "showLess": "Show less"
+  },
+  "currency": {
+    "eur": "€",
+    "price": "Price"
+  },
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{count} days ago",
+    "weeksAgo": "{count} weeks ago",
+    "monthsAgo": "{count} months ago"
+  },
+  "details": "Details",
+  "saved": "Saved",
+  "buttons": {
+    "save": "Save",
+    "contact": "Contact"
+  },
+  "newsletter": {
+    "title": "Subscribe to newsletter",
+    "description": "Be the first to know about new offers and automotive news.",
+    "placeholder": "your@email.com",
+    "button": "Subscribe",
+    "successTitle": "Thank you! You have successfully subscribed.",
+    "successDescription": "We will send you the best offers and news.",
+    "errors": {
+      "invalidEmail": "Please enter a valid email address.",
+      "alreadySubscribed": "This email address is already subscribed.",
+      "generic": "Something went wrong. Please try again.",
+      "connection": "Connection error. Please try again."
+    },
+    "languages": {
+      "et": "Estonian",
+      "ru": "Russian",
+      "en": "English"
+    },
+    "unsubscribe": {
+      "title": "Newsletter Unsubscribe",
+      "confirm": "Are you sure you want to unsubscribe from our newsletter?",
+      "button": "Yes, unsubscribe",
+      "success": "You have successfully unsubscribed from the newsletter. We will no longer send you emails.",
+      "invalidToken": "Invalid link. Please use the link provided in your email.",
+      "wait": "Please wait...",
+      "error": "Error"
     }
+  },
+  "specs": {
+    "year": "Year",
+    "mileage": "Mileage",
+    "fuelType": "Fuel Type",
+    "transmission": "Transmission",
+    "power": "Power",
+    "auto": "Automatic",
+    "manual": "Manual"
+  },
+  "share": {
+    "button": "Share",
+    "title": "Share this listing",
+    "description": "Choose how you want to share",
+    "copied": "Copied!",
+    "linkCopied": "Link copied to clipboard",
+    "copyFailed": "Copy failed",
+    "copyFailedDesc": "Please copy the link manually",
+    "success": "Shared!",
+    "shared": "Listing shared successfully"
+  }
 }

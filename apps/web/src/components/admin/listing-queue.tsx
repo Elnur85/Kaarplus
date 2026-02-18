@@ -25,7 +25,7 @@ export function ListingQueue() {
     const fetchPending = useCallback(async () => {
         setIsLoading(true);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/listings/pending`, {
+            const res = await fetch(`/api/v1/admin/listings/pending`, {
                 credentials: "include",
             });
 
@@ -47,7 +47,7 @@ export function ListingQueue() {
 
     const handleApprove = async (id: string) => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/listings/${id}/verify`, {
+            const res = await fetch(`/api/v1/admin/listings/${id}/verify`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export function ListingQueue() {
         if (!selectedListing) return;
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/listings/${selectedListing.id}/verify`, {
+            const res = await fetch(`/api/v1/admin/listings/${selectedListing.id}/verify`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

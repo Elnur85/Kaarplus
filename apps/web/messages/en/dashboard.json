@@ -52,8 +52,8 @@
             "deleteConfirm": "Are you sure? This action cannot be undone."
         },
         "pagination": {
-            "page": "Page {{current}}/{{total}}",
-            "total": "{{count}} listings",
+            "page": "Page {current}/{total}",
+            "total": "{count} listings",
             "previous": "Previous",
             "next": "Next"
         }
@@ -112,14 +112,14 @@
             "button": "Start searching"
         },
         "card": {
-            "saved": "Saved {{date}}",
+            "saved": "Saved {date}",
             "allVehicles": "All vehicles",
             "alerts": "Notifications",
             "view": "Edit / View"
         },
         "delete": {
             "title": "Are you sure?",
-            "description": "This action will remove the saved search \"{{name}}\". This cannot be undone.",
+            "description": "This action will remove the saved search \"{name}\". This cannot be undone.",
             "button": "Delete"
         },
         "toasts": {

@@ -27,7 +27,7 @@ export function AnalyticsDashboard() {
 
         setIsLoading(true);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/analytics`, {
+            const res = await fetch(`/api/v1/admin/analytics`, {
                 credentials: "include",
             });
 

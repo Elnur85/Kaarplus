@@ -32,7 +32,7 @@ export default function AdInventoryPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/admin/ad-units`, { credentials: "include" })
+    fetch(`${API_URL}/admin/ad-units`, { credentials: "include" })
       .then((res) => res.json())
       .then((json) => setUnits(json.data || []))
       .catch(console.error)

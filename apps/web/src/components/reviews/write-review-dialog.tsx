@@ -46,7 +46,7 @@ export function WriteReviewDialog({
     setSubmitting(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/reviews`,
+        `/api/v1/reviews`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

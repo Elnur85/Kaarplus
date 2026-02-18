@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
@@ -17,8 +17,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, formatPrice, formatNumber } from "@/lib/utils";
+import { API_URL } from "@/lib/constants";
+import { useSession } from "next-auth/react";
 
-type ListingStatus = "ACTIVE" | "PENDING" | "SOLD" | "REJECTED" | "DRAFT";
+type ListingStatus = "ACTIVE" | "PENDING" | "SOLD" | "REJECTED" | "DRAFT" | "EXPIRED";
 
 interface UserListing {
   id: string;
@@ -58,6 +60,10 @@ const statusConfig: Record<
     label: "Mustand",
     className: "bg-slate-50 text-slate-600 border-slate-200",
   },
+  EXPIRED: {
+    label: "Aegunud",
+    className: "bg-gray-50 text-gray-600 border-gray-200",
+  },
 };
 
 import { useTranslation } from "react-i18next";
@@ -67,84 +73,10 @@ function StatusBadge({ status }: { status: ListingStatus }) {
   const config = statusConfig[status];
   return (
     <Badge variant="outline" className={cn("font-medium", config.className)}>
-      {t(`listings.status.${status.toLowerCase()}`)}
+      {t(`listings.status.${status.toLowerCase()}`, { defaultValue: config.label })}
     </Badge>
   );
 }
-
-// Mock data for development
-const mockListings: UserListing[] = [
-  {
-    id: "1",
-    make: "BMW",
-    model: "330e",
-    year: 2022,
-    price: 35900,
-    priceVatIncluded: true,
-    status: "ACTIVE",
-    thumbnailUrl:
-      "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=400",
-    viewCount: 245,
-    favoriteCount: 18,
-    createdAt: "2025-12-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    make: "Volkswagen",
-    model: "ID.4",
-    year: 2023,
-    price: 42500,
-    priceVatIncluded: true,
-    status: "ACTIVE",
-    thumbnailUrl:
-      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=400",
-    viewCount: 189,
-    favoriteCount: 12,
-    createdAt: "2025-12-20T14:30:00Z",
-  },
-  {
-    id: "3",
-    make: "Toyota",
-    model: "RAV4 Hybrid",
-    year: 2021,
-    price: 28900,
-    priceVatIncluded: false,
-    status: "PENDING",
-    thumbnailUrl:
-      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=400",
-    viewCount: 0,
-    favoriteCount: 0,
-    createdAt: "2026-01-05T09:15:00Z",
-  },
-  {
-    id: "4",
-    make: "Audi",
-    model: "A4 Avant",
-    year: 2020,
-    price: 24500,
-    priceVatIncluded: true,
-    status: "SOLD",
-    thumbnailUrl:
-      "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=400",
-    viewCount: 512,
-    favoriteCount: 34,
-    createdAt: "2025-11-10T08:00:00Z",
-  },
-  {
-    id: "5",
-    make: "Tesla",
-    model: "Model 3",
-    year: 2023,
-    price: 39900,
-    priceVatIncluded: true,
-    status: "DRAFT",
-    thumbnailUrl:
-      "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=400",
-    viewCount: 0,
-    favoriteCount: 0,
-    createdAt: "2026-01-20T16:45:00Z",
-  },
-];
 
 function ListingTableSkeleton() {
   return (
@@ -173,15 +105,62 @@ export function MyListingsTable({
   showPagination = false,
 }: MyListingsTableProps) {
   const { t, i18n } = useTranslation('dashboard');
+  const { data: session } = useSession();
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [listings, setListings] = useState<UserListing[]>([]);
   const pageSize = limit || 10;
   const localeCode = i18n.language === 'et' ? 'et-EE' : i18n.language === 'ru' ? 'ru-RU' : 'en-GB';
 
-  // Use mock data; in production, fetch from API
-  const allListings = mockListings;
-  const totalPages = Math.ceil(allListings.length / pageSize);
-  const displayedListings = allListings.slice(
+  useEffect(() => {
+    if (!session?.user) return;
+
+    let cancelled = false;
+    
+    const loadListings = async () => {
+      // Use initial state for loading instead of setState in effect
+      try {
+        const res = await fetch(`${API_URL}/listings?userId=${session.user.id}&pageSize=100`, {
+          credentials: "include",
+        });
+        const json = await res.json();
+        
+        if (!cancelled) {
+          const data = json.data || [];
+          // Transform the data to match UserListing interface
+          const transformedListings: UserListing[] = data.map((item: { id: string; make: string; model: string; year: number; price: number; priceVatIncluded: boolean; status: ListingStatus; images?: { url: string }[]; viewCount?: number; favoriteCount?: number; createdAt: string }) => ({
+            id: item.id,
+            make: item.make,
+            model: item.model,
+            year: item.year,
+            price: Number(item.price),
+            priceVatIncluded: item.priceVatIncluded,
+            status: item.status,
+            thumbnailUrl: item.images?.[0]?.url || 'https://via.placeholder.com/400x300?text=No+Image',
+            viewCount: item.viewCount || 0,
+            favoriteCount: item.favoriteCount || 0,
+            createdAt: item.createdAt,
+          }));
+          setListings(transformedListings);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    loadListings();
+    
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user]);
+
+  const totalPages = Math.ceil(listings.length / pageSize);
+  const displayedListings = listings.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -190,7 +169,7 @@ export function MyListingsTable({
     return <ListingTableSkeleton />;
   }
 
-  if (allListings.length === 0) {
+  if (listings.length === 0) {
     return (
       <Card className="flex flex-col items-center justify-center gap-4 rounded-xl border p-12 text-center">
         <p className="text-lg font-medium text-foreground">
@@ -354,7 +333,7 @@ export function MyListingsTable({
       {showPagination && totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
           <p className="text-sm text-muted-foreground">
-            {t('listings.pagination.page', { current: currentPage, total: totalPages })} ({t('listings.pagination.total', { count: allListings.length })})
+            {t('listings.pagination.page', { current: currentPage, total: totalPages })} ({t('listings.pagination.total', { count: listings.length })})
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -383,4 +362,3 @@ export function MyListingsTable({
     </div>
   );
 }
-

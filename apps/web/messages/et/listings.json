@@ -19,6 +19,7 @@
         "min": "Min",
         "max": "Max",
         "allModels": "Kõik mudelid",
+        "any": "Kõik",
         "showResults": "Näita tulemusi"
     },
     "sort": {

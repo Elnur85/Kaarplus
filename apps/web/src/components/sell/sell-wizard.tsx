@@ -174,7 +174,7 @@ export function SellWizard() {
 
     const uploadToS3 = async (file: File, listingId: string): Promise<string> => {
         // 1. Get presigned URL
-        const presignRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/uploads/presign`, {
+        const presignRes = await fetch(`/api/v1/uploads/presign`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -234,7 +234,7 @@ export function SellWizard() {
             };
 
             // 2. Create Listing
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/listings`, {
+            const res = await fetch(`/api/v1/listings`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -263,7 +263,7 @@ export function SellWizard() {
             );
 
             // 4. Attach images to Listing
-            const attachRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/listings/${newListingId}/images`, {
+            const attachRes = await fetch(`/api/v1/listings/${newListingId}/images`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -182,6 +182,51 @@ export class ReviewService {
 
         return { message: "Review deleted" };
     }
+
+    /**
+     * Get featured reviews for home page (highest rated, most recent).
+     * Includes reviewer info and listing details.
+     */
+    async getFeaturedReviews(limit: number = 6) {
+        const reviews = await prisma.review.findMany({
+            where: {
+                rating: { gte: 4 }, // Only 4+ star reviews
+            },
+            include: {
+                reviewer: {
+                    select: {
+                        id: true,
+                        name: true,
+                        image: true,
+                    },
+                },
+                listing: {
+                    select: {
+                        id: true,
+                        make: true,
+                        model: true,
+                    },
+                },
+            },
+            orderBy: [
+                { rating: "desc" },
+                { createdAt: "desc" },
+            ],
+            take: limit,
+        });
+
+        return reviews.map((review) => ({
+            id: review.id,
+            rating: review.rating,
+            title: review.title,
+            body: review.body,
+            createdAt: review.createdAt,
+            reviewer: review.reviewer,
+            car: review.listing 
+                ? `${review.listing.make} ${review.listing.model}`
+                : undefined,
+        }));
+    }
 }
 
 export const reviewService = new ReviewService();

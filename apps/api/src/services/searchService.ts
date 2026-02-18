@@ -142,4 +142,58 @@ export class SearchService {
         cacheService.set(cacheKey, result, CACHE_TTL);
         return result;
     }
+
+    async getPlatformStats(): Promise<{ activeListings: number; totalUsers: number; yearsInMarket: number; avgSaleTimeDays: number }> {
+        const cacheKey = "search:platform-stats";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as { activeListings: number; totalUsers: number; yearsInMarket: number; avgSaleTimeDays: number };
+
+        const [activeListings, totalUsers] = await Promise.all([
+            prisma.listing.count({ where: { status: "ACTIVE" } }),
+            prisma.user.count({ where: { deletedAt: null } }),
+        ]);
+
+        // Calculate average days from published to sold for sold listings
+        const soldListings = await prisma.listing.findMany({
+            where: { 
+                status: "SOLD",
+                publishedAt: { not: null },
+            },
+            select: {
+                publishedAt: true,
+                updatedAt: true,
+            },
+            take: 100, // Sample recent sales
+        });
+
+        let avgSaleTimeDays = 14; // Default
+        if (soldListings.length > 0) {
+            const totalDays = soldListings.reduce((sum, listing) => {
+                const published = listing.publishedAt?.getTime() || 0;
+                const sold = listing.updatedAt?.getTime() || 0;
+                const days = Math.round((sold - published) / (1000 * 60 * 60 * 24));
+                return sum + Math.max(0, days);
+            }, 0);
+            avgSaleTimeDays = Math.round(totalDays / soldListings.length);
+        }
+
+        // Years since first listing
+        const firstListing = await prisma.listing.findFirst({
+            orderBy: { createdAt: "asc" },
+            select: { createdAt: true },
+        });
+        const yearsInMarket = firstListing 
+            ? Math.max(1, Math.floor((Date.now() - firstListing.createdAt.getTime()) / (1000 * 60 * 60 * 24 * 365)))
+            : 1;
+
+        const result = {
+            activeListings,
+            totalUsers,
+            yearsInMarket,
+            avgSaleTimeDays: Math.max(1, avgSaleTimeDays),
+        };
+
+        cacheService.set(cacheKey, result, 300); // 5 minute cache
+        return result;
+    }
 }

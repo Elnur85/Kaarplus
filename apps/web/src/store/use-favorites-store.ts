@@ -1,76 +1,103 @@
 import { create } from "zustand";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+import { apiFetch } from "@/lib/api-client";
 
 interface FavoritesStore {
-    favoriteIds: Set<string>;
-    isLoaded: boolean;
-    toggleFavorite: (listingId: string) => Promise<void>;
-    loadFavorites: () => Promise<void>;
-    isFavorite: (listingId: string) => boolean;
+	favoriteIds: Set<string>;
+	isLoaded: boolean;
+	isLoading: boolean;
+	error: string | null;
+	toggleFavorite: (listingId: string) => Promise<void>;
+	loadFavorites: () => Promise<void>;
+	isFavorite: (listingId: string) => boolean;
+	clearFavorites: () => void;
 }
 
 export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
-    favoriteIds: new Set<string>(),
-    isLoaded: false,
+	favoriteIds: new Set<string>(),
+	isLoaded: false,
+	isLoading: false,
+	error: null,
 
-    loadFavorites: async () => {
-        try {
-            const response = await fetch(`${API_URL}/api/user/favorites/ids`, {
-                credentials: "include",
-            });
+	loadFavorites: async () => {
+		// Don't load if already loaded or loading
+		const { isLoaded, isLoading } = get();
+		if (isLoaded || isLoading) return;
 
-            if (!response.ok) {
-                throw new Error("Failed to load favorites");
-            }
+		// In cookie-based auth, we try to load and if it's 401, we know we're unauthenticated.
+		set({ isLoading: true, error: null });
 
-            const json = await response.json();
-            const ids: string[] = json.data ?? [];
+		try {
+			const response = await apiFetch("/user/favorites/ids");
 
-            set({ favoriteIds: new Set(ids), isLoaded: true });
-        } catch (error) {
-            console.error("Failed to load favorites:", error);
-            set({ isLoaded: true });
-        }
-    },
+			// Handle 401 - user not authenticated
+			if (response.status === 401) {
+				set({ favoriteIds: new Set(), isLoaded: true, isLoading: false, error: null });
+				return;
+			}
 
-    toggleFavorite: async (listingId: string) => {
-        const { favoriteIds } = get();
-        const wasFavorited = favoriteIds.has(listingId);
+			if (!response.ok) {
+				throw new Error(`Failed to load favorites: ${response.status}`);
+			}
 
-        // Optimistic update
-        const nextIds = new Set(favoriteIds);
-        if (wasFavorited) {
-            nextIds.delete(listingId);
-        } else {
-            nextIds.add(listingId);
-        }
-        set({ favoriteIds: nextIds });
+			const json = await response.json();
+			const ids: string[] = json.data ?? [];
 
-        try {
-            const response = await fetch(`${API_URL}/api/user/favorites/${listingId}`, {
-                method: wasFavorited ? "DELETE" : "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-            });
+			set({ favoriteIds: new Set(ids), isLoaded: true, isLoading: false, error: null });
+		} catch (error) {
+			console.error("Failed to load favorites:", error);
+			set({
+				favoriteIds: new Set(),
+				isLoaded: true,
+				isLoading: false,
+				error: error instanceof Error ? error.message : "Unknown error"
+			});
+		}
+	},
 
-            if (!response.ok) {
-                throw new Error("Failed to toggle favorite");
-            }
-        } catch (error) {
-            // Revert optimistic update on failure
-            console.error("Failed to toggle favorite:", error);
-            const revertedIds = new Set(get().favoriteIds);
-            if (wasFavorited) {
-                revertedIds.add(listingId);
-            } else {
-                revertedIds.delete(listingId);
-            }
-            set({ favoriteIds: revertedIds });
-        }
-    },
+	toggleFavorite: async (listingId: string) => {
+		const { favoriteIds } = get();
+		const wasFavorited = favoriteIds.has(listingId);
 
-    isFavorite: (listingId: string) => {
-        return get().favoriteIds.has(listingId);
-    },
+		// Optimistic update
+		const nextIds = new Set(favoriteIds);
+		if (wasFavorited) {
+			nextIds.delete(listingId);
+		} else {
+			nextIds.add(listingId);
+		}
+		set({ favoriteIds: nextIds });
+
+		try {
+			const response = await apiFetch(`/user/favorites/${listingId}`, {
+				method: wasFavorited ? "DELETE" : "POST",
+			});
+
+			if (!response.ok) {
+				// Handle 401 - user not authenticated
+				if (response.status === 401) {
+					throw new Error("Please log in to save favorites");
+				}
+				throw new Error(`Failed to toggle favorite: ${response.status}`);
+			}
+		} catch (error) {
+			// Revert optimistic update on failure
+			console.error("Failed to toggle favorite:", error);
+			const revertedIds = new Set(get().favoriteIds);
+			if (wasFavorited) {
+				revertedIds.add(listingId);
+			} else {
+				revertedIds.delete(listingId);
+			}
+			set({ favoriteIds: revertedIds });
+			throw error;
+		}
+	},
+
+	isFavorite: (listingId: string) => {
+		return get().favoriteIds.has(listingId);
+	},
+
+	clearFavorites: () => {
+		set({ favoriteIds: new Set(), isLoaded: false, isLoading: false, error: null });
+	},
 }));

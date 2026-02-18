@@ -62,3 +62,12 @@ export const getDriveTypes = async (_req: Request, res: Response, next: NextFunc
         next(error);
     }
 };
+
+export const getPlatformStats = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const stats = await searchService.getPlatformStats();
+        res.json({ data: stats });
+    } catch (error) {
+        next(error);
+    }
+};

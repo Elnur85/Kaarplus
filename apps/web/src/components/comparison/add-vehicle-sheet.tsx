@@ -62,7 +62,7 @@ export function AddVehicleSheet({ open, onOpenChange }: AddVehicleSheetProps) {
             setIsLoading(true);
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/listings?q=${encodeURIComponent(query)}&pageSize=10&status=ACTIVE`
+                    `/api/v1/listings?q=${encodeURIComponent(query)}&pageSize=10&status=ACTIVE`
                 );
                 const json = await res.json();
                 setResults(json.data || []);

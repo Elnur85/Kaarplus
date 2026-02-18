@@ -45,7 +45,7 @@
             "fuelType": "Kütus *",
             "transmission": "Käigukast *",
             "powerKw": "Võimsus (kW) *",
-            "powerHj": "{{count}} hj",
+            "powerHj": "{count} hj",
             "powerHjEmpty": "— hj",
             "driveType": "Vedu *",
             "doors": "Uksed *",
@@ -74,7 +74,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Räägi oma autost lähemalt..."
         },
-        "charCount": "{{count}} / 5000 tähemärki"
+        "charCount": "{count} / 5000 tähemärki"
     },
     "step3": {
         "title": "Lisage fotod",
@@ -96,12 +96,12 @@
             ]
         },
         "mainPhoto": "Peapilt",
-        "addMore": "Lisage veel (kuni {{count}})",
-        "photoNumber": "Pilt {{index}}"
+        "addMore": "Lisage veel (kuni {count})",
+        "photoNumber": "Pilt {index}"
     },
     "step4": {
         "success": "Kuulutus on edukalt esitatud!",
-        "idText": "Teie kuulutus (ID: #{{id}}) on nüüd ülevaatusel.",
+        "idText": "Teie kuulutus (ID: #{id}) on nüüd ülevaatusel.",
         "nextSteps": {
             "title": "Mis edasi saab?",
             "items": [
@@ -122,7 +122,7 @@
         "minPhotos": "Palun lisage vähemalt 3 fotot",
         "createError": "Viga kuulutuse loomisel",
         "uploadingTitle": "Piltide üleslaadimine...",
-        "uploadingDesc": "Laadime üles {{count}} pilti. Palun oodake.",
+        "uploadingDesc": "Laadime üles {count} pilti. Palun oodake.",
         "attachError": "Viga piltide sidumisel kuulutusega",
         "successTitle": "Edu!",
         "successDesc": "Kuulutus on edukalt esitatud koos piltidega!",
@@ -179,11 +179,17 @@
             "Elekter": "Elekter",
             "CNG": "CNG",
             "LPG": "LPG",
-            "Gaas": "Gaas"
+            "Gaas": "Gaas",
+            "Petrol": "Bensiin",
+            "Diesel": "Diisel",
+            "Hybrid": "Hübriid",
+            "Electric": "Elekter"
         },
         "transmission": {
             "Manuaal": "Manuaal",
-            "Automaat": "Automaat"
+            "Automaat": "Automaat",
+            "Manual": "Manuaal",
+            "Automatic": "Automaat"
         },
         "drive": {
             "Esivedu": "Esivedu",

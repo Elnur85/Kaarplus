@@ -55,7 +55,7 @@ export function AdForm({ open, onOpenChange, campaignId, onSuccess }: AdFormProp
 
   useEffect(() => {
     if (open) {
-      fetch(`${API_URL}/api/admin/ad-units`, { credentials: "include" })
+      fetch(`${API_URL}/admin/ad-units`, { credentials: "include" })
         .then((res) => res.json())
         .then((json) => setAdUnits(json.data || []))
         .catch(console.error);
@@ -67,7 +67,7 @@ export function AdForm({ open, onOpenChange, campaignId, onSuccess }: AdFormProp
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/admin/advertisements`, {
+      const res = await fetch(`${API_URL}/admin/advertisements`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

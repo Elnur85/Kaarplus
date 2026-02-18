@@ -10,36 +10,70 @@ import {
 import { StarRating } from "@/components/shared/star-rating";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
-import { Quote } from "lucide-react";
+import { Quote, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { API_URL } from "@/lib/constants";
+
+interface Review {
+    id: string;
+    rating: number;
+    title: string | null;
+    body: string;
+    createdAt: string;
+    reviewer: {
+        id: string;
+        name: string | null;
+        image: string | null;
+    };
+    car?: string;
+}
 
 export function ReviewsCarousel() {
     const { t } = useTranslation('home');
-    const reviews = [
-        {
-            id: 1,
-            name: "Mari Tamm",
-            rating: 5,
-            car: "BMW 520d",
-            text: "Suurepärane kogemus. Auto oli täpselt selline nagu kirjeldatud, ja müüja oli väga professionaalne.",
-            avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-        },
-        {
-            id: 2,
-            name: "Jüri Sepp",
-            rating: 4.5,
-            car: "Audi A6",
-            text: "Ostmine oli lihtne ja kiire. Kontrollitud ajalugu andis kindlustunde. Soovitan!",
-            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-        },
-        {
-            id: 3,
-            name: "Anna Kuusk",
-            rating: 5,
-            car: "Tesla Model Y",
-            text: "Väga rahul ostuga. Kaarplus aitas leida ideaalse elektriauto.",
-            avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-        },
-    ];
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(`${API_URL}/reviews/featured?limit=6`)
+            .then((res) => res.json())
+            .then((json) => {
+                setReviews(json.data || []);
+            })
+            .catch(console.error)
+            .finally(() => setIsLoading(false));
+    }, []);
+
+    if (isLoading) {
+        return (
+            <section className="py-20 bg-slate-50 dark:bg-slate-900/30">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold mb-4">{t('reviews.title')}</h2>
+                        <p className="text-slate-500 max-w-xl mx-auto">{t('reviews.subtitle')}</p>
+                    </div>
+                    <div className="flex items-center justify-center py-12">
+                        <Loader2 className="animate-spin text-primary h-8 w-8" />
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (reviews.length === 0) {
+        return (
+            <section className="py-20 bg-slate-50 dark:bg-slate-900/30">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl font-bold mb-4">{t('reviews.title')}</h2>
+                        <p className="text-slate-500 max-w-xl mx-auto">{t('reviews.subtitle')}</p>
+                    </div>
+                    <div className="text-center text-muted-foreground py-8">
+                        {t('reviews.noReviews', { defaultValue: 'Hetkel ei ole ülevaateid' })}
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-20 bg-slate-50 dark:bg-slate-900/30">
@@ -67,17 +101,21 @@ export function ReviewsCarousel() {
                                     <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/10" />
                                     <div className="flex items-center gap-4 mb-6">
                                         <Avatar className="h-14 w-14 ring-2 ring-primary/20">
-                                            <AvatarImage src={review.avatar} alt={review.name} />
-                                            <AvatarFallback className="bg-primary/10 text-primary font-bold">{review.name[0]}</AvatarFallback>
+                                            <AvatarImage src={review.reviewer.image || undefined} alt={review.reviewer.name || ''} />
+                                            <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                                                {review.reviewer.name?.[0] || 'U'}
+                                            </AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <p className="font-bold text-slate-900 dark:text-white">{review.name}</p>
-                                            <p className="text-xs font-semibold text-primary">{review.car}</p>
+                                            <p className="font-bold text-slate-900 dark:text-white">{review.reviewer.name}</p>
+                                            {review.car && (
+                                                <p className="text-xs font-semibold text-primary">{review.car}</p>
+                                            )}
                                         </div>
                                     </div>
                                     <StarRating rating={review.rating} count={0} showCount={false} />
                                     <blockquote className="mt-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-1">
-                                        &quot;{review.text}&quot;
+                                        &quot;{review.body}&quot;
                                     </blockquote>
                                 </div>
                             </CarouselItem>

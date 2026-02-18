@@ -44,7 +44,7 @@ export function RequestInspectionButton({ listingId, listingTitle }: RequestInsp
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${API_URL}/api/user/inspections`, {
+            const response = await fetch(`${API_URL}/user/inspections`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },

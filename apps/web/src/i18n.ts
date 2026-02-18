@@ -145,6 +145,8 @@ i18n
         defaultNS: 'common',
         interpolation: {
             escapeValue: false, // React already escapes values
+            prefix: '{',
+            suffix: '}',
         },
     });
 

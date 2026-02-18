@@ -49,7 +49,7 @@
             "fuelType": "Fuel *",
             "transmission": "Transmission *",
             "powerKw": "Power (kW) *",
-            "powerHj": "{{count}} hp",
+            "powerHj": "{count} hp",
             "powerHjEmpty": "— hp",
             "driveType": "Drivetrain *",
             "doors": "Doors *",
@@ -81,7 +81,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Tell more about your car..."
         },
-        "charCount": "{{count}} / 5000 characters"
+        "charCount": "{count} / 5000 characters"
     },
     "step3": {
         "title": "Add Photos",
@@ -103,12 +103,12 @@
             ]
         },
         "mainPhoto": "Main Photo",
-        "addMore": "Add more (up to {{count}})",
-        "photoNumber": "Photo {{index}}"
+        "addMore": "Add more (up to {count})",
+        "photoNumber": "Photo {index}"
     },
     "step4": {
         "success": "Listing successfully submitted!",
-        "idText": "Your listing (ID: #{{id}}) is now under review.",
+        "idText": "Your listing (ID: #{id}) is now under review.",
         "nextSteps": {
             "title": "What happens next?",
             "items": [
@@ -130,7 +130,7 @@
         "minPhotos": "Please add at least 3 photos",
         "createError": "Error creating listing",
         "uploadingTitle": "Uploading images...",
-        "uploadingDesc": "Uploading {{count}} images. Please wait.",
+        "uploadingDesc": "Uploading {count} images. Please wait.",
         "attachError": "Error attaching images to listing",
         "successTitle": "Success!",
         "successDesc": "Listing successfully submitted with images!",
@@ -187,11 +187,17 @@
             "Elekter": "Electric",
             "CNG": "CNG",
             "LPG": "LPG",
-            "Gaas": "Gas (CNG/LPG)"
+            "Gaas": "Gas (CNG/LPG)",
+            "Petrol": "Petrol",
+            "Diesel": "Diesel",
+            "Hybrid": "Hybrid",
+            "Electric": "Electric"
         },
         "transmission": {
             "Manuaal": "Manual",
-            "Automaat": "Automatic"
+            "Automaat": "Automatic",
+            "Manual": "Manual",
+            "Automatic": "Automatic"
         },
         "drive": {
             "Esivedu": "FWD",

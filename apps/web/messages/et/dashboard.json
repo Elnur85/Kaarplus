@@ -52,8 +52,8 @@
             "deleteConfirm": "Kas olete kindel? Seda tegevust ei saa tagasi võtta."
         },
         "pagination": {
-            "page": "Lehekülg {{current}}/{{total}}",
-            "total": "{{count}} kuulutust",
+            "page": "Lehekülg {current}/{total}",
+            "total": "{count} kuulutust",
             "previous": "Eelmine",
             "next": "Järgmine"
         }
@@ -112,14 +112,14 @@
             "button": "Alusta otsimist"
         },
         "card": {
-            "saved": "Salvestatud {{date}}",
+            "saved": "Salvestatud {date}",
             "allVehicles": "Kõik sõidukid",
             "alerts": "Teavitused",
             "view": "Muuda / Vaata"
         },
         "delete": {
             "title": "Kas olete kindel?",
-            "description": "See tegevus eemaldab salvestatud otsingu \"{{name}}\". Seda ei saa tagasi võtta.",
+            "description": "See tegevus eemaldab salvestatud otsingu \"{name}\". Seda ei saa tagasi võtta.",
             "button": "Kustuta"
         },
         "toasts": {

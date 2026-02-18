@@ -36,7 +36,7 @@ export default function CampaignDetailPage({ params }: Props) {
 
   const fetchCampaign = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/api/admin/campaigns/${id}`, {
+      const res = await fetch(`${API_URL}/admin/campaigns/${id}`, {
         credentials: "include",
       });
       const json = await res.json();
@@ -50,7 +50,7 @@ export default function CampaignDetailPage({ params }: Props) {
 
   const fetchAnalytics = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/api/admin/campaigns/${id}/analytics`, {
+      const res = await fetch(`${API_URL}/admin/campaigns/${id}/analytics`, {
         credentials: "include",
       });
       const json = await res.json();

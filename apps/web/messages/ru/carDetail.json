@@ -1,61 +1,98 @@
 {
-    "specs": {
-        "condition": "Состояние",
-        "firstRegistration": "Первая регистрация",
-        "mileage": "Пробег",
-        "engine": "Двигатель",
-        "power": "Мощность",
-        "powerValue": "{{kw}} кВт ({{hp}} л.с.)",
-        "transmission": "Коробка передач",
-        "driveType": "Привод",
-        "bodyType": "Тип кузова",
-        "doorsSeats": "Двери / Места",
-        "exteriorColor": "Цвет (экстерьер)",
-        "interiorColor": "Цвет (интерьер)",
-        "vin": "VIN-код",
-        "notSpecified": "Не указано",
-        "frontWheelDrive": "Передний привод",
-        "addedOn": "Объявление добавлено: {{date}}"
-    },
-    "priceCard": {
-        "goodPrice": "Хорошая цена",
-        "withVat": "С НДС",
-        "withoutVat": "Без НДС",
-        "excellentChoice": "Отличный выбор!",
-        "saveCompared": "Экономия по сравнению с рынком",
-        "buyNow": "Купить сейчас",
-        "contactSeller": "Связаться с продавцом",
-        "share": "Поделиться",
-        "save": "Сохранить",
-        "marketAverage": "Средняя цена",
-        "yourGain": "Ваша выгода"
-    },
-    "features": {
-        "title": "Оборудование",
-        "notSpecified": "Дополнительное оборудование не указано"
-    },
-    "similarListings": "Похожие объявления",
-    "description": {
-        "title": "Описание",
-        "none": "Описание отсутствует."
-    },
-    "seller": {
-        "title": "Информация о продавце",
-        "dealership": "Автосалон",
-        "verifiedSeller": "Проверенный продавец с 2024 года",
-        "officialPartner": "Официальный партнер",
-        "privateSeller": "Частное лицо",
-        "viewAllListings": "Посмотреть все объявления",
-        "history": "История",
-        "warranty": "Гарантия",
-        "verified": "Проверено",
-        "locationEstonia": "{{location}}, Эстония"
-    },
-    "gallery": {
-        "noImages": "Нет изображений",
-        "photoCount": "{{current}} / {{total}} Фото",
-        "fullscreen": "Полноэкранный режим",
-        "vehicleImage": "Изображение автомобиля {{index}}",
-        "thumbnail": "Миниатюра {{index}}"
-    }
+  "specs": {
+    "condition": "Состояние",
+    "firstRegistration": "Первая регистрация",
+    "mileage": "Пробег",
+    "engine": "Двигатель",
+    "power": "Мощность",
+    "powerValue": "{kw} кВт ({hp} л.с.)",
+    "transmission": "Коробка передач",
+    "driveType": "Привод",
+    "bodyType": "Тип кузова",
+    "doorsSeats": "Двери / Места",
+    "exteriorColor": "Цвет (экстерьер)",
+    "interiorColor": "Цвет (интерьер)",
+    "vin": "VIN-код",
+    "notSpecified": "Не указано",
+    "frontWheelDrive": "Передний привод",
+    "addedOn": "Объявление добавлено: {date}",
+    "views": "{count} просмотров",
+    "verified": "Проверено",
+    "title": "Технические данные"
+  },
+  "priceCard": {
+    "goodPrice": "Хорошая цена",
+    "withVat": "С НДС",
+    "withoutVat": "Без НДС",
+    "excellentChoice": "Отличный выбор!",
+    "saveCompared": "Экономия по сравнению с рынком",
+    "buyNow": "Купить сейчас",
+    "contactSeller": "Связаться с продавцом",
+    "share": "Поделиться",
+    "save": "Сохранить",
+    "marketAverage": "Средняя цена",
+    "yourGain": "Ваша выгода",
+    "saved": "Сохранено"
+  },
+  "features": {
+    "title": "Оборудование",
+    "notSpecified": "Дополнительное оборудование не указано"
+  },
+  "similarListings": "Похожие объявления",
+  "description": {
+    "title": "Описание",
+    "none": "Описание отсутствует."
+  },
+  "seller": {
+    "title": "Информация о продавце",
+    "dealership": "Автосалон",
+    "verifiedSeller": "Проверенный продавец с 2024 года",
+    "officialPartner": "Официальный партнер",
+    "privateSeller": "Частное лицо",
+    "viewAllListings": "Посмотреть все объявления",
+    "history": "История",
+    "warranty": "Гарантия",
+    "verified": "Проверено",
+    "locationEstonia": "{location}, Эстония"
+  },
+  "gallery": {
+    "noImages": "Нет изображений",
+    "photoCount": "{current} / {total} Фото",
+    "fullscreen": "Полноэкранный режим",
+    "vehicleImage": "Изображение автомобиля {index}",
+    "thumbnail": "Миниатюра {index}"
+  },
+  "contact": {
+    "dialogTitle": "Связаться с продавцом",
+    "dialogDescription": "Отправить сообщение о: {title}",
+    "nameLabel": "Имя",
+    "namePlaceholder": "Ваше имя",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "phoneLabel": "Телефон (необязательно)",
+    "phonePlaceholder": "+7 ...",
+    "messageLabel": "Сообщение",
+    "messagePlaceholder": "Я заинтересован в этом транспортном средстве...",
+    "sendButton": "Отправить сообщение",
+    "sending": "Отправка...",
+    "successTitle": "Сообщение отправлено!",
+    "successDesc": "Ваше сообщение о {title} отправлено продавцу.",
+    "errorTitle": "Ошибка",
+    "sendError": "Не удалось отправить сообщение. Попробуйте снова.",
+    "validationError": "Ошибка валидации",
+    "messageRequired": "Пожалуйста, введите сообщение",
+    "close": "Закрыть",
+    "viewMessages": "Посмотреть сообщения"
+  },
+  "favorites": {
+    "loginRequired": "Требуется вход",
+    "loginRequiredDesc": "Пожалуйста, войдите, чтобы сохранить избранное",
+    "added": "Добавлено в избранное",
+    "addedDesc": "Этот автомобиль добавлен в ваше избранное",
+    "removed": "Удалено из избранного",
+    "removedDesc": "Этот автомобиль удален из вашего избранного"
+  },
+  "share": {
+    "listingDescription": "Посмотрите этот {title} на Kaarplus!"
+  }
 }

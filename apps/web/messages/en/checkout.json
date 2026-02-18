@@ -10,7 +10,7 @@
     "total": "Total",
     "terms": "By clicking \"Pay\", you agree to Kaarplus terms of use and privacy policy. Your payment is processed securely through Stripe.",
     "form": {
-        "pay": "Pay {{amount}} €",
+        "pay": "Pay {amount} €",
         "paying": "Paying...",
         "secureConnection": "Secure payment with encrypted connection",
         "errorOccurred": "Something went wrong.",

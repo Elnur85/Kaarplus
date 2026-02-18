@@ -19,8 +19,8 @@
     },
     "inventory": {
         "title": "Vehicles for Sale",
-        "count": "{{count}} listing",
-        "count_plural": "{{count}} listings",
+        "count": "{count} listing",
+        "count_plural": "{count} listings",
         "empty": {
             "title": "No listings found",
             "description": "This dealership currently has no active sales listings."
@@ -29,8 +29,8 @@
     "list": {
         "title": "Official Dealerships",
         "description": "Check out our reliable partners. All dealerships are verified and offer quality vehicles.",
-        "activeListings": "{{count}} active listing",
-        "activeListings_plural": "{{count}} active listings",
+        "activeListings": "{count} active listing",
+        "activeListings_plural": "{count} active listings",
         "viewDealer": "View Dealership",
         "noDealers": "No dealerships are currently registered.",
         "noBio": "No description available.",

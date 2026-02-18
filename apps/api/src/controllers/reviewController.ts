@@ -83,3 +83,17 @@ export async function deleteReview(req: Request, res: Response, next: NextFuncti
         next(error);
     }
 }
+
+/**
+ * GET /api/reviews/featured
+ * Get featured reviews for home page (highest rated, most recent).
+ */
+export async function getFeaturedReviews(req: Request, res: Response, next: NextFunction) {
+    try {
+        const limit = Math.min(Number(req.query.limit) || 6, 20);
+        const result = await reviewService.getFeaturedReviews(limit);
+        res.json({ data: result });
+    } catch (error) {
+        next(error);
+    }
+}

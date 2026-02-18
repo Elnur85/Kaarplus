@@ -30,7 +30,7 @@ export default function FavoritesPage() {
             });
 
             const response = await fetch(
-                `${API_URL}/api/user/favorites?${params.toString()}`,
+                `${API_URL}/user/favorites?${params.toString()}`,
                 { credentials: "include" }
             );
 

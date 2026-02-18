@@ -1,9 +1,9 @@
 {
     "title": "My favorites",
     "breadcrumb": "Favorites",
-    "count": "{{count}} favorite",
-    "count_plural": "{{count}} favorites",
-    "showing": "Showing {{start}} to {{end}} favorites of {{total}}",
+    "count": "{count} favorite",
+    "count_plural": "{count} favorites",
+    "showing": "Showing {start} to {end} favorites of {total}",
     "empty": {
         "title": "You don't have any favorites yet",
         "description": "Browse our listings and add vehicles to favorites by clicking the heart icon.",

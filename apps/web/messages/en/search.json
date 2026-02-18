@@ -10,10 +10,10 @@
     "noResults": "No results found",
     "noResultsDesc": "Try changing filters or search term.",
     "clearFilters": "Clear all filters",
-    "pagination": "Showing {{start}} to {{end}} of {{total}} vehicles",
+    "pagination": "Showing {start} to {end} of {total} vehicles",
     "filters": {
-        "count_one": "{{count}} filter",
-        "count_other": "{{count}} filters",
+        "count_one": "{count} filter",
+        "count_other": "{count} filters",
         "reset": "Reset all",
         "showResults": "Show results"
     },
@@ -177,7 +177,7 @@
         },
         "toast": {
             "successTitle": "Search saved",
-            "successDescription": "Search \"{{name}}\" is now saved in your profile."
+            "successDescription": "Search \"{name}\" is now saved in your profile."
         }
     }
 }

@@ -12,10 +12,10 @@
     "noResults": "Результатов не найдено",
     "noResultsDesc": "Попробуйте изменить фильтры или поисковый запрос.",
     "clearFilters": "Очистить все фильтры",
-    "pagination": "Показано {{start}} - {{end}} из {{total}} автомобилей",
+    "pagination": "Показано {start} - {end} из {total} автомобилей",
     "filters": {
-        "count_one": "{{count}} фильтр",
-        "count_other": "{{count}} фильтров",
+        "count_one": "{count} фильтр",
+        "count_other": "{count} фильтров",
         "reset": "Сбросить все",
         "showResults": "Показать результаты"
     },
@@ -179,7 +179,7 @@
         },
         "toast": {
             "successTitle": "Поиск сохранен",
-            "successDescription": "Поиск \"{{name}}\" сохранен в вашем профиле."
+            "successDescription": "Поиск \"{name}\" сохранен в вашем профиле."
         }
     }
 }

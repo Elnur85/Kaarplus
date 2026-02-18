@@ -1,7 +1,7 @@
 {
     "title": "My inspections",
     "description": "View and track the status of your inspections.",
-    "count": "My inspections ({{count}})",
+    "count": "My inspections ({count})",
     "empty": {
         "title": "No inspections ordered",
         "description": "Your ordered vehicle inspections will be displayed here. You can order an inspection in the vehicle detail view."
@@ -47,7 +47,7 @@
         "toastError": "Error",
         "toastErrorDesc": "An error occurred while sending the request.",
         "successTitle": "Request received!",
-        "successDesc": "We have received your request to inspect <strong>{{title}}</strong>. We will contact you within 24 hours.",
+        "successDesc": "We have received your request to inspect <strong>{title}</strong>. We will contact you within 24 hours.",
         "viewRequests": "View my requests",
         "successOrdered": "Inspection successfully ordered!",
         "successOrderedDesc": "We will contact you shortly to arrange a suitable time.",

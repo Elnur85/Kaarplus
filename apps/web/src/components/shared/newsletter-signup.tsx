@@ -41,7 +41,7 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/newsletter/subscribe`,
+        `/api/v1/newsletter/subscribe`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -1,28 +1,129 @@
 {
-    "cookies": {
-        "banner": {
-            "title": "Küpsised ja privaatsus",
-            "description": "Kasutame küpsiseid, et parandada teie sirvimiskogemust ja analüüsida liiklust. Vajutades \"Nõustu kõigiga\" nõustute kõigi küpsiste kasutamisega."
-        },
-        "settingsTitle": "Küpsiste eelistused",
-        "essential": {
-            "title": "Vajalikud küpsised",
-            "badge": "Nõutud",
-            "description": "Vajalikud veebisaidi nõuetekohaseks toimimiseks. Neid ei saa keelata."
-        },
-        "analytics": {
-            "title": "Analüütilised küpsised",
-            "description": "Aitavad meil mõista, kuidas külastajad meie veebisaidiga suhtlevad, kogudes anonüümseid andmeid."
-        },
-        "marketing": {
-            "title": "Turundusküpsised",
-            "description": "Kasutatakse külastajate jälgimiseks veebisaitidel, et kuvada asjakohaseid ja kaasahaaravaid reklaame."
-        }
-    },
-    "buttons": {
-        "acceptAll": "Nõustu kõigiga",
-        "customize": "Kohanda",
-        "rejectAll": "Keeldu kõigist",
-        "savePreferences": "Salvesta eelistused"
-    }
+	"cookies": {
+		"banner": {
+			"title": "Küpsised ja privaatsus",
+			"description": "Kasutame küpsiseid, et parandada teie sirvimiskogemust ja analüüsida liiklust. Vajutades \"Nõustu kõigiga\" nõustute kõigi küpsiste kasutamisega."
+		},
+		"settingsTitle": "Küpsiste eelistused",
+		"essential": {
+			"title": "Vajalikud küpsised",
+			"badge": "Nõutud",
+			"description": "Vajalikud veebisaidi nõuetekohaseks toimimiseks. Neid ei saa keelata."
+		},
+		"analytics": {
+			"title": "Analüütilised küpsised",
+			"description": "Aitavad meil mõista, kuidas külastajad meie veebisaidiga suhtlevad, kogudes anonüümseid andmeid."
+		},
+		"marketing": {
+			"title": "Turundusküpsised",
+			"description": "Kasutatakse külastajate jälgimiseks veebisaitidel, et kuvada asjakohaseid ja kaasahaaravaid reklaame."
+		}
+	},
+	"buttons": {
+		"acceptAll": "Nõustu kõigiga",
+		"customize": "Kohanda",
+		"rejectAll": "Keeldu kõigist",
+		"savePreferences": "Salvesta eelistused"
+	},
+	"terms": {
+		"title": "Kasutustingimused",
+		"effectiveDate": "Kehtiv alates: 1. jaanuar 2026",
+		"sections": {
+			"description": {
+				"title": "1. Teenuse kirjeldus",
+				"content": "Kaarplus on veebiplatvorm, mis võimaldab eraisikutel ja ettevõtetel müüa ning osta sõidukeid Eestis. Platvorm pakub kuulutuste avaldamise, otsingu ja suhtlusvahendeid."
+			},
+			"registration": {
+				"title": "2. Kasutajaks registreerumine",
+				"items": [
+					"Registreeruda saavad vähemalt 18-aastased isikud",
+					"Esitatud andmed peavad olema tõesed ja ajakohased",
+					"Iga isik tohib omada ühte kontot",
+					"Vastutate oma konto turvalisuse eest"
+				]
+			},
+			"listings": {
+				"title": "3. Kuulutuste reeglid",
+				"items": [
+					"Kuulutus peab kirjeldama tegelikku sõidukit",
+					"Fotod peavad olema autentsed ja hiljuti tehtud",
+					"Hinnad kuvatakse eurodes (EUR), KM-ga/KM-ta",
+					"Eraisikud: kuni 5 aktiivset kuulutust",
+					"Kõik kuulutused läbivad manuaalse kontrolli enne avaldamist",
+					"Keelatud on pettus, eksitav info ja ebaseaduslik tegevus"
+				]
+			},
+			"payments": {
+				"title": "4. Maksed",
+				"content": "Makseid töötleb Stripe. Kaarplus ei salvesta kaardiandmeid. Kõik tehingud toimuvad eurodes. Tagastamised toimuvad vastavalt konkreetse teenuse tingimustele."
+			},
+			"liability": {
+				"title": "5. Vastutuse piirangud",
+				"content": "Kaarplus on vahendusplatvorm ega ole ostu-müügi lepingu osapool. Me ei vastuta sõiduki seisukorra, müüja aususe ega tehingu tulemuse eest. Soovitame alati sõidukit enne ostu kontrollida."
+			},
+			"termination": {
+				"title": "6. Konto lõpetamine",
+				"content": "Saate oma konto igal ajal kustutada seadete alt. Jätame endale õiguse peatada või sulgeda kontosid, mis rikuvad kasutustingimusi."
+			},
+			"contact": {
+				"title": "7. Kontakt",
+				"content": "Küsimuste korral: info@kaarplus.ee"
+			}
+		}
+	},
+	"privacy": {
+		"title": "Privaatsuspoliitika",
+		"effectiveDate": "Kehtiv alates: 1. jaanuar 2026",
+		"sections": {
+			"general": {
+				"title": "1. Üldinfo",
+				"content": "Kaarplus OÜ (\"meie\", \"meid\", \"Kaarplus\") on pühendunud teie privaatsuse kaitsmisele. See poliitika selgitab, kuidas me kogume, kasutame, säilitame ja kaitseme teie isikuandmeid kooskõlas Euroopa Liidu isikuandmete kaitse üldmäärusega (GDPR)."
+			},
+			"dataCollection": {
+				"title": "2. Andmete kogumine",
+				"description": "Me kogume järgmisi andmeid:",
+				"items": [
+					"Registreerimisandmed: nimi, e-posti aadress, telefoninumber",
+					"Kuulutuste andmed: sõiduki info, fotod, hind, asukoht",
+					"Tehniline info: IP-aadress, brauseri tüüp, seadme andmed",
+					"Küpsised: vajalikud, analüütilised ja turundusküpsised (teie nõusolekul)"
+				]
+			},
+			"dataUsage": {
+				"title": "3. Andmete kasutamine",
+				"description": "Teie andmeid kasutatakse:",
+				"items": [
+					"Konto loomiseks ja haldamiseks",
+					"Kuulutuste avaldamiseks ja haldamiseks",
+					"Ostja-müüja suhtluse võimaldamiseks",
+					"Platvormi parandamiseks ja analüüsimiseks",
+					"Õiguslike kohustuste täitmiseks"
+				]
+			},
+			"rights": {
+				"title": "4. Teie õigused",
+				"description": "GDPR alusel on teil järgmised õigused:",
+				"items": [
+					"Juurdepääsuõigus: õigus saada koopia oma andmetest",
+					"Parandamisõigus: õigus parandada ebatäpseid andmeid",
+					"Kustutamisõigus: õigus nõuda andmete kustutamist",
+					"Andmete ülekandmise õigus: õigus saada oma andmed masinloetaval kujul",
+					"Vastuväite esitamise õigus: õigus esitada vastuväide andmete töötlemisele"
+				],
+				"footer": "Oma andmete ekspordi ja konto kustutamise funktsioonid leiate seadete alt pärast sisselogimist."
+			},
+			"retention": {
+				"title": "5. Andmete säilitamine",
+				"content": "Säilitame teie andmeid nii kaua, kui teil on aktiivne konto. Konto kustutamise taotlusel anonümiseerime teie andmed 30 päeva jooksul."
+			},
+			"cookies": {
+				"title": "6. Küpsised",
+				"content": "Kasutame küpsiseid veebisaidi nõuetekohaseks toimimiseks, analüüsiks ja turunduseks. Täpsemat teavet leiate meie küpsiste poliitikast."
+			},
+			"contact": {
+				"title": "7. Kontakt",
+				"content": "Privaatsusega seotud küsimuste korral võtke ühendust: privacy@kaarplus.ee"
+			}
+		}
+	}
 }

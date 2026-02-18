@@ -39,7 +39,7 @@ export function ReviewList({ targetId }: ReviewListProps) {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/reviews?targetId=${targetId}&page=${currentPage}&pageSize=${PAGE_SIZE}`
+        `/api/v1/reviews?targetId=${targetId}&page=${currentPage}&pageSize=${PAGE_SIZE}`
       );
       if (!res.ok) throw new Error("Failed to fetch reviews");
       const json = await res.json();

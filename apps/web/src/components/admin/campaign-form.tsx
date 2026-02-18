@@ -49,7 +49,7 @@ export function CampaignForm({ open, onOpenChange, onSuccess }: CampaignFormProp
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/admin/campaigns`, {
+      const res = await fetch(`${API_URL}/admin/campaigns`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

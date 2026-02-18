@@ -26,7 +26,7 @@ export function ReviewStats({ targetId }: ReviewStatsProps) {
     async function fetchStats() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/reviews/stats?targetId=${targetId}`
+          `/api/v1/reviews/stats?targetId=${targetId}`
         );
         if (!res.ok) throw new Error("Failed to fetch stats");
         const json = await res.json();

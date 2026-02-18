@@ -16,3 +16,4 @@ searchRouter.get("/filters", searchController.getFilterOptions);
 searchRouter.get("/locations", searchController.getLocations);
 searchRouter.get("/colors", searchController.getColors);
 searchRouter.get("/drive-types", searchController.getDriveTypes);
+searchRouter.get("/stats", searchController.getPlatformStats);

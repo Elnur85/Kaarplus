@@ -36,7 +36,7 @@
             "hybrid": "Hybrid",
             "commercial": "Commercial"
         },
-        "viewAll": "View all {{category}}"
+        "viewAll": "View all {category}"
     },
     "valueProps": {
         "history": {
@@ -60,7 +60,7 @@
         "title": "Popular brands",
         "subtitle": "Browse vehicles by your preferred manufacturer",
         "viewAll": "View all",
-        "listingCount": "{{count}} listings"
+        "listingCount": "{count} listings"
     },
     "reviews": {
         "title": "What customers think",

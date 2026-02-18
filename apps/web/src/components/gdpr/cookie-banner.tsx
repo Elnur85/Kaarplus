@@ -161,7 +161,7 @@ export function CookieBanner() {
  */
 async function submitConsentToApi(consent: ConsentState) {
     try {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/gdpr/consent`, {
+        await fetch(`/api/v1/user/gdpr/consent`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

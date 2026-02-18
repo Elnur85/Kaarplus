@@ -36,7 +36,7 @@
             "hybrid": "Гибрид",
             "commercial": "Коммерческий"
         },
-        "viewAll": "Посмотреть все {{category}}"
+        "viewAll": "Посмотреть все {category}"
     },
     "valueProps": {
         "history": {
@@ -60,7 +60,7 @@
         "title": "Популярные марки",
         "subtitle": "Просматривайте автомобили по предпочитаемому производителю",
         "viewAll": "Посмотреть все",
-        "listingCount": "{{count}} объявлений"
+        "listingCount": "{count} объявлений"
     },
     "reviews": {
         "title": "Что говорят клиенты",

@@ -153,7 +153,7 @@ model Favorite {
 
 model Message {
   id          String   @id @default(cuid())
-  senderId    String
+  senderId    String?  // Nullable for anonymous messages
   recipientId String
   listingId   String?
   subject     String?
@@ -161,7 +161,7 @@ model Message {
   read        Boolean  @default(false)
   deletedAt   DateTime? // Soft delete support
   createdAt   DateTime @default(now())
-  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  sender      User?    @relation("SentMessages", fields: [senderId], references: [id])
   recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
   listing     Listing? @relation(fields: [listingId], references: [id])
 

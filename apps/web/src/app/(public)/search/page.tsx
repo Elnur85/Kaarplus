@@ -66,7 +66,7 @@ export default function SearchPage() {
                 params.set("page", filters.page.toString());
                 params.set("pageSize", PAGE_SIZE.toString());
 
-                const response = await fetch(`${API_URL}/api/search?${params.toString()}`, {
+                const response = await fetch(`${API_URL}/search?${params.toString()}`, {
                     signal: controller.signal,
                 });
 

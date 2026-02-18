@@ -51,7 +51,7 @@ export default function SavedSearchesPage() {
     const fetchSearches = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${API_URL}/api/user/saved-searches`, {
+            const response = await fetch(`${API_URL}/user/saved-searches`, {
                 credentials: "include",
                 headers: {
                     "Cache-Control": "no-cache"
@@ -78,7 +78,7 @@ export default function SavedSearchesPage() {
 
     const handleDelete = async (id: string) => {
         try {
-            const response = await fetch(`${API_URL}/api/user/saved-searches/${id}`, {
+            const response = await fetch(`${API_URL}/user/saved-searches/${id}`, {
                 method: "DELETE",
                 credentials: "include",
             });
@@ -100,7 +100,7 @@ export default function SavedSearchesPage() {
 
     const toggleAlerts = async (id: string, currentStatus: boolean) => {
         try {
-            const response = await fetch(`${API_URL}/api/user/saved-searches/${id}`, {
+            const response = await fetch(`${API_URL}/user/saved-searches/${id}`, {
                 method: "PATCH",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },

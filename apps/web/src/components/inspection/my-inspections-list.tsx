@@ -28,7 +28,7 @@ export function MyInspectionsList() {
     const fetchInspections = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/user/inspections`,
+          `/api/v1/user/inspections`,
           { credentials: "include" }
         );
 

@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+export const API_URL = "/api/v1";
 
 export const SITE_NAME = "Kaarplus";
 export const SITE_DESCRIPTION = "Eesti suurim autode ost-müügi platvorm. Leia oma unistuste auto!";
@@ -15,24 +15,24 @@ export const INDIVIDUAL_LISTING_LIMIT = 5;
 export const COMPARISON_MAX = 4;
 
 export const BODY_TYPES = [
-  "Micro",
-  "Sedan",
-  "Hatchback",
-  "Family Car",
-  "Sport",
-  "SUV",
-  "Truck",
-  "Van",
+	"Micro",
+	"Sedan",
+	"Hatchback",
+	"Family Car",
+	"Sport",
+	"SUV",
+	"Truck",
+	"Van",
 ] as const;
 
 export const FUEL_TYPES = [
-  "Petrol",
-  "Diesel",
-  "Hybrid",
-  "Electric",
-  "CNG",
-  "LPG",
-  "Ethanol",
+	"Petrol",
+	"Diesel",
+	"Hybrid",
+	"Electric",
+	"CNG",
+	"LPG",
+	"Ethanol",
 ] as const;
 
 export const TRANSMISSION_TYPES = ["Manual", "Automatic"] as const;

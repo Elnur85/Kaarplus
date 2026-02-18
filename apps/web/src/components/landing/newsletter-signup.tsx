@@ -21,7 +21,7 @@ export function NewsletterSignup() {
             const formData = new FormData(e.currentTarget);
             const email = formData.get("email") as string;
 
-            const response = await fetch(`${API_URL}/api/newsletter/subscribe`, {
+            const response = await fetch(`${API_URL}/newsletter/subscribe`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),

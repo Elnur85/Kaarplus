@@ -8,8 +8,12 @@ import { asyncHandler } from "../utils/asyncHandler";
 
 export const listingsRouter = Router();
 
-// Public routes
+// Public routes - specific routes must come before parameterized routes
 listingsRouter.get("/", readLimiter, asyncHandler(listingController.getAllListings));
+listingsRouter.get("/metadata/filter-options", readLimiter, asyncHandler(listingController.getFilterOptions));
+listingsRouter.get("/metadata/featured", readLimiter, asyncHandler(listingController.getFeaturedListings));
+listingsRouter.get("/metadata/body-types", readLimiter, asyncHandler(listingController.getBodyTypeCounts));
+// Parameterized routes come last
 listingsRouter.get("/:id", readLimiter, asyncHandler(listingController.getListingById));
 listingsRouter.get("/:id/similar", readLimiter, asyncHandler(listingController.getSimilarListings));
 listingsRouter.post("/:id/contact", writeLimiter, asyncHandler(listingController.contactSeller));
