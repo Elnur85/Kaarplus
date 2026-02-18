@@ -1,0 +1,29 @@
+{
+    "badges": {
+        "official": "Ametlik esindus"
+    },
+    "placeholders": {
+        "noLocation": "Asukoht määramata",
+        "noBio": "Sellel esindusel ei ole veel kirjeldust lisatud.",
+        "noOpeningHours": "Lahtiolekuajad puuduvad"
+    },
+    "links": {
+        "website": "Veebileht",
+        "email": "Saada email"
+    },
+    "sections": {
+        "openingHours": "Lahtiolekuajad"
+    },
+    "buttons": {
+        "contact": "Võta ühendust"
+    },
+    "inventory": {
+        "title": "Müügis olevad sõidukid",
+        "count": "{{count}} kuulutus",
+        "count_plural": "{{count}} kuulutust",
+        "empty": {
+            "title": "Kuulutusi ei leitud",
+            "description": "Sellel esindusel ei ole hetkel aktiivseid müügikuulutusi."
+        }
+    }
+}

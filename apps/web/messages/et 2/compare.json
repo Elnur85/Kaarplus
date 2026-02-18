@@ -1,0 +1,57 @@
+{
+    "breadcrumb": "Võrdle autosid",
+    "title": "Sõidukite võrdlus",
+    "subtitle": "Võrdle kuni 4 sõidukit kõrvuti, et leida parim valik.",
+    "filters": {
+        "differencesOnly": "Näita ainult erinevusi"
+    },
+    "buttons": {
+        "share": "Jaga",
+        "clearAll": "Tühjenda",
+        "addVehicle": "Lisa sõiduk",
+        "browseListings": "Sirvi kuulutusi",
+        "removeFromCompare": "Eemalda võrdlusest"
+    },
+    "sections": {
+        "specs": "Spetsifikatsioonid",
+        "basic": "Põhiandmed",
+        "performance": "Jõudlus ja andmed",
+        "appearance": "Välimus",
+        "features": "Varustus"
+    },
+    "specs": {
+        "bodyType": "Keretüüp",
+        "fuelType": "Kütuse liik",
+        "transmission": "Käigukast",
+        "driveType": "Vedav sild",
+        "doors": "Uste arv",
+        "seats": "Istekohti",
+        "condition": "Seisukord",
+        "power": "Võimsus",
+        "mileage": "Läbisõit",
+        "price": "Hind",
+        "year": "Aasta",
+        "colorExterior": "Värvus (väline)",
+        "colorInterior": "Värvus (sisemine)",
+        "location": "Asukoht"
+    },
+    "emptyStates": {
+        "start": {
+            "title": "Alusta võrdlust",
+            "description": "Lisa vähemalt 2 sõidukit, et neid kõrvuti võrrelda. Saad lisada kuni 4 sõidukit."
+        },
+        "addMore": {
+            "title": "Lisa veel üks sõiduk",
+            "description": "Võrdluse nägemiseks lisa vähemalt üks sõiduk veel."
+        }
+    },
+    "addSheet": {
+        "title": "Lisa sõiduk võrdlusesse",
+        "placeholder": "Otsi marki, mudelit...",
+        "loading": "Otsime...",
+        "noResults": "Tulemusi ei leitud"
+    },
+    "placeholders": {
+        "noImage": "Pilt puudub"
+    }
+}

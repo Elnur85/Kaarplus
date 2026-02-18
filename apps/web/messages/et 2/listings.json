@@ -1,0 +1,54 @@
+{
+    "title": "Autode kuulutused",
+    "searchPlaceholder": "Otsi margi, mudeli või linnapiirkonna järgi...",
+    "filters": {
+        "title": "Filtrid",
+        "clear": "Tühjenda filtrid",
+        "price": "Hind",
+        "year": "Aasta",
+        "mileage": "Läbisõit",
+        "fuelType": "Kütuseliik",
+        "transmission": "Käigukast",
+        "bodyType": "Keretüüp",
+        "location": "Asukoht",
+        "make": "Mark",
+        "model": "Mudel"
+    },
+    "sort": {
+        "label": "Sorteeri",
+        "newest": "Uusimad",
+        "oldest": "Vanimad",
+        "priceLow": "Odavaimad",
+        "priceHigh": "Kallimad",
+        "mileageLow": "Väiksem läbisõit",
+        "yearNew": "Uuemad autod"
+    },
+    "results": {
+        "found": "Leiti {count} autot",
+        "noResults": "Tulemusi ei leitud",
+        "noResultsDesc": "Proovi muuta filtri tingimusi"
+    },
+    "card": {
+        "year": "Aasta",
+        "mileage": "{value} km",
+        "fuel": "Kütus",
+        "transmission": "Käigukast",
+        "power": "{value} kW",
+        "viewDetails": "Vaata detaile",
+        "favorite": "Lisa lemmikutesse",
+        "unfavorite": "Eemalda lemmikutest"
+    },
+    "detail": {
+        "overview": "Ülevaade",
+        "specifications": "Spetsifikatsioonid",
+        "features": "Varustus",
+        "description": "Kirjeldus",
+        "seller": "Müüja",
+        "contact": "Võta ühendust",
+        "price": "Hind",
+        "negotiable": "Kokkuleppel",
+        "location": "Asukoht",
+        "published": "Avaldatud",
+        "views": "Vaatamised"
+    }
+}

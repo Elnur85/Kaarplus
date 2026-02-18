@@ -16,5 +16,19 @@
         "errorOccurred": "Something went wrong.",
         "unexpectedError": "An unexpected error occurred.",
         "paymentFailed": "Payment failed"
+    },
+    "page": {
+        "title": "Purchase Vehicle",
+        "inactive": {
+            "title": "This listing is no longer active",
+            "description": "We apologize, but this vehicle can no longer be purchased."
+        },
+        "success": {
+            "title": "Payment Successful!",
+            "description": "Thank you for your purchase! Your payment has been successfully received.",
+            "sellerNotification": "The seller has been notified and will contact you shortly to arrange the vehicle handover.",
+            "viewMessages": "View Messages",
+            "backHome": "Back to Home"
+        }
     }
 }

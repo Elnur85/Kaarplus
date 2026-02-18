@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { ClipboardCheck, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +29,7 @@ export function RequestInspectionDialog({
   year,
   onSuccess,
 }: RequestInspectionDialogProps) {
+  const { t } = useTranslation("inspection");
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
@@ -50,14 +52,14 @@ export function RequestInspectionDialog({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Viga päringu saatmisel");
+        throw new Error(errorData.error || t("request.errorSending"));
       }
 
       setIsSuccess(true);
       onSuccess?.();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Viga päringu saatmisel"
+        err instanceof Error ? err.message : t("request.errorSending")
       );
     } finally {
       setIsLoading(false);
@@ -77,25 +79,22 @@ export function RequestInspectionDialog({
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <ClipboardCheck className="h-4 w-4" />
-          Telli ülevaatus
+          {t("request.orderButton")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ClipboardCheck className="h-5 w-5 text-primary" />
-            Telli sõiduki ülevaatus
+            {t("request.dialogTitle")}
           </DialogTitle>
           <DialogDescription>
-            Professionaalne sõiduki ülevaatus annab teile kindluse auto
-            tehnilise seisukorra kohta. Meie sertifitseeritud inspektorid
-            kontrollivad sõidukit põhjalikult ja koostavad üksikasjaliku
-            aruande.
+            {t("request.dialogDescription")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="rounded-lg border bg-muted/50 p-4">
-          <p className="text-sm font-medium text-muted-foreground">Sõiduk</p>
+          <p className="text-sm font-medium text-muted-foreground">{t("request.vehicle")}</p>
           <p className="text-base font-semibold">
             {year} {make} {model}
           </p>
@@ -105,10 +104,10 @@ export function RequestInspectionDialog({
           <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-center">
             <ClipboardCheck className="mx-auto mb-2 h-8 w-8 text-green-600" />
             <p className="font-semibold text-green-800">
-              Ülevaatus on edukalt tellitud!
+              {t("request.successOrdered")}
             </p>
             <p className="mt-1 text-sm text-green-700">
-              Võtame teiega peagi ühendust, et leppida kokku sobiv aeg.
+              {t("request.successOrderedDesc")}
             </p>
           </div>
         ) : (
@@ -125,7 +124,7 @@ export function RequestInspectionDialog({
                 className="w-full gap-2"
               >
                 {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-                Telli ülevaatus
+                {t("request.orderButton")}
               </Button>
             </DialogFooter>
           </>

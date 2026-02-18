@@ -143,8 +143,8 @@ interface SocketProviderProps {
 
 export function SocketProvider({ children }: SocketProviderProps) {
   const { data: session, status } = useSession();
-  const socketRef = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
-  
+  const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
+
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -153,22 +153,17 @@ export function SocketProvider({ children }: SocketProviderProps) {
   // Initialize socket connection when user is authenticated
   useEffect(() => {
     if (status !== "authenticated" || !session?.user) {
-      // Disconnect if user logs out
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-        setIsConnected(false);
-      }
       return;
     }
 
     // Get token from session or cookie
     const token = (session as unknown as { accessToken?: string })?.accessToken;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsConnecting(true);
 
     // Create socket connection
-    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_URL, {
+    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(SOCKET_URL, {
       auth: { token },
       transports: ["websocket", "polling"],
       reconnection: true,
@@ -177,42 +172,42 @@ export function SocketProvider({ children }: SocketProviderProps) {
       reconnectionDelayMax: 5000,
     });
 
-    socketRef.current = socket;
+    setSocket(newSocket);
 
     // Connection event handlers
-    socket.on("connect", () => {
+    newSocket.on("connect", () => {
       setIsConnected(true);
       setIsConnecting(false);
     });
 
-    socket.on("disconnect", () => {
+    newSocket.on("disconnect", () => {
       setIsConnected(false);
     });
 
-    socket.on("connect_error", () => {
+    newSocket.on("connect_error", () => {
       setIsConnected(false);
       setIsConnecting(false);
     });
 
     // Message event handlers
-    socket.on("message:received", () => {
+    newSocket.on("message:received", () => {
       // Increment unread count for new messages not in current conversation
       setUnreadCount((prev) => prev + 1);
     });
 
-    socket.on("message:status_update", () => {
+    newSocket.on("message:status_update", () => {
       // Handle message status update
     });
 
-    socket.on("unread_count:update", (payload) => {
+    newSocket.on("unread_count:update", (payload) => {
       setUnreadCount(payload.count);
     });
 
-    socket.on("messages:read", () => {
+    newSocket.on("messages:read", () => {
       // Handle messages read
     });
 
-    socket.on("user:presence", (payload) => {
+    newSocket.on("user:presence", (payload) => {
       setOnlineUsers((prev) => {
         const newSet = new Set(prev);
         if (payload.status === "online") {
@@ -224,14 +219,15 @@ export function SocketProvider({ children }: SocketProviderProps) {
       });
     });
 
-    socket.on("error", (payload) => {
+    newSocket.on("error", (payload) => {
       console.error("[Socket] Error:", payload);
     });
 
-    // Cleanup on unmount
+    // Cleanup on unmount or session change
     return () => {
-      socket.disconnect();
-      socketRef.current = null;
+      newSocket.disconnect();
+      setSocket(null);
+      setIsConnected(false);
     };
   }, [session, status]);
 
@@ -243,12 +239,12 @@ export function SocketProvider({ children }: SocketProviderProps) {
       options?: { listingId?: string; subject?: string; tempId?: string }
     ): Promise<{ success: boolean; message?: MessageWithSender; error?: string; tempId?: string }> => {
       return new Promise((resolve) => {
-        if (!socketRef.current?.connected) {
+        if (!socket?.connected) {
           resolve({ success: false, error: "Not connected", tempId: options?.tempId });
           return;
         }
 
-        socketRef.current.emit(
+        socket.emit(
           "message:send",
           {
             recipientId,
@@ -263,55 +259,55 @@ export function SocketProvider({ children }: SocketProviderProps) {
         );
       });
     },
-    []
+    [socket]
   );
 
   // Join conversation
   const joinConversation = useCallback(
     (conversationId: string, otherUserId: string, listingId?: string) => {
-      socketRef.current?.emit("conversation:join", {
+      socket?.emit("conversation:join", {
         conversationId,
         otherUserId,
         listingId,
       });
     },
-    []
+    [socket]
   );
 
   // Leave conversation
   const leaveConversation = useCallback((conversationId: string) => {
-    socketRef.current?.emit("conversation:leave", { conversationId });
-  }, []);
+    socket?.emit("conversation:leave", { conversationId });
+  }, [socket]);
 
   // Mark messages as read
   const markMessagesAsRead = useCallback(
     (conversationId: string, senderId: string, listingId?: string) => {
-      socketRef.current?.emit("messages:mark_read", {
+      socket?.emit("messages:mark_read", {
         conversationId,
         senderId,
         listingId,
       });
     },
-    []
+    [socket]
   );
 
   // Typing indicators
   const startTyping = useCallback((conversationId: string) => {
     const userId = session?.user?.id;
     if (userId) {
-      socketRef.current?.emit("typing:start", { conversationId, userId });
+      socket?.emit("typing:start", { conversationId, userId });
     }
-  }, [session?.user?.id]);
+  }, [session?.user?.id, socket]);
 
   const stopTyping = useCallback((conversationId: string) => {
     const userId = session?.user?.id;
     if (userId) {
-      socketRef.current?.emit("typing:stop", { conversationId, userId });
+      socket?.emit("typing:stop", { conversationId, userId });
     }
-  }, [session?.user?.id]);
+  }, [session?.user?.id, socket]);
 
   const value: SocketContextType = {
-    socket: socketRef.current,
+    socket,
     isConnected,
     isConnecting,
     unreadCount,

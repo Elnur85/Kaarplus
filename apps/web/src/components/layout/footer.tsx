@@ -88,8 +88,8 @@ export function Footer() {
             <ul className="space-y-4 text-sm font-medium">
               <li><Link href="/listings" className="hover:text-primary transition-colors">{t('footer.services.allListings')}</Link></li>
               <li><Link href="/sell" className="hover:text-primary transition-colors">{t('footer.services.sellYourCar')}</Link></li>
-              <li><Link href="/listings?fuelType=Electric" className="hover:text-primary transition-colors">Electric Vehicles</Link></li>
-              <li><Link href="/listings?sort=createdAt_desc" className="hover:text-primary transition-colors">New Listings</Link></li>
+              <li><Link href="/listings?fuelType=Electric" className="hover:text-primary transition-colors">{t('footer.services.electricVehicles')}</Link></li>
+              <li><Link href="/listings?sort=createdAt_desc" className="hover:text-primary transition-colors">{t('footer.services.newListings')}</Link></li>
               <li><Link href="/inspections" className="hover:text-primary transition-colors">{t('footer.services.inspections')}</Link></li>
             </ul>
           </div>
@@ -101,7 +101,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-4 text-sm font-medium">
               <li><Link href="/about" className="hover:text-primary transition-colors">{t('footer.company.aboutUs')}</Link></li>
-              <li><Link href="/careers" className="hover:text-primary transition-colors">Career Opportunities</Link></li>
+              <li><Link href="/careers" className="hover:text-primary transition-colors">{t('footer.company.careers')}</Link></li>
               <li><Link href="/faq" className="hover:text-primary transition-colors">{t('footer.company.faq')}</Link></li>
               <li><Link href="/terms" className="hover:text-primary transition-colors">{t('footer.company.terms')}</Link></li>
               <li><Link href="/privacy" className="hover:text-primary transition-colors">{t('footer.company.privacy')}</Link></li>
@@ -110,13 +110,13 @@ export function Footer() {
 
           {/* SUPPORT */}
           <div>
-            <h4 className="text-white font-bold mb-8 uppercase text-xs tracking-[0.2em]">Support</h4>
+            <h4 className="text-white font-bold mb-8 uppercase text-xs tracking-[0.2em]">{t('footer.support.title')}</h4>
             <ul className="space-y-4 text-sm font-medium">
-              <li><Link href="/help" className="hover:text-primary transition-colors">Help Center</Link></li>
-              <li><Link href="/safety" className="hover:text-primary transition-colors">Safety Advice</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Support</Link></li>
-              <li><Link href="/fraud" className="hover:text-primary transition-colors">Fraud Protection</Link></li>
-              <li><Link href="/sitemap" className="hover:text-primary transition-colors">Sitemap</Link></li>
+              <li><Link href="/help" className="hover:text-primary transition-colors">{t('footer.support.helpCenter')}</Link></li>
+              <li><Link href="/safety" className="hover:text-primary transition-colors">{t('footer.support.safetyAdvice')}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">{t('footer.support.contactSupport')}</Link></li>
+              <li><Link href="/fraud" className="hover:text-primary transition-colors">{t('footer.support.fraudProtection')}</Link></li>
+              <li><Link href="/sitemap" className="hover:text-primary transition-colors">{t('footer.support.sitemap')}</Link></li>
             </ul>
           </div>
         </div>
@@ -126,7 +126,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} Kaarplus. {t('footer.allRightsReserved')}.</p>
           <div className="flex gap-8">
             <Link href="/privacy" className="hover:text-white transition-colors">{t('footer.company.privacy')}</Link>
-            <Link href="/cookies" className="hover:text-white transition-colors">Cookies Policy</Link>
+            <Link href="/cookies" className="hover:text-white transition-colors">{t('footer.company.cookies')}</Link>
           </div>
         </div>
       </div>

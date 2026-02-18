@@ -23,7 +23,7 @@ export function ListingDetailView({ listing }: ListingDetailViewProps) {
     const { t, i18n } = useTranslation(['carDetail', 'listings', 'common']);
 
     const breadcrumbItems = [
-        { label: t('breadcrumb.cars', { ns: 'listings', defaultValue: "Kasutatud autod" }), href: "/listings" },
+        { label: t('carsPage.breadcrumb.cars', { ns: 'listings', defaultValue: "Kasutatud autod" }), href: "/listings" },
         { label: listing.make, href: `/listings?make=${listing.make}` },
         { label: `${listing.model} ${listing.year}` },
     ];

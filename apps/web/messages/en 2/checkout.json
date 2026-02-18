@@ -1,0 +1,20 @@
+{
+    "preparing": "Preparing payment...",
+    "initFailed": "Payment initiation failed. Please try again.",
+    "securePayment": "Secure payment",
+    "confirmPurchase": "Confirm your purchase and make a secure payment.",
+    "summary": "Order summary",
+    "price": "Price",
+    "serviceFee": "Service fee",
+    "free": "Free",
+    "total": "Total",
+    "terms": "By clicking \"Pay\", you agree to Kaarplus terms of use and privacy policy. Your payment is processed securely through Stripe.",
+    "form": {
+        "pay": "Pay {{amount}} €",
+        "paying": "Paying...",
+        "secureConnection": "Secure payment with encrypted connection",
+        "errorOccurred": "Something went wrong.",
+        "unexpectedError": "An unexpected error occurred.",
+        "paymentFailed": "Payment failed"
+    }
+}

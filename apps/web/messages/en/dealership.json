@@ -25,5 +25,19 @@
             "title": "No listings found",
             "description": "This dealership currently has no active sales listings."
         }
+    },
+    "list": {
+        "title": "Official Dealerships",
+        "description": "Check out our reliable partners. All dealerships are verified and offer quality vehicles.",
+        "activeListings": "{{count}} active listing",
+        "activeListings_plural": "{{count}} active listings",
+        "viewDealer": "View Dealership",
+        "noDealers": "No dealerships are currently registered.",
+        "noBio": "No description available.",
+        "locationNotSpecified": "Location not specified"
+    },
+    "metadata": {
+        "notFound": "Dealership not found",
+        "ogDescription": "Check out {name}'s listings and information."
     }
 }

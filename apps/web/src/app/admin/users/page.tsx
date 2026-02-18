@@ -1,5 +1,7 @@
-import { Metadata } from "next";
-import { Users, Search, MoreHorizontal, Shield, Mail, Calendar } from "lucide-react";
+"use client";
+
+import { useTranslation } from "react-i18next";
+import { Search, MoreHorizontal, Mail, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,12 +14,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-export const metadata: Metadata = {
-    title: "Kasutajad | Kaarplus Admin",
-    description: "Kasutajate haldamine",
-};
-
 export default function AdminUsersPage() {
+    const { t } = useTranslation("admin");
+
     // Mock data for initial UI implementation
     const users = [
         { id: "1", name: "Elnur Aghabayli", email: "elnur@example.com", role: "ADMIN", createdAt: "2024-01-15" },
@@ -30,14 +29,14 @@ export default function AdminUsersPage() {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Kasutajad</h2>
+                    <h2 className="text-3xl font-bold tracking-tight">{t("users.title")}</h2>
                     <p className="text-muted-foreground mt-1">
-                        Kõik registreeritud kasutajad ja nende rollid ({users.length}).
+                        {t("users.description", { count: users.length })}
                     </p>
                 </div>
                 <div className="relative max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-                    <Input placeholder="Otsi nime või e-posti järgi..." className="pl-10 h-10 border-border/50" />
+                    <Input placeholder={t("users.searchPlaceholder")} className="pl-10 h-10 border-border/50" />
                 </div>
             </div>
 
@@ -45,10 +44,10 @@ export default function AdminUsersPage() {
                 <Table>
                     <TableHeader>
                         <TableRow className="hover:bg-transparent bg-slate-50/50">
-                            <TableHead className="w-[250px] py-4">Kasutaja</TableHead>
-                            <TableHead>Roll</TableHead>
-                            <TableHead>Liitunud</TableHead>
-                            <TableHead className="text-right">Tegevused</TableHead>
+                            <TableHead className="w-[250px] py-4">{t("users.table.user")}</TableHead>
+                            <TableHead>{t("users.table.role")}</TableHead>
+                            <TableHead>{t("users.table.joined")}</TableHead>
+                            <TableHead className="text-right">{t("users.table.actions")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

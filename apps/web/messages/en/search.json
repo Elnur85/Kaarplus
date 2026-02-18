@@ -1,5 +1,16 @@
 {
     "title": "Advanced Search",
+    "subtitle": "Find your dream car with precise filters",
+    "results_suffix_one": "result",
+    "results_suffix_other": "results",
+    "filtersButton": "Filters",
+    "saveButton": "Save",
+    "tryAgain": "Try again",
+    "error": "Search failed. Please try again.",
+    "noResults": "No results found",
+    "noResultsDesc": "Try changing filters or search term.",
+    "clearFilters": "Clear all filters",
+    "pagination": "Showing {{start}} to {{end}} of {{total}} vehicles",
     "filters": {
         "count_one": "{{count}} filter",
         "count_other": "{{count}} filters",

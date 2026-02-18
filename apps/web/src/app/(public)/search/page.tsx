@@ -18,7 +18,10 @@ import { SaveSearchModal } from "@/components/search/save-search-modal";
 
 const PAGE_SIZE = 20;
 
+import { useTranslation } from "react-i18next";
+
 export default function SearchPage() {
+    const { t } = useTranslation('search');
     const [listings, setListings] = useState<VehicleSummary[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -78,7 +81,7 @@ export default function SearchPage() {
                     return; // Ignore aborted requests
                 }
                 console.error("Failed to fetch listings:", err);
-                setError("Otsing ebaõnnestus. Palun proovige uuesti.");
+                setError(t('error'));
             } finally {
                 if (!controller.signal.aborted) {
                     setIsLoading(false);
@@ -98,6 +101,7 @@ export default function SearchPage() {
         filters.mileageMin, filters.mileageMax, filters.powerMin, filters.powerMax,
         filters.driveType, filters.color, filters.doors, filters.seats,
         filters.condition, filters.location,
+        t // added t to dependency array
     ]);
 
     return (
@@ -105,10 +109,10 @@ export default function SearchPage() {
             <div className="mb-6">
                 <h1 className="text-2xl font-bold flex items-center gap-2">
                     <Search size={24} className="text-primary" />
-                    Täppisotsing
+                    {t('title')}
                 </h1>
                 <p className="text-muted-foreground mt-1">
-                    Leidke oma unistuste auto täpsete filtritega
+                    {t('subtitle')}
                 </p>
             </div>
 
@@ -130,7 +134,7 @@ export default function SearchPage() {
                                     ) : (
                                         <span className="font-medium text-foreground">{total}</span>
                                     )}{" "}
-                                    {!isLoading && "tulemust"}
+                                    {!isLoading && t('results_suffix', { count: total })}
                                 </p>
                             </div>
 
@@ -140,7 +144,7 @@ export default function SearchPage() {
                                     <SheetTrigger asChild>
                                         <Button variant="outline" size="sm" className="lg:hidden h-9 px-3 gap-2">
                                             <SlidersHorizontal size={16} />
-                                            Filtrid
+                                            {t('filtersButton')}
                                         </Button>
                                     </SheetTrigger>
                                     <SheetContent side="left" className="p-0 w-[340px]">
@@ -154,7 +158,7 @@ export default function SearchPage() {
                                     trigger={
                                         <Button variant="outline" size="sm" className="h-9 px-3 gap-2 text-primary border-primary/20 hover:bg-primary/5">
                                             <Bookmark size={16} />
-                                            Salvesta
+                                            {t('saveButton')}
                                         </Button>
                                     }
                                 />
@@ -177,7 +181,7 @@ export default function SearchPage() {
                                     className="ml-auto shrink-0"
                                     onClick={() => setError(null)}
                                 >
-                                    Proovi uuesti
+                                    {t('tryAgain')}
                                 </Button>
                             </div>
                         )}
@@ -198,10 +202,10 @@ export default function SearchPage() {
                         ) : !error ? (
                             <div className="py-20 text-center border rounded-xl bg-card border-dashed">
                                 <Search size={48} className="mx-auto text-muted-foreground/30 mb-4" />
-                                <h3 className="text-lg font-semibold">Tulemusi ei leitud</h3>
-                                <p className="text-muted-foreground mt-1">Proovige muuta filtreid või otsingusõna.</p>
+                                <h3 className="text-lg font-semibold">{t('noResults')}</h3>
+                                <p className="text-muted-foreground mt-1">{t('noResultsDesc')}</p>
                                 <Button variant="outline" className="mt-4" onClick={filters.resetFilters}>
-                                    Puhasta kõik filtrid
+                                    {t('clearFilters')}
                                 </Button>
                             </div>
                         ) : null}
@@ -210,7 +214,11 @@ export default function SearchPage() {
                         {!isLoading && total > PAGE_SIZE && (
                             <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border pt-8">
                                 <p className="text-sm text-muted-foreground">
-                                    Näitan {((filters.page - 1) * PAGE_SIZE) + 1} kuni {Math.min(filters.page * PAGE_SIZE, total)} sõidukit {total}-st
+                                    {t('pagination', {
+                                        start: ((filters.page - 1) * PAGE_SIZE) + 1,
+                                        end: Math.min(filters.page * PAGE_SIZE, total),
+                                        total: total
+                                    })}
                                 </p>
                                 <Pagination
                                     currentPage={filters.page}

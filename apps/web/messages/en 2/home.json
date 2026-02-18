@@ -1,0 +1,106 @@
+{
+    "hero": {
+        "title": "Find your dream car",
+        "subtitle": "Estonia's modern car buying and selling platform. Verified electric cars, hybrids and combustion vehicles.",
+        "searchPlaceholder": "Search by make, model or city area...",
+        "cta": "Start searching",
+        "sellCta": "Sell your car",
+        "customerSatisfaction": "customer satisfaction"
+    },
+    "features": {
+        "verified": {
+            "title": "Verified Vehicles"
+        },
+        "secure": {
+            "title": "Secure Payments"
+        },
+        "support": {
+            "title": "24/7 Support"
+        }
+    },
+    "categories": {
+        "title": "Discover best offers",
+        "tabs": {
+            "buy": "Buy car",
+            "electric": "Electric cars",
+            "hybrid": "Hybrid cars"
+        },
+        "gridTitle": "Browse by category",
+        "grid": {
+            "sedan": "Sedan",
+            "hatchback": "Hatchback",
+            "suv": "SUV",
+            "coupe": "Coupe",
+            "convertible": "Convertible",
+            "electric": "Electric",
+            "hybrid": "Hybrid",
+            "commercial": "Commercial"
+        },
+        "viewAll": "View all {{category}}"
+    },
+    "valueProps": {
+        "history": {
+            "title": "Verified history",
+            "description": "All vehicles go through a thorough background check."
+        },
+        "secure": {
+            "title": "Secure transaction",
+            "description": "Pay the deposit only when you are satisfied with the car."
+        },
+        "easySearch": {
+            "title": "Easy search",
+            "description": "Use our precise filters to find your dream car."
+        },
+        "trustedSellers": {
+            "title": "Trusted sellers",
+            "description": "Our partners are certified and verified."
+        }
+    },
+    "popularBrands": {
+        "title": "Popular brands",
+        "subtitle": "Browse vehicles by your preferred manufacturer",
+        "viewAll": "View all",
+        "listingCount": "{{count}} listings"
+    },
+    "reviews": {
+        "title": "What customers think",
+        "subtitle": "Over 1,000 satisfied customers have bought their new car through Kaarplus."
+    },
+    "statistics": {
+        "activeListings": "Active Listings",
+        "happyClients": "Happy Clients",
+        "trustedSellers": "Trusted Sellers",
+        "carBrands": "Car Brands"
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to the most common questions.",
+        "items": [
+            {
+                "question": "How can I sell my car?",
+                "answer": "Selling a car on Kaarplus is easy. Log in, fill in the vehicle details and add photos. Our team verifies the listing before publication."
+            },
+            {
+                "question": "Does Kaarplus offer a warranty?",
+                "answer": "We facilitate warranty offers from our partners. All vehicles have undergone a background check."
+            },
+            {
+                "question": "How much does it cost to list a car?",
+                "answer": "For individuals, the first listing is free. Subsequent listings cost €9.99."
+            },
+            {
+                "question": "Can I trade in my car?",
+                "answer": "Yes, many sellers are willing to accept trade-in offers. Look for listings marked 'Trade-in possible'."
+            }
+        ]
+    },
+    "newsletter": {
+        "title": "Join our newsletter",
+        "description": "Be the first to know about the best offers and new cars.",
+        "placeholder": "Enter your email",
+        "button": "Join",
+        "consent": "By joining, you agree to our <privacy>privacy policy</privacy>.",
+        "toastSuccess": "Subscribed!",
+        "toastDescription": "You have joined our newsletter."
+    }
+}

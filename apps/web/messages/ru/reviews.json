@@ -16,5 +16,12 @@
         "successTitle": "Отзыв отправлен",
         "successDesc": "Спасибо за ваш отзыв!",
         "sendError": "Не удалось отправить отзыв"
+    },
+    "sellerReviews": "Отзывы о {name}",
+    "labels": {
+        "user": "Пользователь",
+        "anonymous": "Анонимный",
+        "verifiedPurchase": "Проверенная покупка",
+        "reviewsCount": "{count} отзывов"
     }
 }

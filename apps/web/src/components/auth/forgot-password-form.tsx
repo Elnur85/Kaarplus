@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -27,6 +28,7 @@ const forgotPasswordSchema = z.object({
 })
 
 export function ForgotPasswordForm() {
+    const { t } = useTranslation("auth")
     const { toast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
     const [success, setSuccess] = useState(false)
@@ -55,14 +57,14 @@ export function ForgotPasswordForm() {
 
             setSuccess(true)
             toast({
-                title: "Email sent",
-                description: "If an account exists, a reset link has been sent.",
+                title: t("forgotPassword.emailSent"),
+                description: t("forgotPassword.emailSentDescription"),
             })
         } catch (error) {
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "Something went wrong. Please try again.",
+                title: t("forgotPassword.error"),
+                description: t("forgotPassword.errorDescription"),
             })
         } finally {
             setIsLoading(false)
@@ -73,14 +75,14 @@ export function ForgotPasswordForm() {
         return (
             <Card className="w-full max-w-md mx-auto">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center">Check your email</CardTitle>
+                    <CardTitle className="text-2xl text-center">{t("forgotPassword.successTitle")}</CardTitle>
                     <CardDescription className="text-center">
-                        We have sent a password reset link to your email address.
+                        {t("forgotPassword.successDescription")}
                     </CardDescription>
                 </CardHeader>
                 <CardFooter className="justify-center">
                     <Button variant="outline" onClick={() => setSuccess(false)}>
-                        Back to login
+                        {t("forgotPassword.backToLogin")}
                     </Button>
                 </CardFooter>
             </Card>
@@ -90,9 +92,9 @@ export function ForgotPasswordForm() {
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader>
-                <CardTitle className="text-2xl text-center">Forgot password</CardTitle>
+                <CardTitle className="text-2xl text-center">{t("forgotPassword.title")}</CardTitle>
                 <CardDescription className="text-center">
-                    Enter your email address and we will send you a link to reset your password
+                    {t("forgotPassword.description")}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -103,23 +105,23 @@ export function ForgotPasswordForm() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{t("forgotPassword.email")}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="name@example.com" {...field} />
+                                        <Input placeholder={t("forgotPassword.emailPlaceholder")} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                         <Button className="w-full" type="submit" disabled={isLoading}>
-                            {isLoading ? "Sending link..." : "Send reset link"}
+                            {isLoading ? t("forgotPassword.submitting") : t("forgotPassword.submit")}
                         </Button>
                     </form>
                 </Form>
             </CardContent>
             <CardFooter className="justify-center">
                 <a href="/login" className="text-sm text-primary hover:underline">
-                    Back to login
+                    {t("forgotPassword.backToLogin")}
                 </a>
             </CardFooter>
         </Card>

@@ -49,5 +49,12 @@
         "warranty": "Warranty",
         "verified": "Verified",
         "locationEstonia": "{{location}}, Estonia"
+    },
+    "gallery": {
+        "noImages": "No images",
+        "photoCount": "{{current}} / {{total}} Photos",
+        "fullscreen": "Fullscreen",
+        "vehicleImage": "Vehicle image {{index}}",
+        "thumbnail": "Thumbnail {{index}}"
     }
 }

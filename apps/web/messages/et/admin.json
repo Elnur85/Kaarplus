@@ -110,5 +110,36 @@
                 "joined": "Liitus"
             }
         }
+    },
+    "overview": {
+        "title": "Ülevaade",
+        "description": "Kaarplus portaali haldus ja statistika.",
+        "stats": {
+            "pendingListings": "Kinnitamist ootavad",
+            "pendingSubtext": "Ootab ülevaatamist",
+            "activeUsers": "Aktiivsed kasutajad",
+            "activeUsersSubtext": "Registreeritud kasutajad",
+            "totalListings": "Kuulutusi kokku",
+            "totalListingsSubtext": "Kõik kuulutused",
+            "verifiedToday": "Kinnitatud täna",
+            "verifiedTodaySubtext": "Täna kinnitatud",
+            "failed": "Failed to load stats"
+        },
+        "quickActions": "Kiired tegevused",
+        "viewQueue": "Vaata kinnitusjärjekorda",
+        "viewQueueDesc": "Kuulutuste ülevaatamine ja kinnitamine",
+        "manageUsers": "Halda kasutajaid",
+        "manageUsersDesc": "Otsi ja muuda kasutajate andmeid"
+    },
+    "users": {
+        "title": "Kasutajad",
+        "description": "Kõik registreeritud kasutajad ja nende rollid ({count}).",
+        "searchPlaceholder": "Otsi nime või e-posti järgi...",
+        "table": {
+            "user": "Kasutaja",
+            "role": "Roll",
+            "joined": "Liitunud",
+            "actions": "Tegevused"
+        }
     }
 }

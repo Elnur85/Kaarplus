@@ -1,0 +1,54 @@
+{
+    "title": "Объявления автомобилей",
+    "searchPlaceholder": "Поиск по марке, модели или региону...",
+    "filters": {
+        "title": "Фильтры",
+        "clear": "Очистить фильтры",
+        "price": "Цена",
+        "year": "Год",
+        "mileage": "Пробег",
+        "fuelType": "Тип топлива",
+        "transmission": "Коробка передач",
+        "bodyType": "Тип кузова",
+        "location": "Местонахождение",
+        "make": "Марка",
+        "model": "Модель"
+    },
+    "sort": {
+        "label": "Сортировка",
+        "newest": "Новейшие",
+        "oldest": "Старейшие",
+        "priceLow": "Дешевле",
+        "priceHigh": "Дороже",
+        "mileageLow": "Меньший пробег",
+        "yearNew": "Новее"
+    },
+    "results": {
+        "found": "Найдено {count} автомобилей",
+        "noResults": "Результаты не найдены",
+        "noResultsDesc": "Попробуйте изменить параметры фильтра"
+    },
+    "card": {
+        "year": "Год",
+        "mileage": "{value} км",
+        "fuel": "Топливо",
+        "transmission": "КПП",
+        "power": "{value} кВт",
+        "viewDetails": "Подробнее",
+        "favorite": "Добавить в избранное",
+        "unfavorite": "Удалить из избранного"
+    },
+    "detail": {
+        "overview": "Обзор",
+        "specifications": "Характеристики",
+        "features": "Оборудование",
+        "description": "Описание",
+        "seller": "Продавец",
+        "contact": "Связаться",
+        "price": "Цена",
+        "negotiable": "Договорная",
+        "location": "Местонахождение",
+        "published": "Опубликовано",
+        "views": "Просмотры"
+    }
+}

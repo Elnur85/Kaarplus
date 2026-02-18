@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ListingDetailed } from "@/types/listing";
-import { JsonLd } from "@/components/shared/json-ld";
-import { generateVehicleJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo";
-import { SITE_URL } from "@/lib/constants";
 import { ListingDetailView } from "@/components/car-detail/listing-detail-view";
+import { JsonLd } from "@/components/shared/json-ld";
+import { generateBreadcrumbJsonLd, generateVehicleJsonLd } from "@/lib/seo";
+import { SITE_URL } from "@/lib/constants";
+import listingsEt from "@/../messages/et/listings.json";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -13,7 +14,7 @@ interface Props {
 async function getListing(id: string): Promise<ListingDetailed | null> {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/listings/${id}`, {
-            next: { revalidate: 60 }, // Cache for 60 seconds
+            next: { revalidate: 60 },
         });
         if (!res.ok) return null;
         const json = await res.json();
@@ -27,7 +28,12 @@ async function getListing(id: string): Promise<ListingDetailed | null> {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
     const listing = await getListing(id);
-    if (!listing) return { title: "Listing not found | Kaarplus" };
+
+    if (!listing) {
+        return {
+            title: "Sõidukit ei leitud | Kaarplus",
+        };
+    }
 
     const priceFormatted = new Intl.NumberFormat("et-EE", {
         style: "currency",
@@ -35,16 +41,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         maximumFractionDigits: 0,
     }).format(listing.price);
 
+    const title = `${listing.year} ${listing.make} ${listing.model} — ${priceFormatted}`;
+    const description = listing.description?.slice(0, 160) || `Müüa ${listing.make} ${listing.model} (${listing.year}) hinnaga ${priceFormatted}. Vaata lähemalt Kaarplus portaalist!`;
+
     return {
-        title: `${listing.year} ${listing.make} ${listing.model} - ${priceFormatted} | Kaarplus`,
-        description: `${listing.mileage.toLocaleString()} km, ${listing.fuelType}, ${listing.transmission}. Check it out!`,
+        title,
+        description,
         openGraph: {
-            images: listing.images[0]?.url ? [listing.images[0].url] : [],
+            title,
+            description,
+            images: listing.images?.[0]?.url ? [listing.images[0].url] : [],
         },
     };
 }
 
-export default async function CarDetailPage({ params }: Props) {
+export default async function ListingPage({ params }: Props) {
     const { id } = await params;
     const listing = await getListing(id);
 
@@ -52,22 +63,19 @@ export default async function CarDetailPage({ params }: Props) {
         notFound();
     }
 
-    const vehicleJsonLd = generateVehicleJsonLd({
-        ...listing,
-        price: Number(listing.price),
-    });
-
     const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-        { name: "Avaleht", item: SITE_URL },
-        { name: "Kasutatud autod", item: `${SITE_URL}/listings` },
+        { name: listingsEt.carsPage.breadcrumb.home, item: SITE_URL },
+        { name: listingsEt.carsPage.breadcrumb.cars, item: `${SITE_URL}/listings` },
         { name: listing.make, item: `${SITE_URL}/listings?make=${listing.make}` },
         { name: `${listing.model} ${listing.year}`, item: `${SITE_URL}/listings/${listing.id}` },
     ]);
 
+    const vehicleJsonLd = generateVehicleJsonLd(listing);
+
     return (
         <>
-            <JsonLd data={vehicleJsonLd} />
             <JsonLd data={breadcrumbJsonLd} />
+            <JsonLd data={vehicleJsonLd} />
             <ListingDetailView listing={listing} />
         </>
     );

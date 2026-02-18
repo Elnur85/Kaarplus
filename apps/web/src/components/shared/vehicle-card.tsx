@@ -10,7 +10,7 @@ import Link from "next/link";
 import { PriceDisplay } from "@/components/shared/price-display";
 import { SpecIcons } from "@/components/shared/spec-icons";
 import { formatDistanceToNow } from "date-fns";
-import { et } from "date-fns/locale";
+import { et, enUS, ru } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useFavoritesStore } from "@/store/use-favorites-store";
@@ -25,14 +25,21 @@ interface VehicleCardProps {
 }
 
 export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: VehicleCardProps) {
-  const { t } = useTranslation(['common', 'listings']);
+  const { t, i18n } = useTranslation(['common', 'listings']);
   const { data: session } = useSession();
   const { toast } = useToast();
   const router = useRouter();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
-  
+
   const isGrid = variant === "grid";
-  const timeAgo = formatDistanceToNow(new Date(vehicle.createdAt), { addSuffix: true, locale: et });
+  const localeMap = {
+    et: et,
+    en: enUS,
+    ru: ru
+  };
+  const currentLocale = localeMap[i18n.language as keyof typeof localeMap] || et;
+
+  const timeAgo = formatDistanceToNow(new Date(vehicle.createdAt), { addSuffix: true, locale: currentLocale });
   const favorited = isFavorite(vehicle.id);
 
   const handleFavoriteClick = async (e: React.MouseEvent) => {
@@ -53,8 +60,8 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
       await toggleFavorite(vehicle.id);
       toast({
         title: favorited ? t('listings:favorites.removed') : t('listings:favorites.added'),
-        description: favorited 
-          ? t('listings:favorites.removedDesc') 
+        description: favorited
+          ? t('listings:favorites.removedDesc')
           : t('listings:favorites.addedDesc'),
       });
     } catch (error) {
@@ -66,18 +73,14 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
     }
   };
 
-  const CardWrapper = ({ children }: { children: React.ReactNode }) => (
-    <Card className={cn(
-      "group relative overflow-hidden flex transition-all duration-300 border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none rounded-xl",
-      isGrid ? "flex-col h-full bg-white dark:bg-slate-900" : "flex-col md:flex-row"
-    )}>
-      {children}
-    </Card>
-  );
+
 
   return (
     <Link href={`/listings/${vehicle.id}`} className="block">
-      <CardWrapper>
+      <Card className={cn(
+        "group relative overflow-hidden flex transition-all duration-300 border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none rounded-xl",
+        isGrid ? "flex-col h-full bg-white dark:bg-slate-900" : "flex-col md:flex-row"
+      )}>
         {/* status badges helper */}
         <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
           {vehicle.status === "SOLD" && (
@@ -195,9 +198,9 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="hidden sm:inline-flex px-6 font-bold rounded-lg border-slate-200 dark:border-slate-700"
                     onClick={(e) => {
                       e.preventDefault();
@@ -208,8 +211,8 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
                     <Heart size={16} className={cn("mr-2", favorited && "fill-red-500 text-red-500")} />
                     {favorited ? t('common:saved') : t('common:buttons.save')}
                   </Button>
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     className="px-6 font-bold bg-primary hover:bg-primary/90 text-white rounded-lg shadow-lg shadow-primary/20 transition-all"
                   >
                     {t('common:buttons.contact', { defaultValue: 'Võta ühendust' })}
@@ -219,7 +222,7 @@ export function VehicleCard({ vehicle, variant = "grid", showFavorite = true }: 
             )}
           </div>
         </div>
-      </CardWrapper>
+      </Card>
     </Link>
   );
 }

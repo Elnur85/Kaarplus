@@ -20,6 +20,7 @@ export default defineConfig({
         actionTimeout: 0,
         baseURL: 'http://localhost:3000',
         trace: 'on-first-retry',
+        locale: 'et-EE',
     },
     projects: [
         {

@@ -1,0 +1,18 @@
+{
+    "notFound": {
+        "title": "Lehte ei leitud",
+        "description": "Kahjuks me ei leidnud lehte, mida otsite.",
+        "backHome": "Tagasi avalehele"
+    },
+    "serverError": {
+        "title": "Midagi läks valesti",
+        "description": "Vabandame, kuid serveris tekkis viga. Palun proovi hiljem uuesti.",
+        "retry": "Proovi uuesti"
+    },
+    "unauthorized": {
+        "title": "Juurdepääs keelatud",
+        "description": "Sul pole õigust seda lehte vaadata.",
+        "login": "Logi sisse"
+    },
+    "generic": "Ilmnes viga. Palun proovi uuesti."
+}

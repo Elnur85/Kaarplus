@@ -16,5 +16,12 @@
         "successTitle": "Arvustus saadetud",
         "successDesc": "Tänan tagasiside eest!",
         "sendError": "Arvustuse saatmine ebaõnnestus"
+    },
+    "sellerReviews": "{name} arvustused",
+    "labels": {
+        "user": "Kasutaja",
+        "anonymous": "Anonüümne",
+        "verifiedPurchase": "Kinnitatud ost",
+        "reviewsCount": "{count} arvustust"
     }
 }

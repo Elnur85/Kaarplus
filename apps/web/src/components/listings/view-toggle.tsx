@@ -9,7 +9,10 @@ import { LayoutGrid, List } from "lucide-react";
 // but wait, I just installed toggle. Shadcn toggle-group is usually separate.
 // I'll just use simple button/div composition to match Stitch exactly.
 
+import { useTranslation } from "react-i18next";
+
 export function ViewToggle() {
+    const { t } = useTranslation('listings');
     const { view, setFilter } = useFilterStore();
 
     return (
@@ -20,7 +23,7 @@ export function ViewToggle() {
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground"
                     }`}
-                title="Ruudustik"
+                title={t('view.grid')}
             >
                 <LayoutGrid size={18} />
             </button>
@@ -30,7 +33,7 @@ export function ViewToggle() {
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground"
                     }`}
-                title="Nimekiri"
+                title={t('view.list')}
             >
                 <List size={18} />
             </button>

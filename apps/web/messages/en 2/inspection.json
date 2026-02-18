@@ -1,0 +1,27 @@
+{
+    "title": "My inspections",
+    "description": "View and track the status of your inspections.",
+    "count": "My inspections ({{count}})",
+    "empty": {
+        "title": "No inspections ordered",
+        "description": "Your ordered vehicle inspections will be displayed here. You can order an inspection in the vehicle detail view."
+    },
+    "status": {
+        "ordered": "Ordered:",
+        "scheduled": "Scheduled:",
+        "completed": "Completed:",
+        "cancelled": "Cancelled:",
+        "in_progress": "In progress:",
+        "pending": "Pending",
+        "labels": {
+            "PENDING": "Pending",
+            "SCHEDULED": "Scheduled",
+            "IN_PROGRESS": "In progress",
+            "COMPLETED": "Completed",
+            "CANCELLED": "Cancelled"
+        }
+    },
+    "notes": "Inspector notes",
+    "downloadReport": "Download report",
+    "error": "Failed to load inspections"
+}

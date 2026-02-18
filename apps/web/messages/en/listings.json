@@ -14,7 +14,10 @@
         "make": "Make",
         "model": "Model",
         "from": "From",
-        "to": "To"
+        "to": "To",
+        "allMakes": "All makes",
+        "allModels": "All models",
+        "showResults": "Show results"
     },
     "sort": {
         "label": "Sort by",
@@ -25,8 +28,12 @@
         "mileageLow": "Lowest Mileage",
         "yearNew": "Newest Year"
     },
+    "view": {
+        "grid": "Grid",
+        "list": "List"
+    },
     "results": {
-        "found": "Found {count} cars",
+        "found": "Found {total} cars",
         "noResults": "No results found",
         "noResultsDesc": "Try adjusting your filter criteria",
         "showing": "Showing {start} to {end} of {total} vehicles",
@@ -76,5 +83,20 @@
         "active": "Active",
         "pending": "Pending"
     },
-    "noDescription": "Vehicle in excellent technical and visual condition. Service history verified."
+    "noDescription": "Vehicle in excellent technical and visual condition. Service history verified.",
+    "carsPage": {
+        "title": "Cars for Sale",
+        "description": "Browse car listings. Filter by make, model, price and more.",
+        "filters": "Filters",
+        "noResults": "No results found",
+        "noResultsDesc": "Try changing filters or search term.",
+        "clearAllFilters": "Clear all filters",
+        "showing": "Showing {start} to {end} of {total} vehicles",
+        "error": "Failed to load listings. Please try again.",
+        "retry": "Try again",
+        "breadcrumb": {
+            "home": "Home",
+            "cars": "Cars for Sale"
+        }
+    }
 }

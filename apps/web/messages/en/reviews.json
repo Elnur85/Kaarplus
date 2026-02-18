@@ -16,5 +16,12 @@
         "successTitle": "Review submitted",
         "successDesc": "Thank you for your feedback!",
         "sendError": "Failed to send review"
+    },
+    "sellerReviews": "{name}'s reviews",
+    "labels": {
+        "user": "User",
+        "anonymous": "Anonymous",
+        "verifiedPurchase": "Verified purchase",
+        "reviewsCount": "{count} reviews"
     }
 }

@@ -1,5 +1,16 @@
 {
     "title": "Täppisotsing",
+    "subtitle": "Leidke oma unistuste auto täpsete filtritega",
+    "results_suffix_one": "tulemus",
+    "results_suffix_other": "tulemust",
+    "filtersButton": "Filtrid",
+    "saveButton": "Salvesta",
+    "tryAgain": "Proovi uuesti",
+    "error": "Otsing ebaõnnestus. Palun proovige uuesti.",
+    "noResults": "Tulemusi ei leitud",
+    "noResultsDesc": "Proovige muuta filtreid või otsingusõna.",
+    "clearFilters": "Puhasta kõik filtrid",
+    "pagination": "Näitan {{start}} kuni {{end}} sõidukit {{total}}-st",
     "filters": {
         "count_one": "{{count}} filter",
         "count_other": "{{count}} filtrit",

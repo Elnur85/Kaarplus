@@ -97,7 +97,7 @@ export default function MobileAppPage() {
                                             <div className="flex justify-between items-start">
                                                 <div>
                                                     <h3 className="font-bold text-sm">BMW 320d xDrive</h3>
-                                                    <p className="text-[10px] text-muted-foreground mt-0.5">2022 • 45,000 km • Diesel</p>
+                                                    <p className="text-[10px] text-muted-foreground mt-0.5">2022 • 45,000 km • {t('mockup.diesel')}</p>
                                                 </div>
                                                 <div className="bg-primary/10 p-1.5 rounded-full text-primary">
                                                     <Star size={12} />
@@ -115,7 +115,7 @@ export default function MobileAppPage() {
                                             <div className="flex justify-between items-start">
                                                 <div>
                                                     <h3 className="font-bold text-sm">Audi A6 quattro</h3>
-                                                    <p className="text-[10px] text-muted-foreground mt-0.5">2020 • 95,000 km • Diesel</p>
+                                                    <p className="text-[10px] text-muted-foreground mt-0.5">2020 • 95,000 km • {t('mockup.diesel')}</p>
                                                 </div>
                                                 <div className="bg-secondary/50 p-1.5 rounded-full text-muted-foreground">
                                                     <Star size={12} />

@@ -1,0 +1,77 @@
+{
+    "nav": {
+        "home": "Home",
+        "listings": "Listings",
+        "sell": "Sell Car",
+        "compare": "Compare",
+        "favorites": "Favorites",
+        "messages": "Messages",
+        "dashboard": "Dashboard",
+        "admin": "Admin",
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "profile": "Profile"
+    },
+    "footer": {
+        "description": "Kaarplus is Estonia's largest and most reliable car buying and selling platform. We help you find your dream car safely and quickly.",
+        "services": {
+            "title": "Services",
+            "allListings": "All listings",
+            "sellYourCar": "Sell your car",
+            "advancedSearch": "Advanced search",
+            "inspections": "Technical inspection"
+        },
+        "company": {
+            "title": "Company",
+            "aboutUs": "About us",
+            "faq": "FAQ",
+            "terms": "Terms of use",
+            "privacy": "Privacy policy"
+        },
+        "newsletter": {
+            "title": "Join our newsletter",
+            "description": "Get the best offers and car world news directly to your inbox.",
+            "placeholder": "your@email.com",
+            "success": "Newsletter subscribed!",
+            "consent": "By joining, you agree to our privacy terms.",
+            "toastSuccess": "Subscription successful!",
+            "toastDescription": "You have been added to our newsletter list.",
+            "toastError": "Error joining newsletter."
+        },
+        "allRightsReserved": "All rights reserved",
+        "followUs": "Follow us"
+    },
+    "common": {
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "close": "Close",
+        "submit": "Submit",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "yes": "Yes",
+        "no": "No",
+        "more": "More",
+        "less": "Less",
+        "showMore": "Show more",
+        "showLess": "Show less"
+    },
+    "currency": {
+        "eur": "€",
+        "price": "Price"
+    },
+    "date": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "daysAgo": "{{count}} days ago",
+        "weeksAgo": "{{count}} weeks ago",
+        "monthsAgo": "{{count}} months ago"
+    }
+}

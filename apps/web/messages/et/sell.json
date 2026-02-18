@@ -1,4 +1,10 @@
 {
+    "hero": {
+        "badge": "100% Tasuta müük",
+        "title": "Müüge oma auto",
+        "titleAccent": "parima hinnaga",
+        "description": "Sisestage andmed, lisage fotod ja leidke ostja juba täna. See võtab vaid 5 minutit."
+    },
     "steps": {
         "type": "Sõiduki tüüp",
         "data": "Andmed",
@@ -16,7 +22,8 @@
             "coupe": "Kupee",
             "convertible": "Kabriolett",
             "minivan": "Mahtuniversaal",
-            "pickup": "Pikap"
+            "pickup": "Pikap",
+            "small_car": "Väikeautod"
         }
     },
     "step2": {
@@ -38,7 +45,7 @@
             "fuelType": "Kütus *",
             "transmission": "Käigukast *",
             "powerKw": "Võimsus (kW) *",
-            "powerHj": "{count} hj",
+            "powerHj": "{{count}} hj",
             "driveType": "Vedu *",
             "doors": "Uksed *",
             "seats": "Istekohad *",
@@ -65,7 +72,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Räägi oma autost lähemalt..."
         },
-        "charCount": "{count} / 5000 tähemärki"
+        "charCount": "{{count}} / 5000 tähemärki"
     },
     "step3": {
         "title": "Lisage fotod",
@@ -87,12 +94,12 @@
             ]
         },
         "mainPhoto": "Peapilt",
-        "addMore": "Lisage veel (kuni {count})",
-        "photoNumber": "Pilt {index}"
+        "addMore": "Lisage veel (kuni {{count}})",
+        "photoNumber": "Pilt {{index}}"
     },
     "step4": {
         "success": "Kuulutus on edukalt esitatud!",
-        "idText": "Teie kuulutus (ID: #{id}) on nüüd ülevaatusel.",
+        "idText": "Teie kuulutus (ID: #{{id}}) on nüüd ülevaatusel.",
         "nextSteps": {
             "title": "Mis edasi saab?",
             "items": [
@@ -113,7 +120,7 @@
         "minPhotos": "Palun lisage vähemalt 3 fotot",
         "createError": "Viga kuulutuse loomisel",
         "uploadingTitle": "Piltide üleslaadimine...",
-        "uploadingDesc": "Laadime üles {count} pilti. Palun oodake.",
+        "uploadingDesc": "Laadime üles {{count}} pilti. Palun oodake.",
         "attachError": "Viga piltide sidumisel kuulutusega",
         "successTitle": "Edu!",
         "successDesc": "Kuulutus on edukalt esitatud koos piltidega!",
@@ -169,7 +176,8 @@
             "Hübriid": "Hübriid",
             "Elekter": "Elekter",
             "CNG": "CNG",
-            "LPG": "LPG"
+            "LPG": "LPG",
+            "Gaas": "Gaas"
         },
         "transmission": {
             "Manuaal": "Manuaal",

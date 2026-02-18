@@ -110,5 +110,36 @@
                 "joined": "Присоединился"
             }
         }
+    },
+    "overview": {
+        "title": "Обзор",
+        "description": "Управление порталом Kaarplus и статистика.",
+        "stats": {
+            "pendingListings": "Ожидают проверки",
+            "pendingSubtext": "Ожидает проверки",
+            "activeUsers": "Активные пользователи",
+            "activeUsersSubtext": "Зарегистрированные пользователи",
+            "totalListings": "Всего объявлений",
+            "totalListingsSubtext": "Все объявления",
+            "verifiedToday": "Проверено сегодня",
+            "verifiedTodaySubtext": "Проверено сегодня",
+            "failed": "Ошибка загрузки статистики"
+        },
+        "quickActions": "Быстрые действия",
+        "viewQueue": "Просмотр очереди проверки",
+        "viewQueueDesc": "Проверка и одобрение объявлений",
+        "manageUsers": "Управление пользователями",
+        "manageUsersDesc": "Поиск и редактирование данных пользователей"
+    },
+    "users": {
+        "title": "Пользователи",
+        "description": "Все зарегистрированные пользователи и их роли ({count}).",
+        "searchPlaceholder": "Поиск по имени или email...",
+        "table": {
+            "user": "Пользователь",
+            "role": "Роль",
+            "joined": "Дата регистрации",
+            "actions": "Действия"
+        }
     }
 }

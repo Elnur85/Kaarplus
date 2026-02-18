@@ -49,5 +49,12 @@
         "warranty": "Garantii",
         "verified": "Kontrollitud",
         "locationEstonia": "{{location}}, Eesti"
+    },
+    "gallery": {
+        "noImages": "Pilte ei ole",
+        "photoCount": "{{current}} / {{total}} Fotot",
+        "fullscreen": "Täisekraan",
+        "vehicleImage": "Sõiduki pilt {{index}}",
+        "thumbnail": "Pisipilt {{index}}"
     }
 }

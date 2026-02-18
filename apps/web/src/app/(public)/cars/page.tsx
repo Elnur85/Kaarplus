@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { useFilterStore } from "@/store/use-filter-store";
 import { FilterSidebar } from "@/components/listings/filter-sidebar";
 import { FilterBadges } from "@/components/listings/filter-badges";
@@ -18,12 +19,9 @@ import { SlidersHorizontal, Car, AlertCircle } from "lucide-react";
 import { JsonLd } from "@/components/shared/json-ld";
 import { generateBreadcrumbJsonLd } from "@/lib/seo";
 import { SITE_URL } from "@/lib/constants";
-import type { Metadata } from "next";
-
-// Metadata must be exported from a server component, but this is a client component
-// So we'll use a different approach with a wrapper
 
 function CarsPageContent() {
+    const { t } = useTranslation("listings");
     const [listings, setListings] = useState<VehicleSummary[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -50,18 +48,18 @@ function CarsPageContent() {
             params.set("pageSize", "20");
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search?${params.toString()}`);
-            
+
             if (!response.ok) {
                 throw new Error(`Failed to fetch listings: ${response.status}`);
             }
-            
+
             const json = await response.json();
 
             setListings(json.data || []);
             setTotal(json.meta?.total || 0);
-        } catch (error) {
-            console.error("Failed to fetch listings:", error);
-            setError("Kuulutuste laadimine ebaõnnestus. Palun proovige uuesti.");
+        } catch (fetchError) {
+            console.error("Failed to fetch listings:", fetchError);
+            setError(t("carsPage.error"));
         } finally {
             setIsLoading(false);
         }
@@ -86,8 +84,8 @@ function CarsPageContent() {
     ]);
 
     const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-        { name: "Avaleht", item: SITE_URL },
-        { name: "Autod müügis", item: `${SITE_URL}/cars` },
+        { name: t("carsPage.breadcrumb.home"), item: SITE_URL },
+        { name: t("carsPage.breadcrumb.cars"), item: `${SITE_URL}/cars` },
     ]);
 
     return (
@@ -102,11 +100,11 @@ function CarsPageContent() {
                 <div className="flex items-center gap-3 mb-2">
                     <Car className="h-8 w-8 text-primary" />
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                        Autod müügis
+                        {t("carsPage.title")}
                     </h1>
                 </div>
                 <p className="text-muted-foreground">
-                    Sirvi autode kuulutusi. Filtreeri margi, mudeli, hinna ja muu järgi.
+                    {t("carsPage.description")}
                 </p>
             </div>
 
@@ -130,7 +128,7 @@ function CarsPageContent() {
                                         <SheetTrigger asChild>
                                             <Button variant="outline" size="sm" className="lg:hidden h-9 px-3 gap-2">
                                                 <SlidersHorizontal size={16} />
-                                                Filtrid
+                                                {t("carsPage.filters")}
                                             </Button>
                                         </SheetTrigger>
                                         <SheetContent side="left" className="p-0 w-[300px]">
@@ -159,7 +157,7 @@ function CarsPageContent() {
                                     className="ml-auto shrink-0"
                                     onClick={() => fetchListings()}
                                 >
-                                    Proovi uuesti
+                                    {t("carsPage.retry")}
                                 </Button>
                             </div>
                         )}
@@ -180,10 +178,10 @@ function CarsPageContent() {
                         ) : !error ? (
                             <div className="py-20 text-center border rounded-xl bg-card border-dashed">
                                 <Car className="mx-auto h-12 w-12 text-muted-foreground/30 mb-4" />
-                                <h3 className="text-lg font-semibold">Tulemusi ei leitud</h3>
-                                <p className="text-muted-foreground mt-1">Proovige muuta filtreid või otsingusõna.</p>
+                                <h3 className="text-lg font-semibold">{t("carsPage.noResults")}</h3>
+                                <p className="text-muted-foreground mt-1">{t("carsPage.noResultsDesc")}</p>
                                 <Button variant="outline" className="mt-4" onClick={filters.resetFilters}>
-                                    Puhasta kõik filtrid
+                                    {t("carsPage.clearAllFilters")}
                                 </Button>
                             </div>
                         ) : null}
@@ -192,7 +190,11 @@ function CarsPageContent() {
                         {!isLoading && total > 20 && (
                             <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border pt-8">
                                 <p className="text-sm text-muted-foreground">
-                                    Näitan {((filters.page - 1) * 20) + 1} kuni {Math.min(filters.page * 20, total)} sõidukit {total}-st
+                                    {t("carsPage.showing", {
+                                        start: ((filters.page - 1) * 20) + 1,
+                                        end: Math.min(filters.page * 20, total),
+                                        total,
+                                    })}
                                 </p>
                                 <Pagination
                                     currentPage={filters.page}

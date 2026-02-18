@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ListingDetailed } from "@/types/listing";
 import { CheckoutPageClient } from "@/components/checkout/checkout-page-client";
+import { InactiveListing } from "@/components/checkout/inactive-listing";
+import checkoutEt from "@/../messages/et/checkout.json";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -22,7 +24,7 @@ async function getListing(id: string): Promise<ListingDetailed | null> {
 }
 
 export const metadata: Metadata = {
-    title: "Osta sõiduk | Kaarplus",
+    title: `${checkoutEt.page.title} | Kaarplus`,
     robots: { index: false, follow: false },
 };
 
@@ -35,12 +37,7 @@ export default async function PurchasePage({ params }: Props) {
     }
 
     if (listing.status !== "ACTIVE") {
-        return (
-            <div className="container py-20 text-center">
-                <h1 className="text-2xl font-bold mb-4">See kuulutus pole enam aktiivne</h1>
-                <p className="text-muted-foreground">Vabandame, aga seda sõidukit ei saa enam osta.</p>
-            </div>
-        );
+        return <InactiveListing />;
     }
 
     return <CheckoutPageClient listing={listing} />;

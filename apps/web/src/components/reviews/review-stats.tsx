@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Star } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,6 +18,7 @@ interface ReviewStatsProps {
 }
 
 export function ReviewStats({ targetId }: ReviewStatsProps) {
+  const { t } = useTranslation("reviews");
   const [stats, setStats] = useState<ReviewStatsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -79,7 +81,7 @@ export function ReviewStats({ targetId }: ReviewStatsProps) {
           ))}
         </div>
         <span className="text-sm text-muted-foreground">
-          {totalReviews} arvustust
+          {t("labels.reviewsCount", { count: totalReviews })}
         </span>
       </div>
 

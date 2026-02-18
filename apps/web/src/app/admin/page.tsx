@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { ClipboardList, Users, TrendingUp, CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,18 +15,18 @@ interface StatsData {
     verifiedToday: number;
 }
 
-function StatsCard({ 
-    name, 
-    value, 
-    icon: Icon, 
-    color, 
+function StatsCard({
+    name,
+    value,
+    icon: Icon,
+    color,
     bg,
-    subtext 
-}: { 
-    name: string; 
-    value: string | number; 
-    icon: React.ElementType; 
-    color: string; 
+    subtext
+}: {
+    name: string;
+    value: string | number;
+    icon: React.ElementType;
+    color: string;
     bg: string;
     subtext?: string;
 }) {
@@ -72,33 +73,34 @@ function StatsSkeleton() {
 }
 
 function AdminStats() {
+    const { t } = useTranslation("admin");
     const [stats, setStats] = useState<StatsData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
+
     const fetchStats = useCallback(async () => {
         setIsLoading(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/stats`, {
                 credentials: "include",
             });
-            
+
             if (!res.ok) throw new Error("Failed to fetch stats");
             const data = await res.json();
             setStats(data.data);
         } catch (e) {
-            setError("Failed to load stats");
+            setError(t("overview.stats.failed"));
         } finally {
             setIsLoading(false);
         }
-    }, []);
-    
+    }, [t]);
+
     useEffect(() => {
         fetchStats();
     }, [fetchStats]);
-    
+
     if (isLoading) return <StatsSkeleton />;
-    
+
     if (error) {
         return (
             <div className="p-4 border border-destructive/50 rounded-lg bg-destructive/10 text-destructive">
@@ -106,42 +108,42 @@ function AdminStats() {
             </div>
         );
     }
-    
+
     const statItems = [
-        { 
-            name: "Kinnitamist ootavad", 
-            value: stats?.pendingListings ?? "-", 
-            icon: ClipboardList, 
-            color: "text-amber-500", 
+        {
+            name: t("overview.stats.pendingListings"),
+            value: stats?.pendingListings ?? "-",
+            icon: ClipboardList,
+            color: "text-amber-500",
             bg: "bg-amber-50",
-            subtext: "Ootab ülevaatamist"
+            subtext: t("overview.stats.pendingSubtext")
         },
-        { 
-            name: "Aktiivsed kasutajad", 
-            value: stats?.activeUsers ?? "-", 
-            icon: Users, 
-            color: "text-blue-500", 
+        {
+            name: t("overview.stats.activeUsers"),
+            value: stats?.activeUsers ?? "-",
+            icon: Users,
+            color: "text-blue-500",
             bg: "bg-blue-50",
-            subtext: "Registreeritud kasutajad"
+            subtext: t("overview.stats.activeUsersSubtext")
         },
-        { 
-            name: "Kuulutusi kokku", 
-            value: stats?.totalListings ?? "-", 
-            icon: TrendingUp, 
-            color: "text-primary", 
+        {
+            name: t("overview.stats.totalListings"),
+            value: stats?.totalListings ?? "-",
+            icon: TrendingUp,
+            color: "text-primary",
             bg: "bg-green-50",
-            subtext: "Kõik kuulutused"
+            subtext: t("overview.stats.totalListingsSubtext")
         },
-        { 
-            name: "Kinnitatud täna", 
-            value: stats?.verifiedToday ?? "-", 
-            icon: CheckCircle2, 
-            color: "text-emerald-500", 
+        {
+            name: t("overview.stats.verifiedToday"),
+            value: stats?.verifiedToday ?? "-",
+            icon: CheckCircle2,
+            color: "text-emerald-500",
             bg: "bg-emerald-50",
-            subtext: "Täna kinnitatud"
+            subtext: t("overview.stats.verifiedTodaySubtext")
         },
     ];
-    
+
     return (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {statItems.map((stat) => (
@@ -152,17 +154,18 @@ function AdminStats() {
 }
 
 export default function AdminPage() {
+    const { t } = useTranslation("admin");
     const { data: session, status } = useSession();
     const router = useRouter();
-    
+
     useEffect(() => {
         if (status === "loading") return;
-        
+
         if (!session?.user || session.user.role !== "ADMIN") {
             router.push("/login");
         }
     }, [session, status, router]);
-    
+
     if (status === "loading") {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
@@ -170,17 +173,17 @@ export default function AdminPage() {
             </div>
         );
     }
-    
+
     if (!session?.user || session.user.role !== "ADMIN") {
         return null;
     }
-    
+
     return (
         <div className="space-y-8">
             <div>
-                <h2 className="text-3xl font-bold tracking-tight">Ülevaade</h2>
+                <h2 className="text-3xl font-bold tracking-tight">{t("overview.title")}</h2>
                 <p className="text-muted-foreground mt-1">
-                    Kaarplus portaali haldus ja statistika.
+                    {t("overview.description")}
                 </p>
             </div>
 
@@ -191,7 +194,7 @@ export default function AdminPage() {
             <div className="grid gap-6 md:grid-cols-2">
                 <Card className="border-border/50 shadow-sm">
                     <CardHeader>
-                        <CardTitle>Kiired tegevused</CardTitle>
+                        <CardTitle>{t("overview.quickActions")}</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
                         <Link
@@ -203,8 +206,8 @@ export default function AdminPage() {
                                     <ClipboardList size={20} />
                                 </div>
                                 <div>
-                                    <p className="font-semibold">Vaata kinnitusjärjekorda</p>
-                                    <p className="text-sm text-muted-foreground">Kuulutuste ülevaatamine ja kinnitamine</p>
+                                    <p className="font-semibold">{t("overview.viewQueue")}</p>
+                                    <p className="text-sm text-muted-foreground">{t("overview.viewQueueDesc")}</p>
                                 </div>
                             </div>
                             <div className="text-muted-foreground group-hover:text-primary transform transition-transform group-hover:translate-x-1">
@@ -221,8 +224,8 @@ export default function AdminPage() {
                                     <Users size={20} />
                                 </div>
                                 <div>
-                                    <p className="font-semibold">Halda kasutajaid</p>
-                                    <p className="text-sm text-muted-foreground">Otsi ja muuda kasutajate andmeid</p>
+                                    <p className="font-semibold">{t("overview.manageUsers")}</p>
+                                    <p className="text-sm text-muted-foreground">{t("overview.manageUsersDesc")}</p>
                                 </div>
                             </div>
                             <div className="text-muted-foreground group-hover:text-primary transform transition-transform group-hover:translate-x-1">

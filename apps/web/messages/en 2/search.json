@@ -1,0 +1,172 @@
+{
+    "title": "Advanced Search",
+    "filters": {
+        "count_one": "{{count}} filter",
+        "count_other": "{{count}} filters",
+        "reset": "Reset all",
+        "showResults": "Show results"
+    },
+    "sections": {
+        "basic": "Basic Search",
+        "price": "Price",
+        "yearMileage": "Year & Mileage",
+        "technical": "Technical",
+        "appearance": "Appearance",
+        "conditionLocation": "Condition & Location"
+    },
+    "fields": {
+        "query": {
+            "label": "Search term",
+            "placeholder": "Search by make, model, description..."
+        },
+        "make": {
+            "label": "Make",
+            "placeholder": "All makes"
+        },
+        "model": {
+            "label": "Model",
+            "placeholder": "All models"
+        },
+        "price": {
+            "min": "Min",
+            "max": "Max"
+        },
+        "year": {
+            "label": "Year",
+            "min": "From",
+            "max": "To",
+            "all": "All"
+        },
+        "mileage": {
+            "label": "Mileage (km)",
+            "min": "Min",
+            "max": "Max"
+        },
+        "fuel": {
+            "label": "Fuel",
+            "types": {
+                "Petrol": "Petrol",
+                "Diesel": "Diesel",
+                "Hybrid": "Hybrid",
+                "Electric": "Electric",
+                "Gas": "Gas"
+            }
+        },
+        "transmission": {
+            "label": "Transmission",
+            "options": {
+                "all": "All",
+                "automatic": "Automatic",
+                "manual": "Manual"
+            }
+        },
+        "body": {
+            "label": "Body type",
+            "types": {
+                "Sedan": "Sedan",
+                "Wagon": "Wagon",
+                "SUV": "SUV",
+                "Coupe": "Coupe",
+                "Convertible": "Convertible",
+                "Minivan": "Minivan",
+                "Pickup": "Pickup",
+                "Hatchback": "Hatchback"
+            }
+        },
+        "drive": {
+            "label": "Drive type",
+            "placeholder": "All",
+            "options": {
+                "FWD": "Front-wheel drive (FWD)",
+                "RWD": "Rear-wheel drive (RWD)",
+                "AWD": "All-wheel drive (AWD)",
+                "4WD": "Four-wheel drive (4WD)"
+            }
+        },
+        "power": {
+            "label": "Power (kW)",
+            "min": "Min",
+            "max": "Max"
+        },
+        "color": {
+            "label": "Color",
+            "placeholder": "All colors",
+            "options": {
+                "Black": "Black",
+                "White": "White",
+                "Grey": "Grey",
+                "Silver": "Silver",
+                "Blue": "Blue",
+                "Red": "Red",
+                "Green": "Green",
+                "Brown": "Brown",
+                "Beige": "Beige",
+                "Yellow": "Yellow",
+                "Orange": "Orange"
+            }
+        },
+        "doors": {
+            "label": "Doors",
+            "placeholder": "All"
+        },
+        "seats": {
+            "label": "Seats",
+            "placeholder": "All"
+        },
+        "condition": {
+            "label": "Condition",
+            "placeholder": "All",
+            "options": {
+                "new": "New",
+                "used": "Used",
+                "certified": "Certified"
+            }
+        },
+        "location": {
+            "label": "Location",
+            "placeholder": "All Estonia",
+            "options": {
+                "Tallinn": "Tallinn",
+                "Tartu": "Tartu",
+                "Pärnu": "Pärnu",
+                "Narva": "Narva",
+                "Haapsalu": "Haapsalu",
+                "Viljandi": "Viljandi",
+                "Rakvere": "Rakvere",
+                "Kuressaare": "Kuressaare",
+                "Jõhvi": "Jõhvi"
+            }
+        }
+    },
+    "saveSearch": {
+        "trigger": "Save search",
+        "title": "Save search",
+        "description": "Save current filters so you can quickly reopen them later.",
+        "nameLabel": "Search name",
+        "namePlaceholder": "e.g. AWD BMWs in Tallinn",
+        "emailAlertsLabel": "Email alerts",
+        "emailAlertsDescription": "We'll let you know when new matching cars are added.",
+        "submit": "Save search",
+        "submitting": "Saving...",
+        "successTitle": "Saved!",
+        "successDescription": "Your search has been successfully saved.",
+        "errors": {
+            "loginRequired": {
+                "title": "Login required",
+                "description": "You must be logged in to save a search."
+            },
+            "nameMissing": {
+                "title": "Name missing",
+                "description": "Please enter a name for the search."
+            },
+            "saveFailed": {
+                "title": "Save error",
+                "default": "An error occurred while saving the search."
+            }
+        },
+        "toast": {
+            "successTitle": "Search saved",
+            "successDescription": "Search \"{{name}}\" is now saved in your profile."
+        }
+    }
+}

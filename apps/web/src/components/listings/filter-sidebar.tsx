@@ -13,8 +13,10 @@ import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import { RotateCcw, SlidersHorizontal } from "lucide-react";
 import { API_URL } from "@/lib/constants";
+import { useTranslation } from "react-i18next";
 
 export function FilterSidebar() {
+    const { t } = useTranslation(['listings', 'common', 'sell']);
     const filters = useFilterStore();
     const [makes, setMakes] = useState<string[]>([]);
     const [models, setModels] = useState<string[]>([]);
@@ -52,11 +54,22 @@ export function FilterSidebar() {
     const fuelTypes = ["Bensiin", "Diisel", "Hübriid", "Elekter", "Gaas"];
     const bodyTypes = ["Sedaan", "Universaal", "Maastur", "Kupee", "Kabriolett", "Mahtuniversaal", "Pikap", "Väikeautod"];
 
+    const bodyTypeMap: Record<string, string> = {
+        "Sedaan": "sedan",
+        "Universaal": "wagon",
+        "Maastur": "suv",
+        "Kupee": "coupe",
+        "Kabriolett": "convertible",
+        "Mahtuniversaal": "minivan",
+        "Pikap": "pickup",
+        "Väikeautod": "small_car"
+    };
+
     return (
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm h-fit">
             <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <h2 className="font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                    <SlidersHorizontal size={18} className="text-primary" /> Filtrid
+                    <SlidersHorizontal size={18} className="text-primary" /> {t('filters.title')}
                 </h2>
                 <Button
                     variant="ghost"
@@ -64,20 +77,22 @@ export function FilterSidebar() {
                     className="text-xs font-semibold text-primary hover:text-primary/80 hover:bg-primary/5 p-0 h-auto"
                     onClick={filters.resetFilters}
                 >
-                    <RotateCcw size={12} className="mr-1" /> Lähtesta
+                    <RotateCcw size={12} className="mr-1" /> {t('filters.clear')}
                 </Button>
             </div>
 
             <div className="p-5 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
                 {/* Make & Model */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Mark ja mudel</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        {t('filters.make')} & {t('filters.model')}
+                    </Label>
                     <Select value={filters.make} onValueChange={(val) => filters.setFilter("make", val)}>
                         <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
-                            <SelectValue placeholder="Kõik margid" />
+                            <SelectValue placeholder={t('filters.allMakes')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="none">Kõik margid</SelectItem>
+                            <SelectItem value="none">{t('filters.allMakes')}</SelectItem>
                             {makes.map((make) => (
                                 <SelectItem key={make} value={make}>{make}</SelectItem>
                             ))}
@@ -90,10 +105,10 @@ export function FilterSidebar() {
                         disabled={!filters.make}
                     >
                         <SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
-                            <SelectValue placeholder="Kõik mudelid" />
+                            <SelectValue placeholder={t('filters.allModels')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="none">Kõik mudelid</SelectItem>
+                            <SelectItem value="none">{t('filters.allModels')}</SelectItem>
                             {models.map((model) => (
                                 <SelectItem key={model} value={model}>{model}</SelectItem>
                             ))}
@@ -105,7 +120,7 @@ export function FilterSidebar() {
 
                 {/* Price Range */}
                 <div className="space-y-4">
-                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Hind (€)</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.price')} (€)</Label>
                     <div className="flex gap-2">
                         <Input
                             placeholder="Min"
@@ -126,11 +141,11 @@ export function FilterSidebar() {
 
                 {/* Year Range */}
                 <div className="space-y-4">
-                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aasta</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.year')}</Label>
                     <div className="flex gap-2">
                         <Select value={filters.yearMin} onValueChange={(val) => filters.setFilter("yearMin", val)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Alates" />
+                                <SelectValue placeholder={t('filters.from')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map((y) => (
@@ -140,7 +155,7 @@ export function FilterSidebar() {
                         </Select>
                         <Select value={filters.yearMax} onValueChange={(val) => filters.setFilter("yearMax", val)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Kuni" />
+                                <SelectValue placeholder={t('filters.to')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map((y) => (
@@ -155,7 +170,7 @@ export function FilterSidebar() {
 
                 {/* Fuel Type */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kütus</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.fuelType')}</Label>
                     <div className="space-y-2">
                         {fuelTypes.map((fuel) => (
                             <div key={fuel} className="flex items-center space-x-2">
@@ -168,7 +183,7 @@ export function FilterSidebar() {
                                     htmlFor={`fuel-${fuel}`}
                                     className="text-sm text-slate-700 dark:text-slate-300 leading-none cursor-pointer hover:text-primary transition-colors"
                                 >
-                                    {fuel}
+                                    {t(`options.fuel.${fuel}`, { ns: 'sell', defaultValue: fuel })}
                                 </label>
                             </div>
                         ))}
@@ -179,19 +194,19 @@ export function FilterSidebar() {
 
                 {/* Transmission */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Käigukast</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.transmission')}</Label>
                     <RadioGroup value={filters.transmission} onValueChange={(val) => filters.setFilter("transmission", val)}>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="all" id="t-all" />
-                            <Label htmlFor="t-all" className="text-sm font-normal">Kõik</Label>
+                            <Label htmlFor="t-all" className="text-sm font-normal">{t('common.all', { ns: 'common' })}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="automatic" id="t-auto" />
-                            <Label htmlFor="t-auto" className="text-sm font-normal">Automaat</Label>
+                            <Label htmlFor="t-auto" className="text-sm font-normal">{t('options.transmission.Automaat', { ns: 'sell' })}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="manual" id="t-manual" />
-                            <Label htmlFor="t-manual" className="text-sm font-normal">Manuaal</Label>
+                            <Label htmlFor="t-manual" className="text-sm font-normal">{t('options.transmission.Manuaal', { ns: 'sell' })}</Label>
                         </div>
                     </RadioGroup>
                 </div>
@@ -200,7 +215,7 @@ export function FilterSidebar() {
 
                 {/* Body Type */}
                 <div className="space-y-3">
-                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Keretüüp</Label>
+                    <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.bodyType')}</Label>
                     <div className="grid grid-cols-1 gap-2">
                         {bodyTypes.map((body) => (
                             <div key={body} className="flex items-center space-x-2">
@@ -213,7 +228,7 @@ export function FilterSidebar() {
                                     htmlFor={`body-${body}`}
                                     className="text-sm text-slate-700 dark:text-slate-300 leading-none cursor-pointer hover:text-primary transition-colors"
                                 >
-                                    {body}
+                                    {t(`step1.types.${bodyTypeMap[body]}`, { ns: 'sell', defaultValue: body })}
                                 </label>
                             </div>
                         ))}
@@ -223,7 +238,7 @@ export function FilterSidebar() {
 
             <div className="p-5 bg-slate-50 dark:bg-slate-800/50">
                 <Button className="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-lg shadow-primary/20 hover:brightness-105 transition-all">
-                    Näita tulemusi
+                    {t('filters.showResults')}
                 </Button>
             </div>
         </div>

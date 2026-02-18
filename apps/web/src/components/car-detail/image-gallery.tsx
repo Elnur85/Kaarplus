@@ -10,13 +10,16 @@ interface ImageGalleryProps {
     images: ListingImage[];
 }
 
+import { useTranslation } from "react-i18next";
+
 export function ImageGallery({ images }: ImageGalleryProps) {
+    const { t } = useTranslation('carDetail');
     const [activeIndex, setActiveIndex] = useState(0);
 
     if (!images?.length) {
         return (
             <div className="aspect-[4/3] rounded-xl bg-muted flex items-center justify-center">
-                <span className="text-muted-foreground">Pilte ei ole</span>
+                <span className="text-muted-foreground">{t('gallery.noImages')}</span>
             </div>
         );
     }
@@ -30,7 +33,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-muted group">
                 <Image
                     src={images[activeIndex].url}
-                    alt={`Vehicle image ${activeIndex + 1}`}
+                    alt={t('gallery.vehicleImage', { index: activeIndex + 1 })}
                     fill
                     className="object-cover transition-transform duration-500"
                     priority
@@ -39,12 +42,12 @@ export function ImageGallery({ images }: ImageGalleryProps) {
 
                 {/* Overlays */}
                 <div className="absolute top-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm z-10">
-                    {activeIndex + 1} / {images.length} Fotot
+                    {t('gallery.photoCount', { current: activeIndex + 1, total: images.length })}
                 </div>
 
                 <button
                     className="absolute top-4 right-4 bg-black/60 text-white p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/80"
-                    title="Täisekraan"
+                    title={t('gallery.fullscreen')}
                 >
                     <Maximize2 size={18} />
                 </button>
@@ -87,7 +90,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     >
                         <Image
                             src={image.url}
-                            alt={`Thumbnail ${index + 1}`}
+                            alt={t('gallery.thumbnail', { index: index + 1 })}
                             fill
                             className="object-cover"
                             sizes="120px"

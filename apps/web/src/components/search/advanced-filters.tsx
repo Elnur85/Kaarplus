@@ -102,7 +102,8 @@ export function AdvancedFilters() {
 
     useEffect(() => {
         if (!currentMake || currentMake === "none") {
-            setModels([]);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setModels(prev => prev.length === 0 ? prev : []);
             return;
         }
 

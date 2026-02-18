@@ -17,7 +17,11 @@ interface NewsletterSignupProps {
   className?: string;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function NewsletterSignup({ className }: NewsletterSignupProps) {
+  const { t } = useTranslation('common');
+
   const [email, setEmail] = useState("");
   const [language, setLanguage] = useState("et");
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +33,7 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
     setError(null);
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Palun sisestage kehtiv e-posti aadress.");
+      setError(t('newsletter.errors.invalidEmail'));
       return;
     }
 
@@ -49,16 +53,16 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
 
       if (!res.ok) {
         if (res.status === 409) {
-          setError("See e-posti aadress on juba registreeritud.");
+          setError(t('newsletter.errors.alreadySubscribed'));
         } else {
-          setError(data.error || "Midagi läks valesti. Palun proovige uuesti.");
+          setError(data.error || t('newsletter.errors.generic'));
         }
         return;
       }
 
       setIsSuccess(true);
     } catch {
-      setError("Ühenduse viga. Palun proovige uuesti.");
+      setError(t('newsletter.errors.connection'));
     } finally {
       setIsLoading(false);
     }
@@ -75,10 +79,10 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
         <div className="mx-auto max-w-md space-y-4">
           <CheckCircle className="mx-auto size-12 text-primary" />
           <h3 className="text-xl font-semibold text-foreground">
-            Täname! Olete edukalt liitunud meie uudiskirjaga.
+            {t('newsletter.successTitle')}
           </h3>
           <p className="text-sm text-muted-foreground">
-            Saadame teile parimad pakkumised ja uudised.
+            {t('newsletter.successDescription')}
           </p>
         </div>
       </section>
@@ -100,10 +104,10 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
         </div>
 
         <h3 className="mb-2 text-2xl font-bold text-foreground">
-          Liitu uudiskirjaga
+          {t('newsletter.title')}
         </h3>
         <p className="mb-8 text-muted-foreground">
-          Saage esimesena teada uutest pakkumistest ja autoturul toimuvast.
+          {t('newsletter.description')}
         </p>
 
         <form
@@ -112,7 +116,7 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
         >
           <Input
             type="email"
-            placeholder="teie@email.ee"
+            placeholder={t('newsletter.placeholder')}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -123,13 +127,13 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
           />
 
           <Select value={language} onValueChange={setLanguage}>
-            <SelectTrigger className="h-11 w-full bg-background sm:w-[100px]">
+            <SelectTrigger className="h-11 w-full bg-background sm:w-[130px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="et">Eesti</SelectItem>
-              <SelectItem value="ru">Русский</SelectItem>
-              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="et">{t('newsletter.languages.et')}</SelectItem>
+              <SelectItem value="ru">{t('newsletter.languages.ru')}</SelectItem>
+              <SelectItem value="en">{t('newsletter.languages.en')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -139,7 +143,7 @@ export function NewsletterSignup({ className }: NewsletterSignupProps) {
             ) : (
               <Mail className="mr-2 size-4" />
             )}
-            Liitu
+            {t('newsletter.button')}
           </Button>
         </form>
 

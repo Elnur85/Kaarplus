@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 interface ResultsCountProps {
     count: number;
     total: number;
@@ -7,15 +9,17 @@ interface ResultsCountProps {
 }
 
 export function ResultsCount({ count, total, isLoading }: ResultsCountProps) {
+    const { t } = useTranslation('listings');
+
     if (isLoading) {
         return <div className="h-4 w-32 bg-muted animate-pulse rounded" />;
     }
 
     return (
         <div>
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Kasutatud autod</h1>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{t('title')}</h1>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                {total.toLocaleString()} sõidukit vastab teie otsingule
+                {t('results.found', { total: total?.toLocaleString() || 0 })}
             </p>
         </div>
     );

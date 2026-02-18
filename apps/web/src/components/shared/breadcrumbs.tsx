@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { ChevronRight, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,11 +16,12 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+    const { t } = useTranslation('listings');
     return (
         <nav className={cn("flex items-center gap-2 text-xs font-medium text-muted-foreground mb-6", className)}>
             <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1.5">
                 <Home size={14} />
-                <span>Avaleht</span>
+                <span>{t('carsPage.breadcrumb.home', { defaultValue: 'Avaleht' })}</span>
             </Link>
 
             {items.map((item, index) => (

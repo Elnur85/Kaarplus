@@ -14,7 +14,7 @@ export const RateLimitConfig = {
     medium: 15 * 60 * 1000, // 15 minutes
     long: 60 * 60 * 1000,   // 1 hour
   },
-  
+
   // Maximum requests per window
   maxRequests: {
     strict: 5,      // Very strict (password reset, etc.)
@@ -33,13 +33,13 @@ export const RateLimitConfig = {
 function handleLimitReached(req: Request, res: Response): void {
   const clientIp = req.ip || req.socket.remoteAddress || "unknown";
   const endpoint = `${req.method} ${req.path}`;
-  
+
   logger.warn(`Rate limit exceeded`, {
     ip: clientIp,
     endpoint,
     userAgent: req.get("user-agent"),
   });
-  
+
   res.status(429).json({
     error: "Too many requests",
     message: "Please slow down and try again later.",
@@ -63,8 +63,8 @@ function createRateLimiter(
     legacyHeaders: false,  // Disable `X-RateLimit-*` headers
     message: { error: message },
     handler: handleLimitReached,
-    // Skip rate limiting in test environment
-    skip: () => process.env.NODE_ENV === "test",
+    // Skip rate limiting in test environment or when explicitly disabled
+    skip: () => process.env.NODE_ENV === "test" || process.env.DISABLE_RATE_LIMIT === "true",
   });
 }
 

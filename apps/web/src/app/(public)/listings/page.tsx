@@ -76,8 +76,8 @@ export default function ListingsPage() {
     ]);
 
     const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-        { name: "Avaleht", item: SITE_URL },
-        { name: "Kasutatud autod", item: `${SITE_URL}/listings` },
+        { name: t('carsPage.breadcrumb.home'), item: SITE_URL },
+        { name: t('carsPage.breadcrumb.cars'), item: `${SITE_URL}/listings` },
     ]);
 
     return (
@@ -152,10 +152,10 @@ export default function ListingsPage() {
                         {!isLoading && total > 20 && (
                             <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border pt-8">
                                 <p className="text-sm text-muted-foreground">
-                                    {t('results.showing', { 
-                                        start: ((filters.page - 1) * 20) + 1, 
-                                        end: Math.min(filters.page * 20, total), 
-                                        total: total 
+                                    {t('results.showing', {
+                                        start: ((filters.page - 1) * 20) + 1,
+                                        end: Math.min(filters.page * 20, total),
+                                        total: total
                                     })}
                                 </p>
                                 <Pagination

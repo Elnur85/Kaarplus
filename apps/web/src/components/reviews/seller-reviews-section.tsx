@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ReviewStats } from "@/components/reviews/review-stats";
 import { ReviewList } from "@/components/reviews/review-list";
 import { WriteReviewDialog } from "@/components/reviews/write-review-dialog";
@@ -15,6 +16,7 @@ export function SellerReviewsSection({
   sellerName,
 }: SellerReviewsSectionProps) {
   const [refreshKey, setRefreshKey] = useState(0);
+  const { t } = useTranslation("reviews");
 
   const handleReviewSuccess = useCallback(() => {
     setRefreshKey((k) => k + 1);
@@ -24,7 +26,7 @@ export function SellerReviewsSection({
     <section className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold text-foreground">
-          {sellerName} arvustused
+          {t("sellerReviews", { name: sellerName })}
         </h2>
         <WriteReviewDialog
           targetId={sellerId}

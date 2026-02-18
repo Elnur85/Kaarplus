@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,21 +25,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-const resetPasswordSchema = z.object({
-    newPassword: z
-        .string()
-        .min(8, "Parool peab olema vähemalt 8 tähemärki pikk")
-        .regex(/[A-Z]/, "Parool peab sisaldama vähemalt ühte suurt tähte")
-        .regex(/[0-9]/, "Parool peab sisaldama vähemalt ühte numbrit"),
-    confirmPassword: z.string(),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Paroolid ei kattu",
-    path: ["confirmPassword"],
-});
-
-type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
-
 function ResetPasswordFormContent() {
+    const { t } = useTranslation("auth");
     const { toast } = useToast();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -47,6 +35,20 @@ function ResetPasswordFormContent() {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isInvalidToken, setIsInvalidToken] = useState(false);
+
+    const resetPasswordSchema = z.object({
+        newPassword: z
+            .string()
+            .min(8, t("resetPassword.validation.minLength"))
+            .regex(/[A-Z]/, t("resetPassword.validation.uppercase"))
+            .regex(/[0-9]/, t("resetPassword.validation.number")),
+        confirmPassword: z.string(),
+    }).refine((data) => data.newPassword === data.confirmPassword, {
+        message: t("resetPassword.validation.mismatch"),
+        path: ["confirmPassword"],
+    });
+
+    type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
     const form = useForm<ResetPasswordFormValues>({
         resolver: zodResolver(resetPasswordSchema),
@@ -83,24 +85,25 @@ function ResetPasswordFormContent() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Parooli lähtestamine ebaõnnestus");
+                throw new Error(data.message || t("resetPassword.toastErrorDesc"));
             }
 
             setIsSuccess(true);
             toast({
-                title: "Parool lähtestatud",
-                description: "Teie parool on edukalt lähtestatud. Võite nüüd sisse logida.",
+                title: t("resetPassword.toastSuccess"),
+                description: t("resetPassword.toastSuccessDesc"),
             });
 
             // Redirect to login after 3 seconds
             setTimeout(() => {
                 router.push("/login");
             }, 3000);
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : t("resetPassword.toastErrorDesc");
             toast({
                 variant: "destructive",
-                title: "Viga",
-                description: error.message || "Parooli lähtestamine ebaõnnestus. Palun proovige uuesti.",
+                title: t("resetPassword.toastError"),
+                description: message,
             });
         } finally {
             setIsLoading(false);
@@ -111,22 +114,22 @@ function ResetPasswordFormContent() {
         return (
             <Card className="w-full max-w-md mx-auto">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center">Vigane link</CardTitle>
+                    <CardTitle className="text-2xl text-center">{t("resetPassword.invalidLinkTitle")}</CardTitle>
                     <CardDescription className="text-center">
-                        Parooli lähtestamise link on vigane või puudub.
+                        {t("resetPassword.invalidLinkDescription")}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription>
-                            Palun taotlege uus parooli lähtestamise link.
+                            {t("resetPassword.invalidLinkAlert")}
                         </AlertDescription>
                     </Alert>
                 </CardContent>
                 <CardFooter className="justify-center">
                     <Button variant="outline" onClick={() => router.push("/forgot-password")}>
-                        Taotle uus link
+                        {t("resetPassword.requestNewLink")}
                     </Button>
                 </CardFooter>
             </Card>
@@ -139,18 +142,18 @@ function ResetPasswordFormContent() {
                 <CardHeader>
                     <CardTitle className="text-2xl text-center flex items-center justify-center gap-2">
                         <CheckCircle className="text-green-500" />
-                        Parool lähtestatud
+                        {t("resetPassword.successTitle")}
                     </CardTitle>
                     <CardDescription className="text-center">
-                        Teie parool on edukalt lähtestatud.
+                        {t("resetPassword.successDescription")}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center text-muted-foreground">
-                    <p>Suuname teid automaatselt sisselogimise lehele...</p>
+                    <p>{t("resetPassword.redirecting")}</p>
                 </CardContent>
                 <CardFooter className="justify-center">
                     <Button variant="outline" onClick={() => router.push("/login")}>
-                        Mine sisselogimisele
+                        {t("resetPassword.goToLogin")}
                     </Button>
                 </CardFooter>
             </Card>
@@ -160,9 +163,9 @@ function ResetPasswordFormContent() {
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader>
-                <CardTitle className="text-2xl text-center">Lähtesta parool</CardTitle>
+                <CardTitle className="text-2xl text-center">{t("resetPassword.title")}</CardTitle>
                 <CardDescription className="text-center">
-                    Sisestage oma uus parool
+                    {t("resetPassword.description")}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -173,11 +176,11 @@ function ResetPasswordFormContent() {
                             name="newPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Uus parool</FormLabel>
+                                    <FormLabel>{t("resetPassword.newPassword")}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="password"
-                                            placeholder="Sisesta uus parool"
+                                            placeholder={t("resetPassword.newPasswordPlaceholder")}
                                             {...field}
                                         />
                                     </FormControl>
@@ -190,11 +193,11 @@ function ResetPasswordFormContent() {
                             name="confirmPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Kinnita parool</FormLabel>
+                                    <FormLabel>{t("resetPassword.confirmPassword")}</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="password"
-                                            placeholder="Kinnita uus parool"
+                                            placeholder={t("resetPassword.confirmPasswordPlaceholder")}
                                             {...field}
                                         />
                                     </FormControl>
@@ -206,10 +209,10 @@ function ResetPasswordFormContent() {
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Salvestan...
+                                    {t("resetPassword.submitting")}
                                 </>
                             ) : (
-                                "Lähtesta parool"
+                                t("resetPassword.submit")
                             )}
                         </Button>
                     </form>
@@ -217,7 +220,7 @@ function ResetPasswordFormContent() {
             </CardContent>
             <CardFooter className="justify-center">
                 <a href="/login" className="text-sm text-primary hover:underline">
-                    Tagasi sisselogimisele
+                    {t("resetPassword.backToLogin")}
                 </a>
             </CardFooter>
         </Card>
@@ -225,12 +228,13 @@ function ResetPasswordFormContent() {
 }
 
 export function ResetPasswordForm() {
+    const { t } = useTranslation("auth");
     return (
         <Suspense fallback={
             <Card className="w-full max-w-md mx-auto">
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center">Lähtesta parool</CardTitle>
-                    <CardDescription className="text-center">Laadimine...</CardDescription>
+                    <CardTitle className="text-2xl text-center">{t("resetPassword.title")}</CardTitle>
+                    <CardDescription className="text-center">{t("resetPassword.loading")}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />

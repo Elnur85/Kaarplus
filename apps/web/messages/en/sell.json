@@ -1,4 +1,10 @@
 {
+    "hero": {
+        "badge": "100% Free selling",
+        "title": "Sell your car for the",
+        "titleAccent": "best price",
+        "description": "Enter the details, add photos and find a buyer today. It only takes 5 minutes."
+    },
     "steps": {
         "type": "Vehicle Type",
         "data": "Details",
@@ -16,7 +22,8 @@
             "coupe": "Coupe",
             "convertible": "Convertible",
             "minivan": "Minivan",
-            "pickup": "Pickup"
+            "pickup": "Pickup",
+            "small_car": "Small car"
         }
     },
     "step2": {
@@ -42,7 +49,7 @@
             "fuelType": "Fuel *",
             "transmission": "Transmission *",
             "powerKw": "Power (kW) *",
-            "powerHj": "{count} hp",
+            "powerHj": "{{count}} hp",
             "driveType": "Drivetrain *",
             "doors": "Doors *",
             "seats": "Seats *",
@@ -72,7 +79,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Tell more about your car..."
         },
-        "charCount": "{count} / 5000 characters"
+        "charCount": "{{count}} / 5000 characters"
     },
     "step3": {
         "title": "Add Photos",
@@ -94,12 +101,12 @@
             ]
         },
         "mainPhoto": "Main Photo",
-        "addMore": "Add more (up to {count})",
-        "photoNumber": "Photo {index}"
+        "addMore": "Add more (up to {{count}})",
+        "photoNumber": "Photo {{index}}"
     },
     "step4": {
         "success": "Listing successfully submitted!",
-        "idText": "Your listing (ID: #{id}) is now under review.",
+        "idText": "Your listing (ID: #{{id}}) is now under review.",
         "nextSteps": {
             "title": "What happens next?",
             "items": [
@@ -121,7 +128,7 @@
         "minPhotos": "Please add at least 3 photos",
         "createError": "Error creating listing",
         "uploadingTitle": "Uploading images...",
-        "uploadingDesc": "Uploading {count} images. Please wait.",
+        "uploadingDesc": "Uploading {{count}} images. Please wait.",
         "attachError": "Error attaching images to listing",
         "successTitle": "Success!",
         "successDesc": "Listing successfully submitted with images!",
@@ -177,7 +184,8 @@
             "Hübriid": "Hybrid",
             "Elekter": "Electric",
             "CNG": "CNG",
-            "LPG": "LPG"
+            "LPG": "LPG",
+            "Gaas": "Gas (CNG/LPG)"
         },
         "transmission": {
             "Manuaal": "Manual",

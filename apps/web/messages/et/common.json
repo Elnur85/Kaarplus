@@ -19,15 +19,26 @@
             "title": "Teenused",
             "allListings": "Kõik kuulutused",
             "sellYourCar": "Müü oma auto",
-            "advancedSearch": "Täppisotsing",
-            "inspections": "Tehniline kontroll"
+            "inspections": "Sõiduki kontroll",
+            "electricVehicles": "Elektriautod",
+            "newListings": "Uued kuulutused"
         },
         "company": {
-            "title": "Ettevõttest",
+            "title": "Ettevõte",
             "aboutUs": "Meist",
             "faq": "KKK",
             "terms": "Kasutustingimused",
-            "privacy": "Privaatsuspoliitika"
+            "privacy": "Privaatsuspoliitika",
+            "careers": "Karjäär",
+            "cookies": "Küpsiste poliitika"
+        },
+        "support": {
+            "title": "Tugi",
+            "helpCenter": "Abikeskus",
+            "safetyAdvice": "Turvanõuanded",
+            "contactSupport": "Klienditugi",
+            "fraudProtection": "Pettusekaitse",
+            "sitemap": "Sisukaart"
         },
         "newsletter": {
             "title": "Liitu uudiskirjaga",
@@ -58,6 +69,7 @@
         "success": "Õnnestus",
         "yes": "Jah",
         "no": "Ei",
+        "all": "Kõik",
         "more": "Rohkem",
         "less": "Vähem",
         "showMore": "Näita rohkem",
@@ -79,5 +91,42 @@
     "buttons": {
         "save": "Salvesta",
         "contact": "Võta ühendust"
+    },
+    "newsletter": {
+        "title": "Liitu uudiskirjaga",
+        "description": "Saage esimesena teada uutest pakkumistest ja autoturul toimuvast.",
+        "placeholder": "teie@email.ee",
+        "button": "Liitu",
+        "successTitle": "Täname! Olete edukalt liitunud meie uudiskirjaga.",
+        "successDescription": "Saadame teile parimad pakkumised ja uudised.",
+        "errors": {
+            "invalidEmail": "Palun sisestage kehtiv e-posti aadress.",
+            "alreadySubscribed": "See e-posti aadress on juba registreeritud.",
+            "generic": "Midagi läks valesti. Palun proovige uuesti.",
+            "connection": "Ühenduse viga. Palun proovige uuesti."
+        },
+        "languages": {
+            "et": "Eesti",
+            "ru": "Русский",
+            "en": "English"
+        },
+        "unsubscribe": {
+            "title": "Uudiskirjast lahkumine",
+            "confirm": "Kas olete kindel, et soovite uudiskirjast lahkuda?",
+            "button": "Jah, lahku uudiskirjast",
+            "success": "Olete edukalt uudiskirjast lahkunud. Ei saada teile enam e-kirju.",
+            "invalidToken": "Vigane link. Palun kasutage e-kirjas olevat linki.",
+            "wait": "Palun oodake...",
+            "error": "Viga"
+        }
+    },
+    "specs": {
+        "year": "Aasta",
+        "mileage": "Läbisõit",
+        "fuelType": "Kütus",
+        "transmission": "Käigukast",
+        "power": "Võimsus",
+        "auto": "Automaat",
+        "manual": "Manuaal"
     }
 }

@@ -16,5 +16,19 @@
         "errorOccurred": "Midagi läks valesti.",
         "unexpectedError": "Ootamatu viga ilmnes.",
         "paymentFailed": "Makse ebaõnnestus"
+    },
+    "page": {
+        "title": "Osta sõiduk",
+        "inactive": {
+            "title": "See kuulutus pole enam aktiivne",
+            "description": "Vabandame, aga seda sõidukit ei saa enam osta."
+        },
+        "success": {
+            "title": "Makse õnnestus!",
+            "description": "Täname ostu eest! Teie makse on edukalt kätte saadud.",
+            "sellerNotification": "Müüja on saanud teavituse ja võtab teiega peagi ühendust, et kokku leppida sõiduki üleandmine.",
+            "viewMessages": "Vaata sõnumeid",
+            "backHome": "Tagasi avalehele"
+        }
     }
 }

@@ -25,5 +25,19 @@
             "title": "Kuulutusi ei leitud",
             "description": "Sellel esindusel ei ole hetkel aktiivseid müügikuulutusi."
         }
+    },
+    "list": {
+        "title": "Ametlikud Esindused",
+        "description": "Tutvu meie usaldusväärsete koostööpartneritega. Kõik esindused on kontrollitud ja pakuvad kvaliteetseid sõidukeid.",
+        "activeListings": "{{count}} aktiivne kuulutus",
+        "activeListings_plural": "{{count}} aktiivset kuulutust",
+        "viewDealer": "Vaata esindust",
+        "noDealers": "Hetkel ei ole ühtegi esindust registreeritud.",
+        "noBio": "Kirjeldus puudub.",
+        "asukohtMaaramata": "Asukoht määramata"
+    },
+    "metadata": {
+        "notFound": "Esindust ei leitud",
+        "ogDescription": "Tutvu {name} müügikuulutuste ja infoga."
     }
 }

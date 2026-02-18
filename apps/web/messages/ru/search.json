@@ -1,5 +1,18 @@
 {
     "title": "Расширенный поиск",
+    "subtitle": "Найдите автомобиль своей мечты с точными фильтрами",
+    "results_suffix_one": "результат",
+    "results_suffix_few": "результата",
+    "results_suffix_many": "результатов",
+    "results_suffix_other": "результатов",
+    "filtersButton": "Фильтры",
+    "saveButton": "Сохранить",
+    "tryAgain": "Попробовать снова",
+    "error": "Поиск не удался. Пожалуйста, попробуйте еще раз.",
+    "noResults": "Результатов не найдено",
+    "noResultsDesc": "Попробуйте изменить фильтры или поисковый запрос.",
+    "clearFilters": "Очистить все фильтры",
+    "pagination": "Показано {{start}} - {{end}} из {{total}} автомобилей",
     "filters": {
         "count_one": "{{count}} фильтр",
         "count_other": "{{count}} фильтров",

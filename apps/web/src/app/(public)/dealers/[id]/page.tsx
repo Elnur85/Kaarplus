@@ -1,6 +1,7 @@
 import { DealershipProfile } from "@/components/dealership/dealership-profile";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import dealershipEt from "@/../messages/et/dealership.json";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -23,11 +24,11 @@ async function getDealership(id: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
     const dealership = await getDealership(id);
-    if (!dealership) return { title: "Dealership not found | Kaarplus" };
+    if (!dealership) return { title: `${dealershipEt.metadata.notFound} | Kaarplus` };
 
     return {
-        title: `${dealership.name} | Ametlik Esindus Kaarplus`,
-        description: dealership.bio || `Tutvu ${dealership.name} müügikuulutuste ja infoga.`,
+        title: `${dealership.name} | ${dealershipEt.badges.official} Kaarplus`,
+        description: dealership.bio || dealershipEt.metadata.ogDescription.replace("{name}", dealership.name),
         openGraph: {
             images: dealership.image ? [dealership.image] : [],
         },

@@ -110,5 +110,36 @@
                 "joined": "Joined"
             }
         }
+    },
+    "overview": {
+        "title": "Overview",
+        "description": "Kaarplus portal management and statistics.",
+        "stats": {
+            "pendingListings": "Pending Verification",
+            "pendingSubtext": "Awaiting review",
+            "activeUsers": "Active Users",
+            "activeUsersSubtext": "Registered users",
+            "totalListings": "Total Listings",
+            "totalListingsSubtext": "All listings",
+            "verifiedToday": "Verified Today",
+            "verifiedTodaySubtext": "Verified today",
+            "failed": "Failed to load stats"
+        },
+        "quickActions": "Quick Actions",
+        "viewQueue": "View verification queue",
+        "viewQueueDesc": "Review and approve listings",
+        "manageUsers": "Manage users",
+        "manageUsersDesc": "Search and edit user data"
+    },
+    "users": {
+        "title": "Users",
+        "description": "All registered users and their roles ({count}).",
+        "searchPlaceholder": "Search by name or email...",
+        "table": {
+            "user": "User",
+            "role": "Role",
+            "joined": "Joined",
+            "actions": "Actions"
+        }
     }
 }

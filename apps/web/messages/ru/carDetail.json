@@ -49,5 +49,12 @@
         "warranty": "Гарантия",
         "verified": "Проверено",
         "locationEstonia": "{{location}}, Эстония"
+    },
+    "gallery": {
+        "noImages": "Нет изображений",
+        "photoCount": "{{current}} / {{total}} Фото",
+        "fullscreen": "Полноэкранный режим",
+        "vehicleImage": "Изображение автомобиля {{index}}",
+        "thumbnail": "Миниатюра {{index}}"
     }
 }

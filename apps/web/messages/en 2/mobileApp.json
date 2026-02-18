@@ -1,0 +1,29 @@
+{
+    "hero": {
+        "badge": "Investor Preview • Version 1.0",
+        "title": "The future of car buying",
+        "titleAccent": "in your pocket.",
+        "description": "Experience the seamless marketplace with real-time notifications, instant messaging, and exclusive mobile-first features.",
+        "waitlist": {
+            "placeholder": "Enter your email",
+            "button": "Join Waitlist",
+            "count": "Join 2,000+ others on the waitlist"
+        }
+    },
+    "mockup": {
+        "searchPlaceholder": "Search BMW...",
+        "categories": {
+            "all": "All",
+            "suv": "SUV",
+            "sedan": "Sedan",
+            "sport": "Sport"
+        },
+        "badge": "New",
+        "nav": {
+            "search": "Search",
+            "favorites": "Favorites",
+            "messages": "Messages",
+            "profile": "Profile"
+        }
+    }
+}

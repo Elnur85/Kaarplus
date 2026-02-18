@@ -1,6 +1,9 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { Star, User } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { et } from "date-fns/locale";
+import { formatDistanceToNow, type Locale } from "date-fns";
+import { et, ru, enUS } from "date-fns/locale";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -22,22 +25,29 @@ interface ReviewCardProps {
   review: ReviewData;
 }
 
+const locales: Record<string, Locale> = {
+  et: et,
+  ru: ru,
+  en: enUS,
+};
+
 export function ReviewCard({ review }: ReviewCardProps) {
+  const { t, i18n } = useTranslation("reviews");
   const { rating, title, body, verified, createdAt, reviewer } = review;
 
   const initials = reviewer.name
     ? reviewer.name
-        .split(" ")
-        .filter(Boolean)
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
+      .split(" ")
+      .filter(Boolean)
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
     : null;
 
   const timeAgo = formatDistanceToNow(new Date(createdAt), {
     addSuffix: true,
-    locale: et,
+    locale: locales[i18n.language] || enUS,
   });
 
   return (
@@ -45,7 +55,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
       <div className="flex items-start gap-3">
         <Avatar className="h-9 w-9">
           {reviewer.image && (
-            <AvatarImage src={reviewer.image} alt={reviewer.name ?? "Kasutaja"} />
+            <AvatarImage src={reviewer.image} alt={reviewer.name ?? t("labels.user")} />
           )}
           <AvatarFallback>
             {initials ?? <User className="h-4 w-4" />}
@@ -55,7 +65,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-medium text-foreground">
-              {reviewer.name ?? "Anonuumne"}
+              {reviewer.name ?? t("labels.anonymous")}
             </span>
             <span className="text-xs text-muted-foreground">{timeAgo}</span>
             {verified && (
@@ -63,7 +73,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 variant="secondary"
                 className="bg-green-100 text-green-700 text-xs"
               >
-                Kinnitatud ost
+                {t("labels.verifiedPurchase")}
               </Badge>
             )}
           </div>

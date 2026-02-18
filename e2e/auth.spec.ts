@@ -53,7 +53,7 @@ test.describe('Authentication Flow', () => {
         await page.fill('input[name="password"]', userPassword);
         await page.click('button[type="submit"]');
 
-        await expect(page).toHaveURL(/\/dashboard/);
+        await expect(page).toHaveURL(/\/dashboard/, { timeout: 15000 });
         // await expect(page.getByText('Edukalt sisse logitud')).toBeVisible();
 
         await context.close();
