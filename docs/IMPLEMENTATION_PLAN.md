@@ -155,7 +155,7 @@ Remediation phase to bring the project to actual production quality.
 | P5-T07 | Final integration test & quality gate                       | ✅     | P5-T01 to P5-T06   | 2h   |
 | P6-T01 | Security Hardening: Resource Ownership Verification          | ✅     | Phase 1, Phase 5   | 3h   |
 | P6-T02 | Ad Engine: Full UI Integration & Dashboard                  | ✅     | Phase 2, Phase 3   | 5h   |
-| P6-T03 | Caching & DB Index Optimization                             | ⬜     | Phase 1            | 3h   |
+| P6-T03 | Caching & DB Index Optimization                             | ✅     | Phase 1            | 3h   |
 | P6-T04 | Messaging System: Real-time with WebSockets                 | ⬜     | P2-T06             | 5h   |
 
 ### Phase 6 — Acceptance Criteria
@@ -163,7 +163,7 @@ Remediation phase to bring the project to actual production quality.
 - [ ] Users can only edit/delete their OWN listings (and admins can do all)
 - [ ] Ad slots are functional on Listings and Search pages
 - [ ] Admin panel includes a basic Ad Management dashboard
-- [ ] API responses for search/filters are under 200ms (caching)
+- [x] API responses for search/filters are under 200ms (caching)
 - [ ] Messaging supports real-time updates (no page refresh)
 
 ---
