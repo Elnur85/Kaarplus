@@ -22,7 +22,7 @@ export const getAllListings = async (req: Request, res: Response) => {
     }
 
     const isAdmin = req.user?.role === "ADMIN";
-    const listings = await listingService.getAllListings(result.data as ListingQuery, isAdmin);
+    const listings = await listingService.getAllListings(result.data as ListingQuery, isAdmin) as any;
 
     // If it's the first page and not admin view, prepend sponsored listings
     if (!isAdmin && result.data.page === 1) {
@@ -43,7 +43,7 @@ export const getAllListings = async (req: Request, res: Response) => {
                 const sponsoredIds = new Set(sponsoredListings.map(l => l.id));
                 listings.data = [
                     ...sponsoredListings,
-                    ...listings.data.filter(l => !sponsoredIds.has(l.id))
+                    ...listings.data.filter((l: any) => !sponsoredIds.has(l.id))
                 ];
 
                 // Update total count if needed (optional, usually sponsored are "extra")

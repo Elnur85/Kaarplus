@@ -119,6 +119,10 @@ model Listing {
   @@index([deletedAt])
   @@index([make, model, year, price, status])
   @@index([location, status, publishedAt])
+  @@index([fuelType, status])
+  @@index([transmission, status])
+  @@index([bodyType, status])
+  @@index([mileage])
 }
 
 model ListingImage {

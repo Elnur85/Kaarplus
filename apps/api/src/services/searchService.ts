@@ -1,17 +1,31 @@
 import { prisma } from "@kaarplus/database";
 
+import { cacheService } from "../utils/cache";
+
+const CACHE_TTL = 3600; // 1 hour for search options
+
 export class SearchService {
-    async getMakes() {
+    async getMakes(): Promise<string[]> {
+        const cacheKey = "search:makes";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as string[];
+
         const makes = await prisma.listing.findMany({
             where: { status: "ACTIVE" },
             select: { make: true },
             distinct: ["make"],
             orderBy: { make: "asc" },
         });
-        return makes.map((m) => m.make);
+        const result = makes.map((m) => m.make);
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 
-    async getModels(make: string) {
+    async getModels(make: string): Promise<string[]> {
+        const cacheKey = `search:models:${make.toLowerCase()}`;
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as string[];
+
         const models = await prisma.listing.findMany({
             where: {
                 status: "ACTIVE",
@@ -21,10 +35,16 @@ export class SearchService {
             distinct: ["model"],
             orderBy: { model: "asc" },
         });
-        return models.map((m) => m.model);
+        const result = models.map((m) => m.model);
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 
-    async getFilterOptions() {
+    async getFilterOptions(): Promise<any> {
+        const cacheKey = "search:filter-options";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as any;
+
         // This could be optimized by querying distinct values for each field
         const [makes, fuelTypes, bodyTypes, transmissions] = await Promise.all([
             prisma.listing.findMany({ where: { status: "ACTIVE" }, select: { make: true }, distinct: ["make"] }),
@@ -40,7 +60,7 @@ export class SearchService {
             _max: { year: true, price: true },
         });
 
-        return {
+        const result = {
             makes: makes.map((m) => m.make).filter(Boolean).sort(),
             fuelTypes: fuelTypes.map((f) => f.fuelType).filter(Boolean).sort(),
             bodyTypes: bodyTypes.map((b) => b.bodyType).filter(Boolean).sort(),
@@ -54,45 +74,72 @@ export class SearchService {
                 max: Number(aggregates._max.price) || 500000,
             }
         };
+
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 
-    async getLocations() {
+    async getLocations(): Promise<string[]> {
+        const cacheKey = "search:locations";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as string[];
+
         const locations = await prisma.listing.findMany({
             where: { status: "ACTIVE" },
             select: { location: true },
             distinct: ["location"],
             orderBy: { location: "asc" },
         });
-        return locations.map((l) => l.location).filter(Boolean);
+        const result = locations.map((l) => l.location).filter(Boolean) as string[];
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 
-    async getColors() {
+    async getColors(): Promise<string[]> {
+        const cacheKey = "search:colors";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as string[];
+
         const colors = await prisma.listing.findMany({
             where: { status: "ACTIVE" },
             select: { colorExterior: true },
             distinct: ["colorExterior"],
             orderBy: { colorExterior: "asc" },
         });
-        return colors.map((c) => c.colorExterior).filter(Boolean);
+        const result = colors.map((c) => c.colorExterior).filter(Boolean) as string[];
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 
-    async getDriveTypes() {
+    async getDriveTypes(): Promise<string[]> {
+        const cacheKey = "search:drive-types";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as string[];
+
         const driveTypes = await prisma.listing.findMany({
             where: { status: "ACTIVE" },
             select: { driveType: true },
             distinct: ["driveType"],
             orderBy: { driveType: "asc" },
         });
-        return driveTypes.map((d) => d.driveType).filter(Boolean);
+        const result = driveTypes.map((d) => d.driveType).filter(Boolean) as string[];
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 
-    async getBodyTypes() {
+    async getBodyTypes(): Promise<string[]> {
+        const cacheKey = "search:body-types";
+        const cached = cacheService.get(cacheKey);
+        if (cached) return cached as string[];
+
         const bodyTypes = await prisma.listing.findMany({
             where: { status: "ACTIVE" },
             select: { bodyType: true },
             distinct: ["bodyType"],
             orderBy: { bodyType: "asc" },
         });
-        return bodyTypes.map((b) => b.bodyType).filter(Boolean);
+        const result = bodyTypes.map((b) => b.bodyType).filter(Boolean) as string[];
+        cacheService.set(cacheKey, result, CACHE_TTL);
+        return result;
     }
 }
