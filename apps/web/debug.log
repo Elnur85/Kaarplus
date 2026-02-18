@@ -1,0 +1,6 @@
+2026-02-18T22:19:37.908Z - PurchasePage loaded for id: cmlscaxjp00gcrw0hfkv6sqrh
+2026-02-18T22:19:37.908Z - Fetching listing from: http://localhost:4000/api/listings/cmlscaxjp00gcrw0hfkv6sqrh
+2026-02-18T22:19:37.997Z - Fetch status: 200 OK
+2026-02-18T22:19:37.998Z - Fetch success, data exists: true
+2026-02-18T22:19:37.998Z - Listing status: ACTIVE
+2026-02-18T22:19:37.998Z - Rendering CheckoutPageClient

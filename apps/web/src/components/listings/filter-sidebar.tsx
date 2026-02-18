@@ -109,27 +109,37 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 
 	const currentMake = filters.make;
 
+
 	// Fetch makes and filter options on mount
 	useEffect(() => {
 		let cancelled = false;
 
-		Promise.all([
-			fetch(`${API_URL}/search/makes`).then(r => r.json()),
-			fetch(`${API_URL}/search/filters`).then(r => r.json()),
-		])
-			.then(([makesData, filtersData]) => {
-				if (!cancelled) {
-					setMakes(makesData.data || []);
-					setFilterOptions(filtersData.data);
-				}
-			})
-			.catch(console.error)
-			.finally(() => {
-				if (!cancelled) {
-					setIsLoadingMakes(false);
-					setIsLoadingOptions(false);
-				}
-			});
+		const fetchMakes = async () => {
+			try {
+				const res = await fetch(`${API_URL}/search/makes`);
+				const json = await res.json();
+				if (!cancelled) setMakes(json.data || []);
+			} catch (error) {
+				console.error("Failed to fetch makes:", error);
+			} finally {
+				if (!cancelled) setIsLoadingMakes(false);
+			}
+		};
+
+		const fetchFilters = async () => {
+			try {
+				const res = await fetch(`${API_URL}/search/filters`);
+				const json = await res.json();
+				if (!cancelled) setFilterOptions(json.data);
+			} catch (error) {
+				console.error("Failed to fetch filters:", error);
+			} finally {
+				if (!cancelled) setIsLoadingOptions(false);
+			}
+		};
+
+		fetchMakes();
+		fetchFilters();
 
 		return () => {
 			cancelled = true;

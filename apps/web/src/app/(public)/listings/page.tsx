@@ -57,6 +57,7 @@ export default function ListingsPage() {
 			if (filters.condition && filters.condition !== "none") params.set("condition", filters.condition);
 			if (filters.location && filters.location !== "none") params.set("location", filters.location);
 			if (filters.color && filters.color !== "none") params.set("color", filters.color);
+
 			params.set("page", filters.page.toString());
 			params.set("pageSize", "20");
 
