@@ -164,10 +164,10 @@ export class AdService {
 
     const ipHash = data.ip
       ? crypto
-          .createHash("sha256")
-          .update(data.ip)
-          .digest("hex")
-          .substring(0, 16)
+        .createHash("sha256")
+        .update(data.ip)
+        .digest("hex")
+        .substring(0, 16)
       : null;
 
     await prisma.adAnalytics.create({
@@ -557,11 +557,12 @@ export class AdService {
         listing: {
           include: {
             images: {
+              where: { verified: true },
               orderBy: { order: "asc" },
               take: 1,
             },
             user: {
-              select: { id: true, name: true, role: true },
+              select: { id: true, name: true, role: true, dealershipId: true },
             },
           },
         },

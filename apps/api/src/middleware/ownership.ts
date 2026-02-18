@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express";
 import { prisma } from "@kaarplus/database";
+import { Request, Response, NextFunction } from "express";
+
 import { ForbiddenError, NotFoundError, AuthError } from "../utils/errors";
 
 /**

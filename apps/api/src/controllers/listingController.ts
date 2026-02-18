@@ -8,10 +8,12 @@ import {
     addImagesSchema,
     reorderImagesSchema,
 } from "../schemas/listing";
+import { AdService } from "../services/adService";
 import { ListingService, ListingQuery } from "../services/listingService";
 import { BadRequestError } from "../utils/errors";
 
 const listingService = new ListingService();
+const adService = new AdService();
 
 export const getAllListings = async (req: Request, res: Response) => {
     const result = listingQuerySchema.safeParse(req.query);
@@ -21,6 +23,38 @@ export const getAllListings = async (req: Request, res: Response) => {
 
     const isAdmin = req.user?.role === "ADMIN";
     const listings = await listingService.getAllListings(result.data as ListingQuery, isAdmin);
+
+    // If it's the first page and not admin view, prepend sponsored listings
+    if (!isAdmin && result.data.page === 1) {
+        try {
+            const context = {
+                fuelType: result.data.fuelType,
+                bodyType: result.data.bodyType,
+            };
+            const sponsoredData = await adService.getSponsoredListingsForSearch(context);
+
+            if (sponsoredData && sponsoredData.length > 0) {
+                const sponsoredListings = sponsoredData.map(s => ({
+                    ...s.listing,
+                    isSponsored: true
+                }));
+
+                // filter out sponsored listings if they already exist in standard listings to avoid duplicates
+                const sponsoredIds = new Set(sponsoredListings.map(l => l.id));
+                listings.data = [
+                    ...sponsoredListings,
+                    ...listings.data.filter(l => !sponsoredIds.has(l.id))
+                ];
+
+                // Update total count if needed (optional, usually sponsored are "extra")
+                // listings.total += sponsoredListings.length;
+            }
+        } catch (error) {
+            // Log error but don't fail the request - ads are non-critical
+            console.error("[ListingController] Failed to fetch sponsored listings:", error);
+        }
+    }
+
     res.json(listings);
 };
 

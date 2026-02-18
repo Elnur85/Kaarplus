@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import React from "react";
 import { useFilterStore } from "@/store/use-filter-store";
 import { AdvancedFilters } from "@/components/search/advanced-filters";
 import { VehicleCard } from "@/components/shared/vehicle-card";
@@ -15,6 +16,7 @@ import { SlidersHorizontal, Search, Bookmark, AlertCircle } from "lucide-react";
 import { VehicleSummary } from "@/types/vehicle";
 import { API_URL } from "@/lib/constants";
 import { SaveSearchModal } from "@/components/search/save-search-modal";
+import { AdSlot } from "@/components/shared/ad-slot";
 
 const PAGE_SIZE = 20;
 
@@ -195,8 +197,28 @@ export default function SearchPage() {
                             </div>
                         ) : listings.length > 0 ? (
                             <div className={`grid gap-6 ${filters.view === "grid" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
-                                {listings.map((vehicle) => (
-                                    <VehicleCard key={vehicle.id} vehicle={vehicle} variant={filters.view} />
+                                {listings.map((vehicle, index) => (
+                                    <React.Fragment key={vehicle.id}>
+                                        <VehicleCard
+                                            vehicle={vehicle}
+                                            variant={filters.view}
+                                            sponsored={vehicle.isSponsored}
+                                        />
+                                        {/* Show ad after 6th listing on large screens, or 4th on mobile grid */}
+                                        {(index + 1) % 6 === 0 && (
+                                            <div className="col-span-full py-4">
+                                                <AdSlot
+                                                    placementId="search-results-inline"
+                                                    context={{
+                                                        make: filters.make !== "none" ? filters.make : undefined,
+                                                        fuelType: filters.fuelType[0],
+                                                        bodyType: filters.bodyType[0],
+                                                    }}
+                                                    className="h-[120px]"
+                                                />
+                                            </div>
+                                        )}
+                                    </React.Fragment>
                                 ))}
                             </div>
                         ) : !error ? (

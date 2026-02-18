@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, Suspense } from "react";
+import React from "react";
 import { useFilterStore } from "@/store/use-filter-store";
 import { FilterSidebar } from "@/components/listings/filter-sidebar";
 import { FilterBadges } from "@/components/listings/filter-badges";
@@ -25,29 +26,9 @@ import { useTranslation } from "react-i18next";
 export default function ListingsPage() {
     const { t } = useTranslation('listings');
     const [listings, setListings] = useState<VehicleSummary[]>([]);
-    const [sponsoredListings, setSponsoredListings] = useState<SponsoredListingData[]>([]);
     const [total, setTotal] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
     const filters = useFilterStore();
-
-    // Fetch sponsored listings
-    const fetchSponsored = useCallback(async () => {
-        try {
-            const params = new URLSearchParams();
-            if (filters.fuelType.length > 0) params.set("fuelType", filters.fuelType[0]);
-            if (filters.bodyType.length > 0) params.set("bodyType", filters.bodyType[0]);
-            const qs = params.toString();
-            const res = await fetch(`${API_URL}/api/content-blocks/sponsored/listings${qs ? `?${qs}` : ""}`);
-            const json = await res.json();
-            setSponsoredListings(json.data || []);
-        } catch {
-            setSponsoredListings([]);
-        }
-    }, [filters.fuelType, filters.bodyType]);
-
-    useEffect(() => {
-        fetchSponsored();
-    }, [fetchSponsored]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchListings = async () => {
         setIsLoading(true);
@@ -157,37 +138,29 @@ export default function ListingsPage() {
                             </div>
                         ) : listings.length > 0 ? (
                             <div className={`grid gap-6 ${filters.view === "grid" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
-                                {listings.map((vehicle, index) => {
-                                    const items = [
-                                        <VehicleCard key={vehicle.id} vehicle={vehicle} variant={filters.view} />
-                                    ];
-                                    // Inject a sponsored card after every 10th organic result
-                                    const sponsoredIdx = Math.floor(index / 10);
-                                    if ((index + 1) % 10 === 0 && sponsoredIdx < sponsoredListings.length) {
-                                        const sp = sponsoredListings[sponsoredIdx];
-                                        const spVehicle: VehicleSummary = {
-                                            id: sp.listing.id,
-                                            make: sp.listing.make,
-                                            model: sp.listing.model,
-                                            variant: sp.listing.variant,
-                                            year: sp.listing.year,
-                                            price: sp.listing.price,
-                                            priceVatIncluded: sp.listing.priceVatIncluded,
-                                            mileage: sp.listing.mileage,
-                                            fuelType: sp.listing.fuelType,
-                                            transmission: sp.listing.transmission,
-                                            bodyType: sp.listing.bodyType,
-                                            thumbnailUrl: sp.listing.images?.[0]?.url || "",
-                                            status: sp.listing.status as VehicleSummary["status"],
-                                            badges: [],
-                                            createdAt: new Date().toISOString(),
-                                        };
-                                        items.push(
-                                            <VehicleCard key={`sponsored-${sp.id}`} vehicle={spVehicle} variant={filters.view} sponsored />
-                                        );
-                                    }
-                                    return items;
-                                })}
+                                {listings.map((vehicle, index) => (
+                                    <React.Fragment key={vehicle.id}>
+                                        <VehicleCard
+                                            vehicle={vehicle}
+                                            variant={filters.view}
+                                            sponsored={vehicle.isSponsored}
+                                        />
+                                        {/* Inline Display Ad after every 10th result if not already showing one */}
+                                        {(index + 1) % 10 === 0 && (
+                                            <div className="col-span-full py-4">
+                                                <AdSlot
+                                                    placementId="LISTINGS_INLINE"
+                                                    context={{
+                                                        make: filters.make !== "none" ? filters.make : undefined,
+                                                        fuelType: filters.fuelType[0],
+                                                        bodyType: filters.bodyType[0],
+                                                    }}
+                                                    className="h-[120px]"
+                                                />
+                                            </div>
+                                        )}
+                                    </React.Fragment>
+                                ))}
                             </div>
                         ) : (
                             <div className="py-20 text-center border rounded-xl bg-card border-dashed">
