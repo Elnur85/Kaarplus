@@ -17,7 +17,7 @@ export function initSentry() {
             environment: process.env.NODE_ENV || "development",
         });
         console.log("Sentry initialized");
-    } else {
+    } else if (process.env.NODE_ENV === "production") {
         console.warn("Sentry DSN not found, skipping initialization.");
     }
 }

@@ -19,6 +19,7 @@ vi.mock('@kaarplus/database', () => ({
 }));
 
 import { getUserDashboardStats, getUserListings, getUserProfile, updateUserProfile } from './dashboardService';
+
 import { prisma } from '@kaarplus/database';
 
 describe('DashboardService', () => {

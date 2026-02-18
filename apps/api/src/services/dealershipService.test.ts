@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { NotFoundError } from '../utils/errors';
 
 // Mock must be before importing the service
@@ -15,6 +16,7 @@ vi.mock('@kaarplus/database', () => ({
 }));
 
 import { DealershipService } from './dealershipService';
+
 import { prisma } from '@kaarplus/database';
 
 describe('DealershipService', () => {

@@ -15,11 +15,7 @@ function UnsubscribeContent() {
   );
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    if (!token) {
-      setMessage(t("newsletter.unsubscribe.invalidToken"));
-    }
-  }, [token, t]);
+  const displayMessage = message || (!token ? t("newsletter.unsubscribe.invalidToken") : "");
 
   const handleUnsubscribe = async () => {
     if (!token) return;
@@ -78,7 +74,7 @@ function UnsubscribeContent() {
           <h1 className="text-2xl font-bold text-foreground">
             {t("newsletter.unsubscribe.title")}
           </h1>
-          <p className="text-muted-foreground">{message}</p>
+          <p className="text-muted-foreground">{displayMessage}</p>
         </div>
       )}
 
@@ -86,7 +82,7 @@ function UnsubscribeContent() {
         <div className="space-y-4">
           <XCircle className="mx-auto size-16 text-destructive" />
           <h1 className="text-2xl font-bold text-foreground">{t("newsletter.unsubscribe.error")}</h1>
-          <p className="text-muted-foreground">{message}</p>
+          <p className="text-muted-foreground">{displayMessage}</p>
         </div>
       )}
     </div>

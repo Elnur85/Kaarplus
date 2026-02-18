@@ -19,6 +19,7 @@ vi.mock('@kaarplus/database', () => ({
 }));
 
 import { favoriteService } from './favoriteService';
+
 import { prisma } from '@kaarplus/database';
 
 describe('FavoriteService', () => {

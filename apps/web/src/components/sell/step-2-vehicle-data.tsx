@@ -84,8 +84,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <Label htmlFor="make">{t('step2.labels.make')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("make", v, { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("make", v, { shouldValidate: true })}
                             value={watch("make")}
                         >
                             <SelectTrigger className={cn(hasError("make") && "border-destructive ring-1 ring-destructive")}>
@@ -190,8 +190,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
                         <Label htmlFor="fuelType">{t('step2.labels.fuelType')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("fuelType", v, { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("fuelType", v, { shouldValidate: true })}
                             value={watch("fuelType")}
                         >
                             <SelectTrigger className={cn(hasError("fuelType") && "border-destructive ring-1 ring-destructive")}>
@@ -208,8 +208,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
 
                     <div className="space-y-2">
                         <Label htmlFor="transmission">{t('step2.labels.transmission')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("transmission", v, { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("transmission", v, { shouldValidate: true })}
                             value={watch("transmission")}
                         >
                             <SelectTrigger className={cn(hasError("transmission") && "border-destructive ring-1 ring-destructive")}>
@@ -230,12 +230,12 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             <Input
                                 id="powerKw"
                                 type="number"
-                                placeholder="0"
+                                placeholder={t('step2.placeholders.power')}
                                 {...register("powerKw")}
                                 className={cn(hasError("powerKw") && "border-destructive ring-1 ring-destructive")}
                             />
                             <div className="absolute right-3 top-2.5 text-xs text-muted-foreground bg-background px-1">
-                                {watch("powerKw") ? t('step2.labels.powerHj', { count: Math.round(Number(watch("powerKw")) * 1.341) }) : "— hj"}
+                                {watch("powerKw") ? t('step2.labels.powerHj', { count: Math.round(Number(watch("powerKw")) * 1.341) }) : t('step2.labels.powerHjEmpty')}
                             </div>
                         </div>
                         {errors.powerKw && <p className="text-xs text-destructive">{errors.powerKw.message}</p>}
@@ -243,8 +243,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
 
                     <div className="space-y-2">
                         <Label htmlFor="driveType">{t('step2.labels.driveType')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("driveType", v, { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("driveType", v, { shouldValidate: true })}
                             value={watch("driveType")}
                         >
                             <SelectTrigger className={cn(hasError("driveType") && "border-destructive ring-1 ring-destructive")}>
@@ -261,8 +261,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
 
                     <div className="space-y-2">
                         <Label htmlFor="doors">{t('step2.labels.doors')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("doors", Number(v), { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("doors", Number(v), { shouldValidate: true })}
                             value={watch("doors")?.toString()}
                         >
                             <SelectTrigger className={cn(hasError("doors") && "border-destructive ring-1 ring-destructive")}>
@@ -279,8 +279,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
 
                     <div className="space-y-2">
                         <Label htmlFor="seats">{t('step2.labels.seats')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("seats", Number(v), { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("seats", Number(v), { shouldValidate: true })}
                             value={watch("seats")?.toString()}
                         >
                             <SelectTrigger className={cn(hasError("seats") && "border-destructive ring-1 ring-destructive")}>
@@ -308,8 +308,8 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
 
                     <div className="space-y-2">
                         <Label htmlFor="condition">{t('step2.labels.condition')}</Label>
-                        <Select 
-                            onValueChange={(v) => setValue("condition", v, { shouldValidate: true })} 
+                        <Select
+                            onValueChange={(v) => setValue("condition", v, { shouldValidate: true })}
                             value={watch("condition")}
                         >
                             <SelectTrigger className={cn(hasError("condition") && "border-destructive ring-1 ring-destructive")}>

@@ -8,6 +8,7 @@ import { SellerInfo } from "@/components/car-detail/seller-info";
 import { SpecsGrid } from "@/components/car-detail/specs-grid";
 import { FeatureBadges } from "@/components/car-detail/feature-badges";
 import { RelatedCars } from "@/components/car-detail/related-cars";
+import { AdSlot } from "@/components/shared/ad-slot";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Eye, ShieldCheck, Mail, Phone, ChevronRight, Star } from "lucide-react";
@@ -124,6 +125,13 @@ export function ListingDetailView({ listing }: ListingDetailViewProps) {
                             location={listing.location}
                         />
 
+                        {/* Ad: Finance/Leasing partner slot */}
+                        <AdSlot
+                            placementId="DETAIL_FINANCE"
+                            className="rounded-xl overflow-hidden"
+                            context={{ make: listing.make, fuelType: listing.fuelType, bodyType: listing.bodyType }}
+                        />
+
                         <RequestInspectionButton
                             listingId={listing.id}
                             listingTitle={`${listing.year} ${listing.make} ${listing.model}`}
@@ -142,6 +150,13 @@ export function ListingDetailView({ listing }: ListingDetailViewProps) {
                     </div>
                 </div>
             </div>
+
+            {/* Ad: Full-width banner before related cars */}
+            <AdSlot
+                placementId="DETAIL_FOOTER"
+                className="my-8"
+                context={{ make: listing.make, fuelType: listing.fuelType }}
+            />
 
             <RelatedCars listingId={listing.id} />
         </div>

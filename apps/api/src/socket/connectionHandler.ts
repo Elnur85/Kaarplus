@@ -1,14 +1,16 @@
 import { Socket } from "socket.io";
 
-import { socketService } from "../services/socketService";
 import { messageService } from "../services/messageService";
-import { logger } from "../utils/logger";
+import { socketService } from "../services/socketService";
 import {
   ClientToServerEvents,
+  MessageSendCallback,
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
 } from "../types/socket";
+import { logger } from "../utils/logger";
+
 import {
   handleSendMessage,
   handleMarkMessagesRead,
@@ -62,7 +64,7 @@ function setupEventListeners(
 
   // Message events
   socket.on("message:send", (payload, callback) => {
-    handleSendMessage(socket, payload, callback as any);
+    handleSendMessage(socket, payload, callback as MessageSendCallback);
   });
 
   socket.on("messages:mark_read", (payload) => {

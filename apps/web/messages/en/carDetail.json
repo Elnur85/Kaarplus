@@ -5,6 +5,7 @@
         "mileage": "Mileage",
         "engine": "Engine",
         "power": "Power",
+        "powerValue": "{{kw}} kW ({{hp}} hp)",
         "transmission": "Transmission",
         "driveType": "Drivetrain",
         "bodyType": "Body type",

@@ -1,4 +1,4 @@
-import { PrismaClient, UserRole, ListingStatus } from '@prisma/client';
+import { PrismaClient, UserRole, ListingStatus, AdUnitType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -132,8 +132,8 @@ async function main() {
                 features: {},
                 images: {
                     create: [
-                        { url: `https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800`, order: 0, verified: true },
-                        { url: `https://images.unsplash.com/photo-1494976388531-d11e99518c01?auto=format&fit=crop&q=80&w=800`, order: 1, verified: true }
+                        { url: `https://images.unsplash.com/photo-1549317661-bd32c8ce0729?auto=format&fit=crop&q=80&w=800`, order: 0, verified: true },
+                        { url: `https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&w=800`, order: 1, verified: true }
                     ]
                 }
             }
@@ -155,6 +155,24 @@ async function main() {
                 }
             });
         }
+    }
+
+    // Seed Ad Unit placements
+    const adUnits = [
+        { name: "Homepage Billboard", placementId: "HOME_BILLBOARD", type: AdUnitType.BANNER, width: 1200, height: 300, description: "Full-width banner after hero section" },
+        { name: "Homepage Partners", placementId: "HOME_PARTNERS", type: AdUnitType.NATIVE, width: 1200, height: 200, description: "Featured partners section between categories" },
+        { name: "Search Sidebar", placementId: "SEARCH_SIDEBAR", type: AdUnitType.BANNER, width: 300, height: 600, description: "Sidebar ad below filters (desktop only)" },
+        { name: "Listing Native", placementId: "LISTING_NATIVE", type: AdUnitType.NATIVE, width: 400, height: 300, description: "Sponsored card injected in search results" },
+        { name: "Detail Finance", placementId: "DETAIL_FINANCE", type: AdUnitType.BANNER, width: 300, height: 250, description: "Finance partner ad in detail sidebar" },
+        { name: "Detail Footer", placementId: "DETAIL_FOOTER", type: AdUnitType.BANNER, width: 1200, height: 200, description: "Full-width banner before related cars" },
+    ];
+
+    for (const unit of adUnits) {
+        await prisma.adUnit.upsert({
+            where: { placementId: unit.placementId },
+            update: { name: unit.name, type: unit.type, width: unit.width, height: unit.height, description: unit.description },
+            create: unit,
+        });
     }
 
     console.log('Seed finished.');

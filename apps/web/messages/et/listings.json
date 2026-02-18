@@ -16,6 +16,8 @@
         "from": "Alates",
         "to": "Kuni",
         "allMakes": "Kõik margid",
+        "min": "Min",
+        "max": "Max",
         "allModels": "Kõik mudelid",
         "showResults": "Näita tulemusi"
     },
@@ -76,7 +78,8 @@
     "badges": {
         "hotDeal": "TASUV DIIL",
         "new": "UUS",
-        "certified": "KONTROLLITUD"
+        "certified": "KONTROLLITUD",
+        "sponsored": "SPONSOREERITUD"
     },
     "status": {
         "sold": "MÜÜDUD",

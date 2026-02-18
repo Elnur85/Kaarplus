@@ -5,6 +5,7 @@
         "mileage": "Läbisõit",
         "engine": "Mootor",
         "power": "Võimsus",
+        "powerValue": "{{kw}} kW ({{hp}} hj)",
         "transmission": "Käigukast",
         "driveType": "Vedu",
         "bodyType": "Keretüüp",

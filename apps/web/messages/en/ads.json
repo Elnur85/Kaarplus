@@ -1,0 +1,99 @@
+{
+  "badges": {
+    "sponsored": "Sponsored",
+    "ad": "Ad",
+    "partner": "Partner"
+  },
+  "admin": {
+    "title": "Ad Management",
+    "campaigns": {
+      "title": "Campaigns",
+      "create": "New Campaign",
+      "name": "Campaign Name",
+      "budget": "Budget",
+      "dailyBudget": "Daily Budget",
+      "spent": "Spent",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "status": "Status",
+      "priority": "Priority",
+      "targeting": "Targeting",
+      "advertiser": "Advertiser",
+      "ads": "Advertisements",
+      "statuses": {
+        "DRAFT": "Draft",
+        "ACTIVE": "Active",
+        "PAUSED": "Paused",
+        "COMPLETED": "Completed",
+        "ARCHIVED": "Archived"
+      },
+      "priorities": {
+        "1": "Takeover",
+        "2": "House Ad",
+        "3": "Programmatic"
+      },
+      "empty": "No campaigns found",
+      "archive": "Archive",
+      "archiveConfirm": "Are you sure you want to archive this campaign?",
+      "form": {
+        "namePlaceholder": "e.g. LHV Leasing Q1 2026",
+        "advertiserPlaceholder": "User ID of advertiser",
+        "budgetPlaceholder": "5000",
+        "dailyBudgetPlaceholder": "200",
+        "cancel": "Cancel",
+        "creating": "Creating...",
+        "create": "Create Campaign"
+      },
+      "toasts": {
+        "success": "Campaign created successfully",
+        "error": "Failed to create campaign"
+      }
+    },
+    "advertisements": {
+      "title": "Advertisements",
+      "create": "New Advertisement",
+      "ad": "Advertisement",
+      "unit": "Ad Unit",
+      "active": "Active",
+      "inactive": "Inactive",
+      "empty": "No advertisements found",
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "e.g. LHV Auto Leasing Banner",
+        "unitPlaceholder": "Select ad placement",
+        "imageDesktop": "Image URL (Desktop)",
+        "imageMobile": "Image URL (Mobile)",
+        "urlPlaceholder": "https://...",
+        "linkUrl": "Click-through URL",
+        "linkPlaceholder": "https://partner.example.com/offer",
+        "cancel": "Cancel",
+        "creating": "Creating...",
+        "create": "Create Advertisement"
+      },
+      "toasts": {
+        "success": "Advertisement created successfully",
+        "error": "Failed to create advertisement"
+      }
+    },
+    "units": {
+      "title": "Ad Placements",
+      "occupancy": "Occupancy",
+      "placement": "Placement ID",
+      "type": "Type",
+      "dimensions": "Dimensions",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "overview": "Overview",
+      "impressions": "Impressions",
+      "clicks": "Clicks",
+      "ctr": "CTR",
+      "activeCampaigns": "Active Campaigns",
+      "totalBudget": "Total Budget",
+      "totalSpent": "Total Spent",
+      "chartTitle": "Campaign Performance"
+    }
+  }
+}

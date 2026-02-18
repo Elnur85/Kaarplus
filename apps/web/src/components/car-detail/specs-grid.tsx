@@ -1,8 +1,8 @@
 "use client";
 
 import { Separator } from "@/components/ui/separator";
+import { useLocale } from "@/hooks/use-locale";
 import { format } from "date-fns";
-import { et, enUS, ru } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 
 interface SpecsGridProps {
@@ -28,14 +28,14 @@ interface SpecsGridProps {
 
 export function SpecsGrid({ listing }: SpecsGridProps) {
     const { t, i18n } = useTranslation(['carDetail', 'sell']);
-    const currentLocale = i18n.language === 'ru' ? ru : i18n.language === 'en' ? enUS : et;
+    const currentLocale = useLocale();
 
     const specItems = [
         { label: t('specs.condition'), value: t(`options.condition.${listing.condition}`, { ns: 'sell', defaultValue: listing.condition }) },
         { label: t('specs.firstRegistration'), value: listing.year.toString() },
         { label: t('specs.mileage'), value: `${listing.mileage.toLocaleString(i18n.language === 'et' ? "et-EE" : i18n.language === 'ru' ? "ru-RU" : "en-US")} km` },
         { label: t('specs.engine'), value: t(`options.fuel.${listing.fuelType}`, { ns: 'sell', defaultValue: listing.fuelType }) },
-        { label: t('specs.power'), value: `${listing.powerKw} kW (${Math.round(listing.powerKw * 1.341)} hj)` },
+        { label: t('specs.power'), value: t('specs.powerValue', { kw: listing.powerKw, hp: Math.round(listing.powerKw * 1.341) }) },
         { label: t('specs.transmission'), value: t(`options.transmission.${listing.transmission}`, { ns: 'sell', defaultValue: listing.transmission }) },
         { label: t('specs.driveType'), value: listing.driveType ? t(`options.drive.${listing.driveType}`, { ns: 'sell', defaultValue: listing.driveType }) : t('specs.frontWheelDrive') },
         { label: t('specs.bodyType'), value: t(`step1.types.${listing.bodyType.toLowerCase()}`, { ns: 'sell', defaultValue: listing.bodyType }) },

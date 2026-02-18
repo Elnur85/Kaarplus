@@ -146,13 +146,13 @@ Remediation phase to bring the project to actual production quality.
 
 | ID     | Task                                                        | Status | Dependencies       | Est. |
 | ------ | ----------------------------------------------------------- | ------ | ------------------ | ---- |
-| P5-T01 | i18n completion — all components translated (et/en/ru)      | ⬜     | P4-T01             | 8h   |
-| P5-T02 | Stitch design fidelity audit & fixes                        | ⬜     | Phase 1            | 4h   |
-| P5-T03 | Test infrastructure setup (Vitest) + API unit tests         | ⬜     | P1-T03, P1-T07     | 6h   |
-| P5-T04 | Web component tests + E2E fixes                             | ⬜     | P5-T03             | 5h   |
-| P5-T05 | Bug fixes & broken assets cleanup                           | ⬜     | Phase 1            | 3h   |
-| P5-T06 | Environment documentation & deployment readiness            | ⬜     | All previous       | 2h   |
-| P5-T07 | Final integration test & quality gate                       | ⬜     | P5-T01 to P5-T06   | 2h   |
+| P5-T01 | i18n completion — all components translated (et/en/ru)      | ✅     | P4-T01             | 8h   |
+| P5-T02 | Stitch design fidelity audit & fixes                        | ✅     | Phase 1            | 4h   |
+| P5-T03 | Test infrastructure setup (Vitest) + API unit tests         | ✅     | P1-T03, P1-T07     | 6h   |
+| P5-T04 | Web component tests + E2E fixes                             | ✅     | P5-T03             | 5h   |
+| P5-T05 | Bug fixes & broken assets cleanup                           | ✅     | Phase 1            | 3h   |
+| P5-T06 | Environment documentation & deployment readiness            | ✅     | All previous       | 2h   |
+| P5-T07 | Final integration test & quality gate                       | ✅     | P5-T01 to P5-T06   | 2h   |
 
 ### Phase 5 — Acceptance Criteria
 

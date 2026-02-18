@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 
 import { adminRouter } from "./admin";
 import { authRouter } from "./auth";
+import { contentBlocksRouter } from "./content-blocks";
 import { dealershipRouter } from "./dealerships";
 import { listingsRouter } from "./listings";
 import { mobileRouter } from "./mobile";
@@ -37,6 +38,7 @@ apiRouter.use("/dealerships", dealershipRouter);
 apiRouter.use("/mobile", mobileRouter);
 apiRouter.use("/newsletter", newsletterRouter);
 apiRouter.use("/reviews", reviewsRouter);
+apiRouter.use("/content-blocks", contentBlocksRouter);
 // Debug routes only available in non-production environments
 if (process.env.NODE_ENV !== "production") {
   import("./debug-sentry").then(({ debugSentryRouter }) => {

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NotFoundError, BadRequestError } from '../utils/errors';
+
+import { NotFoundError } from '../utils/errors';
 
 // Mock must be before importing the service
 vi.mock('@kaarplus/database', () => ({
@@ -29,7 +30,9 @@ vi.mock('./emailService', () => ({
 }));
 
 import { AdminService } from './adminService';
+
 import { prisma } from '@kaarplus/database';
+
 import { emailService } from './emailService';
 
 describe('AdminService', () => {

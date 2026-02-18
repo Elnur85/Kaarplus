@@ -10,6 +10,7 @@ import { FaqSection } from "@/components/landing/faq-section";
 import { NewsletterSignup } from "@/components/landing/newsletter-signup";
 
 import { JsonLd } from "@/components/shared/json-ld";
+import { AdSlot } from "@/components/shared/ad-slot";
 import { generateWebsiteJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -27,11 +28,17 @@ export default function HomePage() {
       {/* 1. Hero Section + Search Bar (integrated) */}
       <HeroSection />
 
+      {/* Ad: Billboard after hero */}
+      <AdSlot placementId="HOME_BILLBOARD" className="container px-4 -mt-4 mb-8" />
+
       {/* 2. Vehicle Categories (Buy / Electric / Hybrid tabs) */}
       <VehicleCategories />
 
       {/* 3. Category Grid (8 body types with icons) */}
       <CategoryGrid />
+
+      {/* Ad: Featured Partners */}
+      <AdSlot placementId="HOME_PARTNERS" className="container px-4 my-8" />
 
       {/* 4. Value Propositions (4 cards) */}
       <ValuePropositions />

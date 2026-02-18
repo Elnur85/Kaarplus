@@ -18,9 +18,10 @@ vi.mock('./emailService', () => ({
     },
 }));
 
-import { newsletterService } from './newsletterService';
-import { prisma } from '@kaarplus/database';
 import { emailService } from './emailService';
+import { newsletterService } from './newsletterService';
+
+import { prisma } from '@kaarplus/database';
 
 describe('NewsletterService', () => {
     beforeEach(() => {

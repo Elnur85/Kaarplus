@@ -123,13 +123,13 @@ export function FilterSidebar() {
                     <Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.price')} (€)</Label>
                     <div className="flex gap-2">
                         <Input
-                            placeholder="Min"
+                            placeholder={t('filters.min')}
                             value={filters.priceMin}
                             onChange={(e) => filters.setFilter("priceMin", e.target.value)}
                             className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
                         />
                         <Input
-                            placeholder="Max"
+                            placeholder={t('filters.max')}
                             value={filters.priceMax}
                             onChange={(e) => filters.setFilter("priceMax", e.target.value)}
                             className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useFilterStore } from "@/store/use-filter-store";
 import { FilterSidebar } from "@/components/listings/filter-sidebar";
 import { FilterBadges } from "@/components/listings/filter-badges";
@@ -9,23 +9,45 @@ import { ViewToggle } from "@/components/listings/view-toggle";
 import { ResultsCount } from "@/components/listings/results-count";
 import { UrlSync } from "@/components/listings/url-sync";
 import { VehicleCard } from "@/components/shared/vehicle-card";
+import { AdSlot } from "@/components/shared/ad-slot";
 import { Pagination } from "@/components/shared/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { VehicleSummary } from "@/types/vehicle";
+import type { VehicleSummary } from "@/types/vehicle";
+import type { SponsoredListingData } from "@/types/ad";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
 import { JsonLd } from "@/components/shared/json-ld";
 import { generateBreadcrumbJsonLd } from "@/lib/seo";
-import { SITE_URL } from "@/lib/constants";
+import { SITE_URL, API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 
 export default function ListingsPage() {
     const { t } = useTranslation('listings');
     const [listings, setListings] = useState<VehicleSummary[]>([]);
+    const [sponsoredListings, setSponsoredListings] = useState<SponsoredListingData[]>([]);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const filters = useFilterStore();
+
+    // Fetch sponsored listings
+    const fetchSponsored = useCallback(async () => {
+        try {
+            const params = new URLSearchParams();
+            if (filters.fuelType.length > 0) params.set("fuelType", filters.fuelType[0]);
+            if (filters.bodyType.length > 0) params.set("bodyType", filters.bodyType[0]);
+            const qs = params.toString();
+            const res = await fetch(`${API_URL}/api/content-blocks/sponsored/listings${qs ? `?${qs}` : ""}`);
+            const json = await res.json();
+            setSponsoredListings(json.data || []);
+        } catch {
+            setSponsoredListings([]);
+        }
+    }, [filters.fuelType, filters.bodyType]);
+
+    useEffect(() => {
+        fetchSponsored();
+    }, [fetchSponsored]);
 
     const fetchListings = async () => {
         setIsLoading(true);
@@ -89,8 +111,9 @@ export default function ListingsPage() {
 
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Sidebar - Desktop */}
-                <aside className="hidden lg:block w-[300px] shrink-0 sticky top-24 h-fit">
+                <aside className="hidden lg:block w-[300px] shrink-0 sticky top-24 h-fit space-y-6">
                     <FilterSidebar />
+                    <AdSlot placementId="SEARCH_SIDEBAR" className="rounded-xl overflow-hidden" />
                 </aside>
 
                 {/* Main Content */}
@@ -134,9 +157,37 @@ export default function ListingsPage() {
                             </div>
                         ) : listings.length > 0 ? (
                             <div className={`grid gap-6 ${filters.view === "grid" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
-                                {listings.map((vehicle) => (
-                                    <VehicleCard key={vehicle.id} vehicle={vehicle} variant={filters.view} />
-                                ))}
+                                {listings.map((vehicle, index) => {
+                                    const items = [
+                                        <VehicleCard key={vehicle.id} vehicle={vehicle} variant={filters.view} />
+                                    ];
+                                    // Inject a sponsored card after every 10th organic result
+                                    const sponsoredIdx = Math.floor(index / 10);
+                                    if ((index + 1) % 10 === 0 && sponsoredIdx < sponsoredListings.length) {
+                                        const sp = sponsoredListings[sponsoredIdx];
+                                        const spVehicle: VehicleSummary = {
+                                            id: sp.listing.id,
+                                            make: sp.listing.make,
+                                            model: sp.listing.model,
+                                            variant: sp.listing.variant,
+                                            year: sp.listing.year,
+                                            price: sp.listing.price,
+                                            priceVatIncluded: sp.listing.priceVatIncluded,
+                                            mileage: sp.listing.mileage,
+                                            fuelType: sp.listing.fuelType,
+                                            transmission: sp.listing.transmission,
+                                            bodyType: sp.listing.bodyType,
+                                            thumbnailUrl: sp.listing.images?.[0]?.url || "",
+                                            status: sp.listing.status as VehicleSummary["status"],
+                                            badges: [],
+                                            createdAt: new Date().toISOString(),
+                                        };
+                                        items.push(
+                                            <VehicleCard key={`sponsored-${sp.id}`} vehicle={spVehicle} variant={filters.view} sponsored />
+                                        );
+                                    }
+                                    return items;
+                                })}
                             </div>
                         ) : (
                             <div className="py-20 text-center border rounded-xl bg-card border-dashed">
@@ -176,7 +227,7 @@ export default function ListingsPage() {
 function ListingSkeleton({ variant }: { variant: "grid" | "list" }) {
     if (variant === "list") {
         return (
-            <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden gap-4 h-[200px] border-border bg-card">
+            <div data-testid="listing-skeleton" className="flex flex-col md:flex-row border rounded-xl overflow-hidden gap-4 h-[200px] border-border bg-card">
                 <Skeleton className="w-full md:w-[280px] h-full" />
                 <div className="flex-1 p-4 flex flex-col gap-2">
                     <Skeleton className="h-6 w-2/3" />
@@ -190,7 +241,7 @@ function ListingSkeleton({ variant }: { variant: "grid" | "list" }) {
         );
     }
     return (
-        <div className="flex flex-col border rounded-xl overflow-hidden border-border bg-card h-full">
+        <div data-testid="listing-skeleton" className="flex flex-col border rounded-xl overflow-hidden border-border bg-card h-full">
             <Skeleton className="aspect-[4/3] w-full" />
             <div className="p-4 flex flex-col gap-3">
                 <Skeleton className="h-5 w-3/4" />

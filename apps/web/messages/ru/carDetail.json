@@ -5,6 +5,7 @@
         "mileage": "Пробег",
         "engine": "Двигатель",
         "power": "Мощность",
+        "powerValue": "{{kw}} кВт ({{hp}} л.с.)",
         "transmission": "Коробка передач",
         "driveType": "Привод",
         "bodyType": "Тип кузова",

@@ -1,7 +1,7 @@
 import { Server as HttpServer } from "http";
+
 import { Server as SocketIOServer, Socket } from "socket.io";
 
-import { logger } from "../utils/logger";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -10,6 +10,7 @@ import {
   MessageWithSender,
   generateConversationId,
 } from "../types/socket";
+import { logger } from "../utils/logger";
 
 /**
  * SocketService manages Socket.io connections, rooms, and event emission.
