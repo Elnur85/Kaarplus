@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import * as listingController from "../controllers/listingController";
 import { requireAuth, requireRole } from "../middleware/auth";
+import { requireListingOwnership } from "../middleware/ownership";
 import { readLimiter, writeLimiter } from "../middleware/rateLimiter";
 import { asyncHandler } from "../utils/asyncHandler";
 
@@ -23,11 +24,41 @@ listingsRouter.post(
 );
 
 // Protected routes (Owner/Admin)
-listingsRouter.patch("/:id", requireAuth, writeLimiter, asyncHandler(listingController.updateListing));
-listingsRouter.delete("/:id", requireAuth, writeLimiter, asyncHandler(listingController.deleteListing));
+listingsRouter.patch(
+    "/:id",
+    requireAuth,
+    requireListingOwnership,
+    writeLimiter,
+    asyncHandler(listingController.updateListing)
+);
+listingsRouter.delete(
+    "/:id",
+    requireAuth,
+    requireListingOwnership,
+    writeLimiter,
+    asyncHandler(listingController.deleteListing)
+);
 
 // Image management (Owner/Admin)
-listingsRouter.post("/:id/images", requireAuth, writeLimiter, asyncHandler(listingController.addImages));
-listingsRouter.patch("/:id/images/reorder", requireAuth, writeLimiter, asyncHandler(listingController.reorderImages));
-listingsRouter.delete("/:id/images/:imageId", requireAuth, writeLimiter, asyncHandler(listingController.deleteImage));
+listingsRouter.post(
+    "/:id/images",
+    requireAuth,
+    requireListingOwnership,
+    writeLimiter,
+    asyncHandler(listingController.addImages)
+);
+listingsRouter.patch(
+    "/:id/images/reorder",
+    requireAuth,
+    requireListingOwnership,
+    writeLimiter,
+    asyncHandler(listingController.reorderImages)
+);
+listingsRouter.delete(
+    "/:id/images/:imageId",
+    requireAuth,
+    requireListingOwnership,
+    writeLimiter,
+    asyncHandler(listingController.deleteImage)
+);
 

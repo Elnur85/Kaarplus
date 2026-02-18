@@ -153,20 +153,18 @@ Remediation phase to bring the project to actual production quality.
 | P5-T05 | Bug fixes & broken assets cleanup                           | ✅     | Phase 1            | 3h   |
 | P5-T06 | Environment documentation & deployment readiness            | ✅     | All previous       | 2h   |
 | P5-T07 | Final integration test & quality gate                       | ✅     | P5-T01 to P5-T06   | 2h   |
+| P6-T01 | Security Hardening: Resource Ownership Verification          | ✅     | Phase 1, Phase 5   | 3h   |
+| P6-T02 | Ad Engine: Full UI Integration & Dashboard                  | ⬜     | Phase 2, Phase 3   | 5h   |
+| P6-T03 | Caching & DB Index Optimization                             | ⬜     | Phase 1            | 3h   |
+| P6-T04 | Messaging System: Real-time with WebSockets                 | ⬜     | P2-T06             | 5h   |
 
-### Phase 5 — Acceptance Criteria
+### Phase 6 — Acceptance Criteria
 
-- [ ] Every user-facing string uses translation keys — ZERO hardcoded text
-- [ ] Language switcher changes ALL text on every page in real-time
-- [ ] All 3 languages (et, en, ru) have complete JSON files with no missing keys
-- [ ] Each stitch design reference has been compared and implementation matches
-- [ ] Vitest configured and running for both API and Web workspaces
-- [ ] API controllers have unit tests with >80% coverage
-- [ ] Key UI components have render/interaction tests
-- [ ] E2E suite fully green (no skipped, no flaky)
-- [ ] All image URLs resolve (no 404s)
-- [ ] `.env.example` files document ALL required environment variables
-- [ ] Production build succeeds with zero warnings
+- [ ] Users can only edit/delete their OWN listings (and admins can do all)
+- [ ] Ad slots are functional on Listings and Search pages
+- [ ] Admin panel includes a basic Ad Management dashboard
+- [ ] API responses for search/filters are under 200ms (caching)
+- [ ] Messaging supports real-time updates (no page refresh)
 
 ---
 
