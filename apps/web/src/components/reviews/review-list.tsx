@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { MessageSquare } from "lucide-react";
+import { AlertCircle, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReviewCard } from "@/components/reviews/review-card";
@@ -32,11 +32,13 @@ export function ReviewList({ targetId }: ReviewListProps) {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const fetchReviews = useCallback(async (currentPage: number) => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch(
         `/api/v1/reviews?targetId=${targetId}&page=${currentPage}&pageSize=${PAGE_SIZE}`
@@ -46,11 +48,13 @@ export function ReviewList({ targetId }: ReviewListProps) {
       setReviews(json.data ?? []);
       setTotal(json.meta?.total ?? 0);
     } catch {
+      setError(t('fetchError'));
       setReviews([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
-  }, [targetId]);
+  }, [targetId, t]);
 
   // Reset page when targetId changes
   useEffect(() => {
@@ -75,6 +79,20 @@ export function ReviewList({ targetId }: ReviewListProps) {
             </div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-12">
+        <div className="flex items-center gap-2 text-destructive">
+          <AlertCircle className="h-5 w-5" />
+          <span className="text-sm font-medium">{error}</span>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => fetchReviews(page)}>
+          {t('retry')}
+        </Button>
       </div>
     );
   }

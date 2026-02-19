@@ -14,15 +14,78 @@
     "step1": {
         "title": "Выберите тип транспорта",
         "description": "Это поможет нам предложить правильные поля данных на следующем этапе.",
-        "types": {
-            "sedan": "Седан",
+        "selectSubtype": "Выберите подтип",
+        "backToCategories": "Назад к категориям",
+        "selectGeneral": "Выбрать общий: {{category}}",
+        "selected": "Выбрано",
+        "categories": {
+            "passengerCar": "Легковой автомобиль",
             "suv": "Внедорожник (SUV)",
-            "hatchback": "Хэтчбек",
-            "sport": "Спорт",
-            "family_car": "Семейный",
-            "van": "Фургон",
+            "commercialVehicle": "Коммерческий",
             "truck": "Грузовик",
-            "micro": "Микро"
+            "mototechnics": "Мотоцикл",
+            "waterVehicle": "Водный транспорт",
+            "trailer": "Прицеп",
+            "caravan": "Караван",
+            "constructionMachinery": "Строительная техника",
+            "agriculturalMachinery": "Сельхозтехника",
+            "forestMachinery": "Лесная техника",
+            "communalMachinery": "Коммунальная техника"
+        },
+        "subtypes": {
+            "sedan": "Седан",
+            "hatchback": "Хэтчбек",
+            "touring": "Универсал",
+            "minivan": "Минивэн",
+            "coupe": "Купе",
+            "cabriolet": "Кабриолет",
+            "pickup": "Пикап",
+            "limousine": "Лимузин",
+            "open": "Открытый",
+            "smallCommercial": "Малый коммерческий",
+            "commercial": "Коммерческий",
+            "rigid": "Фиксированный",
+            "saddle": "Седельный",
+            "chassis": "Шасси",
+            "classicalMotorcycle": "Классический",
+            "scooter": "Скутер",
+            "moped": "Мопед",
+            "bike": "Мотоцикл",
+            "cruiserChopper": "Круизер/Чоппер",
+            "motocross": "Мотокросс",
+            "enduroAdventure": "Эндуро/Приключения",
+            "trial": "Триал",
+            "threeWheeler": "Трехколесный",
+            "atvUtv": "ATV/UTV",
+            "buggy": "Багги",
+            "mopedCar": "Мопедный автомобиль",
+            "snowmobile": "Снегоход",
+            "other": "Другой",
+            "motorboat": "Моторная лодка",
+            "yachtSailboat": "Яхта/Парусник",
+            "waterscooter": "Водный скутер",
+            "lightTrailer": "Легкий прицеп",
+            "semiTrailer": "Полуприцеп",
+            "trailer": "Прицеп",
+            "boatTrailer": "Прицеп для лодки",
+            "caravan": "Караван",
+            "trailerTent": "Прицеп-палатка",
+            "crane": "Кран",
+            "concreteMixer": "Бетономешалка",
+            "excavator": "Экскаватор",
+            "bulldozer": "Бульдозер",
+            "forklift": "Погрузчик",
+            "loader": "Погрузчик",
+            "loaderExcavator": "Погрузчик-экскаватор",
+            "roadConstruction": "Дорожное строительство",
+            "tractor": "Трактор",
+            "combine": "Комбайн",
+            "mower": "Косилка",
+            "harvester": "Харвестер",
+            "forwarder": "Форвардер",
+            "sweepingMachine": "Подметальная машина",
+            "garbageTruck": "Мусоровоз",
+            "excrementsRemoval": "Вывоз навоза"
         }
     },
     "step2": {
@@ -48,7 +111,7 @@
             "fuelType": "Топливо *",
             "transmission": "Коробка передач *",
             "powerKw": "Мощность (кВт) *",
-            "powerHj": "{count} л.с.",
+            "powerHj": "{{count}} л.с.",
             "powerHjEmpty": "— л.с.",
             "driveType": "Привод *",
             "doors": "Двери *",
@@ -82,7 +145,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Расскажите о своем автомобиле подробнее..."
         },
-        "charCount": "{count} / 5000 символов"
+        "charCount": "{{count}} / 5000 символов"
     },
     "step3": {
         "title": "Добавьте фотографии",
@@ -104,12 +167,12 @@
             ]
         },
         "mainPhoto": "Главное фото",
-        "addMore": "Добавить еще (до {count})",
-        "photoNumber": "Фото {index}"
+        "addMore": "Добавить еще (до {{count}})",
+        "photoNumber": "Фото {{index}}"
     },
     "step4": {
         "success": "Объявление успешно подано!",
-        "idText": "Ваше объявление (ID: #{id}) находится на проверке.",
+        "idText": "Ваше объявление (ID: #{{id}}) находится на проверке.",
         "nextSteps": {
             "title": "Что будет дальше?",
             "items": [
@@ -131,7 +194,7 @@
         "minPhotos": "Пожалуйста, добавьте минимум 3 фотографии",
         "createError": "Ошибка при создании объявления",
         "uploadingTitle": "Загрузка изображений...",
-        "uploadingDesc": "Загружаем {count} изобр. Пожалуйста, подождите.",
+        "uploadingDesc": "Загружаем {{count}} изобр. Пожалуйста, подождите.",
         "attachError": "Ошибка при привязке изображений к объявлению",
         "successTitle": "Успех!",
         "successDesc": "Объявление успешно подано вместе с фотографиями!",
@@ -142,6 +205,12 @@
         "next": "Далее",
         "saving": "Сохранение...",
         "publish": "Опубликовать объявление"
+    },
+    "loginRequired": {
+        "title": "Войдите, чтобы продать",
+        "description": "Для размещения объявления необходимо войти в систему. Это займет всего минуту и совершенно бесплатно.",
+        "loginButton": "Войти",
+        "registerButton": "Зарегистрироваться"
     },
     "footer": {
         "termsText": "Нажимая «Опубликовать объявление», вы соглашаетесь с условиями использования и политикой конфиденциальности Kaarplus."

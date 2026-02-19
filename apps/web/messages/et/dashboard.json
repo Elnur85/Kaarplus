@@ -22,7 +22,9 @@
         "totalViews": "Vaatamisi kokku",
         "totalFavorites": "Lemmikutesse lisatud",
         "totalMessages": "Sõnumid",
-        "thisMonth": "sellel kuul"
+        "thisMonth": "sellel kuul",
+        "error": "Statistika laadimine ebaõnnestus",
+        "retry": "Proovi uuesti"
     },
     "listings": {
         "title": "Minu kuulutused",
@@ -44,7 +46,9 @@
             "favorites": "Lemmikud",
             "date": "Kuupäev",
             "actions": "Tegevused",
-            "empty": "Teil ei ole veel ühtegi kuulutust."
+            "empty": "Teil ei ole veel ühtegi kuulutust.",
+            "error": "Kuulutuste laadimine ebaõnnestus",
+            "retry": "Proovi uuesti"
         },
         "actions": {
             "edit": "Muuda",
@@ -53,8 +57,8 @@
             "deleteConfirm": "Kas olete kindel? Seda tegevust ei saa tagasi võtta."
         },
         "pagination": {
-            "page": "Lehekülg {current}/{total}",
-            "total": "{count} kuulutust",
+            "page": "Lehekülg {{current}}/{{total}}",
+            "total": "{{count}} kuulutust",
             "previous": "Eelmine",
             "next": "Järgmine"
         }
@@ -123,14 +127,14 @@
             "button": "Alusta otsimist"
         },
         "card": {
-            "saved": "Salvestatud {date}",
+            "saved": "Salvestatud {{date}}",
             "allVehicles": "Kõik sõidukid",
             "alerts": "Teavitused",
             "view": "Muuda / Vaata"
         },
         "delete": {
             "title": "Kas olete kindel?",
-            "description": "See tegevus eemaldab salvestatud otsingu \"{name}\". Seda ei saa tagasi võtta.",
+            "description": "See tegevus eemaldab salvestatud otsingu \"{{name}}\". Seda ei saa tagasi võtta.",
             "button": "Kustuta"
         },
         "toasts": {

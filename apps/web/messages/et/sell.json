@@ -14,15 +14,78 @@
     "step1": {
         "title": "Valige sõiduki tüüp",
         "description": "See aitab meil pakkuda õigeid andmevälju järgmises sammus.",
-        "types": {
-            "sedan": "Sedaan",
+        "selectSubtype": "Vali alamkategooria",
+        "backToCategories": "Tagasi kategooriatesse",
+        "selectGeneral": "Vali üldine: {{category}}",
+        "selected": "Valitud",
+        "categories": {
+            "passengerCar": "Sõiduauto",
             "suv": "Maastur (SUV)",
-            "hatchback": "Luukpära",
-            "sport": "Sportauto",
-            "family_car": "Pereauto",
-            "van": "Kaubik",
+            "commercialVehicle": "Kaubik",
             "truck": "Veoauto",
-            "micro": "Micro"
+            "mototechnics": "Mootortsikkel",
+            "waterVehicle": "Veesõiduk",
+            "trailer": "Haagis",
+            "caravan": "Karavan",
+            "constructionMachinery": "Ehitustehnika",
+            "agriculturalMachinery": "Põllumajandustehnika",
+            "forestMachinery": "Metsatehnika",
+            "communalMachinery": "Kommunaaltehnika"
+        },
+        "subtypes": {
+            "sedan": "Sedaan",
+            "hatchback": "Luukpära",
+            "touring": "Universaal",
+            "minivan": "Minibuss",
+            "coupe": "Kupee",
+            "cabriolet": "Kabriolett",
+            "pickup": "Pikap",
+            "limousine": "Limusiin",
+            "open": "Avatud",
+            "smallCommercial": "Väike kaubik",
+            "commercial": "Kaubik",
+            "rigid": "Fikseeritud",
+            "saddle": "Sadulk",
+            "chassis": "Šassii",
+            "classicalMotorcycle": "Klassikaline",
+            "scooter": "Skuter",
+            "moped": "Mopeed",
+            "bike": "Mootorratas",
+            "cruiserChopper": "Cruiser/Chopper",
+            "motocross": "Motokross",
+            "enduroAdventure": "Enduro/Seiklus",
+            "trial": "Trial",
+            "threeWheeler": "Kolmerattaline",
+            "atvUtv": "ATV/UTV",
+            "buggy": "Buggy",
+            "mopedCar": "Mopeedauto",
+            "snowmobile": "Mootorsaan",
+            "other": "Muu",
+            "motorboat": "Mootorpaat",
+            "yachtSailboat": "Jaht/Purjekas",
+            "waterscooter": "Veescooter",
+            "lightTrailer": "Kerge haagis",
+            "semiTrailer": "Poolhaagis",
+            "trailer": "Haagis",
+            "boatTrailer": "Paadikäru",
+            "caravan": "Karavan",
+            "trailerTent": "Telkhaagis",
+            "crane": "Kraana",
+            "concreteMixer": "Betoonisegisti",
+            "excavator": "Ekskavaator",
+            "bulldozer": "Buldooser",
+            "forklift": "Kahveltõstuk",
+            "loader": "Laadur",
+            "loaderExcavator": "Laadur-ekskavaator",
+            "roadConstruction": "Tee-ehitus",
+            "tractor": "Traktor",
+            "combine": "Kombain",
+            "mower": "Niiduk",
+            "harvester": "Harvester",
+            "forwarder": "Forwarder",
+            "sweepingMachine": "Puhastusmasin",
+            "garbageTruck": "Prügiauto",
+            "excrementsRemoval": "Sõnnikueemaldus"
         }
     },
     "step2": {
@@ -48,7 +111,7 @@
             "fuelType": "Kütus *",
             "transmission": "Käigukast *",
             "powerKw": "Võimsus (kW) *",
-            "powerHj": "{count} hj",
+            "powerHj": "{{count}} hj",
             "powerHjEmpty": "— hj",
             "driveType": "Vedu *",
             "doors": "Uksed *",
@@ -82,7 +145,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Räägi oma autost lähemalt..."
         },
-        "charCount": "{count} / 5000 tähemärki"
+        "charCount": "{{count}} / 5000 tähemärki"
     },
     "step3": {
         "title": "Lisage fotod",
@@ -104,12 +167,12 @@
             ]
         },
         "mainPhoto": "Peapilt",
-        "addMore": "Lisage veel (kuni {count})",
-        "photoNumber": "Pilt {index}"
+        "addMore": "Lisage veel (kuni {{count}})",
+        "photoNumber": "Pilt {{index}}"
     },
     "step4": {
         "success": "Kuulutus on edukalt esitatud!",
-        "idText": "Teie kuulutus (ID: #{id}) on nüüd ülevaatusel.",
+        "idText": "Teie kuulutus (ID: #{{id}}) on nüüd ülevaatusel.",
         "nextSteps": {
             "title": "Mis edasi saab?",
             "items": [
@@ -131,7 +194,7 @@
         "minPhotos": "Palun lisage vähemalt 3 fotot",
         "createError": "Viga kuulutuse loomisel",
         "uploadingTitle": "Piltide üleslaadimine...",
-        "uploadingDesc": "Laadime üles {count} pilti. Palun oodake.",
+        "uploadingDesc": "Laadime üles {{count}} pilti. Palun oodake.",
         "attachError": "Viga piltide sidumisel kuulutusega",
         "successTitle": "Edu!",
         "successDesc": "Kuulutus on edukalt esitatud koos piltidega!",
@@ -142,6 +205,12 @@
         "next": "Edasi",
         "saving": "Salvestamine...",
         "publish": "Avalda kuulutus"
+    },
+    "loginRequired": {
+        "title": "Logi sisse, et müüa",
+        "description": "Kuulutuse lisamiseks pead olema sisseloginud. See võtab ainult minuti ja on täiesti tasuta.",
+        "loginButton": "Logi sisse",
+        "registerButton": "Registreeru"
     },
     "footer": {
         "termsText": "Klõpsates “Avalda kuulutus”, nõustute Kaarplus kasutustingimuste ja privaatsuspoliitikaga."

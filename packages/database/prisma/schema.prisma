@@ -9,9 +9,8 @@ datasource db {
 }
 
 enum UserRole {
-  BUYER
-  INDIVIDUAL_SELLER
-  DEALERSHIP
+  USER           // Regular authenticated user (browse, sell, message)
+  DEALERSHIP     // Reserved for future
   ADMIN
   SUPPORT
 }
@@ -44,7 +43,7 @@ model User {
   website         String?
   address         String?
   openingHours    String?
-  role            UserRole      @default(BUYER)
+  role            UserRole      @default(USER)
   dealershipId    String?
   emailVerified   DateTime?
   deletedAt       DateTime?

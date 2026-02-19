@@ -19,8 +19,8 @@
     },
     "inventory": {
         "title": "Müügis olevad sõidukid",
-        "count": "{count} kuulutus",
-        "count_plural": "{count} kuulutust",
+        "count": "{{count}} kuulutus",
+        "count_plural": "{{count}} kuulutust",
         "empty": {
             "title": "Kuulutusi ei leitud",
             "description": "Sellel esindusel ei ole hetkel aktiivseid müügikuulutusi."
@@ -29,15 +29,17 @@
     "list": {
         "title": "Ametlikud Esindused",
         "description": "Tutvu meie usaldusväärsete koostööpartneritega. Kõik esindused on kontrollitud ja pakuvad kvaliteetseid sõidukeid.",
-        "activeListings": "{count} aktiivne kuulutus",
-        "activeListings_plural": "{count} aktiivset kuulutust",
+        "activeListings": "{{count}} aktiivne kuulutus",
+        "activeListings_plural": "{{count}} aktiivset kuulutust",
         "viewDealer": "Vaata esindust",
         "noDealers": "Hetkel ei ole ühtegi esindust registreeritud.",
         "noBio": "Kirjeldus puudub.",
-        "locationNotSpecified": "Asukoht määramata"
+        "locationNotSpecified": "Asukoht määramata",
+        "error": "Esinduste laadimine ebaõnnestus",
+        "retry": "Proovi uuesti"
     },
     "metadata": {
         "notFound": "Esindust ei leitud",
-        "ogDescription": "Tutvu {name} müügikuulutuste ja infoga."
+        "ogDescription": "Tutvu {{name}} müügikuulutuste ja infoga."
     }
 }

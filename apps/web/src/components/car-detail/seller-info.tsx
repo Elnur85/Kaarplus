@@ -22,6 +22,7 @@ interface SellerInfoProps {
 export function SellerInfo({ seller, location }: SellerInfoProps) {
     const { t } = useTranslation('carDetail');
     const isDealership = seller.role === "DEALERSHIP";
+    const isUser = seller.role === "USER" || !seller.role;
 
     // Determine avatar URL
     const avatarUrl = seller.image || `https://ui-avatars.com/api/?name=${seller.name || "User"}&background=random`;
@@ -50,6 +51,7 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
                     </div>
                     <div className="flex items-center gap-1 mt-1">
                         <span className="text-xs text-muted-foreground">{isDealership ? t('seller.dealership') : t('seller.privateSeller')}</span>
+                        {isUser && <span className="text-xs text-muted-foreground ml-1">({t('seller.verifiedUser')})</span>}
                     </div>
                 </div>
             </div>

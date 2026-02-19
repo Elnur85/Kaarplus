@@ -46,7 +46,8 @@
       },
       "toasts": {
         "success": "Kampaania edukalt loodud",
-        "error": "Viga kampaania loomisel"
+        "error": "Viga kampaania loomisel",
+        "fetchError": "Kampaaniate laadimine ebaõnnestus"
       }
     },
     "advertisements": {

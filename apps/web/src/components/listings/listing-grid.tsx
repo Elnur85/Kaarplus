@@ -14,7 +14,7 @@ type VehicleUser = NonNullable<VehicleSummary["user"]>;
 
 const DEFAULT_USER: VehicleUser = {
 	name: "Unknown Seller",
-	role: "INDIVIDUAL_SELLER",
+	role: "USER",
 	dealershipId: null,
 };
 

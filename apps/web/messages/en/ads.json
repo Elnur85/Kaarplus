@@ -46,7 +46,8 @@
       },
       "toasts": {
         "success": "Campaign created successfully",
-        "error": "Failed to create campaign"
+        "error": "Failed to create campaign",
+        "fetchError": "Failed to load campaigns"
       }
     },
     "advertisements": {

@@ -22,6 +22,7 @@ import legalEt from '../messages/et/legal.json';
 import dealershipEt from '../messages/et/dealership.json';
 import mobileAppEt from '../messages/et/mobileApp.json';
 import adsEt from '../messages/et/ads.json';
+import bodyTypesEt from '../messages/et/bodyTypes.json';
 
 // Import translation files - Russian
 import commonRu from '../messages/ru/common.json';
@@ -44,6 +45,7 @@ import legalRu from '../messages/ru/legal.json';
 import dealershipRu from '../messages/ru/dealership.json';
 import mobileAppRu from '../messages/ru/mobileApp.json';
 import adsRu from '../messages/ru/ads.json';
+import bodyTypesRu from '../messages/ru/bodyTypes.json';
 
 // Import translation files - English
 import commonEn from '../messages/en/common.json';
@@ -66,88 +68,91 @@ import legalEn from '../messages/en/legal.json';
 import dealershipEn from '../messages/en/dealership.json';
 import mobileAppEn from '../messages/en/mobileApp.json';
 import adsEn from '../messages/en/ads.json';
+import bodyTypesEn from '../messages/en/bodyTypes.json';
 
 const resources = {
-    et: {
-        common: commonEt,
-        home: homeEt,
-        listings: listingsEt,
-        auth: authEt,
-        errors: errorsEt,
-        sell: sellEt,
-        dashboard: dashboardEt,
-        admin: adminEt,
-        carDetail: carDetailEt,
-        checkout: checkoutEt,
-        compare: compareEt,
-        reviews: reviewsEt,
-        messages: messagesEt,
-        search: searchEt,
-        favorites: favoritesEt,
-        inspection: inspectionEt,
-        legal: legalEt,
-        dealership: dealershipEt,
-        mobileApp: mobileAppEt,
-        ads: adsEt,
-    },
-    ru: {
-        common: commonRu,
-        home: homeRu,
-        listings: listingsRu,
-        auth: authRu,
-        errors: errorsRu,
-        sell: sellRu,
-        dashboard: dashboardRu,
-        admin: adminRu,
-        carDetail: carDetailRu,
-        checkout: checkoutRu,
-        compare: compareRu,
-        reviews: reviewsRu,
-        messages: messagesRu,
-        search: searchRu,
-        favorites: favoritesRu,
-        inspection: inspectionRu,
-        legal: legalRu,
-        dealership: dealershipRu,
-        mobileApp: mobileAppRu,
-        ads: adsRu,
-    },
-    en: {
-        common: commonEn,
-        home: homeEn,
-        listings: listingsEn,
-        auth: authEn,
-        errors: errorsEn,
-        sell: sellEn,
-        dashboard: dashboardEn,
-        admin: adminEn,
-        carDetail: carDetailEn,
-        checkout: checkoutEn,
-        compare: compareEn,
-        reviews: reviewsEn,
-        messages: messagesEn,
-        search: searchEn,
-        favorites: favoritesEn,
-        inspection: inspectionEn,
-        legal: legalEn,
-        dealership: dealershipEn,
-        mobileApp: mobileAppEn,
-        ads: adsEn,
-    },
+	et: {
+		common: commonEt,
+		home: homeEt,
+		listings: listingsEt,
+		auth: authEt,
+		errors: errorsEt,
+		sell: sellEt,
+		dashboard: dashboardEt,
+		admin: adminEt,
+		carDetail: carDetailEt,
+		checkout: checkoutEt,
+		compare: compareEt,
+		reviews: reviewsEt,
+		messages: messagesEt,
+		search: searchEt,
+		favorites: favoritesEt,
+		inspection: inspectionEt,
+		legal: legalEt,
+		dealership: dealershipEt,
+		mobileApp: mobileAppEt,
+		ads: adsEt,
+		bodyTypes: bodyTypesEt,
+	},
+	ru: {
+		common: commonRu,
+		home: homeRu,
+		listings: listingsRu,
+		auth: authRu,
+		errors: errorsRu,
+		sell: sellRu,
+		dashboard: dashboardRu,
+		admin: adminRu,
+		carDetail: carDetailRu,
+		checkout: checkoutRu,
+		compare: compareRu,
+		reviews: reviewsRu,
+		messages: messagesRu,
+		search: searchRu,
+		favorites: favoritesRu,
+		inspection: inspectionRu,
+		legal: legalRu,
+		dealership: dealershipRu,
+		mobileApp: mobileAppRu,
+		ads: adsRu,
+		bodyTypes: bodyTypesRu,
+	},
+	en: {
+		common: commonEn,
+		home: homeEn,
+		listings: listingsEn,
+		auth: authEn,
+		errors: errorsEn,
+		sell: sellEn,
+		dashboard: dashboardEn,
+		admin: adminEn,
+		carDetail: carDetailEn,
+		checkout: checkoutEn,
+		compare: compareEn,
+		reviews: reviewsEn,
+		messages: messagesEn,
+		search: searchEn,
+		favorites: favoritesEn,
+		inspection: inspectionEn,
+		legal: legalEn,
+		dealership: dealershipEn,
+		mobileApp: mobileAppEn,
+		ads: adsEn,
+		bodyTypes: bodyTypesEn,
+	},
 };
 
 i18n
-    .use(initReactI18next)
-    .init({
-        resources,
-        lng: 'et', // default language
-        fallbackLng: 'et',
-        defaultNS: 'common',
-        interpolation: {
-            escapeValue: false, // React already escapes values
-            prefix: '{',
-            suffix: '}',
-        },
-    });
+	.use(initReactI18next)
+	.init({
+		resources,
+		lng: 'et', // default language
+		fallbackLng: 'et',
+		defaultNS: 'common',
+		debug: process.env.NODE_ENV === 'development',
+		interpolation: {
+			escapeValue: false, // React already escapes values
+		},
+	});
 
 export default i18n;

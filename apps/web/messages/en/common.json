@@ -82,9 +82,9 @@
 	"date": {
 		"today": "Today",
 		"yesterday": "Yesterday",
-		"daysAgo": "{count} days ago",
-		"weeksAgo": "{count} weeks ago",
-		"monthsAgo": "{count} months ago"
+		"daysAgo": "{{count}} days ago",
+		"weeksAgo": "{{count}} weeks ago",
+		"monthsAgo": "{{count}} months ago"
 	},
 	"details": "Details",
 	"saved": "Saved",
@@ -139,5 +139,12 @@
 		"copyFailedDesc": "Please copy the link manually",
 		"success": "Shared!",
 		"shared": "Listing shared successfully"
+	},
+	"errorBoundary": {
+		"title": "Something went wrong",
+		"description": "We're sorry, but an unexpected error occurred on the page. Please try again or refresh the page.",
+		"retry": "Try Again",
+		"reload": "Reload Page",
+		"support": "If the problem persists, contact us at:"
 	}
 }

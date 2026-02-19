@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useSession } from "next-auth/react";
+import { ErrorBoundary } from "@/components/error/error-boundary";
 
 interface AdminLayoutProps {
     children: ReactNode;
@@ -94,7 +95,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
 
                 <main className="flex-1 overflow-y-auto p-8 lg:p-12">
-                    {children}
+                    <ErrorBoundary>
+                        {children}
+                    </ErrorBoundary>
                 </main>
             </div>
         </div>

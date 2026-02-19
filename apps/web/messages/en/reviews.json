@@ -2,7 +2,8 @@
     "noReviews": "No reviews yet",
     "previous": "Previous",
     "next": "Next",
-    "fetchError": "Error fetching reviews",
+    "fetchError": "Failed to load reviews",
+    "retry": "Try again",
     "dialog": {
         "title": "Write a review",
         "rating": "Rating",
@@ -17,11 +18,11 @@
         "successDesc": "Thank you for your feedback!",
         "sendError": "Failed to send review"
     },
-    "sellerReviews": "{name}'s reviews",
+    "sellerReviews": "{{name}}'s reviews",
     "labels": {
         "user": "User",
         "anonymous": "Anonymous",
         "verifiedPurchase": "Verified purchase",
-        "reviewsCount": "{count} reviews"
+        "reviewsCount": "{{count}} reviews"
     }
 }

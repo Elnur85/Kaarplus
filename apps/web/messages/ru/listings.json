@@ -42,18 +42,22 @@
         "list": "Список"
     },
     "results": {
-        "found": "Найдено {total} автомобилей",
+        "found": "Найдено {{count}} автомобилей",
+        "found_one": "Найден {{count}} автомобиль",
+        "found_few": "Найдено {{count}} автомобиля",
+        "found_many": "Найдено {{count}} автомобилей",
+        "found_other": "Найдено {{count}} автомобилей",
         "noResults": "Результаты не найдены",
         "noResultsDesc": "Попробуйте изменить критерии фильтра",
-        "showing": "Показано {start} - {end} из {total} транспортных средств",
+        "showing": "Показано {{start}} - {{end}} из {{total}} транспортных средств",
         "clearAll": "Очистить все фильтры"
     },
     "card": {
         "year": "Год",
-        "mileage": "{value} км",
+        "mileage": "{{value}} км",
         "fuel": "Топливо",
         "transmission": "КПП",
-        "power": "{value} кВт",
+        "power": "{{value}} кВт",
         "viewDetails": "Подробнее",
         "favorite": "В избранное",
         "unfavorite": "Удалить из избранного"
@@ -101,7 +105,7 @@
         "noResults": "Результатов не найдено",
         "noResultsDesc": "Попробуйте изменить фильтры или поисковый запрос.",
         "clearAllFilters": "Очистить все фильтры",
-        "showing": "Показано {start} до {end} из {total} автомобилей",
+        "showing": "Показано {{start}} до {{end}} из {{total}} автомобилей",
         "error": "Не удалось загрузить объявления. Попробуйте еще раз.",
         "retry": "Попробовать снова",
         "breadcrumb": {

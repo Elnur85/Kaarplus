@@ -38,7 +38,20 @@ const CAR_DATA = {
         'Nissan': ['Qashqai', 'Juke', 'X-Trail', 'Micra', 'Leaf', 'Navara', 'Ariya', 'Primera'],
         'Honda': ['Civic', 'CR-V', 'Jazz', 'HR-V', 'Accord', 'e', 'NSX', 'ZRV'],
     },
-    bodyTypes: ['Sedan', 'SUV', 'Hatchback', 'Wagon', 'Coupe', 'Convertible', 'Minivan', 'Pickup'],
+    // New hierarchical body types: category:subtype
+    bodyTypes: [
+        'passengerCar:sedan',
+        'passengerCar:hatchback',
+        'passengerCar:touring',
+        'passengerCar:minivan',
+        'passengerCar:coupe',
+        'passengerCar:cabriolet',
+        'passengerCar:pickup',
+        'suv:touring',
+        'suv:coupe',
+        'commercialVehicle:commercial',
+        'truck:saddle',
+    ],
     fuelTypes: ['Petrol', 'Diesel', 'Hybrid', 'Electric'],
     transmissions: ['Manual', 'Automatic'],
     colors: ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Green', 'Brown', 'Beige', 'Yellow', 'Orange'],
@@ -116,7 +129,12 @@ function generateListing(make: string, model: string, userId: string, status: Li
     const transmission = fuelType === 'Electric' ? 'Automatic' : getRandomItem(CAR_DATA.transmissions);
     const price = generatePrice(year, make);
     const mileage = getRandomInt(5000, 200000);
-    
+
+    // Parse body type for doors/seats logic
+    const isPassengerCar = bodyType.startsWith('passengerCar');
+    const isSUV = bodyType.startsWith('suv');
+    const isCoupe = bodyType.includes('coupe');
+
     return {
         userId,
         make,
@@ -131,8 +149,8 @@ function generateListing(make: string, model: string, userId: string, status: Li
         transmission,
         powerKw: getRandomInt(60, 400),
         driveType: getRandomItem(['FWD', 'RWD', 'AWD']),
-        doors: bodyType === 'Coupe' ? 2 : getRandomItem([3, 4, 5]),
-        seats: getRandomItem([2, 4, 5, 7]),
+        doors: isCoupe ? 2 : getRandomItem([3, 4, 5]),
+        seats: isCoupe ? 2 : getRandomItem([4, 5, 7]),
         colorExterior: getRandomItem(CAR_DATA.colors),
         colorInterior: getRandomItem(['Black', 'Beige', 'Brown', 'Grey', 'Red']),
         condition: mileage < 10000 ? 'New' : 'Used',
@@ -150,7 +168,7 @@ async function main() {
 
     const passwordHash = '$2b$10$Rci8sWp2x5wYiUr9Nt94Se6NsHYx52ToZJCXWzlfXnylu06vw8ca.'; // password123
 
-    // Create users
+    // Create users with new USER role
     const admin = await prisma.user.upsert({
         where: { email: 'admin@kaarplus.ee' },
         update: {},
@@ -210,13 +228,14 @@ async function main() {
         },
     });
 
+    // Regular users with USER role (can buy and sell)
     const seller1 = await prisma.user.upsert({
         where: { email: 'jaan.tamm@example.ee' },
         update: {},
         create: {
             email: 'jaan.tamm@example.ee',
             name: 'Jaan Tamm',
-            role: UserRole.INDIVIDUAL_SELLER,
+            role: UserRole.USER,
             passwordHash,
             phone: '+372 5123 4567',
         },
@@ -228,7 +247,7 @@ async function main() {
         create: {
             email: 'mari.kask@example.ee',
             name: 'Mari Kask',
-            role: UserRole.INDIVIDUAL_SELLER,
+            role: UserRole.USER,
             passwordHash,
             phone: '+372 5234 5678',
         },
@@ -240,7 +259,7 @@ async function main() {
         create: {
             email: 'demo@kaarplus.ee',
             name: 'Demo User',
-            role: UserRole.BUYER,
+            role: UserRole.USER,
             passwordHash,
         },
     });
@@ -250,16 +269,16 @@ async function main() {
     // Generate listings - mix of ACTIVE and PENDING for variety
     const listings = [];
     const listingImages = [];
-    
-    // Create 60+ active listings across different makes and models
+
+    // Create 80+ active listings across different makes and models
     const users = [dealer1, dealer2, dealer3, seller1, seller2];
-    
+
     for (let i = 0; i < 80; i++) {
         const make = getRandomItem(CAR_DATA.makes).name;
         const model = getRandomItem(CAR_DATA.models[make as keyof typeof CAR_DATA.models] || CAR_DATA.models['BMW']);
         const user = getRandomItem(users);
         const status = Math.random() > 0.1 ? ListingStatus.ACTIVE : ListingStatus.PENDING;
-        
+
         const listingData = generateListing(make, model, user.id, status);
         listings.push(listingData);
     }
@@ -283,7 +302,7 @@ async function main() {
         });
     }
 
-    console.log(`🚗 Created ${listings.length} listings`);
+    console.log(`🚗 Created ${listings.length} listings with hierarchical body types`);
 
     // Create reviews for dealers
     const reviewers = [
@@ -314,7 +333,7 @@ async function main() {
             create: {
                 email: `${reviewer.name.toLowerCase().replace(' ', '.')}@example.ee`,
                 name: reviewer.name,
-                role: UserRole.BUYER,
+                role: UserRole.USER,
                 passwordHash,
                 image: reviewer.image,
             },
@@ -325,7 +344,7 @@ async function main() {
         for (let i = 0; i < reviewCount; i++) {
             const target = getRandomItem([dealer1, dealer2, dealer3, seller1, seller2]);
             const reviewData = getRandomItem(reviewTexts);
-            
+
             await prisma.review.create({
                 data: {
                     reviewerId: user.id,
@@ -405,8 +424,8 @@ async function main() {
     console.log('✅ Seed completed successfully!');
     console.log(`
 📊 Summary:
-   - Users: 6 (1 admin, 3 dealers, 2 individual sellers, 1 demo + 6 reviewers)
-   - Listings: ${listings.length} (mix of active and pending)
+   - Users: 7 (1 admin, 3 dealers, 3 regular users + 6 reviewers)
+   - Listings: ${listings.length} (mix of active and pending, with hierarchical body types)
    - Reviews: Multiple reviews for sellers
    - Favorites: ${activeListings.length} for demo user
    - Ad Units: ${adUnits.length}

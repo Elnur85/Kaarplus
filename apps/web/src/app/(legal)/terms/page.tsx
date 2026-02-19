@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export default function TermsPage() {
-	const { t } = useTranslation('legal');
+	const { t } = useTranslation(['legal', 'common']);
 
 	const sections = [
 		{
@@ -118,7 +118,7 @@ export default function TermsPage() {
 
 			<footer className="text-center pt-8">
 				<p className="text-sm text-muted-foreground italic">
-					{t('common.footer.description')}
+					{t('common:footer.description')}
 				</p>
 			</footer>
 		</div>

@@ -19,7 +19,7 @@ interface SearchStats {
 }
 
 export function HomeSearch() {
-	const { t } = useTranslation('home');
+	const { t } = useTranslation(['home', 'sell']);
 	const router = useRouter();
 
 	// State
@@ -202,7 +202,9 @@ export function HomeSearch() {
 							<SelectContent>
 								<SelectItem value="all">{t('search.allBodyTypes')}</SelectItem>
 								{bodyTypes.map(bt => (
-									<SelectItem key={bt} value={bt}>{bt}</SelectItem>
+									<SelectItem key={bt} value={bt}>
+										{t(`sell:options.bodyType.${bt}`, { defaultValue: bt })}
+									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>

@@ -57,7 +57,7 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
 				email,
 				passwordHash,
 				name,
-				role: "BUYER", // Default role
+				role: "USER", // Default role - allows buying and selling
 			},
 		});
 
@@ -76,7 +76,7 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
 		res.cookie("token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "strict",
+			sameSite: "lax",
 			maxAge: 24 * 60 * 60 * 1000, // 24 hours
 		});
 
@@ -126,7 +126,7 @@ authRouter.post("/login", async (req: Request, res: Response, next: NextFunction
 		res.cookie("token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "strict",
+			sameSite: "lax",
 			maxAge: 24 * 60 * 60 * 1000,
 		});
 
@@ -149,7 +149,7 @@ authRouter.post("/logout", (_req: Request, res: Response) => {
 	res.clearCookie("token", {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
-		sameSite: "strict",
+		sameSite: "lax",
 	});
 	res.json({ message: "Logged out successfully" });
 });

@@ -10,7 +10,7 @@
     "total": "Kokku",
     "terms": "Vajutades \"Maksa\", nõustute Kaarplus kasutustingimuste ja privaatsuspoliitikaga. Teie makset töödeldakse turvaliselt läbi Stripe makselahenduse.",
     "form": {
-        "pay": "Maksa {amount} €",
+        "pay": "Maksa {{amount}} €",
         "paying": "Maksmine...",
         "secureConnection": "Turvaline makse krüpteeritud ühendusega",
         "errorOccurred": "Midagi läks valesti.",

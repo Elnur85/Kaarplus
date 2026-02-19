@@ -36,14 +36,43 @@ vi.mock('@/components/ui/checkbox', () => ({
 // Mock i18next
 vi.mock('react-i18next', () => ({
 	useTranslation: () => ({
-		t: (key: string, options?: any) => options?.defaultValue || key,
+		t: (key: string, options?: any) => {
+			if (typeof key === 'string') {
+				// Normalize to just the key part
+				return key.split(':').pop() || key;
+			}
+			return key;
+		},
 	}),
+}));
+
+// Mock body types library
+vi.mock('@/lib/body-types', () => ({
+	BODY_TYPE_HIERARCHY: [
+		{
+			key: 'passengerCar',
+			subtypes: ['sedan', 'hatchback', 'wagon']
+		},
+		{
+			key: 'suv',
+			subtypes: ['compact', 'midsize', 'fullsize']
+		}
+	],
+	getSubtypes: (category: string) => {
+		if (category === 'passengerCar') return ['sedan', 'hatchback', 'wagon'];
+		if (category === 'suv') return ['compact', 'midsize', 'fullsize'];
+		return [];
+	},
+	serializeBodyType: vi.fn(),
+	deserializeBodyType: vi.fn(),
+	flattenBodyTypeSelections: vi.fn()
 }));
 
 describe('Filtering Integration Audit (Frontend)', () => {
 	const mockSetFilter = vi.fn();
 	const mockToggleFuelType = vi.fn();
-	const mockToggleBodyType = vi.fn();
+	const mockToggleBodyTypeCategory = vi.fn();
+	const mockToggleBodyTypeSubtype = vi.fn();
 	const mockResetFilters = vi.fn();
 
 	beforeEach(() => {
@@ -57,10 +86,13 @@ describe('Filtering Integration Audit (Frontend)', () => {
 			yearMax: '',
 			fuelType: [],
 			transmission: 'all',
-			bodyType: [],
+			bodyTypeSelections: [],
 			setFilter: mockSetFilter,
 			toggleFuelType: mockToggleFuelType,
-			toggleBodyType: mockToggleBodyType,
+			toggleBodyTypeCategory: mockToggleBodyTypeCategory,
+			toggleBodyTypeSubtype: mockToggleBodyTypeSubtype,
+			isCategorySelected: (cat: string) => cat === 'passengerCar',
+			isSubtypeSelected: (cat: string, sub: string) => cat === 'passengerCar' && sub === 'sedan',
 			resetFilters: mockResetFilters
 		});
 
@@ -84,7 +116,10 @@ describe('Filtering Integration Audit (Frontend)', () => {
 						data: {
 							makes: ['BMW', 'Tesla'],
 							fuelTypes: ['Petrol', 'Diesel', 'Hybrid', 'Electric'],
-							bodyTypes: ['Sedan', 'SUV', 'Hatchback', 'Wagon'],
+							bodyTypes: [
+								{ category: 'passengerCar', count: 10 },
+								{ category: 'suv', count: 5 }
+							],
 							transmissions: ['Manual', 'Automatic'],
 							years: { min: 1990, max: 2024 },
 							price: { min: 0, max: 500000 },
@@ -101,7 +136,14 @@ describe('Filtering Integration Audit (Frontend)', () => {
 			render(<FilterSidebar />);
 		});
 
-		// Find the "Petrol" checkbox. It should be rendered because it's returned by the API
+		// Expand Fuel Type category
+		const fuelTypeSection = screen.getByText('filters.fuelType');
+		await act(async () => {
+			fireEvent.click(fuelTypeSection);
+		});
+
+		// Find the "Petrol" checkbox.
+		// Note: The UI renders 'sell:options.fuel.Petrol' which our mock turns into 'options.fuel.Petrol'
 		const petrolCheckbox = screen.getByTestId('checkbox-fuel-Petrol');
 
 		await act(async () => {
@@ -122,19 +164,34 @@ describe('Filtering Integration Audit (Frontend)', () => {
 			render(<FilterSidebar />);
 		});
 
-		// Find the "Sedan" checkbox
-		const sedanCheckbox = screen.getByTestId('checkbox-body-Sedan');
+		// We need to wait for categories to be rendered (already visible by default open)
+		await waitFor(() => expect(screen.getByText('categories.passengerCar')).toBeInTheDocument());
+
+		// Expand passengerCar category
+		const expandButton = screen.getByText('categories.passengerCar');
+		await act(async () => {
+			fireEvent.click(expandButton);
+		});
+
+		// Find the "sedan" checkbox under passengerCar
+		const sedanCheckbox = screen.getByTestId('checkbox-passengerCar-sedan');
 
 		await act(async () => {
 			fireEvent.click(sedanCheckbox);
 		});
 
-		expect(mockToggleBodyType).toHaveBeenCalledWith('Sedan');
+		expect(mockToggleBodyTypeSubtype).toHaveBeenCalledWith('passengerCar', 'sedan');
 	});
 
 	it('Verifies if Make/Model dependency works via API calls', async () => {
 		await act(async () => {
 			render(<FilterSidebar />);
+		});
+
+		// Expand the Make & Model section
+		const makeModelSection = screen.getByText('filters.make & filters.model');
+		await act(async () => {
+			fireEvent.click(makeModelSection);
 		});
 
 		await waitFor(() => expect(screen.getByText('Tesla')).toBeInTheDocument());
@@ -151,12 +208,14 @@ describe('Filtering Integration Audit (Frontend)', () => {
 		// We need to re-render or simulate the store update.
 		(useFilterStore as any).mockReturnValue({
 			make: 'Tesla',
+			fuelType: [],
 			setFilter: mockSetFilter,
 			toggleFuelType: mockToggleFuelType,
-			toggleBodyType: mockToggleBodyType,
-			resetFilters: mockResetFilters,
-			fuelType: [],
-			bodyType: [],
+			toggleBodyTypeCategory: vi.fn(),
+			toggleBodyTypeSubtype: vi.fn(),
+			isCategorySelected: vi.fn(),
+			isSubtypeSelected: vi.fn(),
+			bodyTypeSelections: [{ category: 'passengerCar', subtypes: ['sedan'] }],
 		});
 
 		// Re-render to trigger useEffect with updated make

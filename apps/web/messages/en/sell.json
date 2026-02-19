@@ -14,15 +14,78 @@
     "step1": {
         "title": "Select vehicle type",
         "description": "This helps us provide the right data fields in the next step.",
-        "types": {
-            "sedan": "Sedan",
+        "selectSubtype": "Select subtype",
+        "backToCategories": "Back to categories",
+        "selectGeneral": "Select general: {{category}}",
+        "selected": "Selected",
+        "categories": {
+            "passengerCar": "Passenger Car",
             "suv": "SUV",
-            "hatchback": "Hatchback",
-            "sport": "Sport",
-            "family_car": "Family Car",
-            "van": "Van",
+            "commercialVehicle": "Commercial Vehicle",
             "truck": "Truck",
-            "micro": "Micro"
+            "mototechnics": "Motorcycle",
+            "waterVehicle": "Water Vehicle",
+            "trailer": "Trailer",
+            "caravan": "Caravan",
+            "constructionMachinery": "Construction Machinery",
+            "agriculturalMachinery": "Agricultural Machinery",
+            "forestMachinery": "Forest Machinery",
+            "communalMachinery": "Communal Machinery"
+        },
+        "subtypes": {
+            "sedan": "Sedan",
+            "hatchback": "Hatchback",
+            "touring": "Touring",
+            "minivan": "Minivan",
+            "coupe": "Coupe",
+            "cabriolet": "Cabriolet",
+            "pickup": "Pickup",
+            "limousine": "Limousine",
+            "open": "Open",
+            "smallCommercial": "Small Commercial",
+            "commercial": "Commercial",
+            "rigid": "Rigid",
+            "saddle": "Saddle",
+            "chassis": "Chassis",
+            "classicalMotorcycle": "Classical",
+            "scooter": "Scooter",
+            "moped": "Moped",
+            "bike": "Motorcycle",
+            "cruiserChopper": "Cruiser/Chopper",
+            "motocross": "Motocross",
+            "enduroAdventure": "Enduro/Adventure",
+            "trial": "Trial",
+            "threeWheeler": "Three Wheeler",
+            "atvUtv": "ATV/UTV",
+            "buggy": "Buggy",
+            "mopedCar": "Moped Car",
+            "snowmobile": "Snowmobile",
+            "other": "Other",
+            "motorboat": "Motorboat",
+            "yachtSailboat": "Yacht/Sailboat",
+            "waterscooter": "Water Scooter",
+            "lightTrailer": "Light Trailer",
+            "semiTrailer": "Semi-Trailer",
+            "trailer": "Trailer",
+            "boatTrailer": "Boat Trailer",
+            "caravan": "Caravan",
+            "trailerTent": "Trailer Tent",
+            "crane": "Crane",
+            "concreteMixer": "Concrete Mixer",
+            "excavator": "Excavator",
+            "bulldozer": "Bulldozer",
+            "forklift": "Forklift",
+            "loader": "Loader",
+            "loaderExcavator": "Loader Excavator",
+            "roadConstruction": "Road Construction",
+            "tractor": "Tractor",
+            "combine": "Combine",
+            "mower": "Mower",
+            "harvester": "Harvester",
+            "forwarder": "Forwarder",
+            "sweepingMachine": "Sweeping Machine",
+            "garbageTruck": "Garbage Truck",
+            "excrementsRemoval": "Excrements Removal"
         }
     },
     "step2": {
@@ -48,7 +111,7 @@
             "fuelType": "Fuel *",
             "transmission": "Transmission *",
             "powerKw": "Power (kW) *",
-            "powerHj": "{count} hp",
+            "powerHj": "{{count}} hp",
             "powerHjEmpty": "— hp",
             "driveType": "Drivetrain *",
             "doors": "Doors *",
@@ -82,7 +145,7 @@
             "vin": "VIN1234567890ABCD",
             "description": "Tell more about your car..."
         },
-        "charCount": "{count} / 5000 characters"
+        "charCount": "{{count}} / 5000 characters"
     },
     "step3": {
         "title": "Add Photos",
@@ -104,12 +167,12 @@
             ]
         },
         "mainPhoto": "Main Photo",
-        "addMore": "Add more (up to {count})",
-        "photoNumber": "Photo {index}"
+        "addMore": "Add more (up to {{count}})",
+        "photoNumber": "Photo {{index}}"
     },
     "step4": {
         "success": "Listing successfully submitted!",
-        "idText": "Your listing (ID: #{id}) is now under review.",
+        "idText": "Your listing (ID: #{{id}}) is now under review.",
         "nextSteps": {
             "title": "What happens next?",
             "items": [
@@ -131,7 +194,7 @@
         "minPhotos": "Please add at least 3 photos",
         "createError": "Error creating listing",
         "uploadingTitle": "Uploading images...",
-        "uploadingDesc": "Uploading {count} images. Please wait.",
+        "uploadingDesc": "Uploading {{count}} images. Please wait.",
         "attachError": "Error attaching images to listing",
         "successTitle": "Success!",
         "successDesc": "Listing successfully submitted with images!",
@@ -142,6 +205,12 @@
         "next": "Next",
         "saving": "Saving...",
         "publish": "Publish Listing"
+    },
+    "loginRequired": {
+        "title": "Log in to sell",
+        "description": "To post a listing, you need to be logged in. It only takes a minute and is completely free.",
+        "loginButton": "Log in",
+        "registerButton": "Register"
     },
     "footer": {
         "termsText": "By clicking “Publish Listing”, you agree to Kaarplus terms of use and privacy policy."

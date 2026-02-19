@@ -49,7 +49,7 @@ export default function SearchPage() {
                 if (filters.yearMin && filters.yearMin !== "none") params.set("yearMin", filters.yearMin);
                 if (filters.yearMax && filters.yearMax !== "none") params.set("yearMax", filters.yearMax);
                 if (filters.fuelType.length > 0) params.set("fuelType", filters.fuelType.join(","));
-                if (filters.bodyType.length > 0) params.set("bodyType", filters.bodyType.join(","));
+                if (filters.bodyTypeSelections.length > 0) params.set("bodyType", filters.getBodyTypeForApi());
                 if (filters.transmission !== "all") params.set("transmission", filters.transmission);
                 if (filters.mileageMin) params.set("mileageMin", filters.mileageMin);
                 if (filters.mileageMax) params.set("mileageMax", filters.mileageMax);
@@ -98,7 +98,7 @@ export default function SearchPage() {
         };
     }, [
         filters.make, filters.model, filters.priceMin, filters.priceMax,
-        filters.yearMin, filters.yearMax, filters.fuelType, filters.bodyType,
+        filters.yearMin, filters.yearMax, filters.fuelType, filters.bodyTypeSelections,
         filters.transmission, filters.sort, filters.page, filters.q,
         filters.mileageMin, filters.mileageMax, filters.powerMin, filters.powerMax,
         filters.driveType, filters.color, filters.doors, filters.seats,
@@ -212,7 +212,7 @@ export default function SearchPage() {
                                                     context={{
                                                         make: filters.make !== "none" ? filters.make : undefined,
                                                         fuelType: filters.fuelType[0],
-                                                        bodyType: filters.bodyType[0],
+                                                        bodyType: filters.bodyTypeSelections[0]?.category,
                                                     }}
                                                     className="h-[120px]"
                                                 />

@@ -10,10 +10,10 @@
     "noResults": "Tulemusi ei leitud",
     "noResultsDesc": "Proovige muuta filtreid või otsingusõna.",
     "clearFilters": "Puhasta kõik filtrid",
-    "pagination": "Näitan {start} kuni {end} sõidukit {total}-st",
+    "pagination": "Näitan {{start}} kuni {{end}} sõidukit {{total}}-st",
     "filters": {
-        "count_one": "{count} filter",
-        "count_other": "{count} filtrit",
+        "count_one": "{{count}} filter",
+        "count_other": "{{count}} filtrit",
         "reset": "Lähtesta kõik",
         "showResults": "Näita tulemusi"
     },
@@ -179,7 +179,7 @@
         },
         "toast": {
             "successTitle": "Otsing salvestatud",
-            "successDescription": "Otsing \"{name}\" on nüüd teie profiilis salvestatud."
+            "successDescription": "Otsing \"{{name}}\" on nüüd teie profiilis salvestatud."
         }
     }
 }

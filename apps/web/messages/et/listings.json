@@ -42,18 +42,20 @@
         "list": "Nimekiri"
     },
     "results": {
-        "found": "Leitud {total} autot",
+        "found": "Leitud {{count}} autot",
+        "found_one": "Leitud {{count}} auto",
+        "found_other": "Leitud {{count}} autot",
         "noResults": "Tulemusi ei leitud",
         "noResultsDesc": "Proovige muuta filtreid",
-        "showing": "Näitan {start} kuni {end} sõidukit {total}-st",
+        "showing": "Näitan {{start}} kuni {{end}} sõidukit {{total}}-st",
         "clearAll": "Puhasta kõik filtrid"
     },
     "card": {
         "year": "Aasta",
-        "mileage": "{value} km",
+        "mileage": "{{value}} km",
         "fuel": "Kütus",
         "transmission": "Käigukast",
-        "power": "{value} kW",
+        "power": "{{value}} kW",
         "viewDetails": "Vaata detaile",
         "favorite": "Lisa lemmikutesse",
         "unfavorite": "Eemalda lemmikutest"
@@ -101,7 +103,7 @@
         "noResults": "Tulemusi ei leitud",
         "noResultsDesc": "Proovige muuta filtreid või otsingusõna.",
         "clearAllFilters": "Puhasta kõik filtrid",
-        "showing": "Näitan {start} kuni {end} sõidukit {total}-st",
+        "showing": "Näitan {{start}} kuni {{end}} sõidukit {{total}}-st",
         "error": "Kuulutuste laadimine ebaõnnestus. Palun proovige uuesti.",
         "retry": "Proovi uuesti",
         "breadcrumb": {

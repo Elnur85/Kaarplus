@@ -38,12 +38,17 @@ export default function AdminAdsPage() {
       const json = await res.json();
       setCampaigns(json.data || []);
       setTotal(json.meta?.total || 0);
-    } catch (error) {
-      console.error("Failed to fetch campaigns:", error);
+    } catch {
+      toast({
+        variant: "destructive",
+        title: t("admin.campaigns.toasts.fetchError"),
+      });
+      setCampaigns([]);
+      setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  }, [page, statusFilter]);
+  }, [page, statusFilter, toast, t]);
 
   useEffect(() => {
     fetchCampaigns();

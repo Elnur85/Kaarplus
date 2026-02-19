@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/components/i18n/language-provider";
 import { CookieBanner } from "@/components/gdpr/cookie-banner";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Toaster } from "@/components/ui/toaster";
+import { ErrorBoundary } from "@/components/error/error-boundary";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { generateOrganizationJsonLd } from "@/lib/seo";
 
@@ -53,10 +54,12 @@ export default function RootLayout({
 			<body className="min-h-screen bg-background font-sans antialiased">
 				<LanguageProvider>
 					<AuthProvider>
-						<JsonLd data={organizationJsonLd} />
-						{children}
-						<Toaster />
-						<CookieBanner />
+						<ErrorBoundary>
+							<JsonLd data={organizationJsonLd} />
+							{children}
+							<Toaster />
+							<CookieBanner />
+						</ErrorBoundary>
 					</AuthProvider>
 				</LanguageProvider>
 			</body>

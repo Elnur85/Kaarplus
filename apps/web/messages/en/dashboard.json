@@ -22,7 +22,9 @@
         "totalViews": "Total views",
         "totalFavorites": "Total favorites",
         "totalMessages": "Messages",
-        "thisMonth": "this month"
+        "thisMonth": "this month",
+        "error": "Failed to load statistics",
+        "retry": "Try again"
     },
     "listings": {
         "title": "My Listings",
@@ -44,7 +46,9 @@
             "favorites": "Favorites",
             "date": "Date",
             "actions": "Actions",
-            "empty": "You don't have any listings yet."
+            "empty": "You don't have any listings yet.",
+            "error": "Failed to load listings",
+            "retry": "Try again"
         },
         "actions": {
             "edit": "Edit",
@@ -53,8 +57,8 @@
             "deleteConfirm": "Are you sure? This action cannot be undone."
         },
         "pagination": {
-            "page": "Page {current}/{total}",
-            "total": "{count} listings",
+            "page": "Page {{current}}/{{total}}",
+            "total": "{{count}} listings",
             "previous": "Previous",
             "next": "Next"
         }
@@ -123,14 +127,14 @@
             "button": "Start searching"
         },
         "card": {
-            "saved": "Saved {date}",
+            "saved": "Saved {{date}}",
             "allVehicles": "All vehicles",
             "alerts": "Notifications",
             "view": "Edit / View"
         },
         "delete": {
             "title": "Are you sure?",
-            "description": "This action will remove the saved search \"{name}\". This cannot be undone.",
+            "description": "This action will remove the saved search \"{{name}}\". This cannot be undone.",
             "button": "Delete"
         },
         "toasts": {

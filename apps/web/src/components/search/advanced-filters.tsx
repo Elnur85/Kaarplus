@@ -22,11 +22,10 @@ import {
 } from "@/components/ui/select";
 import { RotateCcw, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FUEL_TYPES, DRIVE_TYPES, BODY_TYPES, API_URL } from "@/lib/constants";
+import { FUEL_TYPES, DRIVE_TYPES, API_URL } from "@/lib/constants";
+import { BodyTypeFilter } from "@/components/listings/body-type-filter";
 
 const fuelTypes = FUEL_TYPES.filter(f => f !== "Ethanol").map(f => ({ value: f, key: f }));
-
-const bodyTypes = BODY_TYPES.map(b => ({ value: b, key: b }));
 
 const driveTypes = DRIVE_TYPES.map(d => ({ value: d, key: d }));
 
@@ -400,28 +399,7 @@ export function AdvancedFilters() {
                                 <Label className="text-xs text-muted-foreground mb-2 block">
                                     {t('fields.body.label')}
                                 </Label>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {bodyTypes.map((body) => (
-                                        <div
-                                            key={body.value}
-                                            className="flex items-center space-x-2"
-                                        >
-                                            <Checkbox
-                                                id={`adv-body-${body.value}`}
-                                                checked={filters.bodyType.includes(body.value)}
-                                                onCheckedChange={() =>
-                                                    filters.toggleBodyType(body.value)
-                                                }
-                                            />
-                                            <label
-                                                htmlFor={`adv-body-${body.value}`}
-                                                className="text-sm leading-none cursor-pointer"
-                                            >
-                                                {t(`fields.body.types.${body.key}`)}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
+                                <BodyTypeFilter />
                             </div>
 
                             {/* Drive Type */}
@@ -635,7 +613,7 @@ function getActiveFilterCount(filters: ReturnType<typeof useFilterStore.getState
     if (filters.yearMax && filters.yearMax !== "none") count++;
     if (filters.fuelType.length > 0) count++;
     if (filters.transmission !== "all") count++;
-    if (filters.bodyType.length > 0) count++;
+    if (filters.bodyTypeSelections.length > 0) count++;
     if (filters.color && filters.color !== "none") count++;
     if (filters.mileageMin) count++;
     if (filters.mileageMax) count++;

@@ -40,7 +40,7 @@ function CarsPageContent() {
 			if (filters.yearMin) params.set("yearMin", filters.yearMin);
 			if (filters.yearMax) params.set("yearMax", filters.yearMax);
 			if (filters.fuelType.length > 0) params.set("fuelType", filters.fuelType.join(","));
-			if (filters.bodyType.length > 0) params.set("bodyType", filters.bodyType.join(","));
+			if (filters.bodyTypeSelections.length > 0) params.set("bodyType", filters.getBodyTypeForApi());
 			if (filters.transmission !== "all") params.set("transmission", filters.transmission);
 			if (filters.sort) params.set("sort", filters.sort);
 			if (filters.q) params.set("q", filters.q);
@@ -86,7 +86,7 @@ function CarsPageContent() {
 		filters.yearMin,
 		filters.yearMax,
 		filters.fuelType,
-		filters.bodyType,
+		filters.bodyTypeSelections,
 		filters.transmission,
 		filters.sort,
 		filters.page,

@@ -30,7 +30,7 @@ interface ApiListing {
 	images?: { url: string }[];
 	user?: {
 		name: string | null;
-		role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
+		role: "USER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
 		dealershipId: string | null;
 	};
 }

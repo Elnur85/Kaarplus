@@ -1,109 +1,119 @@
 {
-  "specs": {
-    "condition": "Seisukord",
-    "firstRegistration": "Esmaregistreerimine",
-    "mileage": "Läbisõit",
-    "engine": "Mootor",
-    "power": "Võimsus",
-    "powerValue": "{kw} kW ({hp} hj)",
-    "transmission": "Käigukast",
-    "driveType": "Vedu",
-    "bodyType": "Keretüüp",
-    "doorsSeats": "Uksi / Kohti",
-    "exteriorColor": "Välisvärv",
-    "interiorColor": "Sisevärv",
-    "vin": "VIN-kood",
-    "notSpecified": "Määramata",
-    "frontWheelDrive": "Esivedu",
-    "addedOn": "Kuulutus lisatud: {date}",
-    "views": "{count} vaatamist",
-    "verified": "Kontrollitud",
-    "title": "Tehnilised andmed"
-  },
-  "priceCard": {
-    "goodPrice": "Hea hind",
-    "withVat": "KM-ga",
-    "withoutVat": "Ilma KM-ta",
-    "excellentChoice": "Suurepärane valik!",
-    "saveCompared": "Säästa turuhinnaga võrreldes",
-    "buyNow": "Osta kohe",
-    "contactSeller": "Võta müüjaga ühendust",
-    "callSeller": "Helista",
-    "messageSeller": "Saada sõnum",
-    "seller": "Müüja",
-    "noPhone": "Telefon puudub",
-    "available": "Saadaval",
-    "status": "Staatus: {status}",
-    "share": "Jaga",
-    "save": "Salvesta",
-    "marketAverage": "Turu keskmine",
-    "yourGain": "Sinu võit",
-    "saved": "Salvestatud"
-  },
-  "features": {
-    "title": "Varustus",
-    "notSpecified": "Lisavarustus märkimata"
-  },
-  "similarListings": "Sarnased kuulutused",
-  "description": {
-    "title": "Kirjeldus",
-    "none": "Kirjeldus puudub."
-  },
-  "seller": {
-    "title": "Müüja info",
-    "dealership": "Esindus",
-    "verifiedSeller": "Kontrollitud müüja alates 2024",
-    "officialPartner": "Ametlik koostööpartner",
-    "privateSeller": "Erakasutaja",
-    "viewAllListings": "Vaata kõiki kuulutusi",
-    "history": "Ajalugu",
-    "warranty": "Garantii",
-    "verified": "Kontrollitud",
-    "locationEstonia": "{location}, Eesti"
-  },
-  "gallery": {
-    "noImages": "Pilte ei ole",
-    "photoCount": "{current} / {total} Fotot",
-    "fullscreen": "Täisekraan",
-    "vehicleImage": "Sõiduki pilt {index}",
-    "thumbnail": "Pisipilt {index}"
-  },
-  "contact": {
-    "dialogTitle": "Võta müüjaga ühendust",
-    "dialogDescription": "Saada sõnum: {title}",
-    "nameLabel": "Nimi",
-    "namePlaceholder": "Sinu nimi",
-    "emailLabel": "E-post",
-    "emailPlaceholder": "sinu@epost.ee",
-    "phoneLabel": "Telefon (valikuline)",
-    "phonePlaceholder": "+372 ...",
-    "messageLabel": "Sõnum",
-    "messagePlaceholder": "Olen huvitatud sellest sõidukist...",
-    "sendButton": "Saada sõnum",
-    "sending": "Saadan...",
-    "successTitle": "Sõnum saadetud!",
-    "successDesc": "Sinu sõnum {title} kohta on saadetud müüjale.",
-    "errorTitle": "Viga",
-    "sendError": "Sõnumi saatmine ebaõnnestus. Proovi uuesti.",
-    "validationError": "Valideerimisviga",
-    "messageRequired": "Palun sisesta sõnum",
-    "close": "Sulge",
-    "viewMessages": "Vaata sõnumeid",
-    "loginPrompt": "Saad ka",
-    "loginLink": "sisse logida kiiremaks suhtluseks",
-    "nameEmailRequired": "Nimi ja e-post on kohustuslikud",
-    "invalidEmail": "Palun sisesta kehtiv e-posti aadress"
-  },
-  "favorites": {
-    "loginRequired": "Sisselogimine nõutud",
-    "loginRequiredDesc": "Lemmikute salvestamiseks logi palun sisse",
-    "added": "Lisatud lemmikutesse",
-    "addedDesc": "See sõiduk on lisatud sinu lemmikutesse",
-    "removed": "Eemaldatud lemmikutest",
-    "removedDesc": "See sõiduk on eemaldatud sinu lemmikutest",
-    "error": "Viga"
-  },
-  "share": {
-    "listingDescription": "Vaata seda {title} Kaarplusist!"
-  }
+	"specs": {
+		"condition": "Seisukord",
+		"firstRegistration": "Esmaregistreerimine",
+		"mileage": "Läbisõit",
+		"engine": "Mootor",
+		"power": "Võimsus",
+		"powerValue": "{{kw}} kW ({{hp}} hj)",
+		"transmission": "Käigukast",
+		"driveType": "Vedu",
+		"bodyType": "Keretüüp",
+		"doorsSeats": "Uksi / Kohti",
+		"exteriorColor": "Välisvärv",
+		"interiorColor": "Sisevärv",
+		"vin": "VIN-kood",
+		"notSpecified": "Määramata",
+		"frontWheelDrive": "Esivedu",
+		"addedOn": "Kuulutus lisatud: {{date}}",
+		"views": "{{count}} vaatamist",
+		"verified": "Kontrollitud",
+		"title": "Tehnilised andmed"
+	},
+	"priceCard": {
+		"goodPrice": "Hea hind",
+		"withVat": "KM-ga",
+		"withoutVat": "Ilma KM-ta",
+		"excellentChoice": "Suurepärane valik!",
+		"saveCompared": "Säästa turuhinnaga võrreldes",
+		"buyNow": "Osta kohe",
+		"contactSeller": "Võta müüjaga ühendust",
+		"callSeller": "Helista",
+		"messageSeller": "Saada sõnum",
+		"seller": "Müüja",
+		"noPhone": "Telefon puudub",
+		"available": "Saadaval",
+		"status": "Staatus: {{status}}",
+		"share": "Jaga",
+		"save": "Salvesta",
+		"marketAverage": "Turu keskmine",
+		"yourGain": "Sinu võit",
+		"saved": "Salvestatud"
+	},
+	"features": {
+		"title": "Varustus",
+		"notSpecified": "Lisavarustus märkimata",
+		"support": {
+			"title": "Klienditugi"
+		}
+	},
+	"contactSeller": {
+		"noPhone": "Telefoninumber puudub",
+		"noPhoneDesc": "Vabandame, selle müüja telefoninumber ei ole saadaval. Palun kasutage sõnumi saatmise vormi."
+	},
+	"scrollLeft": "Keri vasakule",
+	"scrollRight": "Keri paremale",
+	"similarListings": "Sarnased kuulutused",
+	"description": {
+		"title": "Kirjeldus",
+		"none": "Kirjeldus puudub."
+	},
+	"seller": {
+		"title": "Müüja info",
+		"dealership": "Esindus",
+		"verifiedSeller": "Kontrollitud müüja alates 2024",
+		"officialPartner": "Ametlik koostööpartner",
+		"privateSeller": "Erakasutaja",
+            "verifiedUser": "Kinnitatud kasutaja",
+		"viewAllListings": "Vaata kõiki kuulutusi",
+		"history": "Ajalugu",
+		"warranty": "Garantii",
+		"verified": "Kontrollitud",
+		"locationEstonia": "{{location}}, Eesti"
+	},
+	"gallery": {
+		"noImages": "Pilte ei ole",
+		"photoCount": "{{current}} / {{total}} Fotot",
+		"fullscreen": "Täisekraan",
+		"vehicleImage": "Sõiduki pilt {{index}}",
+		"thumbnail": "Pisipilt {{index}}"
+	},
+	"contact": {
+		"dialogTitle": "Võta müüjaga ühendust",
+		"dialogDescription": "Saada sõnum: {{title}}",
+		"nameLabel": "Nimi",
+		"namePlaceholder": "Sinu nimi",
+		"emailLabel": "E-post",
+		"emailPlaceholder": "sinu@epost.ee",
+		"phoneLabel": "Telefon (valikuline)",
+		"phonePlaceholder": "+372 ...",
+		"messageLabel": "Sõnum",
+		"messagePlaceholder": "Olen huvitatud sellest sõidukist...",
+		"sendButton": "Saada sõnum",
+		"sending": "Saadan...",
+		"successTitle": "Sõnum saadetud!",
+		"successDesc": "Sinu sõnum {{title}} kohta on saadetud müüjale.",
+		"errorTitle": "Viga",
+		"sendError": "Sõnumi saatmine ebaõnnestus. Proovi uuesti.",
+		"validationError": "Valideerimisviga",
+		"messageRequired": "Palun sisesta sõnum",
+		"close": "Sulge",
+		"viewMessages": "Vaata sõnumeid",
+		"loginPrompt": "Saad ka",
+		"loginLink": "sisse logida kiiremaks suhtluseks",
+		"nameEmailRequired": "Nimi ja e-post on kohustuslikud",
+		"invalidEmail": "Palun sisesta kehtiv e-posti aadress"
+	},
+	"favorites": {
+		"loginRequired": "Sisselogimine nõutud",
+		"loginRequiredDesc": "Lemmikute salvestamiseks logi palun sisse",
+		"added": "Lisatud lemmikutesse",
+		"addedDesc": "See sõiduk on lisatud sinu lemmikutesse",
+		"removed": "Eemaldatud lemmikutest",
+		"removedDesc": "See sõiduk on eemaldatud sinu lemmikutest",
+		"error": "Viga"
+	},
+	"share": {
+		"listingDescription": "Vaata seda {{title}} Kaarplusist!"
+	}
 }

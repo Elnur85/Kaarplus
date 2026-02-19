@@ -1,157 +1,481 @@
 # Development Guide
 
+> Step-by-step guide to set up and run the Kaarplus project locally.  
+> Derived from actual `package.json` scripts and `.env.example` files.
+
+---
+
 ## Prerequisites
 
-- **Node.js 20+** — install via [nvm](https://github.com/nvm-sh/nvm): `nvm install 20`
-- **PostgreSQL 15+** — local instance or Docker
-- **npm 10+** — comes with Node.js 20
-- **Git** — for version control
+| Requirement | Version | Check Command |
+|-------------|---------|---------------|
+| Node.js | >=20.0.0 | `node --version` |
+| npm | >=10.0.0 | `npm --version` |
+| PostgreSQL | >=15.0 | `psql --version` |
+| Git | Any | `git --version` |
+
+**Recommended:** Use `nvm` to manage Node versions:
+```bash
+nvm use  # Uses version from .nvmrc (20)
+```
+
+---
 
 ## Quick Start
 
+### 1. Clone and Navigate
+
 ```bash
-# 1. Clone the repository
-git clone <repo-url> && cd kaarplus
+git clone <repository-url> kaarplus
+cd kaarplus
+```
 
-# 2. Use correct Node version
-nvm use
+### 2. Install Dependencies
 
-# 3. Install dependencies
+Uses pnpm as package manager (specified in `package.json`):
+
+```bash
 npm install
+```
 
-# 4. Set up environment files
+This installs dependencies for all workspaces:
+- `apps/web`
+- `apps/api`
+- `packages/database`
+
+### 3. Set Up Environment Variables
+
+Copy example files to create local environment files:
+
+```bash
+# Backend environment
 cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env.local
-cp packages/database/.env.example packages/database/.env
 
-# 5. Start PostgreSQL (Docker option)
+# Frontend environment  
+cp apps/web/.env.example apps/web/.env.local
+```
+
+### 4. Configure Environment Variables
+
+#### Backend (`apps/api/.env`)
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `DATABASE_URL` | Yes | - | PostgreSQL connection string |
+| `PORT` | No | 4000 | API server port |
+| `NODE_ENV` | No | development | Node environment |
+| `CORS_ORIGIN` | Yes | http://localhost:3000 | Frontend URL for CORS |
+| `JWT_SECRET` | Yes | - | JWT signing secret (min 32 chars) |
+| `STRIPE_SECRET_KEY` | No | - | Stripe secret key (for payments) |
+| `STRIPE_WEBHOOK_SECRET` | No | - | Stripe webhook secret |
+| `AWS_S3_BUCKET` | No | - | S3 bucket name (for images) |
+| `AWS_S3_REGION` | No | eu-central-1 | S3 region |
+| `AWS_ACCESS_KEY_ID` | No | - | AWS IAM access key |
+| `AWS_SECRET_ACCESS_KEY` | No | - | AWS IAM secret key |
+| `SENDGRID_API_KEY` | No | - | SendGrid API key (for email) |
+| `SENDGRID_FROM_EMAIL` | No | - | Verified sender email |
+| `SENDGRID_FROM_NAME` | No | Kaarplus | Email sender name |
+| `SENTRY_DSN` | No | - | Sentry DSN (for error tracking) |
+| `MAX_INDIVIDUAL_LISTINGS` | No | 5 | Max listings per individual seller |
+| `MAX_IMAGE_SIZE_BYTES` | No | 10485760 | Max image upload size (10MB) |
+| `DISABLE_RATE_LIMIT` | No | false | Disable rate limiting (for E2E tests) |
+
+**Minimum required `.env` for local development:**
+```bash
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/kaarplus
+JWT_SECRET=your-secret-key-at-least-32-characters-long
+CORS_ORIGIN=http://localhost:3000
+```
+
+Generate a secure JWT secret:
+```bash
+openssl rand -base64 32
+```
+
+#### Frontend (`apps/web/.env.local`)
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | Yes | http://localhost:4000 | Backend API URL |
+| `NEXT_PUBLIC_SITE_URL` | Yes | http://localhost:3000 | Frontend URL |
+| `NEXTAUTH_URL` | Yes | http://localhost:3000 | NextAuth base URL |
+| `NEXTAUTH_SECRET` | Yes | - | NextAuth secret (same as JWT_SECRET) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | No | - | Stripe publishable key |
+| `NEXT_PUBLIC_S3_BUCKET` | No | - | S3 bucket name |
+| `NEXT_PUBLIC_S3_REGION` | No | eu-central-1 | S3 region |
+| `NEXT_PUBLIC_SENTRY_DSN` | No | - | Sentry DSN |
+| `SENTRY_AUTH_TOKEN` | No | - | Sentry auth token (for source maps) |
+| `NEXT_PUBLIC_COOKIE_CONSENT` | No | true | Enable cookie banner |
+| `NEXT_PUBLIC_ANALYTICS_ENABLED` | No | false | Enable analytics |
+| `NEXT_PUBLIC_GA_ID` | No | - | Google Analytics ID |
+
+**Minimum required `.env.local`:**
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-at-least-32-characters-long
+```
+
+### 5. Set Up PostgreSQL
+
+#### Option A: Docker (Recommended)
+
+```bash
 docker run --name kaarplus-db \
   -e POSTGRES_PASSWORD=postgres \
   -e POSTGRES_DB=kaarplus \
-  -p 5432:5432 -d postgres:15
+  -p 5432:5432 \
+  -d postgres:15
+```
 
-# 6. Set up database
+#### Option B: Local PostgreSQL
+
+Ensure PostgreSQL is running and create the database:
+
+```bash
+createdb kaarplus
+```
+
+Update `DATABASE_URL` in `apps/api/.env` if using different credentials.
+
+#### Verify Connection
+
+```bash
+pg_isready -h localhost -p 5432
+```
+
+### 6. Generate Prisma Client
+
+```bash
 npm run db:generate
-npm run db:migrate
-npm run db:seed
+```
 
-# 7. Start development
+This generates the Prisma client from the schema.
+
+### 7. Run Database Migrations
+
+```bash
+npm run db:migrate
+```
+
+This creates all tables in the database. You will be prompted to create the first migration if the database is empty.
+
+### 8. Seed the Database (Optional)
+
+```bash
+npm run db:seed
+```
+
+This populates the database with sample data for development.
+
+### 9. Start Development Servers
+
+```bash
+# Start both web and API concurrently
 npm run dev
 ```
 
-**Frontend:** http://localhost:3000
-**Backend:** http://localhost:4000/api/health
-**Prisma Studio:** `npm run db:studio` (port 5555)
+Or start individually:
+```bash
+# Terminal 1 - Frontend
+npm run dev:web
 
-## Project Structure
+# Terminal 2 - Backend  
+npm run dev:api
+```
 
-This is an **npm workspaces monorepo** with the following packages:
+### 10. Verify Setup
 
-| Package                       | Path                         | Description            |
-| ----------------------------- | ---------------------------- | ---------------------- |
-| `@kaarplus/web`               | `apps/web`                   | Next.js 14+ frontend   |
-| `@kaarplus/api`               | `apps/api`                   | Express.js backend API |
-| `@kaarplus/database`          | `packages/database`          | Prisma schema & client |
-| `@kaarplus/typescript-config` | `packages/typescript-config` | Shared TS configs      |
-| `@kaarplus/ui`                | `packages/ui`                | Shared UI components   |
+| Service | URL | Expected Result |
+|---------|-----|-----------------|
+| Frontend | http://localhost:3000 | Kaarplus homepage loads |
+| API Health | http://localhost:4000/api/health | `{"status":"ok"}` |
+| Prisma Studio | Run `npm run db:studio` | Database GUI at http://localhost:5555 |
+
+---
 
 ## Common Commands
 
-| Command               | Description                   |
-| --------------------- | ----------------------------- |
-| `npm run dev`         | Start all apps concurrently   |
-| `npm run dev:web`     | Start frontend only           |
-| `npm run dev:api`     | Start backend only            |
-| `npm run build`       | Build all packages            |
-| `npm run lint`        | Lint all packages             |
-| `npm run typecheck`   | TypeScript check              |
-| `npm run test`        | Run all tests                 |
-| `npm run db:generate` | Regenerate Prisma client      |
-| `npm run db:migrate`  | Run pending migrations        |
-| `npm run db:studio`   | Open Prisma Studio GUI        |
-| `npm run db:seed`     | Seed database with test data  |
-| `npm run db:reset`    | Reset database (destructive!) |
+### Development
 
-## Environment Variables
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start all apps concurrently |
+| `npm run dev:web` | Start frontend only |
+| `npm run dev:api` | Start backend only |
 
-### Backend (`apps/api/.env`)
+### Database
 
-| Variable                | Required | Description                   |
-| ----------------------- | -------- | ----------------------------- |
-| `DATABASE_URL`          | Yes      | PostgreSQL connection string  |
-| `JWT_SECRET`            | Yes      | Secret for JWT signing        |
-| `CORS_ORIGIN`           | Yes      | Frontend URL for CORS         |
-| `PORT`                  | No       | API port (default: 4000)      |
-| `STRIPE_SECRET_KEY`     | Phase 3  | Stripe API key                |
-| `STRIPE_WEBHOOK_SECRET` | Phase 3  | Stripe webhook signing secret |
-| `AWS_S3_BUCKET`         | Phase 1  | S3 bucket name                |
-| `AWS_S3_REGION`         | Phase 1  | S3 region                     |
-| `AWS_ACCESS_KEY_ID`     | Phase 1  | AWS credentials               |
-| `AWS_SECRET_ACCESS_KEY` | Phase 1  | AWS credentials               |
-| `SENDGRID_API_KEY`      | Phase 2  | SendGrid API key              |
+| Command | Description |
+|---------|-------------|
+| `npm run db:generate` | Regenerate Prisma client |
+| `npm run db:migrate` | Run pending migrations |
+| `npm run db:studio` | Open Prisma Studio GUI |
+| `npm run db:seed` | Seed database with sample data |
+| `npm run db:reset` | Reset database (destructive!) |
 
-### Frontend (`apps/web/.env.local`)
+### Code Quality
 
-| Variable                             | Required | Description               |
-| ------------------------------------ | -------- | ------------------------- |
-| `NEXT_PUBLIC_API_URL`                | Yes      | Backend API URL           |
-| `NEXTAUTH_URL`                       | Yes      | Frontend URL for NextAuth |
-| `NEXTAUTH_SECRET`                    | Yes      | NextAuth session secret   |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Phase 3  | Stripe publishable key    |
+| Command | Description |
+|---------|-------------|
+| `npm run lint` | Run ESLint on all workspaces |
+| `npm run lint:fix` | Auto-fix lint issues |
+| `npm run format` | Format with Prettier |
+| `npm run typecheck` | TypeScript type checking |
+
+### Testing
+
+| Command | Description |
+|---------|-------------|
+| `npm run test` | Run unit tests (Vitest) |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:coverage` | Run tests with coverage |
+| `npm run test:e2e` | Run E2E tests (Playwright) |
+| `npm run test:e2e:ui` | Run E2E tests with UI |
+
+### Build
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build all packages |
+
+---
+
+## Workspace Commands
+
+Run commands in specific workspaces:
+
+```bash
+# Run command in specific workspace
+npm run <script> --workspace=apps/web
+npm run <script> --workspace=apps/api
+npm run <script> --workspace=packages/database
+
+# Run in all workspaces
+npm run <script> --workspaces --if-present
+```
+
+---
+
+## Project Structure
+
+```
+kaarplus/
+├── apps/
+│   ├── web/                 # Next.js frontend
+│   │   ├── src/
+│   │   │   ├── app/        # App Router pages
+│   │   │   ├── components/ # React components
+│   │   │   ├── lib/        # Utilities, API client
+│   │   │   ├── stores/     # Zustand stores
+│   │   │   ├── hooks/      # Custom hooks
+│   │   │   ├── types/      # TypeScript types
+│   │   │   └── messages/   # i18n translations
+│   │   ├── public/         # Static assets
+│   │   └── .env.local      # Frontend env (created by you)
+│   │
+│   └── api/                # Express backend
+│       ├── src/
+│       │   ├── routes/     # API route definitions
+│       │   ├── controllers/# Request handlers
+│       │   ├── services/   # Business logic
+│       │   ├── middleware/ # Express middleware
+│       │   ├── schemas/    # Zod validation schemas
+│       │   ├── utils/      # Utilities
+│       │   └── types/      # TypeScript types
+│       └── .env            # Backend env (created by you)
+│
+├── packages/
+│   ├── database/           # Prisma schema and client
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma
+│   │   │   ├── migrations/
+│   │   │   └── seed.ts
+│   │   └── src/
+│   │
+│   ├── typescript-config/  # Shared TS configs
+│   └── ui/                 # Shared UI components
+│
+├── docs/                   # Documentation
+├── e2e/                    # Playwright E2E tests
+├── .agent/                 # AI agent rules and workflows
+└── stitch/                 # Design reference files
+```
+
+---
+
+## Troubleshooting
+
+### Database Connection Issues
+
+```bash
+# Check if PostgreSQL is running
+pg_isready -h localhost -p 5432
+
+# Check Docker container
+docker ps | grep kaarplus-db
+
+# View container logs
+docker logs kaarplus-db
+
+# Restart container
+docker restart kaarplus-db
+```
+
+### Prisma Client Out of Sync
+
+```bash
+# Regenerate client
+npm run db:generate
+
+# If types are wrong, restart TypeScript server in IDE
+```
+
+### Port Conflicts
+
+```bash
+# Find processes on ports 3000/4000
+lsof -ti:3000
+lsof -ti:4000
+
+# Kill processes
+lsof -ti:3000 | xargs kill -9
+lsof -ti:4000 | xargs kill -9
+```
+
+### Node Version Issues
+
+```bash
+# Check current version
+node --version  # Should be >=20
+
+# Switch to correct version
+nvm use
+
+# Or install correct version
+nvm install 20
+nvm use 20
+```
+
+### npm Install Issues
+
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+rm -rf apps/*/node_modules
+rm -rf packages/*/node_modules
+npm install
+```
+
+### Migration Conflicts
+
+```bash
+# Reset database (dev only!)
+npm run db:reset
+
+# Or create a new migration to fix
+npm run db:migrate
+```
+
+---
 
 ## Git Workflow
 
 ### Branch Naming
 
 ```
-feat/<task-id>-<description>   # New features
-fix/<task-id>-<description>    # Bug fixes
-chore/<description>            # Maintenance
-docs/<description>             # Documentation
+feat/<task-id>-<description>    # New features
+fix/<task-id>-<description>     # Bug fixes
+chore/<description>             # Maintenance
+docs/<description>              # Documentation
 ```
 
 ### Commit Convention
 
-[Conventional Commits](https://www.conventionalcommits.org/) format:
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat(web): implement landing page hero section [P1-T06]
-fix(api): correct listing filter query for price range [P1-T07]
-chore(db): add seed data for testing [P1-T02]
+feat(web): add search filters [P1-T08]
+fix(api): correct listing query [P1-T07]
+chore(db): add seed data [P1-T02]
 docs: update API documentation
 ```
 
-**Scopes:** `web`, `api`, `db`, `auth`, `listings`, `search`, `payments`, `admin`, `seo`, `gdpr`, `infra`
+**Scopes:** `web`, `api`, `db`, `auth`, `listings`, `search`, `payments`, `admin`, `seo`, `gdpr`, `infra`, `i18n`, `test`
 
-## Testing
+---
 
-- **Unit tests:** Vitest — colocated `*.test.ts` files
-- **E2E tests:** Playwright — in `apps/web/e2e/`
-- Run: `npm run test` (unit) or `npm run test:e2e` (E2E)
+## IDE Setup
 
-## Troubleshooting
+### Recommended VS Code Extensions
 
-### Database connection issues
+- **ESLint** - Linting
+- **Prettier** - Code formatting
+- **Prisma** - Prisma schema support
+- **Tailwind CSS IntelliSense** - Tailwind autocomplete
+- **Thunder Client** or **REST Client** - API testing
 
-```bash
-# Check if PostgreSQL is running
-pg_isready -h localhost -p 5432
+### Settings
 
-# Reset database completely
-npm run db:reset
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+}
 ```
 
-### Prisma client out of sync
+---
 
+## Environment Variables Reference
+
+### Required for Local Development
+
+| Variable | Location | Value |
+|----------|----------|-------|
+| `DATABASE_URL` | `apps/api/.env` | `postgresql://postgres:postgres@localhost:5432/kaarplus` |
+| `JWT_SECRET` | `apps/api/.env` | `openssl rand -base64 32` |
+| `CORS_ORIGIN` | `apps/api/.env` | `http://localhost:3000` |
+| `NEXT_PUBLIC_API_URL` | `apps/web/.env.local` | `http://localhost:4000` |
+| `NEXT_PUBLIC_SITE_URL` | `apps/web/.env.local` | `http://localhost:3000` |
+| `NEXTAUTH_URL` | `apps/web/.env.local` | `http://localhost:3000` |
+| `NEXTAUTH_SECRET` | `apps/web/.env.local` | Same as `JWT_SECRET` |
+
+### Optional Features
+
+To enable additional features, add these variables:
+
+**Image Uploads (AWS S3):**
 ```bash
-npm run db:generate
+AWS_S3_BUCKET=kaarplus-images
+AWS_S3_REGION=eu-central-1
+AWS_ACCESS_KEY_ID=AKIA...
+AWS_SECRET_ACCESS_KEY=...
 ```
 
-### Port conflicts
-
-Kill processes on ports 3000/4000:
-
+**Payments (Stripe):**
 ```bash
-lsof -ti:3000 | xargs kill -9
-lsof -ti:4000 | xargs kill -9
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
+
+**Email (SendGrid):**
+```bash
+SENDGRID_API_KEY=SG...
+SENDGRID_FROM_EMAIL=noreply@kaarplus.ee
+```
+
+**Error Tracking (Sentry):**
+```bash
+SENTRY_DSN=https://...sentry.io/...
+NEXT_PUBLIC_SENTRY_DSN=https://...sentry.io/...
+```
+
+---
+
+**Last Updated:** 2026-02-19  
+**Source:** `package.json`, `apps/api/.env.example`, `apps/web/.env.example`

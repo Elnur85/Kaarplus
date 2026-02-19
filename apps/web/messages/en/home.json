@@ -36,7 +36,7 @@
 			"hybrid": "Hybrid",
 			"commercial": "Commercial"
 		},
-		"viewAll": "View all {category}",
+		"viewAll": "View all {{category}}",
 		"noListings": "No listings available in this category at the moment",
 		"vehicles": "vehicles"
 	},
@@ -65,7 +65,7 @@
 		"title": "Popular brands",
 		"subtitle": "Browse vehicles by your preferred manufacturer",
 		"viewAll": "View all",
-		"listingCount": "{count} listings"
+		"listingCount": "{{count}} listings"
 	},
 	"reviews": {
 		"title": "What customers think",
@@ -107,7 +107,8 @@
 		"button": "Join",
 		"consent": "By joining, you agree to our <privacy>privacy policy</privacy>.",
 		"toastSuccess": "Subscribed!",
-		"toastDescription": "You have joined our newsletter."
+		"toastDescription": "You have joined our newsletter.",
+		"toastError": "Failed to subscribe to newsletter. Please try again later."
 	},
 	"search": {
 		"tabs": {
@@ -133,13 +134,15 @@
 		"moreFilters": "More filters",
 		"submit": "Show ads",
 		"stats": {
-			"today": "Today: {count} new ads"
+			"today": "Today: {{count}} new ads"
 		}
 	},
 	"listings": {
 		"latest": "Latest listings",
 		"premium": "Premium listings",
-		"viewAll": "View all"
+		"viewAll": "View all",
+		"error": "Failed to load listings",
+		"retry": "Try again"
 	},
 	"promo": {
 		"title": "Everything in one app!",

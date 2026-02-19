@@ -42,18 +42,20 @@
         "list": "List"
     },
     "results": {
-        "found": "Found {total} cars",
+        "found": "Found {{count}} cars",
+        "found_one": "Found {{count}} car",
+        "found_other": "Found {{count}} cars",
         "noResults": "No results found",
         "noResultsDesc": "Try adjusting your filter criteria",
-        "showing": "Showing {start} to {end} of {total} vehicles",
+        "showing": "Showing {{start}} to {{end}} of {{total}} vehicles",
         "clearAll": "Clear all filters"
     },
     "card": {
         "year": "Year",
-        "mileage": "{value} km",
+        "mileage": "{{value}} km",
         "fuel": "Fuel",
         "transmission": "Transmission",
-        "power": "{value} kW",
+        "power": "{{value}} kW",
         "viewDetails": "View Details",
         "favorite": "Add to Favorites",
         "unfavorite": "Remove from Favorites"
@@ -101,7 +103,7 @@
         "noResults": "No results found",
         "noResultsDesc": "Try changing filters or search term.",
         "clearAllFilters": "Clear all filters",
-        "showing": "Showing {start} to {end} of {total} vehicles",
+        "showing": "Showing {{start}} to {{end}} of {{total}} vehicles",
         "error": "Failed to load listings. Please try again.",
         "retry": "Try again",
         "breadcrumb": {

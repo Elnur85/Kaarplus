@@ -60,14 +60,14 @@ export class AppError extends Error {
 }
 
 /**
- * Validation error - 400 Bad Request
- * Used when request data fails validation.
+ * Validation error - 422 Unprocessable Entity
+ * Used when request data fails validation (semantic errors).
  */
 export class ValidationError extends AppError {
   public readonly details: unknown;
 
   constructor(message = "Validation failed", details?: unknown) {
-    super(message, 400, ErrorCode.VALIDATION_ERROR);
+    super(message, 422, ErrorCode.VALIDATION_ERROR);
     this.details = details;
   }
 }

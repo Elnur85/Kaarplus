@@ -12,11 +12,15 @@ triggers:
 # Debugging Workflow
 
 ## Goal
+
 Systematically identify, isolate, and fix bugs with proper root cause analysis.
+
+---
 
 ## Phase 1: Problem Definition
 
 ### Step 1: Gather Information
+
 - [ ] Exact error message
 - [ ] Steps to reproduce
 - [ ] Environment (dev/staging/prod)
@@ -26,6 +30,7 @@ Systematically identify, isolate, and fix bugs with proper root cause analysis.
 - [ ] Recent changes/deployments
 
 ### Step 2: Reproduce the Issue
+
 ```
 Reproduction Steps:
 1. Go to ___________
@@ -42,6 +47,8 @@ Actual: ___________
 - Verify environment differences
 - Check data state
 - Review timing issues
+
+---
 
 ## Phase 2: Isolate the Problem
 
@@ -99,6 +106,8 @@ psql $DATABASE_URL
 SELECT * FROM "Listing" WHERE id = 'xxx';
 SELECT * FROM "User" WHERE email = 'xxx';
 ```
+
+---
 
 ## Phase 3: Root Cause Analysis
 
@@ -166,6 +175,8 @@ SELECT 1;  -- Test connection
 EXPLAIN ANALYZE SELECT * FROM "Listing" WHERE make = 'Toyota';
 ```
 
+---
+
 ## Phase 4: Fix Implementation
 
 ### Step 6: Create Minimal Fix
@@ -219,6 +230,88 @@ npm run test -- debugged-feature
 # Manual verification
 # Follow reproduction steps
 ```
+
+---
+
+## Kaarplus-Specific Debugging Patterns
+
+### Pattern 1: UI Error → API Response → Server Log → DB Query
+
+**When you see an error in the UI, trace backwards:**
+
+1. **UI Error:** Check browser DevTools Console and Network tab
+2. **API Response:** Look at the response body and status code
+3. **Server Log:** Check terminal running `npm run dev:api`
+4. **DB Query:** Use Prisma Studio or psql to verify data state
+
+```
+UI: "Failed to save listing"
+  │
+  ▼
+Network: 400 Bad Request
+  Response: { error: "Validation failed", code: "VALIDATION_ERROR" }
+  │
+  ▼
+Server Log: [ERROR] Validation failed: make is required
+  Controller: listingController.ts:45
+  │
+  ▼
+Database: Data not saved (transaction rolled back)
+```
+
+### Pattern 2: i18n Missing Translation
+
+**When text appears as a key instead of translated:**
+
+1. Check `apps/web/messages/et/<namespace>.json`
+2. Check `apps/web/messages/en/<namespace>.json`
+3. Check `apps/web/messages/ru/<namespace>.json`
+4. Verify the key path matches: `t('namespace.key.subkey')`
+
+```typescript
+// ❌ Wrong key path
+const { t } = useTranslation('common');
+t('submit');  // Should be t('actions.submit')
+
+// ✅ Correct
+const { t } = useTranslation('common');
+t('actions.submit');
+```
+
+### Pattern 3: Auth/Permission Issues
+
+**When user can't access something:**
+
+1. Check `req.user` in API log
+2. Verify JWT token in cookie/Authorization header
+3. Check `requireRole` middleware in route
+4. Verify `requireListingOwnership` middleware
+
+```typescript
+// Route definition - check this first
+router.patch('/:id', requireAuth, requireListingOwnership, updateListing);
+
+// User must be: (owner of listing) OR (ADMIN)
+```
+
+### Pattern 4: Database Schema Mismatch
+
+**When Prisma query fails:**
+
+1. Check `packages/database/prisma/schema.prisma`
+2. Run `npm run db:migrate` to apply pending migrations
+3. Run `npm run db:generate` to regenerate client
+4. Check if field was renamed/removed
+
+```bash
+# Verify schema matches database
+npx prisma migrate status
+
+# Regenerate if needed
+npm run db:generate
+```
+
+---
 
 ## Debugging Tools
 
@@ -298,8 +391,7 @@ npx tsx --inspect-brk src/index.ts
 ### Database Debugging
 
 ```bash
-# Enable query logging
-# In schema.prisma
+# Enable query logging in schema.prisma
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
@@ -310,6 +402,8 @@ const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'],
 });
 ```
+
+---
 
 ## Common Bug Patterns
 
@@ -322,6 +416,8 @@ const prisma = new PrismaClient({
 | Stale data | Closure issue | Use functional update |
 | Form reset | Key prop change | Stable key value |
 | Slow render | Large list | Virtualize list |
+| i18n key showing | Missing translation | Add to all 3 JSON files |
+| 401 on API | Expired token | Check token, refresh flow |
 
 ### Backend
 
@@ -331,8 +427,11 @@ const prisma = new PrismaClient({
 | 401 error | Expired/invalid token | Refresh token flow |
 | 403 error | Missing permission | Check authorization |
 | 404 error | Wrong route/ID | Verify URL params |
+| 409 error | Duplicate entry | Check unique constraints |
 | Slow query | Missing index | Add database index |
 | Memory leak | Unclosed connections | Proper cleanup |
+
+---
 
 ## Debugging Checklist
 
@@ -354,6 +453,8 @@ const prisma = new PrismaClient({
 - [ ] No new warnings/errors
 - [ ] Documentation updated (if needed)
 
+---
+
 ## Emergency Debugging
 
 ### Production Issues
@@ -363,7 +464,7 @@ const prisma = new PrismaClient({
 # https://sentry.io/organizations/kaarplus/issues/
 
 # 2. Check logs
-kubectl logs -f deployment/api  # If using K8s
+railway logs --tail  # If using Railway
 # or
 tail -f /var/log/kaarplus/api.log
 
@@ -375,6 +476,7 @@ LOG_LEVEL=debug npm start
 ```
 
 ### Quick Rollback
+
 ```bash
 # If fix is taking too long
 git log --oneline -10  # Find last good commit
@@ -385,6 +487,8 @@ git push
 npm run deploy:production -- --version=previous
 ```
 
+---
+
 ## Post-Debug Actions
 
 1. **Document the bug** - What caused it, how was it fixed
@@ -392,3 +496,31 @@ npm run deploy:production -- --version=previous
 3. **Update monitoring** - Alert if similar occurs
 4. **Share learnings** - Team retrospective
 5. **Improve process** - Prevent similar bugs
+
+---
+
+## Kaarplus-Specific Debugging Commands
+
+```bash
+# Check API health
+curl http://localhost:4000/api/health
+
+# Check database connection
+npm run db:studio
+
+# Reset and reseed (dev only)
+npm run db:reset
+
+# Run specific test
+npm run test -- listing-controller
+
+# Check TypeScript errors
+npm run typecheck
+
+# Check for lint errors
+npm run lint
+```
+
+---
+
+**Last Updated:** 2026-02-19

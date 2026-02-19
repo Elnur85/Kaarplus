@@ -20,7 +20,7 @@ export interface VehicleSummary {
     location?: string;
     user?: {
         name: string | null;
-        role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
+        role: "USER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
         dealershipId: string | null;
     };
 }

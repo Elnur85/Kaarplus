@@ -7,27 +7,33 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, Car } from "lucide-react";
+import { MapPin, Car, AlertCircle } from "lucide-react";
 
 export default function DealershipsPage() {
 	const { t } = useTranslation("dealership");
 	const [dealerships, setDealerships] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	const fetchDealerships = async () => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const res = await fetch(`/api/v1/dealerships`);
+			if (!res.ok) throw new Error("Failed to fetch");
+			const json = await res.json();
+			setDealerships(json.data || []);
+		} catch {
+			setError(t("list.error"));
+			setDealerships([]);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		async function fetchDealerships() {
-			try {
-				const res = await fetch(`/api/v1/dealerships`);
-				if (!res.ok) throw new Error("Failed to fetch");
-				const json = await res.json();
-				setDealerships(json.data || []);
-			} catch (error) {
-				console.error("Failed to fetch dealerships:", error);
-			} finally {
-				setIsLoading(false);
-			}
-		}
 		fetchDealerships();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -57,6 +63,18 @@ export default function DealershipsPage() {
 							</CardFooter>
 						</Card>
 					))}
+				</div>
+			) : error ? (
+				<div className="rounded-xl border border-destructive/20 bg-destructive/10 p-12 text-center">
+					<div className="flex flex-col items-center gap-3">
+						<div className="flex items-center gap-2 text-destructive">
+							<AlertCircle className="h-5 w-5" />
+							<span className="font-medium">{error}</span>
+						</div>
+						<Button variant="outline" onClick={fetchDealerships}>
+							{t("list.retry")}
+						</Button>
+					</div>
 				</div>
 			) : dealerships.length > 0 ? (
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -98,7 +116,7 @@ export default function DealershipsPage() {
 								<h2 className="text-xl font-bold">{dealer.name}</h2>
 								<div className="flex items-center gap-2 text-sm text-muted-foreground">
 									<MapPin size={14} />
-									<span>{dealer.address || t("list.asukohtMaaramata")}</span>
+									<span>{dealer.address || t("list.locationNotSpecified")}</span>
 								</div>
 							</CardHeader>
 							<CardContent>

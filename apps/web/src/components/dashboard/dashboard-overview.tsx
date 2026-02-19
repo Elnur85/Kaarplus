@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, ArrowRight, Loader2 } from "lucide-react";
+import { Plus, ArrowRight, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DashboardStats } from "@/components/dashboard/dashboard-stats";
 import { MyListingsTable } from "@/components/dashboard/my-listings-table";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
@@ -22,26 +22,31 @@ export function DashboardOverview() {
   const { data: session } = useSession();
   const [stats, setStats] = useState<DashboardStatsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchStats = useCallback(async () => {
     if (!session?.user) return;
 
-    // Fetch dashboard stats
-    fetch(`${API_URL}/user/dashboard/stats`, {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((json) => {
-        setStats(json.data);
-      })
-      .catch(() => {
-        // Dashboard stats will show zeros as fallback
-      })
-      .finally(() => setIsLoading(false));
-  }, [session?.user]);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`${API_URL}/user/dashboard/stats`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      setStats(json.data);
+    } catch {
+      setError(t('stats.error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [session?.user, t]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   return (
     <div className="space-y-8">
@@ -67,6 +72,18 @@ export function DashboardOverview() {
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="h-24 bg-muted animate-pulse rounded-lg" />
           ))}
+        </div>
+      ) : error ? (
+        <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-6">
+          <div className="flex flex-col items-center justify-center gap-3 text-center">
+            <div className="flex items-center gap-2 text-destructive">
+              <AlertCircle className="size-5" />
+              <span className="font-medium">{error}</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={fetchStats}>
+              {t('stats.retry')}
+            </Button>
+          </div>
         </div>
       ) : (
         <DashboardStats 

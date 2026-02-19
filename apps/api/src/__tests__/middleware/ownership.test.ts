@@ -20,7 +20,7 @@ describe("requireListingOwnership Middleware", () => {
     beforeEach(() => {
         req = {
             params: { id: "listing-1" },
-            user: { id: "user-1", email: "test@example.com", role: "INDIVIDUAL_SELLER" },
+            user: { id: "user-1", email: "test@example.com", role: "USER" },
         };
         res = {};
         next = vi.fn();

@@ -29,7 +29,7 @@ export interface ListingDetailed extends Omit<VehicleSummary, 'thumbnailUrl' | '
         name: string | null;
         email: string;
         phone: string | null;
-        role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT" | string;
+        role: "USER" | "DEALERSHIP" | "ADMIN" | "SUPPORT" | string;
         dealershipId: string | null;
         image?: string | null;
         coverImage?: string | null;

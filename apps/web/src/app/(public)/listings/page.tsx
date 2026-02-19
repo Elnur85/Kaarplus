@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import React from "react";
 import { useFilterStore } from "@/store/use-filter-store";
 import { FilterSidebar } from "@/components/listings/filter-sidebar";
@@ -31,52 +31,85 @@ export default function ListingsPage() {
 	const filters = useFilterStore();
 	const [isLoading, setIsLoading] = useState(true);
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
-	const fetchListings = useCallback(async () => {
-		setIsLoading(true);
-		try {
-			const params = new URLSearchParams();
-			if (filters.make && filters.make !== "none") params.set("make", filters.make);
-			if (filters.model && filters.model !== "none") params.set("model", filters.model);
-			if (filters.priceMin) params.set("priceMin", filters.priceMin);
-			if (filters.priceMax) params.set("priceMax", filters.priceMax);
-			if (filters.yearMin) params.set("yearMin", filters.yearMin);
-			if (filters.yearMax) params.set("yearMax", filters.yearMax);
-			if (filters.fuelType.length > 0) params.set("fuelType", filters.fuelType.join(","));
-			if (filters.bodyType.length > 0) params.set("bodyType", filters.bodyType.join(","));
-			if (filters.transmission !== "all") params.set("transmission", filters.transmission);
-			if (filters.sort) params.set("sort", filters.sort);
-			if (filters.q) params.set("q", filters.q);
-			if (filters.mileageMin) params.set("mileageMin", filters.mileageMin);
-			if (filters.mileageMax) params.set("mileageMax", filters.mileageMax);
-			if (filters.powerMin) params.set("powerMin", filters.powerMin);
-			if (filters.powerMax) params.set("powerMax", filters.powerMax);
-			if (filters.driveType && filters.driveType !== "none") params.set("driveType", filters.driveType);
-			if (filters.doors && filters.doors !== "none") params.set("doors", filters.doors);
-			if (filters.seats && filters.seats !== "none") params.set("seats", filters.seats);
-			if (filters.condition && filters.condition !== "none") params.set("condition", filters.condition);
-			if (filters.location && filters.location !== "none") params.set("location", filters.location);
-			if (filters.color && filters.color !== "none") params.set("color", filters.color);
-
-			params.set("page", filters.page.toString());
-			params.set("pageSize", "20");
-
-			const response = await fetch(`${API_URL}/search?${params.toString()}`);
-			const json = await response.json();
-
-			setListings(json.data || []);
-			setTotal(json.meta?.total || 0);
-		} catch (error) {
-			console.error("Failed to fetch listings:", error);
-			toast.error("Failed to load listings. Please try again.");
-		} finally {
-			setIsLoading(false);
-		}
-	}, [filters]);
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
+		// Abort previous in-flight request before starting a new one
+		abortControllerRef.current?.abort();
+		const controller = new AbortController();
+		abortControllerRef.current = controller;
+
+		const fetchListings = async () => {
+			setIsLoading(true);
+			try {
+				const params = new URLSearchParams();
+				if (filters.make && filters.make !== "none") params.set("make", filters.make);
+				if (filters.model && filters.model !== "none") params.set("model", filters.model);
+				if (filters.priceMin) params.set("priceMin", filters.priceMin);
+				if (filters.priceMax) params.set("priceMax", filters.priceMax);
+				if (filters.yearMin) params.set("yearMin", filters.yearMin);
+				if (filters.yearMax) params.set("yearMax", filters.yearMax);
+				if (filters.fuelType.length > 0) params.set("fuelType", filters.fuelType.join(","));
+				if (filters.bodyTypeSelections.length > 0) params.set("bodyType", filters.getBodyTypeForApi());
+				if (filters.transmission !== "all") params.set("transmission", filters.transmission);
+				if (filters.sort) params.set("sort", filters.sort);
+				if (filters.q) params.set("q", filters.q);
+				if (filters.mileageMin) params.set("mileageMin", filters.mileageMin);
+				if (filters.mileageMax) params.set("mileageMax", filters.mileageMax);
+				if (filters.powerMin) params.set("powerMin", filters.powerMin);
+				if (filters.powerMax) params.set("powerMax", filters.powerMax);
+				if (filters.driveType && filters.driveType !== "none") params.set("driveType", filters.driveType);
+				if (filters.doors && filters.doors !== "none") params.set("doors", filters.doors);
+				if (filters.seats && filters.seats !== "none") params.set("seats", filters.seats);
+				if (filters.condition && filters.condition !== "none") params.set("condition", filters.condition);
+				if (filters.location && filters.location !== "none") params.set("location", filters.location);
+				if (filters.color && filters.color !== "none") params.set("color", filters.color);
+
+				params.set("page", filters.page.toString());
+				params.set("pageSize", "20");
+
+				const response = await fetch(`${API_URL}/search?${params.toString()}`, {
+					signal: controller.signal,
+				});
+
+				if (!response.ok) {
+					throw new Error(`Search failed with status ${response.status}`);
+				}
+
+				const json = await response.json();
+
+				setListings(json.data || []);
+				setTotal(json.meta?.total || 0);
+			} catch (error) {
+				// Ignore abort errors - they're expected when filters change quickly
+				if (error instanceof DOMException && error.name === "AbortError") {
+					return;
+				}
+				console.error("Failed to fetch listings:", error);
+				toast.error(t('carsPage.error'));
+			} finally {
+				// Only clear loading state if this request wasn't aborted
+				if (!controller.signal.aborted) {
+					setIsLoading(false);
+				}
+			}
+		};
+
 		fetchListings();
-	}, [fetchListings]);
+
+		// Cleanup: abort any in-flight request when component unmounts or dependencies change
+		return () => {
+			controller.abort();
+		};
+	}, [
+		filters.make, filters.model, filters.priceMin, filters.priceMax,
+		filters.yearMin, filters.yearMax, filters.fuelType, filters.bodyTypeSelections,
+		filters.transmission, filters.sort, filters.page, filters.q,
+		filters.mileageMin, filters.mileageMax, filters.powerMin, filters.powerMax,
+		filters.driveType, filters.doors, filters.seats, filters.condition,
+		filters.location, filters.color,
+		t
+	]);
 
 	const breadcrumbJsonLd = generateBreadcrumbJsonLd([
 		{ name: t('carsPage.breadcrumb.home'), item: SITE_URL },
@@ -158,7 +191,7 @@ export default function ListingsPage() {
 													context={{
 														make: filters.make !== "none" ? filters.make : undefined,
 														fuelType: filters.fuelType[0],
-														bodyType: filters.bodyType[0],
+														bodyType: filters.bodyTypeSelections[0]?.category,
 													}}
 													className="h-[120px]"
 												/>

@@ -82,9 +82,9 @@
 	"date": {
 		"today": "Täna",
 		"yesterday": "Eile",
-		"daysAgo": "{count} päeva tagasi",
-		"weeksAgo": "{count} nädalat tagasi",
-		"monthsAgo": "{count} kuud tagasi"
+		"daysAgo": "{{count}} päeva tagasi",
+		"weeksAgo": "{{count}} nädalat tagasi",
+		"monthsAgo": "{{count}} kuud tagasi"
 	},
 	"details": "Detailid",
 	"saved": "Salvestatud",
@@ -139,5 +139,12 @@
 		"copyFailedDesc": "Palun kopeeri link käsitsi",
 		"success": "Jagatud!",
 		"shared": "Kuulutus edukalt jagatud"
+	},
+	"errorBoundary": {
+		"title": "Midagi läks valesti",
+		"description": "Vabandame, kuid lehel ilmnes ootamatu viga. Palun proovige uuesti või värskendage lehte.",
+		"retry": "Proovi uuesti",
+		"reload": "Värskenda lehte",
+		"support": "Kui probleem püsib, võtke ühendust:"
 	}
 }

@@ -1,5 +1,6 @@
 import { prisma, ListingStatus, Prisma } from "@kaarplus/database";
 
+import { parseBodyType, getBodyTypeValues } from "../utils/bodyTypes";
 import { cacheService } from "../utils/cache";
 import { ForbiddenError, NotFoundError } from "../utils/errors";
 import { logger } from "../utils/logger";
@@ -138,8 +139,12 @@ export class ListingService {
 		}
 		if (transmission) where.transmission = { equals: transmission, mode: "insensitive" };
 		if (bodyType) {
-			const bodies = bodyType.split(",");
-			where.bodyType = { in: bodies };
+			// Parse hierarchical body type format
+			const selections = parseBodyType(bodyType);
+			const bodyTypeValues = getBodyTypeValues(selections);
+			if (bodyTypeValues.length > 0) {
+				where.bodyType = { in: bodyTypeValues };
+			}
 		}
 		if (color) where.colorExterior = { equals: color, mode: "insensitive" };
 		if (mileageMin !== undefined || mileageMax !== undefined) {
@@ -275,7 +280,7 @@ export class ListingService {
 		const user = await prisma.user.findUnique({ where: { id: userId } });
 		if (!user) throw new NotFoundError("User not found");
 
-		if (user.role === "INDIVIDUAL_SELLER") {
+		if (user.role === "USER") {
 			const activeCount = await prisma.listing.count({
 				where: {
 					userId,

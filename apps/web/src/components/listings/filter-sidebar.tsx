@@ -1,34 +1,18 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useFilterStore } from "@/store/use-filter-store";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { BodyTypeFilter } from "./body-type-filter";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronRight } from "lucide-react";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
-
-// Define filter options interface based on API response
-interface FilterOptions {
-	makes: string[];
-	fuelTypes: string[];
-	bodyTypes: string[];
-	transmissions: string[];
-	years: {
-		min: number;
-		max: number;
-	};
-	price: {
-		min: number;
-		max: number;
-	};
-}
+import { cn } from "@/lib/utils";
 
 interface FilterSidebarProps {
 	onShowResults?: () => void;
@@ -52,15 +36,46 @@ function useDebounce<T>(value: T, delay: number): T {
 	return debouncedValue;
 }
 
+// Collapsible section component
+function FilterSection({
+	title,
+	children,
+	defaultOpen = false,
+}: {
+	title: string;
+	children: React.ReactNode;
+	defaultOpen?: boolean;
+}) {
+	const [isOpen, setIsOpen] = useState(defaultOpen);
+
+	return (
+		<div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+			<button
+				type="button"
+				onClick={() => setIsOpen(!isOpen)}
+				className="w-full flex items-center justify-between px-3 py-2.5 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+			>
+				<Label className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider cursor-pointer">
+					{title}
+				</Label>
+				{isOpen ? (
+					<ChevronDown size={14} className="text-slate-400" />
+				) : (
+					<ChevronRight size={14} className="text-slate-400" />
+				)}
+			</button>
+			{isOpen && <div className="p-3 space-y-3">{children}</div>}
+		</div>
+	);
+}
+
 export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
-	const { t } = useTranslation(['listings', 'common', 'sell']);
+	const { t } = useTranslation(["listings", "common", "sell", "home"]);
 	const filters = useFilterStore();
 	const [makes, setMakes] = useState<string[]>([]);
 	const [models, setModels] = useState<string[]>([]);
-	const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
 	const [isLoadingMakes, setIsLoadingMakes] = useState(true);
 	const [isLoadingModels, setIsLoadingModels] = useState(false);
-	const [isLoadingOptions, setIsLoadingOptions] = useState(true);
 
 	// Local state for input fields (before debounce)
 	const [localPriceMin, setLocalPriceMin] = useState(filters.priceMin);
@@ -109,8 +124,7 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 
 	const currentMake = filters.make;
 
-
-	// Fetch makes and filter options on mount
+	// Fetch makes on mount
 	useEffect(() => {
 		let cancelled = false;
 
@@ -126,20 +140,7 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 			}
 		};
 
-		const fetchFilters = async () => {
-			try {
-				const res = await fetch(`${API_URL}/search/filters`);
-				const json = await res.json();
-				if (!cancelled) setFilterOptions(json.data);
-			} catch (error) {
-				console.error("Failed to fetch filters:", error);
-			} finally {
-				if (!cancelled) setIsLoadingOptions(false);
-			}
-		};
-
 		fetchMakes();
-		fetchFilters();
 
 		return () => {
 			cancelled = true;
@@ -150,7 +151,6 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 	useEffect(() => {
 		if (!currentMake || currentMake === "none") {
 			setModels([]);
-			// Clear model filter when make is cleared
 			if (filters.model) {
 				filters.setFilter("model", "");
 			}
@@ -160,16 +160,19 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 		let cancelled = false;
 		setIsLoadingModels(true);
 
-		fetch(`${API_URL}/search/models?make=${encodeURIComponent(currentMake)}`)
+		fetch(
+			`${API_URL}/search/models?make=${encodeURIComponent(currentMake)}`
+		)
 			.then((res) => res.json())
 			.then((json) => {
 				if (!cancelled) {
 					const fetchedModels = json.data || [];
 					setModels(fetchedModels);
-
-					// If current model is not in the new models list, clear it
-					// Only clear if we actually got models back (safety against fetch errors or race conditions)
-					if (filters.model && fetchedModels.length > 0 && !fetchedModels.includes(filters.model)) {
+					if (
+						filters.model &&
+						fetchedModels.length > 0 &&
+						!fetchedModels.includes(filters.model)
+					) {
 						filters.setFilter("model", "");
 					}
 				}
@@ -187,79 +190,52 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 	}, [currentMake, filters]);
 
 	// Year range validation - swaps values if range is invalid
-	const handleYearMinChange = useCallback((val: string) => {
-		const yearValue = val === "any" ? "" : val;
-		const yearNum = yearValue ? parseInt(yearValue) : null;
-		const currentMax = filters.yearMax ? parseInt(filters.yearMax) : null;
+	const handleYearMinChange = useCallback(
+		(val: string) => {
+			const yearValue = val === "any" ? "" : val;
+			const yearNum = yearValue ? parseInt(yearValue) : null;
+			const currentMax = filters.yearMax ? parseInt(filters.yearMax) : null;
 
-		// If setting yearMin and it's greater than yearMax, swap the values
-		if (yearNum && currentMax && yearNum > currentMax) {
-			filters.setFilter("yearMax", yearValue);
-			filters.setFilter("yearMin", filters.yearMax);
-		} else {
-			filters.setFilter("yearMin", yearValue);
-		}
-	}, [filters]);
-
-	const handleYearMaxChange = useCallback((val: string) => {
-		const yearValue = val === "any" ? "" : val;
-		const yearNum = yearValue ? parseInt(yearValue) : null;
-		const currentMin = filters.yearMin ? parseInt(filters.yearMin) : null;
-
-		// If setting yearMax and it's less than yearMin, swap the values
-		if (yearNum && currentMin && yearNum < currentMin) {
-			filters.setFilter("yearMin", yearValue);
-			filters.setFilter("yearMax", filters.yearMin);
-		} else {
-			filters.setFilter("yearMax", yearValue);
-		}
-	}, [filters]);
-
-	// Handle price input changes (local state only, debounce handles store update)
-	const handlePriceMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value.replace(/[^0-9]/g, '');
-		setLocalPriceMin(value);
-	};
-
-	const handlePriceMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value.replace(/[^0-9]/g, '');
-		setLocalPriceMax(value);
-	};
-
-	const handleMileageMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value.replace(/[^0-9]/g, '');
-		setLocalMileageMin(value);
-	};
-
-	const handleMileageMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value.replace(/[^0-9]/g, '');
-		setLocalMileageMax(value);
-	};
-
-	// Generate year options from filter options or fallback
-	const currentYear = new Date().getFullYear();
-	const minYear = filterOptions?.years?.min || 1990;
-	const yearOptions = Array.from(
-		{ length: currentYear - minYear + 1 },
-		(_, i) => currentYear - i
+			if (yearNum && currentMax && yearNum > currentMax) {
+				filters.setFilter("yearMax", yearValue);
+				filters.setFilter("yearMin", filters.yearMax);
+			} else {
+				filters.setFilter("yearMin", yearValue);
+			}
+		},
+		[filters]
 	);
 
-	// Get dynamic fuel types and body types from API
-	const fuelTypes = filterOptions?.fuelTypes || [];
-	const bodyTypes = filterOptions?.bodyTypes || [];
+	const handleYearMaxChange = useCallback(
+		(val: string) => {
+			const yearValue = val === "any" ? "" : val;
+			const yearNum = yearValue ? parseInt(yearValue) : null;
+			const currentMin = filters.yearMin ? parseInt(filters.yearMin) : null;
 
-	// Transmission options from API or fallback
-	const transmissionOptions = filterOptions?.transmissions || ["Manual", "Automatic"];
+			if (yearNum && currentMin && yearNum < currentMin) {
+				filters.setFilter("yearMin", yearValue);
+				filters.setFilter("yearMax", filters.yearMin);
+			} else {
+				filters.setFilter("yearMax", yearValue);
+			}
+		},
+		[filters]
+	);
+
+	const currentYear = new Date().getFullYear();
+	const yearOptions = Array.from(
+		{ length: currentYear - 1990 + 1 },
+		(_, i) => currentYear - i
+	);
 
 	const handleShowResults = () => {
 		if (onShowResults) {
 			onShowResults();
 		}
-		// Scroll to results grid on desktop
 		if (!isMobile) {
-			const resultsGrid = document.getElementById('listings-results');
+			const resultsGrid = document.getElementById("listings-results");
 			if (resultsGrid) {
-				resultsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				resultsGrid.scrollIntoView({ behavior: "smooth", block: "start" });
 			}
 		}
 	};
@@ -273,102 +249,131 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 	};
 
 	return (
-		<div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm h-fit">
-			<div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-				<h2 className="font-bold text-slate-800 dark:text-white flex items-center gap-2">
-					<SlidersHorizontal size={18} className="text-primary" /> {t('filters.title')}
+		<div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm h-fit max-h-[calc(100vh-8rem)] flex flex-col">
+			{/* Header */}
+			<div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
+				<h2 className="font-bold text-slate-800 dark:text-white flex items-center gap-2 text-sm">
+					<SlidersHorizontal size={16} className="text-primary" />{" "}
+					{t("filters.title")}
 				</h2>
 				<Button
 					variant="ghost"
-					size="sm"
 					className="text-xs font-semibold text-primary hover:text-primary/80 hover:bg-primary/5 p-0 h-auto"
 					onClick={handleReset}
 				>
-					<RotateCcw size={12} className="mr-1" /> {t('filters.clear')}
+					<RotateCcw size={12} className="mr-1" /> {t("filters.clear")}
 				</Button>
 			</div>
 
-			<div className="p-5 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
+			{/* Scrollable content with better scroll behavior */}
+			<div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3">
+				{/* Body Type - Always visible at top, most important */}
+				<FilterSection
+					title={t("filters.bodyType")}
+					defaultOpen={true}
+				>
+					<BodyTypeFilter isLoading={false} />
+				</FilterSection>
+
 				{/* Make & Model */}
-				<div className="space-y-3">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-						{t('filters.make')} & {t('filters.model')}
-					</Label>
-					<Select
-						value={filters.make || "none"}
-						onValueChange={(val) => filters.setFilter("make", val === "none" ? "" : val)}
-						disabled={isLoadingMakes}
-					>
-						<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
-							<SelectValue placeholder={isLoadingMakes ? t('common.loading') : t('filters.allMakes')} />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="none">{t('filters.allMakes')}</SelectItem>
-							{makes.map((make) => (
-								<SelectItem key={make} value={make}>{make}</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+				<FilterSection title={t("filters.make") + " & " + t("filters.model")}>
+					<div className="space-y-2">
+						<Select
+							value={filters.make || "none"}
+							onValueChange={(val) =>
+								filters.setFilter("make", val === "none" ? "" : val)
+							}
+							disabled={isLoadingMakes}
+						>
+							<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm h-9">
+								<SelectValue
+									placeholder={
+										isLoadingMakes
+											? t("common:common.loading")
+											: t("filters.allMakes")
+									}
+								/>
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="none">{t("filters.allMakes")}</SelectItem>
+								{makes.map((make) => (
+									<SelectItem key={make} value={make}>
+										{make}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
 
-					<Select
-						value={filters.model || "none"}
-						onValueChange={(val) => filters.setFilter("model", val === "none" ? "" : val)}
-						disabled={!filters.make || isLoadingModels}
-					>
-						<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
-							<SelectValue placeholder={isLoadingModels ? t('common.loading') : t('filters.allModels')} />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="none">{t('filters.allModels')}</SelectItem>
-							{models.map((model) => (
-								<SelectItem key={model} value={model}>{model}</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</div>
-
-				<Separator />
+						<Select
+							value={filters.model || "none"}
+							onValueChange={(val) =>
+								filters.setFilter("model", val === "none" ? "" : val)
+							}
+							disabled={!filters.make || isLoadingModels}
+						>
+							<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm h-9">
+								<SelectValue
+									placeholder={
+										isLoadingModels
+											? t("common:common.loading")
+											: t("filters.allModels")
+									}
+								/>
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="none">{t("filters.allModels")}</SelectItem>
+								{models.map((model) => (
+									<SelectItem key={model} value={model}>
+										{model}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				</FilterSection>
 
 				{/* Price Range */}
-				<div className="space-y-4">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.price')} (€)</Label>
+				<FilterSection title={`${t("filters.price")} (€)`}>
 					<div className="flex gap-2">
 						<Input
 							type="text"
 							inputMode="numeric"
-							placeholder={t('filters.min')}
+							placeholder={t("filters.min")}
 							value={localPriceMin}
-							onChange={handlePriceMinChange}
-							className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
+							onChange={(e) =>
+								setLocalPriceMin(e.target.value.replace(/[^0-9]/g, ""))
+							}
+							className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg h-9"
 						/>
 						<Input
 							type="text"
 							inputMode="numeric"
-							placeholder={t('filters.max')}
+							placeholder={t("filters.max")}
 							value={localPriceMax}
-							onChange={handlePriceMaxChange}
-							className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
+							onChange={(e) =>
+								setLocalPriceMax(e.target.value.replace(/[^0-9]/g, ""))
+							}
+							className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg h-9"
 						/>
 					</div>
-				</div>
-
-				<Separator />
+				</FilterSection>
 
 				{/* Year Range */}
-				<div className="space-y-4">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.year')}</Label>
+				<FilterSection title={t("filters.year")}>
 					<div className="flex gap-2">
 						<Select
 							value={filters.yearMin || "any"}
 							onValueChange={handleYearMinChange}
 						>
-							<SelectTrigger>
-								<SelectValue placeholder={t('filters.from')} />
+							<SelectTrigger className="h-9">
+								<SelectValue placeholder={t("filters.from")} />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="any">{t('filters.any')}</SelectItem>
+								<SelectItem value="any">{t("filters.any")}</SelectItem>
 								{yearOptions.map((y) => (
-									<SelectItem key={y} value={y.toString()}>{y}</SelectItem>
+									<SelectItem key={y} value={y.toString()}>
+										{y}
+									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
@@ -376,169 +381,211 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 							value={filters.yearMax || "any"}
 							onValueChange={handleYearMaxChange}
 						>
-							<SelectTrigger>
-								<SelectValue placeholder={t('filters.to')} />
+							<SelectTrigger className="h-9">
+								<SelectValue placeholder={t("filters.to")} />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="any">{t('filters.any')}</SelectItem>
+								<SelectItem value="any">{t("filters.any")}</SelectItem>
 								{yearOptions.map((y) => (
-									<SelectItem key={y} value={y.toString()}>{y}</SelectItem>
+									<SelectItem key={y} value={y.toString()}>
+										{y}
+									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
 					</div>
-				</div>
-
-				<Separator />
-
-				{/* Mileage Range */}
-				<div className="space-y-4">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.mileage')} (km)</Label>
-					<div className="flex gap-2">
-						<Input
-							type="text"
-							inputMode="numeric"
-							placeholder={t('filters.min')}
-							value={localMileageMin}
-							onChange={handleMileageMinChange}
-							className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
-						/>
-						<Input
-							type="text"
-							inputMode="numeric"
-							placeholder={t('filters.max')}
-							value={localMileageMax}
-							onChange={handleMileageMaxChange}
-							className="text-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg"
-						/>
-					</div>
-				</div>
-
-				<Separator />
+				</FilterSection>
 
 				{/* Fuel Type */}
-				<div className="space-y-3">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.fuelType')}</Label>
-					{isLoadingOptions ? (
-						<div className="text-sm text-slate-500">{t('common.loading', { defaultValue: 'Loading...' })}</div>
-					) : (
-						<div className="space-y-2">
-							{fuelTypes.map((fuel) => (
-								<div key={fuel} className="flex items-center space-x-2">
+				<FilterSection title={t("filters.fuelType")}>
+					<div className="grid grid-cols-2 gap-2">
+						{["Petrol", "Diesel", "Electric", "Hybrid", "PlugInHybrid", "LPG", "CNG", "Hydrogen"].map(
+							(fuel) => (
+								<div key={fuel} className="flex items-center gap-2">
 									<Checkbox
 										id={`fuel-${fuel}`}
 										checked={filters.fuelType.includes(fuel)}
-										onCheckedChange={() => filters.toggleFuelType(fuel)}
+										onCheckedChange={() =>
+											filters.toggleFuelType(fuel)
+										}
 									/>
-									<label
+									<Label
 										htmlFor={`fuel-${fuel}`}
-										className="text-sm text-slate-700 dark:text-slate-300 leading-none cursor-pointer hover:text-primary transition-colors"
+										className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer"
 									>
-										{t(`sell:options.fuel.${fuel}`, { defaultValue: fuel })}
-									</label>
+										{t(`sell:options.fuel.${fuel}`, {
+											defaultValue: fuel,
+										})}
+									</Label>
 								</div>
-							))}
-						</div>
-					)}
-				</div>
-
-				<Separator />
+							)
+						)}
+					</div>
+				</FilterSection>
 
 				{/* Transmission */}
-				<div className="space-y-3">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.transmission')}</Label>
-					<RadioGroup value={filters.transmission} onValueChange={(val) => filters.setFilter("transmission", val)}>
-						<div className="flex items-center space-x-2">
-							<RadioGroupItem value="all" id="t-all" />
-							<Label htmlFor="t-all" className="text-sm font-normal">{t('common.all', { ns: 'common' })}</Label>
-						</div>
-						{transmissionOptions.map((trans) => (
-							<div key={trans} className="flex items-center space-x-2">
-								<RadioGroupItem value={trans.toLowerCase()} id={`t-${trans}`} />
-								<Label htmlFor={`t-${trans}`} className="text-sm font-normal">
-									{t(`sell:options.transmission.${trans}`, { defaultValue: trans })}
-								</Label>
-							</div>
-						))}
-					</RadioGroup>
-				</div>
-
-				<Separator />
-
-				{/* Body Type */}
-				<div className="space-y-3">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('filters.bodyType')}</Label>
-					{isLoadingOptions ? (
-						<div className="text-sm text-slate-500">{t('common.loading', { defaultValue: 'Loading...' })}</div>
-					) : (
-						<div className="grid grid-cols-1 gap-2">
-							{bodyTypes.map((body) => (
-								<div key={body} className="flex items-center space-x-2">
-									<Checkbox
-										id={`body-${body}`}
-										checked={filters.bodyType.includes(body)}
-										onCheckedChange={() => filters.toggleBodyType(body)}
-									/>
-									<label
-										htmlFor={`body-${body}`}
-										className="text-sm text-slate-700 dark:text-slate-300 leading-none cursor-pointer hover:text-primary transition-colors"
-									>
-										{t(`sell:step1.types.${body.toLowerCase()}`, { defaultValue: body })}
-									</label>
-								</div>
-							))}
-						</div>
-					)}
-				</div>
-
-				<Separator />
-
-				{/* Drive Type */}
-				<div className="space-y-3">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('sell:step2.labels.driveType')}</Label>
+				<FilterSection title={t("filters.transmission")}>
 					<Select
-						value={filters.driveType || "none"}
-						onValueChange={(val) => filters.setFilter("driveType", val === "none" ? "" : val)}
+						value={filters.transmission}
+						onValueChange={(val) =>
+							filters.setFilter("transmission", val)
+						}
 					>
-						<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
-							<SelectValue placeholder={t('common.all', { ns: 'common' })} />
+						<SelectTrigger className="h-9">
+							<SelectValue />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="none">{t('common.all', { ns: 'common' })}</SelectItem>
-							<SelectItem value="FWD">{t('sell:options.drive.Esivedu')}</SelectItem>
-							<SelectItem value="RWD">{t('sell:options.drive.Tagavedu')}</SelectItem>
-							<SelectItem value="AWD">{t('sell:options.drive.Nelivedu (AWD)')}</SelectItem>
+							<SelectItem value="all">
+								{t("common:common.all")}
+							</SelectItem>
+							<SelectItem value="manual">
+								{t("sell:options.transmission.Manual")}
+							</SelectItem>
+							<SelectItem value="automatic">
+								{t("sell:options.transmission.Automatic")}
+							</SelectItem>
 						</SelectContent>
 					</Select>
-				</div>
+				</FilterSection>
 
-				<Separator />
+				{/* More Filters - Collapsible group */}
+				<FilterSection title={t("filters.moreFilters", { defaultValue: "More Filters" })}>
+					<div className="space-y-4">
+						{/* Mileage */}
+						<div className="space-y-2">
+							<Label className="text-xs text-slate-500">
+								{t("filters.mileage")} (km)
+							</Label>
+							<div className="flex gap-2">
+								<Input
+									type="text"
+									inputMode="numeric"
+									placeholder={t("filters.min")}
+									value={localMileageMin}
+									onChange={(e) =>
+										setLocalMileageMin(
+											e.target.value.replace(/[^0-9]/g, "")
+										)
+									}
+									className="text-sm h-9"
+								/>
+								<Input
+									type="text"
+									inputMode="numeric"
+									placeholder={t("filters.max")}
+									value={localMileageMax}
+									onChange={(e) =>
+										setLocalMileageMax(
+											e.target.value.replace(/[^0-9]/g, "")
+										)
+									}
+									className="text-sm h-9"
+								/>
+							</div>
+						</div>
 
-				{/* Condition */}
-				<div className="space-y-3">
-					<Label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('sell:step2.labels.condition')}</Label>
-					<div className="grid grid-cols-2 gap-2">
-						{["New", "Used"].map((cond) => (
-							<Button
-								key={cond}
-								variant={filters.condition === cond ? "default" : "outline"}
-								size="sm"
-								className="h-8 text-xs"
-								onClick={() => filters.setFilter("condition", filters.condition === cond ? "" : cond)}
+						<Separator />
+
+						{/* Drive Type */}
+						<div className="space-y-2">
+							<Label className="text-xs text-slate-500">
+								{t("sell:step2.labels.driveType")}
+							</Label>
+							<Select
+								value={filters.driveType || "none"}
+								onValueChange={(val) =>
+									filters.setFilter(
+										"driveType",
+										val === "none" ? "" : val
+									)
+								}
 							>
-								{cond === "New" ? t('sell:options.condition.Uus') : t('sell:options.condition.Kasutatud')}
-							</Button>
-						))}
+								<SelectTrigger className="h-9">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="none">
+										{t("common:common.all")}
+									</SelectItem>
+									<SelectItem value="FWD">
+										{t("sell:options.drive.FWD")}
+									</SelectItem>
+									<SelectItem value="RWD">
+										{t("sell:options.drive.RWD")}
+									</SelectItem>
+									<SelectItem value="AWD">
+										{t("sell:options.drive.AWD")}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+
+						<Separator />
+
+						{/* Additional Options */}
+						<div className="space-y-3">
+							<div className="flex items-center space-x-2">
+								<Checkbox
+									id="sidebar-credit"
+									checked={filters.credit}
+									onCheckedChange={(c) => filters.setFilter('credit', !!c)}
+								/>
+								<Label htmlFor="sidebar-credit" className="text-xs text-slate-500 cursor-pointer">{t('home:search.credit', { defaultValue: 'Leasing/Credit possible' })}</Label>
+							</div>
+							<div className="flex items-center space-x-2">
+								<Checkbox
+									id="sidebar-barter"
+									checked={filters.barter}
+									onCheckedChange={(c) => filters.setFilter('barter', !!c)}
+								/>
+								<Label htmlFor="sidebar-barter" className="text-xs text-slate-500 cursor-pointer">{t('home:search.barter', { defaultValue: 'Barter possible' })}</Label>
+							</div>
+						</div>
+
+						<Separator />
+
+						{/* Condition */}
+						<div className="space-y-2">
+							<Label className="text-xs text-slate-500">
+								{t("sell:step2.labels.condition")}
+							</Label>
+							<div className="flex gap-2">
+								{["New", "Used"].map((cond) => (
+									<Button
+										key={cond}
+										variant={
+											filters.condition === cond
+												? "default"
+												: "outline"
+										}
+										className="flex-1 h-9 text-xs"
+										onClick={() =>
+											filters.setFilter(
+												"condition",
+												filters.condition === cond
+													? ""
+													: cond
+											)
+										}
+									>
+										{cond === "New"
+											? t("sell:options.condition.New")
+											: t("sell:options.condition.Used")}
+									</Button>
+								))}
+							</div>
+						</div>
 					</div>
-				</div>
+				</FilterSection>
 			</div>
 
-			<div className="p-5 bg-slate-50 dark:bg-slate-800/50">
+			{/* Footer button */}
+			<div className="p-4 border-t border-slate-100 dark:border-slate-800 shrink-0 bg-slate-50 dark:bg-slate-800/50">
 				<Button
-					className="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-lg shadow-primary/20 hover:brightness-105 transition-all"
+					className="w-full bg-primary text-white py-2.5 rounded-lg font-bold shadow-lg shadow-primary/20 hover:brightness-105 transition-all text-sm"
 					onClick={handleShowResults}
 				>
-					{t('filters.showResults')}
+					{t("filters.showResults")}
 				</Button>
 			</div>
 		</div>

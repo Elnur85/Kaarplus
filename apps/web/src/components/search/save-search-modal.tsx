@@ -75,7 +75,12 @@ export function SaveSearchModal({ trigger }: SaveSearchModalProps) {
                     key !== "resetFilters" &&
                     key !== "setPage" &&
                     key !== "toggleFuelType" &&
-                    key !== "toggleBodyType"
+                    key !== "toggleBodyTypeCategory" &&
+                    key !== "toggleBodyTypeSubtype" &&
+                    key !== "isCategorySelected" &&
+                    key !== "isSubtypeSelected" &&
+                    key !== "getBodyTypeForApi" &&
+                    key !== "bodyTypeSelections"
                 ) {
                     if (Array.isArray(value)) {
                         if (value.length > 0) activeFilters[key] = value;

@@ -2,7 +2,8 @@
     "noReviews": "Arvustusi pole veel",
     "previous": "Eelmine",
     "next": "Järgmine",
-    "fetchError": "Viga arvustuste laadimisel",
+    "fetchError": "Arvustuste laadimine ebaõnnestus",
+    "retry": "Proovi uuesti",
     "dialog": {
         "title": "Kirjuta arvustus",
         "rating": "Hinne",
@@ -17,11 +18,11 @@
         "successDesc": "Tänan tagasiside eest!",
         "sendError": "Arvustuse saatmine ebaõnnestus"
     },
-    "sellerReviews": "{name} arvustused",
+    "sellerReviews": "{{name}} arvustused",
     "labels": {
         "user": "Kasutaja",
         "anonymous": "Anonüümne",
         "verifiedPurchase": "Kinnitatud ost",
-        "reviewsCount": "{count} arvustust"
+        "reviewsCount": "{{count}} arvustust"
     }
 }

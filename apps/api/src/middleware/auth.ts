@@ -59,6 +59,38 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction): v
 }
 
 /**
+ * Optional JWT auth middleware
+ * Verifies token if present, but proceeds anonymously if missing or invalid.
+ */
+export function optionalAuth(req: Request, _res: Response, next: NextFunction): void {
+	try {
+		let token = req.cookies?.token;
+
+		if (!token && req.headers.authorization) {
+			const parts = req.headers.authorization.split(" ");
+			if (parts.length === 2 && parts[0] === "Bearer") {
+				token = parts[1];
+			}
+		}
+
+		if (token && JWT_SECRET) {
+			const decoded = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as DecodedToken;
+
+			req.user = {
+				id: decoded.id,
+				email: decoded.email,
+				role: decoded.role,
+				name: decoded.name,
+			};
+		}
+	} catch (error) {
+		// Silently ignore token errors for optional auth
+	} finally {
+		next();
+	}
+}
+
+/**
  * Role-based authorization middleware.
  * Must be used after requireAuth.
  */

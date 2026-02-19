@@ -1,109 +1,119 @@
 {
-  "specs": {
-    "condition": "Condition",
-    "firstRegistration": "First registration",
-    "mileage": "Mileage",
-    "engine": "Engine",
-    "power": "Power",
-    "powerValue": "{kw} kW ({hp} hp)",
-    "transmission": "Transmission",
-    "driveType": "Drivetrain",
-    "bodyType": "Body type",
-    "doorsSeats": "Doors / Seats",
-    "exteriorColor": "Exterior color",
-    "interiorColor": "Interior color",
-    "vin": "VIN code",
-    "notSpecified": "Not specified",
-    "frontWheelDrive": "FWD",
-    "addedOn": "Listing added: {date}",
-    "views": "{count} views",
-    "verified": "Verified",
-    "title": "Technical Specs"
-  },
-  "priceCard": {
-    "goodPrice": "Good price",
-    "withVat": "Incl. VAT",
-    "withoutVat": "Excl. VAT",
-    "excellentChoice": "Excellent choice!",
-    "saveCompared": "Save compared to market price",
-    "buyNow": "Buy now",
-    "contactSeller": "Contact seller",
-    "callSeller": "Call",
-    "messageSeller": "Send Message",
-    "seller": "Seller",
-    "noPhone": "No phone",
-    "available": "Available",
-    "status": "Status: {status}",
-    "share": "Share",
-    "save": "Save",
-    "marketAverage": "Market average",
-    "yourGain": "Your savings",
-    "saved": "Saved"
-  },
-  "features": {
-    "title": "Features",
-    "notSpecified": "No equipment specified"
-  },
-  "similarListings": "Similar Listings",
-  "description": {
-    "title": "Description",
-    "none": "No description provided."
-  },
-  "seller": {
-    "title": "Seller Info",
-    "dealership": "Dealership",
-    "verifiedSeller": "Verified seller since 2024",
-    "officialPartner": "Official Partner",
-    "privateSeller": "Private Seller",
-    "viewAllListings": "View all listings",
-    "history": "History",
-    "warranty": "Warranty",
-    "verified": "Verified",
-    "locationEstonia": "{location}, Estonia"
-  },
-  "gallery": {
-    "noImages": "No images",
-    "photoCount": "{current} / {total} Photos",
-    "fullscreen": "Fullscreen",
-    "vehicleImage": "Vehicle image {index}",
-    "thumbnail": "Thumbnail {index}"
-  },
-  "contact": {
-    "dialogTitle": "Contact Seller",
-    "dialogDescription": "Send a message about: {title}",
-    "nameLabel": "Name",
-    "namePlaceholder": "Your name",
-    "emailLabel": "Email",
-    "emailPlaceholder": "your@email.com",
-    "phoneLabel": "Phone (optional)",
-    "phonePlaceholder": "+372 ...",
-    "messageLabel": "Message",
-    "messagePlaceholder": "I am interested in this vehicle...",
-    "sendButton": "Send Message",
-    "sending": "Sending...",
-    "successTitle": "Message Sent!",
-    "successDesc": "Your message about {title} has been sent to the seller.",
-    "errorTitle": "Error",
-    "sendError": "Failed to send message. Please try again.",
-    "validationError": "Validation Error",
-    "messageRequired": "Please enter a message",
-    "close": "Close",
-    "viewMessages": "View Messages",
-    "loginPrompt": "You can also",
-    "loginLink": "log in for faster communication",
-    "nameEmailRequired": "Name and email are required",
-    "invalidEmail": "Please enter a valid email address"
-  },
-  "favorites": {
-    "loginRequired": "Login Required",
-    "loginRequiredDesc": "Please log in to save favorites",
-    "added": "Added to Favorites",
-    "addedDesc": "This vehicle has been added to your favorites",
-    "removed": "Removed from Favorites",
-    "removedDesc": "This vehicle has been removed from your favorites",
-    "error": "Error"
-  },
-  "share": {
-    "listingDescription": "Check out this {title} on Kaarplus!"
-  }
+	"specs": {
+		"condition": "Condition",
+		"firstRegistration": "First registration",
+		"mileage": "Mileage",
+		"engine": "Engine",
+		"power": "Power",
+		"powerValue": "{{kw}} kW ({{hp}} hp)",
+		"transmission": "Transmission",
+		"driveType": "Drivetrain",
+		"bodyType": "Body type",
+		"doorsSeats": "Doors / Seats",
+		"exteriorColor": "Exterior color",
+		"interiorColor": "Interior color",
+		"vin": "VIN code",
+		"notSpecified": "Not specified",
+		"frontWheelDrive": "FWD",
+		"addedOn": "Listing added: {{date}}",
+		"views": "{{count}} views",
+		"verified": "Verified",
+		"title": "Technical Specs"
+	},
+	"priceCard": {
+		"goodPrice": "Good price",
+		"withVat": "Incl. VAT",
+		"withoutVat": "Excl. VAT",
+		"excellentChoice": "Excellent choice!",
+		"saveCompared": "Save compared to market price",
+		"buyNow": "Buy now",
+		"contactSeller": "Contact seller",
+		"callSeller": "Call",
+		"messageSeller": "Send Message",
+		"seller": "Seller",
+		"noPhone": "No phone",
+		"available": "Available",
+		"status": "Status: {{status}}",
+		"share": "Share",
+		"save": "Save",
+		"marketAverage": "Market average",
+		"yourGain": "Your savings",
+		"saved": "Saved"
+	},
+	"features": {
+		"title": "Features",
+		"notSpecified": "No equipment specified",
+		"support": {
+			"title": "Support"
+		}
+	},
+	"contactSeller": {
+		"noPhone": "No phone number",
+		"noPhoneDesc": "Sorry, this seller's phone number is not available. Please use the message form."
+	},
+	"scrollLeft": "Scroll left",
+	"scrollRight": "Scroll right",
+	"similarListings": "Similar Listings",
+	"description": {
+		"title": "Description",
+		"none": "No description provided."
+	},
+	"seller": {
+		"title": "Seller Info",
+		"dealership": "Dealership",
+		"verifiedSeller": "Verified seller since 2024",
+		"officialPartner": "Official Partner",
+		"privateSeller": "Private Seller",
+            "verifiedUser": "Verified User",
+		"viewAllListings": "View all listings",
+		"history": "History",
+		"warranty": "Warranty",
+		"verified": "Verified",
+		"locationEstonia": "{{location}}, Estonia"
+	},
+	"gallery": {
+		"noImages": "No images",
+		"photoCount": "{{current}} / {{total}} Photos",
+		"fullscreen": "Fullscreen",
+		"vehicleImage": "Vehicle image {{index}}",
+		"thumbnail": "Thumbnail {{index}}"
+	},
+	"contact": {
+		"dialogTitle": "Contact Seller",
+		"dialogDescription": "Send a message about: {{title}}",
+		"nameLabel": "Name",
+		"namePlaceholder": "Your name",
+		"emailLabel": "Email",
+		"emailPlaceholder": "your@email.com",
+		"phoneLabel": "Phone (optional)",
+		"phonePlaceholder": "+372 ...",
+		"messageLabel": "Message",
+		"messagePlaceholder": "I am interested in this vehicle...",
+		"sendButton": "Send Message",
+		"sending": "Sending...",
+		"successTitle": "Message Sent!",
+		"successDesc": "Your message about {{title}} has been sent to the seller.",
+		"errorTitle": "Error",
+		"sendError": "Failed to send message. Please try again.",
+		"validationError": "Validation Error",
+		"messageRequired": "Please enter a message",
+		"close": "Close",
+		"viewMessages": "View Messages",
+		"loginPrompt": "You can also",
+		"loginLink": "log in for faster communication",
+		"nameEmailRequired": "Name and email are required",
+		"invalidEmail": "Please enter a valid email address"
+	},
+	"favorites": {
+		"loginRequired": "Login Required",
+		"loginRequiredDesc": "Please log in to save favorites",
+		"added": "Added to Favorites",
+		"addedDesc": "This vehicle has been added to your favorites",
+		"removed": "Removed from Favorites",
+		"removedDesc": "This vehicle has been removed from your favorites",
+		"error": "Error"
+	},
+	"share": {
+		"listingDescription": "Check out this {{title}} on Kaarplus!"
+	}
 }

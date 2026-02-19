@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { VehicleCard } from "@/components/shared/vehicle-card";
 import { ListingSection } from "./listing-section";
 import { VehicleSummary } from "@/types/vehicle";
 import { API_URL } from "@/lib/constants";
+import { Button } from "@/components/ui/button";
 
 // API returns images array, but VehicleSummary expects thumbnailUrl
 interface ApiListing {
@@ -30,7 +32,7 @@ interface ApiListing {
 	images?: { url: string }[];
 	user?: {
 		name: string | null;
-		role: "BUYER" | "INDIVIDUAL_SELLER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
+		role: "USER" | "DEALERSHIP" | "ADMIN" | "SUPPORT";
 		dealershipId: string | null;
 	};
 }
@@ -64,24 +66,57 @@ export function LatestListings() {
 	const { t } = useTranslation("home");
 	const [listings, setListings] = useState<VehicleSummary[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	const fetchListings = async () => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const res = await fetch(`${API_URL}/search?pageSize=8&sort=newest`);
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			const json = await res.json();
+			const apiListings: ApiListing[] = json.data || [];
+			setListings(apiListings.map(mapApiToVehicleSummary));
+		} catch (err) {
+			setError(t("listings.error"));
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		fetch(`${API_URL}/search?pageSize=8&sort=newest`)
-			.then((res) => {
-				if (!res.ok) throw new Error(`HTTP ${res.status}`);
-				return res.json();
-			})
-			.then((json) => {
-				const apiListings: ApiListing[] = json.data || [];
-				setListings(apiListings.map(mapApiToVehicleSummary));
-			})
-			.catch(() => {
-				// Non-critical section — silently degrade by showing nothing
-			})
-			.finally(() => setIsLoading(false));
+		fetchListings();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	if (isLoading || listings.length === 0) return null;
+	if (isLoading) {
+		return (
+			<div className="py-12">
+				<div className="flex items-center justify-center gap-2 text-muted-foreground">
+					<Loader2 className="size-5 animate-spin" />
+					<span>{t("listings.latest")}</span>
+				</div>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="py-12">
+				<div className="flex flex-col items-center justify-center gap-3 text-center">
+					<div className="flex items-center gap-2 text-destructive">
+						<AlertCircle className="size-5" />
+						<span>{error}</span>
+					</div>
+					<Button variant="outline" size="sm" onClick={fetchListings}>
+						{t("listings.retry")}
+					</Button>
+				</div>
+			</div>
+		);
+	}
+
+	if (listings.length === 0) return null;
 
 	return (
 		<ListingSection title={t("listings.latest")} href="/listings?sort=createdAt_desc">

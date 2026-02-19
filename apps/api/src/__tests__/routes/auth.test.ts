@@ -34,7 +34,7 @@ describe('Auth Routes', () => {
 				id: 'user-1',
 				email: userData.email,
 				name: userData.name,
-				role: 'BUYER',
+				role: 'USER',
 			});
 
 			const response = await request(app)
@@ -80,7 +80,7 @@ describe('Auth Routes', () => {
 				email: loginData.email,
 				passwordHash: hashedPassword,
 				name: 'Test User',
-				role: 'BUYER',
+				role: 'USER',
 			});
 
 			const response = await request(app)
@@ -103,7 +103,7 @@ describe('Auth Routes', () => {
 				id: 'user-1',
 				email: loginData.email,
 				passwordHash: hashedPassword,
-				role: 'BUYER',
+				role: 'USER',
 			});
 
 			const response = await request(app)

@@ -1,7 +1,7 @@
 {
     "title": "Minu ülevaatused",
     "description": "Vaadake ja jälgige oma ülevaatuste staatust.",
-    "count": "Minu ülevaatused ({count})",
+    "count": "Minu ülevaatused ({{count}})",
     "empty": {
         "title": "Ülevaatusi pole tellitud",
         "description": "Siin kuvatakse teie tellitud sõidukite ülevaatused. Ülevaatuse saate tellida sõiduki detailvaates."
@@ -47,7 +47,7 @@
         "toastError": "Viga",
         "toastErrorDesc": "Tekkis viga taotluse saatmisel.",
         "successTitle": "Taotlus vastu võetud!",
-        "successDesc": "Oleme saanud teie soovi kontrollida sõidukit <strong>{title}</strong>. Võtame teiega ühendust 24 tunni jooksul.",
+        "successDesc": "Oleme saanud teie soovi kontrollida sõidukit <strong>{{title}}</strong>. Võtame teiega ühendust 24 tunni jooksul.",
         "viewRequests": "Vaata minu taotlusi",
         "successOrdered": "Ülevaatus on edukalt tellitud!",
         "successOrderedDesc": "Võtame teiega peagi ühendust, et leppida kokku sobiv aeg.",
