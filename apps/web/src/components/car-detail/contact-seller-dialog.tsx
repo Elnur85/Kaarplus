@@ -44,8 +44,8 @@ export function ContactSellerDialog({ listingId, listingTitle, triggerButton }: 
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const [formData, setFormData] = useState<FormData>({
-		name: "",
-		email: "",
+		name: session?.user?.name || "",
+		email: session?.user?.email || "",
 		phone: "",
 		message: "",
 	});
@@ -62,12 +62,22 @@ export function ContactSellerDialog({ listingId, listingTitle, triggerButton }: 
 			return;
 		}
 
-		// For unauthenticated users, require name and email
+		// For unauthenticated users, require name and valid email
 		if (!isAuthenticated) {
 			if (!formData.name.trim() || !formData.email.trim()) {
 				toast({
 					title: t("contact.validationError"),
 					description: t("contact.nameEmailRequired"),
+					variant: "destructive",
+				});
+				return;
+			}
+			// Validate email format
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailRegex.test(formData.email.trim())) {
+				toast({
+					title: t("contact.validationError"),
+					description: t("contact.invalidEmail"),
 					variant: "destructive",
 				});
 				return;
@@ -112,8 +122,8 @@ export function ContactSellerDialog({ listingId, listingTitle, triggerButton }: 
 		setTimeout(() => {
 			setIsSuccess(false);
 			setFormData({
-				name: "",
-				email: "",
+				name: session?.user?.name || "",
+				email: session?.user?.email || "",
 				phone: "",
 				message: "",
 			});

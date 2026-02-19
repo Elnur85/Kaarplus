@@ -6,6 +6,7 @@ import { Upload, X, Camera, AlertCircle, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { LISTING_PHOTO_MAX } from "@/lib/constants";
 
 interface Step3PhotoUploadProps {
     files: File[];
@@ -112,14 +113,14 @@ export function Step3PhotoUpload({ files, onFilesChange }: Step3PhotoUploadProps
                             </div>
                         </div>
                     ))}
-                    {files.length < 30 && (
+                    {files.length < LISTING_PHOTO_MAX && (
                         <div
                             {...getRootProps()}
                             className="aspect-video bg-muted/50 rounded-lg flex flex-col items-center justify-center border-2 border-dashed border-muted hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer text-muted-foreground hover:text-primary"
                         >
                             <Camera size={24} className="mb-2" />
                             <span className="text-[10px] font-bold uppercase tracking-wider text-center px-2">
-                                {t('step3.addMore', { count: 30 - files.length })}
+                                {t('step3.addMore', { count: LISTING_PHOTO_MAX - files.length })}
                             </span>
                         </div>
                     )}

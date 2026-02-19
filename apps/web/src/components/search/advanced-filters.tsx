@@ -21,83 +21,54 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { RotateCcw, Search } from "lucide-react";
-import { API_URL } from "@/lib/constants";
-
 import { useTranslation } from "react-i18next";
+import { FUEL_TYPES, DRIVE_TYPES, BODY_TYPES, API_URL } from "@/lib/constants";
 
-const fuelTypes = [
-    { value: "Bensiin", key: "Petrol" },
-    { value: "Diisel", key: "Diesel" },
-    { value: "Hübriid", key: "Hybrid" },
-    { value: "Elekter", key: "Electric" },
-    { value: "Gaas", key: "Gas" },
-];
+const fuelTypes = FUEL_TYPES.filter(f => f !== "Ethanol").map(f => ({ value: f, key: f }));
 
-const bodyTypes = [
-    { value: "Sedaan", key: "Sedan" },
-    { value: "Universaal", key: "Wagon" },
-    { value: "Maastur", key: "SUV" },
-    { value: "Kupee", key: "Coupe" },
-    { value: "Kabriolett", key: "Convertible" },
-    { value: "Mahtuniversaal", key: "Minivan" },
-    { value: "Pikap", key: "Pickup" },
-    { value: "Väikeautod", key: "Hatchback" },
-];
+const bodyTypes = BODY_TYPES.map(b => ({ value: b, key: b }));
 
-const driveTypes = [
-    { value: "FWD", key: "FWD" },
-    { value: "RWD", key: "RWD" },
-    { value: "AWD", key: "AWD" },
-    { value: "4WD", key: "4WD" },
-];
+const driveTypes = DRIVE_TYPES.map(d => ({ value: d, key: d }));
 
-const colorOptions = [
-    { value: "Must", key: "Black" },
-    { value: "Valge", key: "White" },
-    { value: "Hall", key: "Grey" },
-    { value: "Hõbedane", key: "Silver" },
-    { value: "Sinine", key: "Blue" },
-    { value: "Punane", key: "Red" },
-    { value: "Roheline", key: "Green" },
-    { value: "Pruun", key: "Brown" },
-    { value: "Beež", key: "Beige" },
-    { value: "Kollane", key: "Yellow" },
-    { value: "Oranž", key: "Orange" },
+const conditionOptions = [
+    { value: "New", key: "New" },
+    { value: "Used", key: "Used" },
+    { value: "Excellent", key: "Excellent" },
+    { value: "Damaged", key: "Damaged" },
 ];
 
 const doorOptions = ["2", "3", "4", "5"];
 const seatOptions = ["2", "4", "5", "6", "7", "8+"];
-
-const conditionOptions = [
-    { value: "new", key: "new" },
-    { value: "used", key: "used" },
-    { value: "certified", key: "certified" },
-];
-
-const locationOptions = [
-    "Tallinn",
-    "Tartu",
-    "Pärnu",
-    "Narva",
-    "Haapsalu",
-    "Viljandi",
-    "Rakvere",
-    "Kuressaare",
-    "Jõhvi",
-];
 
 export function AdvancedFilters() {
     const { t } = useTranslation('search');
     const filters = useFilterStore();
     const [makes, setMakes] = useState<string[]>([]);
     const [models, setModels] = useState<string[]>([]);
+    const [locations, setLocations] = useState<string[]>([]);
+    const [colors, setColors] = useState<string[]>([]);
     const currentMake = filters.make;
 
     useEffect(() => {
-        fetch(`${API_URL}/search/makes`)
-            .then((res) => res.json())
-            .then((json) => setMakes(json.data || []))
-            .catch(console.error);
+        const safeFetch = (url: string) =>
+            fetch(url).then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                return r.json();
+            });
+
+        Promise.all([
+            safeFetch(`${API_URL}/search/makes`),
+            safeFetch(`${API_URL}/search/locations`),
+            safeFetch(`${API_URL}/search/colors`),
+        ])
+            .then(([makesJson, locationsJson, colorsJson]) => {
+                setMakes(makesJson.data || []);
+                setLocations(locationsJson.data || []);
+                setColors(colorsJson.data || []);
+            })
+            .catch(() => {
+                // Filter options will remain empty — dropdowns degrade gracefully
+            });
     }, []);
 
     useEffect(() => {
@@ -109,11 +80,16 @@ export function AdvancedFilters() {
 
         let cancelled = false;
         fetch(`${API_URL}/search/models?make=${encodeURIComponent(currentMake)}`)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
             .then((json) => {
                 if (!cancelled) setModels(json.data || []);
             })
-            .catch(console.error);
+            .catch(() => {
+                // Model dropdown will remain empty
+            });
 
         return () => {
             cancelled = true;
@@ -524,9 +500,9 @@ export function AdvancedFilters() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">{t('fields.color.placeholder')}</SelectItem>
-                                        {colorOptions.map((c) => (
-                                            <SelectItem key={c.value} value={c.value}>
-                                                {t(`fields.color.options.${c.key}`)}
+                                        {colors.map((c) => (
+                                            <SelectItem key={c} value={c}>
+                                                {c}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -625,9 +601,9 @@ export function AdvancedFilters() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">{t('fields.location.placeholder')}</SelectItem>
-                                        {locationOptions.map((loc) => (
+                                        {locations.map((loc) => (
                                             <SelectItem key={loc} value={loc}>
-                                                {t(`fields.location.options.${loc}`)}
+                                                {loc}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

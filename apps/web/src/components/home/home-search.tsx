@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,28 +48,38 @@ export function HomeSearch() {
 	const [isLoadingMetadata, setIsLoadingMetadata] = useState(true);
 	const [isLoadingModels, setIsLoadingModels] = useState(false);
 
-	// Stats (simulated or fetched)
-	const [stats, setStats] = useState<SearchStats>({ todayCount: 120, totalCount: 4500 });
+	// Stats (fetched from API)
+	const [stats, setStats] = useState<SearchStats>({ todayCount: 0, totalCount: 0 });
 	const [foundCount, setFoundCount] = useState<number | null>(null);
 
 	// Initial Data Fetch
 	useEffect(() => {
+		const safeFetch = async (url: string) => {
+			const res = await fetch(url);
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			return res.json();
+		};
+
 		const fetchData = async () => {
 			try {
-				const [makesRes, filtersRes] = await Promise.all([
-					fetch(`${API_URL}/search/makes`),
-					fetch(`${API_URL}/search/filters`)
+				const [makesJson, filtersJson, locationsJson, statsJson] = await Promise.all([
+					safeFetch(`${API_URL}/search/makes`),
+					safeFetch(`${API_URL}/search/filters`),
+					safeFetch(`${API_URL}/search/locations`),
+					safeFetch(`${API_URL}/search/stats`)
 				]);
-
-				const makesJson = await makesRes.json();
-				const filtersJson = await filtersRes.json();
 
 				setMakes(makesJson.data || []);
 				setBodyTypes(filtersJson.data?.bodyTypes || []);
-				// Cities would obscurely come from here or be hardcoded for now
-				setCities(["Tallinn", "Tartu", "Narva", "Pärnu", "Kohtla-Järve"]);
-			} catch (e) {
-				console.error("Failed to fetch search metadata", e);
+				setCities(locationsJson.data || []);
+				if (statsJson.data) {
+					setStats({
+						todayCount: statsJson.data.totalListings || 0,
+						totalCount: statsJson.data.totalListings || 0,
+					});
+				}
+			} catch {
+				// Search metadata fetch failed — dropdowns degrade with empty options
 			} finally {
 				setIsLoadingMetadata(false);
 			}
@@ -89,11 +100,12 @@ export function HomeSearch() {
 			setIsLoadingModels(true);
 			try {
 				const res = await fetch(`${API_URL}/search/models?make=${encodeURIComponent(selectedMake)}`);
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
 				const json = await res.json();
 				setModels(json.data || []);
 				setSelectedModel(""); // Reset model when make changes
-			} catch (e) {
-				console.error(e);
+			} catch {
+				// Model dropdown will remain empty
 			} finally {
 				setIsLoadingModels(false);
 			}
@@ -268,9 +280,9 @@ export function HomeSearch() {
 						<div className="flex gap-6 text-sm font-medium">
 							<span className="text-muted-foreground">{t('search.stats.today', { count: stats.todayCount })}</span>
 							<button onClick={handleReset} className="text-primary hover:underline">{t('search.reset')}</button>
-							<a href="/listings" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
+							<Link href="/listings" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
 								{t('search.moreFilters')}
-							</a>
+							</Link>
 						</div>
 
 						<Button size="lg" className="w-full md:w-auto px-10 font-bold text-lg h-12" onClick={handleSearch}>

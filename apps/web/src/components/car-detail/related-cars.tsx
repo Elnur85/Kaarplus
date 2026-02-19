@@ -74,12 +74,17 @@ export function RelatedCars({ listingId }: RelatedCarsProps) {
 
     useEffect(() => {
         fetch(`${API_URL}/listings/${listingId}/similar`)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
             .then((json) => {
                 const apiListings: ApiListing[] = json.data || [];
                 setCars(apiListings.map(mapApiToVehicleSummary));
             })
-            .catch(console.error)
+            .catch(() => {
+                // Related cars section degrades gracefully — hides if empty
+            })
             .finally(() => setIsLoading(false));
     }, [listingId]);
 

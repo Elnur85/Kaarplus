@@ -7,10 +7,10 @@ import { API_URL } from "@/lib/constants";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PlatformStats {
-    activeListings: number;
-    totalUsers: number;
-    yearsInMarket: number;
-    avgSaleTimeDays: number;
+    totalListings: number;
+    totalMakes: number;
+    totalModels: number;
+    totalLocations: number;
 }
 
 const Counter = ({ end, label, suffix = "+", isLoading = false }: { end: number, label: string, suffix?: string, isLoading?: boolean }) => {
@@ -64,11 +64,16 @@ export function StatisticsSection() {
 
     useEffect(() => {
         fetch(`${API_URL}/search/stats`)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
             .then((json) => {
                 setStats(json.data);
             })
-            .catch(console.error)
+            .catch(() => {
+                // Stats section degrades gracefully — shows 0s
+            })
             .finally(() => setIsLoading(false));
     }, []);
 
@@ -76,27 +81,24 @@ export function StatisticsSection() {
         <section className="py-12 bg-primary text-white">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <Counter 
-                        end={stats?.activeListings || 0} 
-                        label={t('statistics.activeListings', { defaultValue: 'CARS AVAILABLE' })} 
+                    <Counter
+                        end={stats?.totalListings || 0}
+                        label={t('statistics.activeListings', { defaultValue: 'CARS AVAILABLE' })}
                         isLoading={isLoading}
                     />
-                    <Counter 
-                        end={stats?.totalUsers ? Math.floor(stats.totalUsers / 1000) : 0} 
-                        label={t('statistics.happyClients', { defaultValue: 'HAPPY USERS' })} 
-                        suffix="k" 
+                    <Counter
+                        end={stats?.totalMakes || 0}
+                        label={t('statistics.carBrands', { defaultValue: 'CAR BRANDS' })}
                         isLoading={isLoading}
                     />
-                    <Counter 
-                        end={stats?.yearsInMarket || 1} 
-                        label={t('statistics.yearsInMarket', { defaultValue: 'IN MARKET' })} 
-                        suffix={` ${t('statistics.years', { defaultValue: 'Yrs' })}`}
+                    <Counter
+                        end={stats?.totalModels || 0}
+                        label={t('statistics.totalModels', { defaultValue: 'MODELS' })}
                         isLoading={isLoading}
                     />
-                    <Counter 
-                        end={stats?.avgSaleTimeDays || 14} 
-                        label={t('statistics.avgSaleTime', { defaultValue: 'AVG SALE TIME' })} 
-                        suffix={` ${t('statistics.days', { defaultValue: 'Days' })}`}
+                    <Counter
+                        end={stats?.totalLocations || 0}
+                        label={t('statistics.totalLocations', { defaultValue: 'LOCATIONS' })}
                         isLoading={isLoading}
                     />
                 </div>

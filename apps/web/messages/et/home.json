@@ -36,9 +36,13 @@
 			"hybrid": "Hübriid",
 			"commercial": "Tarbesõiduk"
 		},
-		"viewAll": "Vaata kõiki {category}"
+		"viewAll": "Vaata kõiki {category}",
+		"noListings": "Hetkel ei ole selles kategoorias kuulutusi",
+		"vehicles": "autot"
 	},
 	"valueProps": {
+		"title": "Miks valida Kaarplus?",
+		"subtitle": "Pakume kõige turvalisemat ja kiiremat viisi autode ostmiseks ja müümiseks Eestis.",
 		"history": {
 			"title": "Kontrollitud ajalugu",
 			"description": "Kõik sõidukid läbivad põhjaliku taustakontrolli."
@@ -57,6 +61,7 @@
 		}
 	},
 	"popularBrands": {
+		"centeredTitle": "POPULAARSED MARGID EESTIS",
 		"title": "Populaarsed margid",
 		"subtitle": "Sirvi sõidukeid eelistatud tootja järgi",
 		"viewAll": "Vaata kõiki",
@@ -64,13 +69,14 @@
 	},
 	"reviews": {
 		"title": "Mida kliendid arvavad",
-		"subtitle": "Üle 1000 rahuloleva kliendi on ostnud oma uue auto Kaarplusi kaudu."
+		"subtitle": "Üle 1000 rahuloleva kliendi on ostnud oma uue auto Kaarplusi kaudu.",
+		"noReviews": "Hetkel ei ole ülevaateid"
 	},
 	"statistics": {
 		"activeListings": "Aktiivset Kuulutust",
-		"happyClients": "Rahulolevat Klienti",
-		"trustedSellers": "Usaldusväärset Müüjat",
-		"carBrands": "Auto Marki"
+		"carBrands": "Auto Marki",
+		"totalModels": "Mudelit",
+		"totalLocations": "Asukohta"
 	},
 	"faq": {
 		"title": "Korduma kippuvad küsimused",

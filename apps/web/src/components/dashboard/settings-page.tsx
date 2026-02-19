@@ -56,11 +56,16 @@ export function SettingsPage() {
     fetch(`${API_URL}/user/profile`, {
       credentials: "include",
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((json) => {
         setProfile(json.data);
       })
-      .catch(console.error)
+      .catch(() => {
+        // Profile will remain null — form fields show empty
+      })
       .finally(() => setIsLoading(false));
   }, [session?.user]);
 

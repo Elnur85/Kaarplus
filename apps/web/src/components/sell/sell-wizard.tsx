@@ -20,24 +20,24 @@ import { useTranslation } from "react-i18next";
 
 // Step 2 required fields for validation
 const STEP_2_REQUIRED_FIELDS: (keyof SellFormValues)[] = [
-  "contactName",
-  "contactEmail",
-  "contactPhone",
-  "make",
-  "model",
-  "year",
-  "mileage",
-  "price",
-  "location",
-  "bodyType",
-  "fuelType",
-  "transmission",
-  "powerKw",
-  "driveType",
-  "doors",
-  "seats",
-  "colorExterior",
-  "condition",
+    "contactName",
+    "contactEmail",
+    "contactPhone",
+    "make",
+    "model",
+    "year",
+    "mileage",
+    "price",
+    "location",
+    "bodyType",
+    "fuelType",
+    "transmission",
+    "powerKw",
+    "driveType",
+    "doors",
+    "seats",
+    "colorExterior",
+    "condition",
 ];
 
 export function SellWizard() {
@@ -133,19 +133,19 @@ export function SellWizard() {
             // Trigger validation for required fields only
             const result = await form.trigger(STEP_2_REQUIRED_FIELDS);
             isValid = result;
-            
+
             if (!isValid) {
                 const errors = form.formState.errors;
                 const errorFields = Object.keys(errors);
-                
+
                 toast({
                     variant: "destructive",
                     title: t('toasts.errorTitle'),
-                    description: errorFields.length > 0 
+                    description: errorFields.length > 0
                         ? `${t('toasts.fillRequired')} (${errorFields.length} ${t('toasts.fieldsError')})`
                         : t('toasts.fillRequired'),
                 });
-                
+
                 scrollToFirstError();
             }
         } else if (currentStep === 3) {
@@ -209,12 +209,16 @@ export function SellWizard() {
         try {
             // 1. Prepare data for API (WITHOUT images first)
             const values = form.getValues();
+
+            // Helper to nullify empty strings for optional fields
+            const cleanValue = (val: any) => (typeof val === 'string' && val.trim() === '' ? null : val);
+
             const listingData = {
                 make: values.make,
                 model: values.model,
-                variant: values.variant,
+                variant: cleanValue(values.variant),
                 year: Number(values.year),
-                vin: values.vin,
+                vin: cleanValue(values.vin),
                 mileage: Number(values.mileage),
                 price: Number(values.price),
                 priceVatIncluded: values.priceVatIncluded,
@@ -226,9 +230,9 @@ export function SellWizard() {
                 doors: Number(values.doors),
                 seats: Number(values.seats),
                 colorExterior: values.colorExterior,
-                colorInterior: values.colorInterior,
+                colorInterior: cleanValue(values.colorInterior),
                 condition: values.condition,
-                description: values.description,
+                description: cleanValue(values.description),
                 features: values.features,
                 location: values.location,
             };
@@ -245,7 +249,45 @@ export function SellWizard() {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.message || t('toasts.createError'));
+
+                // Detailed error message for validation errors
+                let errorMessage = errorData.error || errorData.message || t('toasts.createError');
+
+                // If there are specific validation details, map them to form fields
+                if (errorData.details && Array.isArray(errorData.details)) {
+                    let firstErrorStep = 4;
+                    const STEP_1_FIELDS = ["bodyType"];
+
+                    errorData.details.forEach((d: any) => {
+                        // Map field names if they differ
+                        const fieldName = d.field as keyof SellFormValues;
+                        form.setError(fieldName, {
+                            type: "server",
+                            message: d.message
+                        });
+
+                        // Determine the earliest step with an error
+                        if (STEP_1_FIELDS.includes(d.field)) {
+                            firstErrorStep = Math.min(firstErrorStep, 1);
+                        } else if (d.field !== "images") {
+                            firstErrorStep = Math.min(firstErrorStep, 2);
+                        } else {
+                            firstErrorStep = Math.min(firstErrorStep, 3);
+                        }
+                    });
+
+                    // Redirect user to the first step that has an error
+                    if (firstErrorStep < 4) {
+                        setCurrentStep(firstErrorStep);
+                        setValidationAttempted(true);
+                        scrollToFirstError();
+                    }
+
+                    const detailMessages = errorData.details.map((d: any) => `${d.field}: ${d.message}`);
+                    errorMessage = `${errorMessage}\n\n• ${detailMessages.join('\n• ')}`;
+                }
+
+                throw new Error(errorMessage);
             }
 
             const result = await res.json();
@@ -283,10 +325,18 @@ export function SellWizard() {
             });
         } catch (error: any) {
             console.error(error);
+
+            // Try to parse the error message if it's JSON (sometimes happens with server errors)
+            let errorMessage = error.message || t('toasts.saveError');
+
+            // If it's a validation error from our custom fetch logic, we might have mapped details already
+            // but let's make it more robust by checking if message contains bullet points (our previous formatting)
+            // or if we can extract structured data.
+
             toast({
                 variant: "destructive",
                 title: t('toasts.errorTitle'),
-                description: error.message || t('toasts.saveError'),
+                description: errorMessage,
             });
         } finally {
             setIsSubmitting(false);
@@ -339,8 +389,8 @@ export function SellWizard() {
 
                         <div className="flex gap-4">
                             {currentStep < 3 ? (
-                                <Button 
-                                    onClick={nextStep} 
+                                <Button
+                                    onClick={nextStep}
                                     className="px-8 font-bold gap-2 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
                                 >
                                     {t('buttons.next')} <ArrowRight size={18} />

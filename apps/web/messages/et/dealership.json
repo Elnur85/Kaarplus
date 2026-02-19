@@ -34,7 +34,7 @@
         "viewDealer": "Vaata esindust",
         "noDealers": "Hetkel ei ole ühtegi esindust registreeritud.",
         "noBio": "Kirjeldus puudub.",
-        "asukohtMaaramata": "Asukoht määramata"
+        "locationNotSpecified": "Asukoht määramata"
     },
     "metadata": {
         "notFound": "Esindust ei leitud",

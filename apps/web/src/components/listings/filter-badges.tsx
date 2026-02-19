@@ -63,12 +63,12 @@ export function FilterBadges() {
     };
 
     const getConditionLabel = (cond: string) => {
-        switch (cond) {
-            case "new": return t('options.condition.Uus', { ns: 'sell' });
-            case "used": return t('options.condition.Kasutatud', { ns: 'sell' });
-            case "certified": return t('badges.certified', { ns: 'listings' });
-            default: return cond;
-        }
+        // Try canonical key first (e.g., "New", "Used", "Excellent", "Damaged")
+        const capitalized = cond.charAt(0).toUpperCase() + cond.slice(1);
+        const translated = t(`options.condition.${capitalized}`, { ns: 'sell', defaultValue: '' });
+        if (translated) return translated;
+        if (cond === "certified") return t('badges.certified', { ns: 'listings' });
+        return cond;
     };
 
     const removeLabel = t('common.close', { ns: 'common' }); // Using 'close' as generic remove label or accessible text
@@ -117,7 +117,7 @@ export function FilterBadges() {
             ))}
             {filters.transmission && filters.transmission !== "all" && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    {t('filters.transmission', { ns: 'listings' })}: {filters.transmission === "automatic" ? t('options.transmission.Automaat', { ns: 'sell' }) : t('options.transmission.Manuaal', { ns: 'sell' })}
+                    {t('filters.transmission', { ns: 'listings' })}: {filters.transmission === "automatic" ? t('options.transmission.Automatic', { ns: 'sell' }) : t('options.transmission.Manual', { ns: 'sell' })}
                     <button onClick={() => removeBadge("transmission")} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>
@@ -141,7 +141,7 @@ export function FilterBadges() {
             )}
             {(filters.powerMin || filters.powerMax) && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    {t('card.power', { value: "", ns: 'listings' }).replace("0 kW", "").trim() || "Võimsus"}: {filters.powerMin || "0"} - {filters.powerMax || "..."} kW
+                    {t('filters.power', { ns: 'listings' })}: {filters.powerMin || "0"} - {filters.powerMax || "..."} kW
                     <button onClick={() => { filters.setFilter("powerMin", ""); filters.setFilter("powerMax", ""); }} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>
@@ -149,7 +149,7 @@ export function FilterBadges() {
             )}
             {filters.driveType && filters.driveType !== "none" && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    {t('specs.driveType', { ns: 'carDetail', defaultValue: 'Vedu' })}: {filters.driveType}
+                    {t('filters.driveType', { ns: 'listings' })}: {filters.driveType}
                     <button onClick={() => removeBadge("driveType")} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>
@@ -157,7 +157,7 @@ export function FilterBadges() {
             )}
             {filters.color && filters.color !== "none" && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    Värv: {filters.color}
+                    {t('filters.color', { ns: 'listings' })}: {filters.color}
                     <button onClick={() => removeBadge("color")} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>
@@ -165,7 +165,7 @@ export function FilterBadges() {
             )}
             {filters.doors && filters.doors !== "none" && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    {t('step2.labels.doors', { ns: 'sell', defaultValue: 'Uksi' }).replace('*', '')}: {filters.doors}
+                    {t('filters.doors', { ns: 'listings' })}: {filters.doors}
                     <button onClick={() => removeBadge("doors")} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>
@@ -173,7 +173,7 @@ export function FilterBadges() {
             )}
             {filters.seats && filters.seats !== "none" && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    {t('step2.labels.seats', { ns: 'sell', defaultValue: 'Istekohti' }).replace('*', '')}: {filters.seats}
+                    {t('filters.seats', { ns: 'listings' })}: {filters.seats}
                     <button onClick={() => removeBadge("seats")} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>
@@ -181,7 +181,7 @@ export function FilterBadges() {
             )}
             {filters.condition && filters.condition !== "none" && (
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80">
-                    {t('specs.condition', { ns: 'carDetail', defaultValue: 'Seisukord' })}: {getConditionLabel(filters.condition)}
+                    {t('filters.condition', { ns: 'listings' })}: {getConditionLabel(filters.condition)}
                     <button onClick={() => removeBadge("condition")} aria-label={removeLabel}>
                         <X size={14} className="text-muted-foreground hover:text-destructive" />
                     </button>

@@ -62,7 +62,8 @@
                 "Diesel": "Дизель",
                 "Hybrid": "Гибрид",
                 "Electric": "Электро",
-                "Gas": "Газ"
+                "CNG": "CNG",
+                "LPG": "LPG"
             }
         },
         "transmission": {
@@ -76,14 +77,14 @@
         "body": {
             "label": "Тип кузова",
             "types": {
+                "Micro": "Микро",
                 "Sedan": "Седан",
-                "Wagon": "Универсал",
+                "Hatchback": "Хэтчбек",
+                "Family Car": "Семейный",
+                "Sport": "Спорт",
                 "SUV": "Внедорожник",
-                "Coupe": "Купе",
-                "Convertible": "Кабриолет",
-                "Minivan": "Минивэн",
-                "Pickup": "Пикап",
-                "Hatchback": "Хэтчбек"
+                "Truck": "Грузовик",
+                "Van": "Фургон"
             }
         },
         "drive": {
@@ -130,9 +131,10 @@
             "label": "Состояние",
             "placeholder": "Все",
             "options": {
-                "new": "Новый",
-                "used": "Б/у",
-                "certified": "Сертифицированный"
+                "New": "Новый",
+                "Excellent": "Как новый",
+                "Used": "Б/у",
+                "Damaged": "С повреждениями"
             }
         },
         "location": {

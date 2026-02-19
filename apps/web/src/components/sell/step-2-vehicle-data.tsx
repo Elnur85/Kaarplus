@@ -11,6 +11,10 @@ import { EquipmentCheckboxes } from "./equipment-checkboxes";
 import { cn } from "@/lib/utils";
 
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
+import { FUEL_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES, API_URL } from "@/lib/constants";
+
+const CONDITIONS = ["New", "Excellent", "Used", "Damaged"] as const;
 
 interface Step2VehicleDataProps {
     validationAttempted?: boolean;
@@ -20,11 +24,26 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
     const { t } = useTranslation('sell');
     const { register, formState: { errors }, watch, setValue } = useFormContext<SellFormValues>();
 
-    const makes = ["Audi", "BMW", "Mercedes-Benz", "Toyota", "Volkswagen", "Volvo", "Tesla", "Porsche"];
-    const fuelTypes = ["Bensiin", "Diisel", "Hübriid", "Elekter", "CNG", "LPG"];
-    const transmissions = ["Manuaal", "Automaat"];
-    const driveTypes = ["Esivedu", "Tagavedu", "Nelivedu (AWD)", "Nelivedu (4WD)"];
-    const conditions = ["Uus", "Uueväärne", "Kasutatud", "Vigastatud"];
+    const [makes, setMakes] = useState<string[]>([]);
+    const [isLoadingMakes, setIsLoadingMakes] = useState(true);
+
+    useEffect(() => {
+        fetch(`${API_URL}/search/makes`)
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
+            .then((json) => setMakes(json.data || []))
+            .catch(() => {
+                // Makes will remain empty — user can still type manually
+            })
+            .finally(() => setIsLoadingMakes(false));
+    }, []);
+
+    const fuelTypes = [...FUEL_TYPES];
+    const transmissions = [...TRANSMISSION_TYPES];
+    const driveTypes = [...DRIVE_TYPES];
+    const conditions = [...CONDITIONS];
 
     const hasError = (fieldName: keyof SellFormValues) => {
         return validationAttempted && errors[fieldName];
@@ -304,6 +323,15 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             className={cn(hasError("colorExterior") && "border-destructive ring-1 ring-destructive")}
                         />
                         {errors.colorExterior && <p className="text-xs text-destructive">{errors.colorExterior.message}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="colorInterior">{t('step2.labels.colorInterior')}</Label>
+                        <Input
+                            id="colorInterior"
+                            placeholder={t('step2.placeholders.colorInterior')}
+                            {...register("colorInterior")}
+                        />
                     </div>
 
                     <div className="space-y-2">

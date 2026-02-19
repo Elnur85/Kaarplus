@@ -91,7 +91,8 @@
     "viewMessages": "View Messages",
     "loginPrompt": "You can also",
     "loginLink": "log in for faster communication",
-    "nameEmailRequired": "Name and email are required"
+    "nameEmailRequired": "Name and email are required",
+    "invalidEmail": "Please enter a valid email address"
   },
   "favorites": {
     "loginRequired": "Login Required",

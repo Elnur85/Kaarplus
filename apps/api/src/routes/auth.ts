@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { z } from "zod";
 
 import { requireAuth } from "../middleware/auth";
-import { authLimiter } from "../middleware/rateLimiter";
+import { authLimiter, strictLimiter } from "../middleware/rateLimiter";
 import { emailService } from "../services/emailService";
 import { passwordResetService } from "../services/passwordResetService";
 import { AuthError, BadRequestError } from "../utils/errors";
@@ -27,7 +27,7 @@ const registerSchema = z.object({
 		.min(8, "Password must be at least 8 characters")
 		.regex(/[A-Z]/, "Password must contain at least one uppercase letter")
 		.regex(/[0-9]/, "Password must contain at least one number"),
-	name: z.string().optional(),
+	name: z.string().min(2, "Name must be at least 2 characters"),
 });
 
 const loginSchema = z.object({
@@ -95,48 +95,53 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
 });
 
 // POST /api/auth/login
-authRouter.post("/login", async (req: Request, res: Response) => {
-	const result = loginSchema.safeParse(req.body);
-	if (!result.success) {
-		throw new BadRequestError(result.error.issues[0].message);
+authRouter.post("/login", async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const result = loginSchema.safeParse(req.body);
+		if (!result.success) {
+			throw new BadRequestError(result.error.issues[0].message);
+		}
+
+		const { email, password } = result.data;
+
+		const user = await prisma.user.findUnique({ where: { email } });
+		if (!user || !user.passwordHash) {
+			throw new AuthError("Invalid email or password");
+		}
+
+		const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+		if (!isValidPassword) {
+			throw new AuthError("Invalid email or password");
+		}
+
+		if (!JWT_SECRET) {
+			throw new AuthError("Server configuration error");
+		}
+		const token = jwt.sign(
+			{ id: user.id, email: user.email, role: user.role, name: user.name },
+			JWT_SECRET,
+			{ expiresIn: JWT_EXPIRES_IN }
+		);
+
+		res.cookie("token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "strict",
+			maxAge: 24 * 60 * 60 * 1000,
+		});
+
+		res.json({
+			user: {
+				id: user.id,
+				email: user.email,
+				name: user.name,
+				role: user.role,
+			},
+		});
+	} catch (error) {
+		logger.error("Login failed", error);
+		next(error);
 	}
-
-	const { email, password } = result.data;
-
-	const user = await prisma.user.findUnique({ where: { email } });
-	if (!user || !user.passwordHash) {
-		throw new AuthError("Invalid email or password");
-	}
-
-	const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-	if (!isValidPassword) {
-		throw new AuthError("Invalid email or password");
-	}
-
-	if (!JWT_SECRET) {
-		throw new AuthError("Server configuration error");
-	}
-	const token = jwt.sign(
-		{ id: user.id, email: user.email, role: user.role, name: user.name },
-		JWT_SECRET,
-		{ expiresIn: JWT_EXPIRES_IN }
-	);
-
-	res.cookie("token", token, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV === "production",
-		sameSite: "strict",
-		maxAge: 24 * 60 * 60 * 1000,
-	});
-
-	res.json({
-		user: {
-			id: user.id,
-			email: user.email,
-			name: user.name,
-			role: user.role,
-		},
-	});
 });
 
 // POST /api/auth/logout
@@ -159,24 +164,24 @@ const forgotPasswordSchema = z.object({
 	email: z.string().email("Invalid email address"),
 });
 
-authRouter.post("/forgot-password", async (req: Request, res: Response) => {
-	const result = forgotPasswordSchema.safeParse(req.body);
-	if (!result.success) {
-		throw new BadRequestError(result.error.issues[0].message);
-	}
-
-	const { email } = result.data;
-
-	// Find user by email
-	const user = await prisma.user.findUnique({ where: { email } });
-
-	// Always return success to prevent email enumeration attacks
-	if (!user) {
-		res.json({ message: "If an account exists, a password reset email has been sent." });
-		return;
-	}
-
+authRouter.post("/forgot-password", strictLimiter, async (req: Request, res: Response, _next: NextFunction) => {
 	try {
+		const result = forgotPasswordSchema.safeParse(req.body);
+		if (!result.success) {
+			throw new BadRequestError(result.error.issues[0].message);
+		}
+
+		const { email } = result.data;
+
+		// Find user by email
+		const user = await prisma.user.findUnique({ where: { email } });
+
+		// Always return success to prevent email enumeration attacks
+		if (!user) {
+			res.json({ message: "If an account exists, a password reset email has been sent." });
+			return;
+		}
+
 		// Generate secure reset token
 		const resetToken = await passwordResetService.createResetToken(email);
 
@@ -213,15 +218,15 @@ const resetPasswordSchema = z.object({
 		.regex(/[0-9]/, "Password must contain at least one number"),
 });
 
-authRouter.post("/reset-password", async (req: Request, res: Response) => {
-	const result = resetPasswordSchema.safeParse(req.body);
-	if (!result.success) {
-		throw new BadRequestError(result.error.issues[0].message);
-	}
-
-	const { token, newPassword } = result.data;
-
+authRouter.post("/reset-password", strictLimiter, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const result = resetPasswordSchema.safeParse(req.body);
+		if (!result.success) {
+			throw new BadRequestError(result.error.issues[0].message);
+		}
+
+		const { token, newPassword } = result.data;
+
 		// Validate the reset token
 		const email = await passwordResetService.validateToken(token);
 
@@ -233,7 +238,6 @@ authRouter.post("/reset-password", async (req: Request, res: Response) => {
 		const user = await prisma.user.findUnique({ where: { email } });
 
 		if (!user) {
-			// This shouldn't happen if token validation passed, but handle it gracefully
 			throw new BadRequestError("Invalid or expired reset token");
 		}
 
@@ -242,13 +246,11 @@ authRouter.post("/reset-password", async (req: Request, res: Response) => {
 
 		// Update user's password in a transaction
 		await prisma.$transaction(async (tx) => {
-			// Update password
 			await tx.user.update({
 				where: { id: user.id },
 				data: { passwordHash },
 			});
 
-			// Mark token as used
 			await tx.passwordResetToken.updateMany({
 				where: { token },
 				data: { used: true },
@@ -256,17 +258,18 @@ authRouter.post("/reset-password", async (req: Request, res: Response) => {
 		});
 
 		// Log for security audit
-		console.log(`[Password Reset] Password successfully reset for user: ${email}`);
+		logger.info(`[Password Reset] Password successfully reset for user: ${email}`);
 
 		res.json({ message: "Password has been reset successfully. You can now log in with your new password." });
 	} catch (error) {
 		if (error instanceof BadRequestError) {
-			throw error;
+			next(error);
+			return;
 		}
 		logger.error("[Password Reset] Error resetting password", {
 			error: error instanceof Error ? error.message : String(error),
 		});
-		throw new BadRequestError("Failed to reset password. Please try again.");
+		next(new BadRequestError("Failed to reset password. Please try again."));
 	}
 });
 
@@ -280,40 +283,45 @@ const changePasswordSchema = z.object({
 		.regex(/[0-9]/, "Password must contain at least one number"),
 });
 
-authRouter.post("/change-password", requireAuth, async (req: Request, res: Response) => {
-	const result = changePasswordSchema.safeParse(req.body);
-	if (!result.success) {
-		throw new BadRequestError(result.error.issues[0].message);
+authRouter.post("/change-password", requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const result = changePasswordSchema.safeParse(req.body);
+		if (!result.success) {
+			throw new BadRequestError(result.error.issues[0].message);
+		}
+
+		const { currentPassword, newPassword } = result.data;
+		const userId = req.user!.id;
+
+		// Get user with password hash
+		const user = await prisma.user.findUnique({
+			where: { id: userId },
+			select: { id: true, passwordHash: true, email: true },
+		});
+
+		if (!user || !user.passwordHash) {
+			throw new BadRequestError("User not found or password not set");
+		}
+
+		// Verify current password
+		const isValidPassword = await bcrypt.compare(currentPassword, user.passwordHash);
+		if (!isValidPassword) {
+			throw new AuthError("Current password is incorrect");
+		}
+
+		// Hash and update new password
+		const newPasswordHash = await bcrypt.hash(newPassword, 12);
+		await prisma.user.update({
+			where: { id: userId },
+			data: { passwordHash: newPasswordHash },
+		});
+
+		// Log for security audit
+		logger.info("[Password Change] Password changed", { email: user.email });
+
+		res.json({ message: "Password changed successfully" });
+	} catch (error) {
+		logger.error("Password change failed", error);
+		next(error);
 	}
-
-	const { currentPassword, newPassword } = result.data;
-	const userId = req.user!.id;
-
-	// Get user with password hash
-	const user = await prisma.user.findUnique({
-		where: { id: userId },
-		select: { id: true, passwordHash: true, email: true },
-	});
-
-	if (!user || !user.passwordHash) {
-		throw new BadRequestError("User not found or password not set");
-	}
-
-	// Verify current password
-	const isValidPassword = await bcrypt.compare(currentPassword, user.passwordHash);
-	if (!isValidPassword) {
-		throw new AuthError("Current password is incorrect");
-	}
-
-	// Hash and update new password
-	const newPasswordHash = await bcrypt.hash(newPassword, 12);
-	await prisma.user.update({
-		where: { id: userId },
-		data: { passwordHash: newPasswordHash },
-	});
-
-	// Log for security audit
-	logger.info("[Password Change] Password changed", { email: user.email });
-
-	res.json({ message: "Password changed successfully" });
 });

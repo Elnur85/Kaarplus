@@ -33,7 +33,8 @@
             "sold": "Müüdud",
             "rejected": "Tagasi lükatud",
             "draft": "Mustand",
-            "inactive": "Mitteaktiivne"
+            "inactive": "Mitteaktiivne",
+            "expired": "Aegunud"
         },
         "table": {
             "listing": "Kuulutus",
@@ -66,7 +67,8 @@
             "name": "Nimi",
             "email": "E-post",
             "phone": "Telefon",
-            "help": "Profiili muutmiseks pöörduge klienditoe poole."
+            "help": "Profiili muutmiseks pöörduge klienditoe poole.",
+            "noPhone": "Telefoninumber puudub"
         },
         "notifications": {
             "title": "Teavituste eelistused",
@@ -92,12 +94,21 @@
             "export": {
                 "title": "Ekspordi oma andmed",
                 "description": "Laadi alla kõik sinu kontoga seotud andmed JSON formaadis",
-                "button": "Ekspordi andmed"
+                "button": "Ekspordi andmed",
+                "success": "Andmed eksporditud",
+                "successDesc": "Teie andmed on alla laaditud",
+                "error": "Eksport ebaõnnestus",
+                "errorDesc": "Proovige uuesti hiljem"
             },
             "delete": {
                 "title": "Kustuta konto",
                 "description": "Kustuta oma konto ja kõik sellega seotud andmed jäädavalt",
-                "button": "Kustuta konto"
+                "button": "Kustuta konto",
+                "confirm": "Kas olete kindel? See tegevus on pöördumatu.",
+                "success": "Konto kustutatud",
+                "successDesc": "Teie konto on edukalt kustutatud",
+                "error": "Kustutamine ebaõnnestus",
+                "errorDesc": "Proovige uuesti hiljem"
             },
             "privacy": "Lisateavet andmetöötluse kohta leiad meie privaatsuspoliitikast."
         },

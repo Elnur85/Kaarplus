@@ -15,14 +15,14 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
     const { t } = useTranslation('sell');
 
     const vehicleTypes = [
-        { id: "Sedaan", key: "sedan", icon: Car },
+        { id: "Sedan", key: "sedan", icon: Car },
         { id: "SUV", key: "suv", icon: Car },
         { id: "Hatchback", key: "hatchback", icon: Car },
-        { id: "Universaal", key: "wagon", icon: Car },
-        { id: "Kupee", key: "coupe", icon: Car },
-        { id: "Kabriolett", key: "convertible", icon: Car },
-        { id: "Mahtuniversaal", key: "minivan", icon: Bus },
-        { id: "Pikap", key: "pickup", icon: Truck },
+        { id: "Sport", key: "sport", icon: Car },
+        { id: "Family Car", key: "family_car", icon: Car },
+        { id: "Van", key: "van", icon: Bus },
+        { id: "Truck", key: "truck", icon: Truck },
+        { id: "Micro", key: "micro", icon: Car },
     ];
 
     return (

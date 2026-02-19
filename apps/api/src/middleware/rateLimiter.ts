@@ -63,8 +63,11 @@ function createRateLimiter(
 		legacyHeaders: false,  // Disable `X-RateLimit-*` headers
 		message: { error: message },
 		handler: handleLimitReached,
-		// Skip rate limiting in test environment or when explicitly disabled
-		skip: () => process.env.NODE_ENV === "test" || process.env.DISABLE_RATE_LIMIT === "true",
+		// Skip rate limiting in test or development environment
+		skip: () =>
+			process.env.NODE_ENV === "test" ||
+			process.env.NODE_ENV === "development" ||
+			process.env.DISABLE_RATE_LIMIT === "true",
 	});
 }
 

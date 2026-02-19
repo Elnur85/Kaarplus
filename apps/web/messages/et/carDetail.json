@@ -88,7 +88,11 @@
     "validationError": "Valideerimisviga",
     "messageRequired": "Palun sisesta sõnum",
     "close": "Sulge",
-    "viewMessages": "Vaata sõnumeid"
+    "viewMessages": "Vaata sõnumeid",
+    "loginPrompt": "Saad ka",
+    "loginLink": "sisse logida kiiremaks suhtluseks",
+    "nameEmailRequired": "Nimi ja e-post on kohustuslikud",
+    "invalidEmail": "Palun sisesta kehtiv e-posti aadress"
   },
   "favorites": {
     "loginRequired": "Sisselogimine nõutud",
@@ -96,7 +100,8 @@
     "added": "Lisatud lemmikutesse",
     "addedDesc": "See sõiduk on lisatud sinu lemmikutesse",
     "removed": "Eemaldatud lemmikutest",
-    "removedDesc": "See sõiduk on eemaldatud sinu lemmikutest"
+    "removedDesc": "See sõiduk on eemaldatud sinu lemmikutest",
+    "error": "Viga"
   },
   "share": {
     "listingDescription": "Vaata seda {title} Kaarplusist!"

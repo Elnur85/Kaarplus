@@ -20,7 +20,13 @@
         "max": "Max",
         "allModels": "All models",
         "any": "Any",
-        "showResults": "Show results"
+        "showResults": "Show results",
+        "power": "Power",
+        "color": "Color",
+        "driveType": "Drivetrain",
+        "doors": "Doors",
+        "seats": "Seats",
+        "condition": "Condition"
     },
     "sort": {
         "label": "Sort by",

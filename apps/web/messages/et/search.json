@@ -60,7 +60,8 @@
                 "Diesel": "Diisel",
                 "Hybrid": "Hübriid",
                 "Electric": "Elekter",
-                "Gas": "Gaas"
+                "CNG": "CNG",
+                "LPG": "LPG"
             }
         },
         "transmission": {
@@ -74,14 +75,14 @@
         "body": {
             "label": "Keretüüp",
             "types": {
+                "Micro": "Micro",
                 "Sedan": "Sedaan",
-                "Wagon": "Universaal",
+                "Hatchback": "Luukpära",
+                "Family Car": "Pereauto",
+                "Sport": "Sportauto",
                 "SUV": "Maastur",
-                "Coupe": "Kupee",
-                "Convertible": "Kabriolett",
-                "Minivan": "Mahtuniversaal",
-                "Pickup": "Pikap",
-                "Hatchback": "Väikeautod"
+                "Truck": "Veoauto",
+                "Van": "Kaubik"
             }
         },
         "drive": {
@@ -128,9 +129,10 @@
             "label": "Seisukord",
             "placeholder": "Kõik",
             "options": {
-                "new": "Uus",
-                "used": "Kasutatud",
-                "certified": "Sertifitseeritud"
+                "New": "Uus",
+                "Excellent": "Uueväärne",
+                "Used": "Kasutatud",
+                "Damaged": "Vigastatud"
             }
         },
         "location": {

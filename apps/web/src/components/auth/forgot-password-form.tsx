@@ -18,8 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+import { API_URL } from "@/lib/constants";
 
 const forgotPasswordSchema = z.object({
     email: z.string().email({
@@ -48,6 +47,7 @@ export function ForgotPasswordForm() {
             const response = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(values),
             });
 

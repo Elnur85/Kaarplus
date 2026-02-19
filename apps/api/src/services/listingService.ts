@@ -122,21 +122,21 @@ export class ListingService {
 		if (model) where.model = { equals: model, mode: "insensitive" };
 		if (yearMin !== undefined || yearMax !== undefined) {
 			where.year = {
-				gte: yearMin,
-				lte: yearMax,
+				...(yearMin !== undefined && { gte: yearMin }),
+				...(yearMax !== undefined && { lte: yearMax }),
 			};
 		}
 		if (priceMin !== undefined || priceMax !== undefined) {
 			where.price = {
-				gte: priceMin,
-				lte: priceMax,
+				...(priceMin !== undefined && { gte: priceMin }),
+				...(priceMax !== undefined && { lte: priceMax }),
 			};
 		}
 		if (fuelType) {
 			const fuels = fuelType.split(",");
 			where.fuelType = { in: fuels };
 		}
-		if (transmission) where.transmission = transmission;
+		if (transmission) where.transmission = { equals: transmission, mode: "insensitive" };
 		if (bodyType) {
 			const bodies = bodyType.split(",");
 			where.bodyType = { in: bodies };
@@ -144,20 +144,20 @@ export class ListingService {
 		if (color) where.colorExterior = { equals: color, mode: "insensitive" };
 		if (mileageMin !== undefined || mileageMax !== undefined) {
 			where.mileage = {
-				gte: mileageMin,
-				lte: mileageMax,
+				...(mileageMin !== undefined && { gte: mileageMin }),
+				...(mileageMax !== undefined && { lte: mileageMax }),
 			};
 		}
 		if (powerMin !== undefined || powerMax !== undefined) {
 			where.powerKw = {
-				gte: powerMin,
-				lte: powerMax,
+				...(powerMin !== undefined && { gte: powerMin }),
+				...(powerMax !== undefined && { lte: powerMax }),
 			};
 		}
 		if (driveType && driveType !== "none") where.driveType = driveType;
 		if (doors) where.doors = doors;
 		if (seats) where.seats = seats;
-		if (condition && condition !== "none") where.condition = condition;
+		if (condition && condition !== "none") where.condition = { equals: condition, mode: "insensitive" };
 		if (location && location !== "none") where.location = { equals: location, mode: "insensitive" };
 
 		if (q) {
@@ -283,8 +283,9 @@ export class ListingService {
 				},
 			});
 
-			if (activeCount >= 5) {
-				throw new ForbiddenError("Erakasutajana on Teil lubatud maksimaalselt 5 aktiivset kuulutust. Vormistage end automüügiks ümber, et lisada rohkem kuulutusi.");
+			const INDIVIDUAL_LISTING_LIMIT = 5;
+			if (activeCount >= INDIVIDUAL_LISTING_LIMIT) {
+				throw new ForbiddenError("LISTING_LIMIT_EXCEEDED");
 			}
 		}
 
@@ -352,7 +353,7 @@ export class ListingService {
 				OR: [
 					{ make: listing.make },
 					{ bodyType: listing.bodyType },
-					{ 
+					{
 						AND: [
 							{ price: { gte: priceMin, lte: priceMax } },
 							{ year: { gte: yearMin, lte: yearMax } },

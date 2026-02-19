@@ -32,7 +32,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (!isFullscreen) return;
-            
+
             switch (e.key) {
                 case 'Escape':
                     setIsFullscreen(false);
@@ -105,11 +105,15 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     </div>
 
                     <button
-                        onClick={openFullscreen}
-                        className="absolute top-4 right-4 bg-black/60 text-white p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/80"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openFullscreen();
+                        }}
+                        className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full backdrop-blur-sm transition-all z-30 shadow-lg"
                         title={t('gallery.fullscreen')}
                     >
-                        <Maximize2 size={18} />
+                        <Maximize2 size={24} />
                     </button>
 
                     {/* Navigation Arrows */}
@@ -162,7 +166,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
 
             {/* Fullscreen Modal */}
             {isFullscreen && (
-                <div 
+                <div
                     className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
                     onClick={closeFullscreen}
                 >
@@ -191,7 +195,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     </button>
 
                     {/* Main Fullscreen Image */}
-                    <div 
+                    <div
                         className="relative w-full h-full flex items-center justify-center p-4"
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -231,7 +235,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                     )}
 
                     {/* Thumbnail Strip at Bottom */}
-                    <div 
+                    <div
                         className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 overflow-x-auto max-w-[90vw] p-2 bg-black/50 rounded-lg backdrop-blur-sm"
                         onClick={(e) => e.stopPropagation()}
                     >

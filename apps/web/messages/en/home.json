@@ -36,9 +36,13 @@
 			"hybrid": "Hybrid",
 			"commercial": "Commercial"
 		},
-		"viewAll": "View all {category}"
+		"viewAll": "View all {category}",
+		"noListings": "No listings available in this category at the moment",
+		"vehicles": "vehicles"
 	},
 	"valueProps": {
+		"title": "Why choose Kaarplus?",
+		"subtitle": "We offer the safest and fastest way to buy and sell cars in Estonia.",
 		"history": {
 			"title": "Verified history",
 			"description": "All vehicles go through a thorough background check."
@@ -57,6 +61,7 @@
 		}
 	},
 	"popularBrands": {
+		"centeredTitle": "POPULAR BRANDS IN ESTONIA",
 		"title": "Popular brands",
 		"subtitle": "Browse vehicles by your preferred manufacturer",
 		"viewAll": "View all",
@@ -64,13 +69,14 @@
 	},
 	"reviews": {
 		"title": "What customers think",
-		"subtitle": "Over 1,000 satisfied customers have bought their new car through Kaarplus."
+		"subtitle": "Over 1,000 satisfied customers have bought their new car through Kaarplus.",
+		"noReviews": "No reviews available at the moment"
 	},
 	"statistics": {
 		"activeListings": "Active Listings",
-		"happyClients": "Happy Clients",
-		"trustedSellers": "Trusted Sellers",
-		"carBrands": "Car Brands"
+		"carBrands": "Car Brands",
+		"totalModels": "Models",
+		"totalLocations": "Locations"
 	},
 	"faq": {
 		"title": "Frequently Asked Questions",

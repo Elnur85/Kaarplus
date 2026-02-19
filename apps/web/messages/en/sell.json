@@ -18,12 +18,11 @@
             "sedan": "Sedan",
             "suv": "SUV",
             "hatchback": "Hatchback",
-            "wagon": "Wagon",
-            "coupe": "Coupe",
-            "convertible": "Convertible",
-            "minivan": "Minivan",
-            "pickup": "Pickup",
-            "small_car": "Small car"
+            "sport": "Sport",
+            "family_car": "Family Car",
+            "van": "Van",
+            "truck": "Truck",
+            "micro": "Micro"
         }
     },
     "step2": {
@@ -55,6 +54,7 @@
             "doors": "Doors *",
             "seats": "Seats *",
             "colorExterior": "Exterior Color *",
+            "colorInterior": "Interior Color",
             "condition": "Condition *",
             "vin": "VIN Code (17 characters)",
             "description": "History, maintenance, etc."
@@ -77,6 +77,7 @@
             "doors": "Count",
             "seats": "Count",
             "color": "e.g. Black metallic",
+            "colorInterior": "e.g. Black leather",
             "condition": "Select condition",
             "vin": "VIN1234567890ABCD",
             "description": "Tell more about your car..."
@@ -181,35 +182,29 @@
     },
     "options": {
         "fuel": {
-            "Bensiin": "Petrol",
-            "Diisel": "Diesel",
-            "Hübriid": "Hybrid",
-            "Elekter": "Electric",
-            "CNG": "CNG",
-            "LPG": "LPG",
-            "Gaas": "Gas (CNG/LPG)",
             "Petrol": "Petrol",
             "Diesel": "Diesel",
             "Hybrid": "Hybrid",
-            "Electric": "Electric"
+            "Electric": "Electric",
+            "CNG": "CNG",
+            "LPG": "LPG",
+            "Ethanol": "Ethanol"
         },
         "transmission": {
-            "Manuaal": "Manual",
-            "Automaat": "Automatic",
             "Manual": "Manual",
             "Automatic": "Automatic"
         },
         "drive": {
-            "Esivedu": "FWD",
-            "Tagavedu": "RWD",
-            "Nelivedu (AWD)": "AWD",
-            "Nelivedu (4WD)": "4WD"
+            "FWD": "FWD (Front)",
+            "RWD": "RWD (Rear)",
+            "AWD": "AWD (All-Wheel)",
+            "4WD": "4WD (Four-Wheel)"
         },
         "condition": {
-            "Uus": "New",
-            "Uueväärne": "Excellent",
-            "Kasutatud": "Used",
-            "Vigastatud": "Damaged"
+            "New": "New",
+            "Excellent": "Excellent",
+            "Used": "Used",
+            "Damaged": "Damaged"
         }
     }
 }

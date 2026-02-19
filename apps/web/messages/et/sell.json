@@ -18,22 +18,25 @@
             "sedan": "Sedaan",
             "suv": "Maastur (SUV)",
             "hatchback": "Luukpära",
-            "wagon": "Universaal",
-            "coupe": "Kupee",
-            "convertible": "Kabriolett",
-            "minivan": "Mahtuniversaal",
-            "pickup": "Pikap",
-            "small_car": "Väikeautod"
+            "sport": "Sportauto",
+            "family_car": "Pereauto",
+            "van": "Kaubik",
+            "truck": "Veoauto",
+            "micro": "Micro"
         }
     },
     "step2": {
         "sections": {
+            "contact": "Kontaktandmed",
             "main": "Põhiandmed",
             "specs": "Tehnilised andmed",
             "features": "Varustus",
             "description": "Kirjeldus"
         },
         "labels": {
+            "contactName": "Nimi *",
+            "contactEmail": "E-post *",
+            "contactPhone": "Telefon *",
             "make": "Automark *",
             "model": "Mudel *",
             "variant": "Variant / Lisanimetus",
@@ -51,11 +54,15 @@
             "doors": "Uksed *",
             "seats": "Istekohad *",
             "colorExterior": "Välisvärv *",
+            "colorInterior": "Sisuvärv",
             "condition": "Seisukord *",
             "vin": "VIN-kood (17 tähemärki)",
             "description": "Lühiajalugu, hooldusinfo jms"
         },
         "placeholders": {
+            "contactName": "Sisestage oma nimi",
+            "contactEmail": "Sisestage oma e-post",
+            "contactPhone": "Sisestage oma telefon",
             "make": "Valige mark",
             "model": "nt. 520d",
             "variant": "nt. xDrive Luxury Line",
@@ -70,6 +77,7 @@
             "doors": "Arv",
             "seats": "Arv",
             "color": "nt. Must metallik",
+            "colorInterior": "nt. Hall nahk",
             "condition": "Valige seisukord",
             "vin": "VIN1234567890ABCD",
             "description": "Räägi oma autost lähemalt..."
@@ -119,6 +127,7 @@
         "errorTitle": "Viga",
         "selectType": "Palun valige sõiduki tüüp",
         "fillRequired": "Palun täitke kõik kohustuslikud väljad vigadeta",
+        "fieldsError": "väljal on vigu",
         "minPhotos": "Palun lisage vähemalt 3 fotot",
         "createError": "Viga kuulutuse loomisel",
         "uploadingTitle": "Piltide üleslaadimine...",
@@ -173,35 +182,29 @@
     },
     "options": {
         "fuel": {
-            "Bensiin": "Bensiin",
-            "Diisel": "Diisel",
-            "Hübriid": "Hübriid",
-            "Elekter": "Elekter",
-            "CNG": "CNG",
-            "LPG": "LPG",
-            "Gaas": "Gaas",
             "Petrol": "Bensiin",
             "Diesel": "Diisel",
             "Hybrid": "Hübriid",
-            "Electric": "Elekter"
+            "Electric": "Elekter",
+            "CNG": "CNG",
+            "LPG": "LPG",
+            "Ethanol": "Etanool"
         },
         "transmission": {
-            "Manuaal": "Manuaal",
-            "Automaat": "Automaat",
             "Manual": "Manuaal",
             "Automatic": "Automaat"
         },
         "drive": {
-            "Esivedu": "Esivedu",
-            "Tagavedu": "Tagavedu",
-            "Nelivedu (AWD)": "Nelivedu (AWD)",
-            "Nelivedu (4WD)": "Nelivedu (4WD)"
+            "FWD": "Esivedu",
+            "RWD": "Tagavedu",
+            "AWD": "Nelivedu (AWD)",
+            "4WD": "Nelivedu (4WD)"
         },
         "condition": {
-            "Uus": "Uus",
-            "Uueväärne": "Uueväärne",
-            "Kasutatud": "Kasutatud",
-            "Vigastatud": "Vigastatud"
+            "New": "Uus",
+            "Excellent": "Uueväärne",
+            "Used": "Kasutatud",
+            "Damaged": "Vigastatud"
         }
     }
 }

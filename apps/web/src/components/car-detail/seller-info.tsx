@@ -48,14 +48,8 @@ export function SellerInfo({ seller, location }: SellerInfoProps) {
                             seller.name || t('seller.privateSeller')
                         )}
                     </div>
-                    {/* ... star rating ... */}
                     <div className="flex items-center gap-1 mt-1">
-                        <div className="flex text-amber-400">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} size={14} className={i < 4 ? "fill-current" : i < 4.5 ? "fill-current opacity-50" : ""} />
-                            ))}
-                        </div>
-                        <span className="text-xs font-semibold text-slate-500 ml-1">(4.8/5)</span>
+                        <span className="text-xs text-muted-foreground">{isDealership ? t('seller.dealership') : t('seller.privateSeller')}</span>
                     </div>
                 </div>
             </div>

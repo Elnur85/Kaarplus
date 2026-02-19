@@ -70,7 +70,7 @@ export async function handleSendMessage(
     });
 
     // Mark as delivered immediately if recipient is online
-    if (socketService.isUserOnline(payload.recipientId)) {
+    if (message.senderId && socketService.isUserOnline(payload.recipientId)) {
       socketService.emitMessageStatus(message.senderId, message.id, "delivered");
     }
 
@@ -80,7 +80,7 @@ export async function handleSendMessage(
     logger.debug(`[SocketHandler] Message sent from ${userId} to ${payload.recipientId}`);
   } catch (error) {
     logger.error(`[SocketHandler] Error sending message:`, error);
-    
+
     const errorMessage = error instanceof Error ? error.message : "Failed to send message";
     callback({ success: false, error: errorMessage, tempId: payload.tempId });
   }

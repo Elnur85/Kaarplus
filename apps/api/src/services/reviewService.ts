@@ -1,6 +1,7 @@
 import { prisma } from "@kaarplus/database";
 
 import { BadRequestError, NotFoundError, ForbiddenError } from "../utils/errors";
+import { logger } from "../utils/logger";
 
 import { emailService } from "./emailService";
 
@@ -158,7 +159,7 @@ export class ReviewService {
             const reviewerName = review.reviewer?.name || "A user";
             emailService
                 .sendReviewNotificationEmail(targetUser.email, reviewerName, data.rating)
-                .catch(() => {});
+                .catch((err) => logger.warn("Failed to send review notification email", { error: err instanceof Error ? err.message : String(err) }));
         }
 
         return review;

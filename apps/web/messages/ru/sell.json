@@ -18,22 +18,25 @@
             "sedan": "Седан",
             "suv": "Внедорожник (SUV)",
             "hatchback": "Хэтчбек",
-            "wagon": "Универсал",
-            "coupe": "Купе",
-            "convertible": "Кабриолет",
-            "minivan": "Минивэн",
-            "pickup": "Пикап",
-            "small_car": "Малолитражка"
+            "sport": "Спорт",
+            "family_car": "Семейный",
+            "van": "Фургон",
+            "truck": "Грузовик",
+            "micro": "Микро"
         }
     },
     "step2": {
         "sections": {
+            "contact": "Контактные данные",
             "main": "Основные данные",
             "specs": "Технические данные",
             "features": "Оборудование",
             "description": "Описание"
         },
         "labels": {
+            "contactName": "Имя *",
+            "contactEmail": "Эл. почта *",
+            "contactPhone": "Телефон *",
             "make": "Марка *",
             "model": "Модель *",
             "variant": "Вариант / Доп. название",
@@ -51,11 +54,15 @@
             "doors": "Двери *",
             "seats": "Места *",
             "colorExterior": "Цвет кузова *",
+            "colorInterior": "Цвет салона",
             "condition": "Состояние *",
             "vin": "VIN-код (17 символов)",
             "description": "История, обслуживание и т.д."
         },
         "placeholders": {
+            "contactName": "Введите ваше имя",
+            "contactEmail": "Введите вашу эл. почту",
+            "contactPhone": "Введите ваш телефон",
             "make": "Выберите марку",
             "model": "напр. 520d",
             "variant": "напр. xDrive Luxury Line",
@@ -70,6 +77,7 @@
             "doors": "Кол-во",
             "seats": "Кол-во",
             "color": "напр. Черный металлик",
+            "colorInterior": "напр. Черная кожа",
             "condition": "Выберите состояние",
             "vin": "VIN1234567890ABCD",
             "description": "Расскажите о своем автомобиле подробнее..."
@@ -119,6 +127,7 @@
         "errorTitle": "Ошибка",
         "selectType": "Пожалуйста, выберите тип транспорта",
         "fillRequired": "Пожалуйста, заполните все обязательные поля без ошибок",
+        "fieldsError": "полей с ошибками",
         "minPhotos": "Пожалуйста, добавьте минимум 3 фотографии",
         "createError": "Ошибка при создании объявления",
         "uploadingTitle": "Загрузка изображений...",
@@ -173,35 +182,29 @@
     },
     "options": {
         "fuel": {
-            "Bensiin": "Бензин",
-            "Diisel": "Дизель",
-            "Hübriid": "Гибрид",
-            "Elekter": "Электро",
-            "CNG": "CNG",
-            "LPG": "LPG",
-            "Gaas": "Газ",
             "Petrol": "Бензин",
             "Diesel": "Дизель",
             "Hybrid": "Гибрид",
-            "Electric": "Электро"
+            "Electric": "Электро",
+            "CNG": "CNG",
+            "LPG": "LPG",
+            "Ethanol": "Этанол"
         },
         "transmission": {
-            "Manuaal": "Механическая",
-            "Automaat": "Автоматическая",
             "Manual": "Механическая",
             "Automatic": "Автоматическая"
         },
         "drive": {
-            "Esivedu": "Передний привод",
-            "Tagavedu": "Задний привод",
-            "Nelivedu (AWD)": "Полный привод (AWD)",
-            "Nelivedu (4WD)": "Полный привод (4WD)"
+            "FWD": "Передний привод",
+            "RWD": "Задний привод",
+            "AWD": "Полный привод (AWD)",
+            "4WD": "Полный привод (4WD)"
         },
         "condition": {
-            "Uus": "Новое",
-            "Uueväärne": "Как новое",
-            "Kasutatud": "Подержанное",
-            "Vigastatud": "С повреждениями"
+            "New": "Новое",
+            "Excellent": "Как новое",
+            "Used": "Подержанное",
+            "Damaged": "С повреждениями"
         }
     }
 }

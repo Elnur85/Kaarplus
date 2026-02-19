@@ -88,8 +88,6 @@ export function AnalyticsDashboard() {
                     value={`${data.summary.totalRevenue.toLocaleString(localeCode)} €`}
                     icon={DollarSign}
                     description={t('dashboard.stats.revenue.description')}
-                    trend={t('dashboard.stats.revenue.trend', { trend: "+12%" })}
-                    trendUp={true}
                 />
                 <StatsCard
                     title={t('dashboard.stats.activeListings.title')}
@@ -101,9 +99,7 @@ export function AnalyticsDashboard() {
                     title={t('dashboard.stats.users.title')}
                     value={data.summary.totalUsers}
                     icon={Users}
-                    description={t('dashboard.stats.users.description', { count: 5 })}
-                    trend={t('dashboard.stats.users.trend', { trend: "+4%" })}
-                    trendUp={true}
+                    description={t('dashboard.stats.users.description', { count: data.summary.totalUsers })}
                 />
                 <StatsCard
                     title={t('dashboard.stats.soldVehicles.title')}

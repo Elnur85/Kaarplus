@@ -60,7 +60,8 @@
                 "Diesel": "Diesel",
                 "Hybrid": "Hybrid",
                 "Electric": "Electric",
-                "Gas": "Gas"
+                "CNG": "CNG",
+                "LPG": "LPG"
             }
         },
         "transmission": {
@@ -74,14 +75,14 @@
         "body": {
             "label": "Body type",
             "types": {
+                "Micro": "Micro",
                 "Sedan": "Sedan",
-                "Wagon": "Wagon",
+                "Hatchback": "Hatchback",
+                "Family Car": "Family Car",
+                "Sport": "Sport",
                 "SUV": "SUV",
-                "Coupe": "Coupe",
-                "Convertible": "Convertible",
-                "Minivan": "Minivan",
-                "Pickup": "Pickup",
-                "Hatchback": "Hatchback"
+                "Truck": "Truck",
+                "Van": "Van"
             }
         },
         "drive": {
@@ -128,9 +129,10 @@
             "label": "Condition",
             "placeholder": "All",
             "options": {
-                "new": "New",
-                "used": "Used",
-                "certified": "Certified"
+                "New": "New",
+                "Excellent": "Excellent",
+                "Used": "Used",
+                "Damaged": "Damaged"
             }
         },
         "location": {

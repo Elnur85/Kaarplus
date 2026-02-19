@@ -20,7 +20,13 @@
         "max": "Max",
         "allModels": "Kõik mudelid",
         "any": "Kõik",
-        "showResults": "Näita tulemusi"
+        "showResults": "Näita tulemusi",
+        "power": "Võimsus",
+        "color": "Värv",
+        "driveType": "Vedu",
+        "doors": "Uksed",
+        "seats": "Istekohad",
+        "condition": "Seisukord"
     },
     "sort": {
         "label": "Sorteeri",

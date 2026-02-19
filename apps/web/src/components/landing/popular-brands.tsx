@@ -5,7 +5,6 @@ import { PopularBrandsClient } from "./popular-brands-client";
 interface Brand {
 	name: string;
 	logo: string;
-	count: number;
 }
 
 export async function PopularBrands() {
@@ -46,7 +45,6 @@ export async function PopularBrands() {
 				.map((make: string) => ({
 					name: make,
 					logo: brandLogos[make],
-					count: 0, // Count not available in this endpoint yet
 				}));
 
 			brands = mappedBrands;

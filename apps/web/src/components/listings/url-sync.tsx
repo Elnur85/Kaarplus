@@ -18,30 +18,36 @@ export function UrlSync() {
 			filters.resetFilters();
 
 			const params = Object.fromEntries(searchParams.entries());
+			const updates: Partial<FilterState> = {};
 
-			if (params.make) filters.setFilter("make", params.make);
-			if (params.model) filters.setFilter("model", params.model);
-			if (params.priceMin) filters.setFilter("priceMin", params.priceMin);
-			if (params.priceMax) filters.setFilter("priceMax", params.priceMax);
-			if (params.yearMin) filters.setFilter("yearMin", params.yearMin);
-			if (params.yearMax) filters.setFilter("yearMax", params.yearMax);
-			if (params.fuelType) filters.setFilter("fuelType", params.fuelType.split(","));
-			if (params.bodyType) filters.setFilter("bodyType", params.bodyType.split(","));
-			if (params.transmission) filters.setFilter("transmission", params.transmission);
-			if (params.sort) filters.setFilter("sort", params.sort);
-			if (params.view) filters.setFilter("view", params.view as "grid" | "list");
+			if (params.make) updates.make = params.make;
+			if (params.model) updates.model = params.model;
+			if (params.priceMin) updates.priceMin = params.priceMin;
+			if (params.priceMax) updates.priceMax = params.priceMax;
+			if (params.yearMin) updates.yearMin = params.yearMin;
+			if (params.yearMax) updates.yearMax = params.yearMax;
+			if (params.fuelType) updates.fuelType = params.fuelType.split(",");
+			if (params.bodyType) updates.bodyType = params.bodyType.split(",");
+			if (params.transmission) updates.transmission = params.transmission;
+			if (params.sort) updates.sort = params.sort;
+			if (params.view) updates.view = params.view as "grid" | "list";
+			if (params.q) updates.q = params.q;
+			if (params.mileageMin) updates.mileageMin = params.mileageMin;
+			if (params.mileageMax) updates.mileageMax = params.mileageMax;
+			if (params.powerMin) updates.powerMin = params.powerMin;
+			if (params.powerMax) updates.powerMax = params.powerMax;
+			if (params.driveType) updates.driveType = params.driveType;
+			if (params.doors) updates.doors = params.doors;
+			if (params.seats) updates.seats = params.seats;
+			if (params.condition) updates.condition = params.condition;
+			if (params.location) updates.location = params.location;
+			if (params.color) updates.color = params.color;
+
+			// Apply all updates at once
+			filters.setFilters(updates);
+
+			// Page is handled separately as it's not a generic filter update that triggers page reset
 			if (params.page) filters.setPage(parseInt(params.page));
-			if (params.q) filters.setFilter("q", params.q);
-			if (params.mileageMin) filters.setFilter("mileageMin", params.mileageMin);
-			if (params.mileageMax) filters.setFilter("mileageMax", params.mileageMax);
-			if (params.powerMin) filters.setFilter("powerMin", params.powerMin);
-			if (params.powerMax) filters.setFilter("powerMax", params.powerMax);
-			if (params.driveType) filters.setFilter("driveType", params.driveType);
-			if (params.doors) filters.setFilter("doors", params.doors);
-			if (params.seats) filters.setFilter("seats", params.seats);
-			if (params.condition) filters.setFilter("condition", params.condition);
-			if (params.location) filters.setFilter("location", params.location);
-			if (params.color) filters.setFilter("color", params.color);
 
 			isInitialMount.current = false;
 		}

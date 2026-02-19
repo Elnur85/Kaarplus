@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 interface Brand {
 	name: string;
 	logo: string;
-	count: number;
 }
 
 interface PopularBrandsClientProps {

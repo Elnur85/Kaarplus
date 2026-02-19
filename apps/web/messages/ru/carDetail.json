@@ -88,7 +88,11 @@
     "validationError": "Ошибка валидации",
     "messageRequired": "Пожалуйста, введите сообщение",
     "close": "Закрыть",
-    "viewMessages": "Посмотреть сообщения"
+    "viewMessages": "Посмотреть сообщения",
+    "loginPrompt": "Вы также можете",
+    "loginLink": "войти для быстрой связи",
+    "nameEmailRequired": "Имя и email обязательны",
+    "invalidEmail": "Пожалуйста, введите корректный email"
   },
   "favorites": {
     "loginRequired": "Требуется вход",
@@ -96,7 +100,8 @@
     "added": "Добавлено в избранное",
     "addedDesc": "Этот автомобиль добавлен в ваше избранное",
     "removed": "Удалено из избранного",
-    "removedDesc": "Этот автомобиль удален из вашего избранного"
+    "removedDesc": "Этот автомобиль удален из вашего избранного",
+    "error": "Ошибка"
   },
   "share": {
     "listingDescription": "Посмотрите этот {title} на Kaarplus!"

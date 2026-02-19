@@ -79,25 +79,25 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 		if (debouncedPriceMin !== filters.priceMin) {
 			filters.setFilter("priceMin", debouncedPriceMin);
 		}
-	}, [debouncedPriceMin]);
+	}, [debouncedPriceMin, filters]);
 
 	useEffect(() => {
 		if (debouncedPriceMax !== filters.priceMax) {
 			filters.setFilter("priceMax", debouncedPriceMax);
 		}
-	}, [debouncedPriceMax]);
+	}, [debouncedPriceMax, filters]);
 
 	useEffect(() => {
 		if (debouncedMileageMin !== filters.mileageMin) {
 			filters.setFilter("mileageMin", debouncedMileageMin);
 		}
-	}, [debouncedMileageMin]);
+	}, [debouncedMileageMin, filters]);
 
 	useEffect(() => {
 		if (debouncedMileageMax !== filters.mileageMax) {
 			filters.setFilter("mileageMax", debouncedMileageMax);
 		}
-	}, [debouncedMileageMax]);
+	}, [debouncedMileageMax, filters]);
 
 	// Sync local state when filters change from URL or reset
 	useEffect(() => {
@@ -184,7 +184,7 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 		return () => {
 			cancelled = true;
 		};
-	}, [currentMake]);
+	}, [currentMake, filters]);
 
 	// Year range validation - swaps values if range is invalid
 	const handleYearMinChange = useCallback((val: string) => {
@@ -199,7 +199,7 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 		} else {
 			filters.setFilter("yearMin", yearValue);
 		}
-	}, [filters.yearMax]);
+	}, [filters]);
 
 	const handleYearMaxChange = useCallback((val: string) => {
 		const yearValue = val === "any" ? "" : val;
@@ -213,7 +213,7 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 		} else {
 			filters.setFilter("yearMax", yearValue);
 		}
-	}, [filters.yearMin]);
+	}, [filters]);
 
 	// Handle price input changes (local state only, debounce handles store update)
 	const handlePriceMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {

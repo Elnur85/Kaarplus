@@ -53,7 +53,7 @@ function mapApiToVehicleSummary(listing: ApiListing): VehicleSummary {
 		status: listing.status,
 		badges: listing.badges,
 		isFavorited: listing.isFavorited,
-		isSponsored: true, // Premium listings are sponsored
+		isSponsored: listing.isSponsored ?? false,
 		createdAt: listing.createdAt,
 		location: listing.location,
 		user: listing.user,
@@ -67,12 +67,17 @@ export function PremiumListings() {
 
 	useEffect(() => {
 		fetch(`${API_URL}/search?pageSize=8&sort=price_desc`)
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
+				return res.json();
+			})
 			.then((json) => {
 				const apiListings: ApiListing[] = json.data || [];
 				setListings(apiListings.map(mapApiToVehicleSummary));
 			})
-			.catch(console.error)
+			.catch(() => {
+				// Non-critical section — silently degrade by showing nothing
+			})
 			.finally(() => setIsLoading(false));
 	}, []);
 
@@ -85,7 +90,7 @@ export function PremiumListings() {
 			className="bg-slate-50 dark:bg-slate-900/50"
 		>
 			{listings.map(vehicle => (
-				<VehicleCard key={vehicle.id} vehicle={vehicle} variant="grid" sponsored={true} />
+				<VehicleCard key={vehicle.id} vehicle={vehicle} variant="grid" />
 			))}
 		</ListingSection>
 	);

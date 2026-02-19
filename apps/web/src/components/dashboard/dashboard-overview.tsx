@@ -30,11 +30,16 @@ export function DashboardOverview() {
     fetch(`${API_URL}/user/dashboard/stats`, {
       credentials: "include",
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((json) => {
         setStats(json.data);
       })
-      .catch(console.error)
+      .catch(() => {
+        // Dashboard stats will show zeros as fallback
+      })
       .finally(() => setIsLoading(false));
   }, [session?.user]);
 

@@ -28,6 +28,7 @@ export interface FilterState {
 
 interface FilterStore extends FilterState {
     setFilter: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
+    setFilters: (filters: Partial<FilterState>) => void;
     resetFilters: () => void;
     setPage: (page: number) => void;
     toggleFuelType: (fuel: string) => void;
@@ -64,6 +65,9 @@ export const useFilterStore = create<FilterStore>((set) => ({
     ...initialFilters,
     setFilter: (key, value) => {
         set((state) => ({ ...state, [key]: value, page: 1 }));
+    },
+    setFilters: (filters) => {
+        set((state) => ({ ...state, ...filters, page: 1 }));
     },
     resetFilters: () => set(initialFilters),
     setPage: (page) => set({ page }),

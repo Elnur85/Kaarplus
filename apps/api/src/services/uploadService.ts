@@ -5,6 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuidv4 } from "uuid";
 
 import { BadRequestError } from "../utils/errors";
+import { logger } from "../utils/logger";
 import { s3Client, BUCKET_NAME } from "../utils/s3";
 
 export class UploadService {
@@ -52,7 +53,7 @@ export class UploadService {
 
             await s3Client.send(command);
         } catch (error) {
-            console.error(`Failed to delete S3 file: ${key}`, error);
+            logger.warn(`Failed to delete S3 file: ${key}`, { error: error instanceof Error ? error.message : String(error) });
             // Non-critical error, don't throw
         }
     }

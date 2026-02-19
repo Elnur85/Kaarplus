@@ -22,8 +22,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+import { API_URL } from "@/lib/constants";
 
 function ResetPasswordFormContent() {
     const { t } = useTranslation("auth");
@@ -76,6 +75,7 @@ function ResetPasswordFormContent() {
             const response = await fetch(`${API_URL}/auth/reset-password`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({
                     token,
                     newPassword: values.newPassword,

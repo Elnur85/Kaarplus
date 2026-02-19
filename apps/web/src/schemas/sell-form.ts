@@ -9,9 +9,9 @@ export const sellFormSchema = z.object({
     // Basic info
     make: z.string().min(1, "Mark on kohustuslik"),
     model: z.string().min(1, "Mudel on kohustuslik"),
-    variant: z.string().optional(),
+    variant: z.string().nullable().optional(),
     year: z.coerce.number().int().min(1900).max(new Date().getFullYear() + 1),
-    vin: z.string().length(17, "VIN-kood peab olema 17 tähemärki").optional().or(z.literal("")),
+    vin: z.string().length(17, "VIN-kood peab olema 17 tähemärki").nullable().optional().or(z.literal("")),
     mileage: z.coerce.number().int().min(0, "Läbisõit ei saa olla negatiivne"),
     price: z.coerce.number().positive("Hind peab olema positiivne"),
     priceVatIncluded: z.boolean().default(true),
@@ -26,9 +26,9 @@ export const sellFormSchema = z.object({
     doors: z.coerce.number().int().min(2).max(5),
     seats: z.coerce.number().int().min(1).max(9),
     colorExterior: z.string().min(1, "Värvus on kohustuslik"),
-    colorInterior: z.string().optional(),
+    colorInterior: z.string().nullable().optional(),
     condition: z.string().min(1, "Seisukord on kohustuslik"),
-    description: z.string().max(5000, "Kirjeldus on liigpikk").optional(),
+    description: z.string().max(5000, "Kirjeldus on liigpikk").nullable().optional(),
 
     // Features (stored as Boolean record)
     features: z.record(z.string(), z.boolean()).default({}),

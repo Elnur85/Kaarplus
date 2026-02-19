@@ -67,12 +67,17 @@ export function LatestListings() {
 
 	useEffect(() => {
 		fetch(`${API_URL}/search?pageSize=8&sort=newest`)
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
+				return res.json();
+			})
 			.then((json) => {
 				const apiListings: ApiListing[] = json.data || [];
 				setListings(apiListings.map(mapApiToVehicleSummary));
 			})
-			.catch(console.error)
+			.catch(() => {
+				// Non-critical section — silently degrade by showing nothing
+			})
 			.finally(() => setIsLoading(false));
 	}, []);
 

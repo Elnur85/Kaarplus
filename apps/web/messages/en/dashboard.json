@@ -33,7 +33,8 @@
             "sold": "Sold",
             "rejected": "Rejected",
             "draft": "Draft",
-            "inactive": "Inactive"
+            "inactive": "Inactive",
+            "expired": "Expired"
         },
         "table": {
             "listing": "Listing",
@@ -66,7 +67,8 @@
             "name": "Name",
             "email": "Email",
             "phone": "Phone",
-            "help": "To change your profile, please contact customer support."
+            "help": "To change your profile, please contact customer support.",
+            "noPhone": "No phone number"
         },
         "notifications": {
             "title": "Notification Preferences",
@@ -92,12 +94,21 @@
             "export": {
                 "title": "Export Your Data",
                 "description": "Download all data related to your account in JSON format",
-                "button": "Export data"
+                "button": "Export data",
+                "success": "Data exported",
+                "successDesc": "Your data has been downloaded",
+                "error": "Export failed",
+                "errorDesc": "Please try again later"
             },
             "delete": {
                 "title": "Delete Account",
                 "description": "Permanently delete your account and all associated data",
-                "button": "Delete account"
+                "button": "Delete account",
+                "confirm": "Are you sure? This action cannot be undone.",
+                "success": "Account deleted",
+                "successDesc": "Your account has been successfully deleted",
+                "error": "Deletion failed",
+                "errorDesc": "Please try again later"
             },
             "privacy": "For more information on data processing, see our privacy policy."
         },

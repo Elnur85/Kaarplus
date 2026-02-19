@@ -32,14 +32,20 @@ export function ReviewsCarousel() {
     const { t } = useTranslation('home');
     const [reviews, setReviews] = useState<Review[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [fetchError, setFetchError] = useState(false);
 
     useEffect(() => {
         fetch(`${API_URL}/reviews/featured?limit=6`)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
             .then((json) => {
                 setReviews(json.data || []);
             })
-            .catch(console.error)
+            .catch(() => {
+                setFetchError(true);
+            })
             .finally(() => setIsLoading(false));
     }, []);
 
@@ -58,6 +64,8 @@ export function ReviewsCarousel() {
             </section>
         );
     }
+
+    if (fetchError) return null;
 
     if (reviews.length === 0) {
         return (
