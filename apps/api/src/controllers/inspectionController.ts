@@ -6,7 +6,22 @@ import { inspectionService } from "../services/inspectionService";
 import { BadRequestError } from "../utils/errors";
 import { logger } from "../utils/logger";
 
-const VALID_STATUSES = Object.values(InspectionStatus);
+/**
+ * GET /api/admin/inspections
+ * Get all inspections with pagination (admin only).
+ */
+export async function getAllInspections(req: Request, res: Response, next: NextFunction) {
+    try {
+        const page = Math.max(1, parseInt(req.query.page as string) || 1);
+        const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize as string) || 20));
+        const status = req.query.status as string | undefined;
+
+        const result = await inspectionService.getAllInspections(page, pageSize, status);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+}
 
 /**
  * POST /api/user/inspections
@@ -60,20 +75,23 @@ export async function getInspection(req: Request, res: Response, next: NextFunct
 /**
  * PATCH /api/admin/inspections/:id
  * Update inspection status (admin only).
+ * Body is validated by updateInspectionSchema middleware before reaching here.
  */
 export async function updateInspectionStatus(req: Request, res: Response, next: NextFunction) {
     try {
-        const { status, inspectorNotes, reportUrl } = req.body;
-
-        if (!status || !VALID_STATUSES.includes(status as InspectionStatus)) {
-            throw new BadRequestError(`status is required and must be one of: ${VALID_STATUSES.join(", ")}`);
-        }
+        const { status, inspectorNotes, reportUrl, scheduledAt } = req.body as {
+            status: InspectionStatus;
+            inspectorNotes?: string;
+            reportUrl?: string;
+            scheduledAt?: string;
+        };
 
         const result = await inspectionService.updateInspectionStatus(
             req.params.id as string,
-            status as InspectionStatus,
+            status,
             inspectorNotes,
             reportUrl,
+            scheduledAt,
         );
 
         // Send email notification (non-blocking with proper error logging)

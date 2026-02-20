@@ -885,6 +885,43 @@ Get platform analytics.
 #### GET /api/admin/stats
 Get quick stats.
 
+### Admin Inspections
+
+#### GET /api/admin/inspections
+Get all vehicle inspection requests with pagination.
+
+**Query:** `?page=1&pageSize=20&status=PENDING`
+
+Valid status values: `PENDING`, `SCHEDULED`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
+
+**Response:**
+```json
+{
+  "data": [{ "id": "...", "status": "PENDING", "listing": {}, "requester": {} }],
+  "meta": { "page": 1, "pageSize": 20, "total": 42 }
+}
+```
+
+#### PATCH /api/admin/inspections/:id
+Update inspection status. Service enforces valid state transitions:
+- `PENDING` → `SCHEDULED` or `CANCELLED`
+- `SCHEDULED` → `IN_PROGRESS` or `CANCELLED`
+- `IN_PROGRESS` → `COMPLETED` or `CANCELLED`
+- `COMPLETED` → (no further transitions)
+- `CANCELLED` → (no further transitions)
+
+**Request Body:**
+```json
+{
+  "status": "SCHEDULED",
+  "inspectorNotes": "Optional notes",
+  "reportUrl": "https://s3.amazonaws.com/...",
+  "scheduledAt": "2026-03-01T10:00:00+02:00"
+}
+```
+
+On status change, a notification email is sent to the requester automatically.
+
 ### Admin Ad Campaigns
 
 #### GET /api/admin/campaigns

@@ -5,10 +5,12 @@ export const verifyListingSchema = z.object({
     reason: z.string().optional(),
 });
 
-export const verifyInspectionSchema = z.object({
-    status: z.enum(["APPROVED", "REJECTED", "COMPLETED", "FAILED"]),
-    inspectorNotes: z.string().optional(),
-    reportUrl: z.string().url().optional(),
+export const updateInspectionSchema = z.object({
+    // Must match InspectionStatus enum — service enforces valid state transitions
+    status: z.enum(["SCHEDULED", "IN_PROGRESS", "COMPLETED", "CANCELLED"]),
+    inspectorNotes: z.string().max(2000).optional(),
+    reportUrl: z.string().url("Invalid report URL").optional(),
+    scheduledAt: z.string().datetime({ offset: true }).optional(),
 });
 
 export const adminQuerySchema = z.object({

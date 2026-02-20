@@ -44,6 +44,51 @@ export class InspectionService {
         return inspection;
     }
 
+    /**
+     * Admin: get all inspections with pagination and optional status filter.
+     */
+    async getAllInspections(page: number, pageSize: number, status?: string) {
+        const skip = (page - 1) * pageSize;
+        const where = status ? { status: status as InspectionStatus } : {};
+
+        const [inspections, total] = await Promise.all([
+            prisma.vehicleInspection.findMany({
+                where,
+                include: {
+                    listing: {
+                        select: {
+                            id: true,
+                            make: true,
+                            model: true,
+                            year: true,
+                            images: {
+                                take: 1,
+                                orderBy: { order: "asc" },
+                                select: { url: true },
+                            },
+                        },
+                    },
+                    requester: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: pageSize,
+            }),
+            prisma.vehicleInspection.count({ where }),
+        ]);
+
+        return {
+            data: inspections,
+            meta: { page, pageSize, total },
+        };
+    }
+
     async getInspectionsByUser(userId: string) {
         const inspections = await prisma.vehicleInspection.findMany({
             where: { requesterId: userId },

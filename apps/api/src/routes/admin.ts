@@ -18,7 +18,7 @@ import {
   adQuerySchema,
   analyticsQuerySchema,
 } from "../schemas/ad";
-import { adminQuerySchema, verifyListingSchema, verifyInspectionSchema } from "../schemas/admin";
+import { adminQuerySchema, verifyListingSchema, updateInspectionSchema } from "../schemas/admin";
 import { asyncHandler } from "../utils/asyncHandler";
 
 export const adminRouter = Router();
@@ -45,10 +45,15 @@ adminRouter.patch(
 );
 
 // Inspections
+adminRouter.get(
+  "/inspections",
+  readLimiter,
+  asyncHandler(inspectionController.getAllInspections)
+);
 adminRouter.patch(
   "/inspections/:id",
   writeLimiter,
-  validate(verifyInspectionSchema),
+  validate(updateInspectionSchema),
   asyncHandler(inspectionController.updateInspectionStatus)
 );
 
