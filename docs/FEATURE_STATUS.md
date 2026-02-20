@@ -21,7 +21,7 @@ Legend:
 | Session check | ✅ IMPLEMENTED | API: `GET /auth/session` (requireAuth). Used by NextAuth provider |
 | Forgot password | ✅ IMPLEMENTED | DB: `PasswordResetToken`. API: `POST /auth/forgot-password` (strictLimiter). Sends email via `emailService`. Frontend: `ForgotPasswordForm` |
 | Reset password | ✅ IMPLEMENTED | DB: `PasswordResetToken`. API: `POST /auth/reset-password` validates token, updates hash. Frontend: `ResetPasswordForm` |
-| Change password | ⚠️ PARTIAL | API: `POST /auth/change-password` is fully implemented (requireAuth, bcrypt verify + update). **No frontend component exists that calls this endpoint.** Endpoint is unreachable from the UI. |
+| Change password | ✅ IMPLEMENTED | API: `POST /auth/change-password` (requireAuth). Frontend: `PasswordSettings` component rendered in `/dashboard/settings` — 3-field form (current/new/confirm), Zod validation, `apiFetch("/auth/change-password")`. |
 | OAuth / Social login | ❌ NOT IMPLEMENTED | No schema columns, no route, no frontend button. `User.image` column exists but is for profile pictures, not OAuth tokens. |
 | Email verification | ❌ NOT IMPLEMENTED | No `emailVerified` column in schema, no verification token table, no verification endpoint, no verification gate on login. |
 
@@ -33,7 +33,7 @@ Legend:
 |---|---|---|
 | View own profile | ✅ IMPLEMENTED | API: `GET /user/profile` → `getUserProfile()`. Frontend: `SettingsPage` fetches and displays name, email, phone, role, createdAt |
 | Edit profile (name, phone) | ✅ IMPLEMENTED | API: `PATCH /user/profile` → `updateUserProfile({ name, phone })`. Frontend: `SettingsPage` — **profile fields display as read-only with "contact support" message**; `patchProfile` controller exists and works. Profile edit UI is intentionally gated. |
-| Notification preferences | ⚠️ PARTIAL | Frontend: `SettingsPage` renders email/messages/favorites/marketing toggles with local state. **No API call is made to persist these settings.** No `notificationPreferences` column or table exists in DB. Settings are lost on page refresh. |
+| Notification preferences | ✅ IMPLEMENTED | DB: `User.notificationPrefs Json?` column. API: `PATCH /user/notifications` → `updateNotificationPrefs`. Frontend: `SettingsPage` — 4 toggles call `PATCH /user/notifications` on change, loaded from `GET /user/profile` on mount. |
 | Dashboard stats | ✅ IMPLEMENTED | API: `GET /user/dashboard/stats` → `getUserDashboardStats()`. Frontend: `DashboardOverview` fetches and passes to `DashboardStats` component |
 
 ---
@@ -115,7 +115,7 @@ Legend:
 | Admin analytics dashboard | ✅ IMPLEMENTED | API: `GET /admin/analytics` → `adminService.getAnalytics()`. Frontend: `AnalyticsDashboard` with charts (recharts), stats cards, recent payments + users tables |
 | Admin stats | ✅ IMPLEMENTED | API: `GET /admin/stats` → `adminService.getStats()`. Frontend: `AdminStats` used on `/admin` overview page |
 | Update user role / ban user | ❌ NOT IMPLEMENTED | No API endpoint exists for modifying a user's role or banning users. The users table `MoreHorizontal` action button in `AdminUsersPage` is a non-functional icon with no handler. |
-| Admin inspection management | ❌ NOT IMPLEMENTED | `inspectionController.updateInspectionStatus()` exists with full logic (sets status, sends email). **No admin route mounts this handler.** `adminRouter` has no inspection endpoints. No admin frontend page for inspections. The function is dead code. |
+| Admin inspection management | ✅ IMPLEMENTED | API: `GET /admin/inspections` (paginated, filterable by status) + `PATCH /admin/inspections/:id` (status update with `updateInspectionSchema`, triggers email notification). Routes mounted with `readLimiter`/`writeLimiter` + `requireRole("ADMIN","SUPPORT")`. No dedicated admin frontend page — endpoints are available for admin UI integration. |
 
 ---
 
@@ -153,7 +153,7 @@ Legend:
 | Featured reviews | ✅ IMPLEMENTED | API: `GET /reviews/featured`. |
 | Create review | ✅ IMPLEMENTED | API: `POST /reviews` (requireAuth) → `reviewService.createReview()`. |
 | Delete own review | ✅ IMPLEMENTED | API: `DELETE /reviews/:id` (requireAuth, ownership checked in service). |
-| **Reviews displayed anywhere in frontend** | ❌ NOT IMPLEMENTED | **No frontend component calls any review endpoint.** No review display on listing detail pages, no review form visible to users, no reviews section on dealership profiles. The seller info card (`SellerInfo`) shows no reviews. The entire reviews API is **never called from the frontend**. |
+| **Reviews displayed in frontend** | ✅ IMPLEMENTED | `SellerReviewsSection` mounted in `ListingDetailView`. `ReviewStats` fetches `GET /reviews/stats`, `ReviewList` fetches `GET /reviews`, `WriteReviewDialog` posts `POST /reviews`. Full end-to-end slice on listing detail page. |
 
 ---
 
@@ -163,7 +163,7 @@ Legend:
 |---|---|---|
 | List all dealerships | ✅ IMPLEMENTED | DB: `User` (role=DEALERSHIP) + dealership fields. API: `GET /dealerships`. Frontend: `/dealers` page fetches and renders dealership grid |
 | View dealership profile | ✅ IMPLEMENTED | API: `GET /dealerships/:id` → returns dealership + listings. Frontend: `/dealers/[id]` SSR page → `DealershipProfile` component with cover image, logo, bio, contact links, inventory grid |
-| Contact dealership button | ⚠️ PARTIAL | Frontend: `DealershipProfile` has a "Contact" button. **The button has no `onClick` handler and no routing** — it is a `<Button>` with no action wired. |
+| Contact dealership button | ✅ IMPLEMENTED | Frontend: `DealershipProfile` wraps the button in `ContactDealershipDialog` (triggerButton prop). Dialog POSTs to `POST /dealerships/:id/contact` (optionalAuth) → creates `Message` in DB, emits Socket.io event, sends email to dealership. Schema fix applied: `name`/`email` now optional for authenticated users. |
 
 ---
 
@@ -174,9 +174,9 @@ Legend:
 | Request inspection (buyer) | ✅ IMPLEMENTED | DB: `VehicleInspection` table. API: `POST /user/inspections` → `inspectionService.requestInspection()`. Frontend: `RequestInspectionDialog` on listing detail page calls the endpoint |
 | View my inspections (buyer) | ✅ IMPLEMENTED | API: `GET /user/inspections` → `inspectionService.getInspectionsByUser()`. Frontend: `/dashboard/inspections` → `MyInspectionsList` → `InspectionStatusCard` |
 | View single inspection | ✅ IMPLEMENTED | API: `GET /user/inspections/:id`. |
-| Update inspection status (admin/support) | ❌ NOT IMPLEMENTED | `inspectionController.updateInspectionStatus()` is a complete function with email notification logic. **It is never registered on any route.** The admin router has no inspection endpoints. Inspections permanently stay in `PENDING` status with no resolution path. |
+| Update inspection status (admin/support) | ✅ IMPLEMENTED | API: `PATCH /admin/inspections/:id` → `inspectionController.updateInspectionStatus()`. Validates with `updateInspectionSchema` (status, inspectorNotes, reportUrl, scheduledAt). Service enforces state transitions. Sends email on status change. |
 | Public inspections page | ❌ NOT IMPLEMENTED | `/inspections` page is a hardcoded "under construction" placeholder with no content or functionality. |
-| Download inspection report | ⚠️ PARTIAL | Frontend: `InspectionStatusCard` renders a download button if `reportUrl` is set and status is `COMPLETED`. **`reportUrl` can never be set** because the admin update endpoint doesn't exist. The button is unreachable in practice. |
+| Download inspection report | ✅ IMPLEMENTED | Frontend: `InspectionStatusCard` renders download button when `reportUrl` set and status is `COMPLETED`. Admin can now set `reportUrl` via `PATCH /admin/inspections/:id`. Full path is now reachable. |
 
 ---
 
@@ -214,7 +214,7 @@ Legend:
 |---|---|---|
 | Mobile version endpoint | ✅ IMPLEMENTED | API: `GET /mobile/version` returns hardcoded version info. |
 | Mobile app landing page | ✅ IMPLEMENTED | Frontend: `/app` page with hero, features showcase, app screenshots |
-| Waitlist form | ❌ NOT IMPLEMENTED | Frontend: `/app` page has an `<Input>` and `<Button>` with **no onChange, no onSubmit, no API call**. It is a static UI mockup. |
+| Waitlist form | ✅ IMPLEMENTED | Frontend: `/app` wired to `POST /api/v1/newsletter/subscribe`. Email input with controlled state, loading spinner, toast feedback for success/already-subscribed/error. i18n keys added in et/en/ru. |
 
 ---
 
@@ -234,24 +234,24 @@ Legend:
 
 | Domain | Implemented | Partial | Not Implemented |
 |---|---|---|---|
-| Auth & Sessions | 6 | 1 | 2 |
-| User Profiles | 3 | 1 | 0 |
+| Auth & Sessions | 7 | 0 | 2 |
+| User Profiles | 4 | 0 | 0 |
 | Car Listings | 15 | 2 | 0 |
 | Search & Filters | 9 | 1 | 0 |
 | Messaging | 7 | 0 | 0 |
 | Favorites | 5 | 0 | 0 |
-| Admin Panel | 6 | 0 | 2 |
+| Admin Panel | 8 | 0 | 0 |
 | Ad System | 8 | 0 | 0 |
 | Payments & Monetisation | 0 | 1 | 2 |
-| Reviews | 5 | 0 | 1 |
-| Dealerships | 2 | 1 | 0 |
-| Vehicle Inspections | 3 | 1 | 2 |
+| Reviews | 6 | 0 | 0 |
+| Dealerships | 3 | 0 | 0 |
+| Vehicle Inspections | 5 | 0 | 1 |
 | Newsletter | 2 | 0 | 0 |
 | GDPR | 3 | 0 | 0 |
 | Uploads & Media | 2 | 0 | 0 |
-| Mobile | 2 | 0 | 1 |
+| Mobile | 3 | 0 | 0 |
 | Legal & Static | 3 | 1 | 7 |
-| **TOTAL** | **81** | **9** | **17** |
+| **TOTAL** | **90** | **5** | **12** |
 
 ---
 
@@ -259,19 +259,19 @@ Legend:
 
 Features that are visibly presented to the user but not actually working — the UI makes a promise the backend cannot fulfil:
 
-1. **Inspection approval is impossible** — Users can request an inspection (`RequestInspectionDialog` calls `POST /user/inspections`), the request enters the DB as `PENDING`, and `MyInspectionsList` shows it. But `inspectionController.updateInspectionStatus()` — the function that changes status, schedules inspections, and sends confirmation emails — **is registered on no route**. Every inspection is permanently `PENDING` with no admin resolution path. `InspectionStatusCard` renders a download-report button for `COMPLETED` inspections that can never exist.
+~~1. **Inspection approval is impossible**~~ — ✅ RESOLVED. `GET /admin/inspections` and `PATCH /admin/inspections/:id` are now mounted. `updateInspectionSchema` fixed with correct `InspectionStatus` enum values. `getAllInspections` added to service + controller.
 
-2. **Reviews are fully invisible** — The reviews API (`GET /reviews`, `GET /reviews/stats`, `GET /reviews/featured`, `POST /reviews`, `DELETE /reviews/:id`) is complete and functional. **Zero frontend components call any review endpoint.** No review section exists on listing detail pages, no review form is accessible to buyers, no review display appears on dealership profiles. The entire review system is dead from the user's perspective.
+~~2. **Reviews are fully invisible**~~ — ✅ RESOLVED. `SellerReviewsSection` is rendered in `ListingDetailView` with `ReviewStats`, `ReviewList`, and `WriteReviewDialog` all wired to the reviews API.
 
-3. **Notification preferences are lost on every page refresh** — `SettingsPage` shows four notification toggle switches (email, messages, favorites, marketing). They are wired to local React state only. No API call persists them. No DB column stores them. Every toggle change is silently discarded.
+~~3. **Notification preferences lost on refresh**~~ — ✅ RESOLVED. `User.notificationPrefs Json?` column exists in schema. `PATCH /user/notifications` route exists. `SettingsPage.toggleNotification()` makes API call on every toggle change.
 
-4. **Saved search email alerts never fire** — Users can enable `alertsEnabled` on saved searches and the UI confirms the toggle. No background job, cron, or webhook reads `SavedSearch` records and sends notification emails when matching listings are published.
+1. **Saved search email alerts never fire** — Users can enable `alertsEnabled` on saved searches and the UI confirms the toggle. No background job, cron, or webhook reads `SavedSearch` records and sends notification emails when matching listings are published.
 
-5. **Change password endpoint is unreachable from the UI** — `POST /auth/change-password` is a fully implemented, authenticated endpoint that correctly verifies the current password and updates the hash. No page, form, or component in the frontend calls it. Users have no way to change their password while logged in (only the forgot-password reset flow works).
+~~5. **Change password endpoint is unreachable from the UI**~~ — ✅ RESOLVED. `PasswordSettings` component exists in `apps/web/src/components/dashboard/password-settings.tsx` and is rendered in `SettingsPage`.
 
-6. **Payments are completely non-functional** — The `paymentsRouter` is defined in `routes/payments.ts` but **never imported or mounted** in `routes/index.ts`. Even if it were mounted, `createPaymentIntent` returns HTTP 501 with a TODO comment. The `Payment` DB table exists with a `PaymentStatus` enum and foreign keys, but no payment can be created, recorded, or retrieved through any live endpoint.
+2. **Payments are completely non-functional** — The `paymentsRouter` is defined in `routes/payments.ts` but **never imported or mounted** in `routes/index.ts`. Even if it were mounted, `createPaymentIntent` returns HTTP 501 with a TODO comment. The `Payment` DB table exists with a `PaymentStatus` enum and foreign keys, but no payment can be created, recorded, or retrieved through any live endpoint.
 
-7. **Dealership contact button does nothing** — `DealershipProfile` renders a prominent "Contact" `<Button>` in the header. It has no `onClick` handler, no `href`, and no routing. Clicking it has no effect.
+~~7. **Dealership contact button does nothing**~~ — ✅ RESOLVED. Button is wrapped in `ContactDealershipDialog`. Schema updated: `name`/`email` optional for authenticated users. Service updated with safe fallbacks for missing contact info.
 
 ---
 

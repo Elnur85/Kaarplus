@@ -1,13 +1,55 @@
 "use client";
 
+import { Smartphone, Bell, Search, Star, MessageSquare, User, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Smartphone, Bell, Search, Star, MessageSquare, User } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useToast } from "@/hooks/use-toast";
 
 export default function MobileAppPage() {
     const { t } = useTranslation('mobileApp');
+    const { toast } = useToast();
+    const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleWaitlistSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const trimmed = email.trim();
+        if (!trimmed) return;
+
+        setIsLoading(true);
+        try {
+            const res = await fetch(`/api/v1/newsletter/subscribe`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: trimmed, language: "et" }),
+            });
+            const data = await res.json();
+
+            if (res.status === 409) {
+                toast({ title: t('hero.waitlist.alreadySubscribed') });
+            } else if (!res.ok) {
+                throw new Error(data.error || t('hero.waitlist.errorDesc'));
+            } else {
+                toast({
+                    title: t('hero.waitlist.success'),
+                    description: t('hero.waitlist.successDesc'),
+                });
+                setEmail("");
+            }
+        } catch {
+            toast({
+                title: t('hero.waitlist.error'),
+                description: t('hero.waitlist.errorDesc'),
+                variant: "destructive",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="min-h-screen">
@@ -27,14 +69,22 @@ export default function MobileAppPage() {
                                 {t('hero.description')}
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                            <form onSubmit={handleWaitlistSubmit} className="flex flex-col sm:flex-row gap-4 pt-4">
                                 <div className="flex-1 max-w-sm flex gap-2">
-                                    <Input placeholder={t('hero.waitlist.placeholder')} className="h-12 bg-background/50 border-input/50" />
-                                    <Button size="lg" className="h-12 px-8 font-semibold">
-                                        {t('hero.waitlist.button')}
+                                    <Input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder={t('hero.waitlist.placeholder')}
+                                        className="h-12 bg-background/50 border-input/50"
+                                        required
+                                        disabled={isLoading}
+                                    />
+                                    <Button type="submit" size="lg" className="h-12 px-8 font-semibold" disabled={isLoading}>
+                                        {isLoading ? <Loader2 size={16} className="animate-spin" /> : t('hero.waitlist.button')}
                                     </Button>
                                 </div>
-                            </div>
+                            </form>
                             <div className="flex items-center gap-4 text-sm text-muted-foreground pt-4">
                                 <div className="flex -space-x-2">
                                     {[1, 2, 3, 4].map((i) => (

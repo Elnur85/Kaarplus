@@ -82,7 +82,7 @@ export class DealershipService {
 
     async contactDealership(
         id: string,
-        contactData: { name: string; email: string; phone?: string; message: string },
+        contactData: { name?: string; email?: string; phone?: string; message: string },
         senderId?: string
     ) {
         const dealership = await prisma.user.findFirst({
@@ -96,12 +96,12 @@ export class DealershipService {
 
         const messageBody = senderId
             ? contactData.message
-            : `Nimi: ${contactData.name}\nEmail: ${contactData.email}\nTelefon: ${contactData.phone || "Puudub"}\n\nSõnum:\n${contactData.message}`;
+            : `Nimi: ${contactData.name || "Anonüümne"}\nEmail: ${contactData.email || "Puudub"}\nTelefon: ${contactData.phone || "Puudub"}\n\nSõnum:\n${contactData.message}`;
 
         const message = await prisma.message.create({
             data: {
                 recipientId: dealership.id,
-                subject: `Päring esindusele: ${contactData.name}`,
+                subject: `Päring esindusele: ${contactData.name || "Kasutaja"}`,
                 body: messageBody,
                 ...(senderId && { senderId }),
             },

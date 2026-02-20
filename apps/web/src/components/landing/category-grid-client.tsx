@@ -14,25 +14,29 @@ interface CategoryGridClientProps {
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-	'Sedan': CarFront,
-	'SUV': Car,
-	'Coupe': CarFront,
-	'Wagon': CarFront,
-	'Hatchback': CarFront,
-	'Convertible': CarFront,
-	'Minivan': Bus,
-	'Pickup': Truck,
+	'passengerCar:sedan': CarFront,
+	'suv:touring': Car,
+	'passengerCar:coupe': CarFront,
+	'suv:coupe': Car,
+	'passengerCar:touring': CarFront,
+	'passengerCar:hatchback': CarFront,
+	'passengerCar:cabriolet': CarFront,
+	'passengerCar:minivan': Bus,
+	'passengerCar:pickup': Truck,
+	'commercialVehicle:commercial': Truck,
 };
 
 const bodyTypeTranslations: Record<string, string> = {
-	'Sedan': 'Sedaan',
-	'SUV': 'Maastur',
-	'Coupe': 'Kupee',
-	'Wagon': 'Universaal',
-	'Hatchback': 'Luukpära',
-	'Convertible': 'Kabriolett',
-	'Minivan': 'Mahtuniversaal',
-	'Pickup': 'Pikap',
+	'passengerCar:sedan': 'Sedaan',
+	'suv:touring': 'Maastur',
+	'passengerCar:coupe': 'Kupee',
+	'suv:coupe': 'SUV Kupee',
+	'passengerCar:touring': 'Universaal',
+	'passengerCar:hatchback': 'Luukpära',
+	'passengerCar:cabriolet': 'Kabriolett',
+	'passengerCar:minivan': 'Mahtuniversaal',
+	'passengerCar:pickup': 'Pikap',
+	'commercialVehicle:commercial': 'Kaubik',
 };
 
 export function CategoryGridClient({ initialBodyTypes }: CategoryGridClientProps) {

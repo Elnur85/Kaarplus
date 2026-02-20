@@ -7,7 +7,12 @@
         "waitlist": {
             "placeholder": "Sisestage oma e-post",
             "button": "Liitu ootenimekirjaga",
-            "count": "Liitu 2000+ teise huvilisega ootenimekirjas"
+            "count": "Liitu 2000+ teise huvilisega ootenimekirjas",
+            "success": "Oled nimekirjas!",
+            "successDesc": "Teavitame sind rakenduse käivitamisel.",
+            "error": "Registreerimine ebaõnnestus",
+            "errorDesc": "Palun proovi uuesti.",
+            "alreadySubscribed": "See e-post on juba registreeritud."
         }
     },
     "mockup": {

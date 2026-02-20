@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
+import { MyInspectionsList } from "@/components/dashboard/my-inspections-list";
 
 interface DashboardStatsData {
   activeListings: number;
@@ -86,25 +87,32 @@ export function DashboardOverview() {
           </div>
         </div>
       ) : (
-        <DashboardStats 
-          stats={stats || { activeListings: 0, totalViews: 0, totalFavorites: 0, totalMessages: 0 }} 
+        <DashboardStats
+          stats={stats || { activeListings: 0, totalViews: 0, totalFavorites: 0, totalMessages: 0 }}
         />
       )}
 
       {/* Recent listings */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">
-            {t('overview.recentListings')}
-          </h2>
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/dashboard/listings">
-              {t('overview.viewAll')}
-              <ArrowRight className="ml-1 size-4" />
-            </Link>
-          </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-foreground">
+                {t('overview.recentListings')}
+              </h2>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/dashboard/listings">
+                  {t('overview.viewAll')}
+                  <ArrowRight className="ml-1 size-4" />
+                </Link>
+              </Button>
+            </div>
+            <MyListingsTable limit={5} />
+          </div>
         </div>
-        <MyListingsTable limit={5} />
+        <div className="lg:col-span-1">
+          <MyInspectionsList />
+        </div>
       </div>
     </div>
   );

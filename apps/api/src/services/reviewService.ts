@@ -1,4 +1,4 @@
-import { prisma } from "@kaarplus/database";
+import { prisma, UserRole } from "@kaarplus/database";
 
 import { BadRequestError, NotFoundError, ForbiddenError } from "../utils/errors";
 import { logger } from "../utils/logger";
@@ -104,6 +104,10 @@ export class ReviewService {
         });
         if (!targetUser) {
             throw new NotFoundError("Target user not found");
+        }
+
+        if (targetUser.role !== UserRole.DEALERSHIP) {
+            throw new BadRequestError("You can only review dealerships");
         }
 
         // Check for duplicate review
@@ -223,7 +227,7 @@ export class ReviewService {
             body: review.body,
             createdAt: review.createdAt,
             reviewer: review.reviewer,
-            car: review.listing 
+            car: review.listing
                 ? `${review.listing.make} ${review.listing.model}`
                 : undefined,
         }));

@@ -47,7 +47,7 @@
         "toastError": "Error",
         "toastErrorDesc": "An error occurred while sending the request.",
         "successTitle": "Request received!",
-        "successDesc": "We have received your request to inspect <strong>{{title}}</strong>. We will contact you within 24 hours.",
+        "successDesc": "Your inspection request for {{title}} has been received. Our professional technician will contact you within 24 hours to schedule the appointment.",
         "viewRequests": "View my requests",
         "successOrdered": "Inspection successfully ordered!",
         "successOrderedDesc": "We will contact you shortly to arrange a suitable time.",

@@ -22,6 +22,7 @@ interface ListingDetailViewProps {
 
 export function ListingDetailView({ listing }: ListingDetailViewProps) {
 	const { t, i18n } = useTranslation(['carDetail', 'listings', 'common']);
+	const isDealership = listing.user.role === "DEALERSHIP";
 
 	const breadcrumbItems = [
 		{ label: t('listings:carsPage.breadcrumb.cars', { defaultValue: "Kasutatud autod" }), href: "/listings" },
@@ -103,12 +104,14 @@ export function ListingDetailView({ listing }: ListingDetailViewProps) {
 						</Tabs>
 					</section>
 
-					<section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 shadow-sm">
-						<SellerReviewsSection
-							sellerId={listing.user.id}
-							sellerName={listing.user.name || t('seller.privateSeller')}
-						/>
-					</section>
+					{isDealership && (
+						<section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 shadow-sm">
+							<SellerReviewsSection
+								sellerId={listing.user.id}
+								sellerName={listing.user.name || t('seller.privateSeller')}
+							/>
+						</section>
+					)}
 				</div>
 
 				{/* Right Column: Sidebar */}

@@ -117,7 +117,10 @@ export class SearchService {
 		if (cached) return cached;
 
 		const locations = await prisma.listing.findMany({
-			where: { status: "ACTIVE" },
+			where: {
+				status: "ACTIVE",
+				location: { not: "Baku" }
+			},
 			select: { location: true },
 			distinct: ["location"],
 			orderBy: { location: "asc" },

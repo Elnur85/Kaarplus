@@ -7,7 +7,12 @@
         "waitlist": {
             "placeholder": "Enter your email",
             "button": "Join Waitlist",
-            "count": "Join 2,000+ others on the waitlist"
+            "count": "Join 2,000+ others on the waitlist",
+            "success": "You're on the list!",
+            "successDesc": "We'll notify you when the app launches.",
+            "error": "Registration failed",
+            "errorDesc": "Please try again.",
+            "alreadySubscribed": "This email is already registered."
         }
     },
     "mockup": {

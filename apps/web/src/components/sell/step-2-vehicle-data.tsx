@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import { FUEL_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES, API_URL } from "@/lib/constants";
+import { FUEL_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES, API_URL, ESTONIAN_CITIES } from "@/lib/constants";
 
 const CONDITIONS = ["New", "Excellent", "Used", "Damaged"] as const;
 
@@ -189,12 +189,20 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
 
                     <div className="space-y-2">
                         <Label htmlFor="location">{t('step2.labels.location')}</Label>
-                        <Input
-                            id="location"
-                            placeholder={t('step2.placeholders.location')}
-                            {...register("location")}
-                            className={cn(hasError("location") && "border-destructive ring-1 ring-destructive")}
-                        />
+                        <Select
+                            onValueChange={(v) => setValue("location", v, { shouldValidate: true })}
+                            value={watch("location")}
+                        >
+                            <SelectTrigger className={cn(hasError("location") && "border-destructive ring-1 ring-destructive")}>
+                                <SelectValue placeholder={t('step2.placeholders.location')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {ESTONIAN_CITIES.map((city) => (
+                                    <SelectItem key={city} value={city}>{city}</SelectItem>
+                                ))}
+                                <SelectItem value="Other">{t('options.location.other', { defaultValue: 'Muu' })}</SelectItem>
+                            </SelectContent>
+                        </Select>
                         {errors.location && <p className="text-xs text-destructive">{errors.location.message}</p>}
                     </div>
                 </div>

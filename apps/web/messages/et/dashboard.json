@@ -1,6 +1,6 @@
 {
     "overview": {
-        "title": "Töölaud",
+        "title": "Ülevaade",
         "welcome": "Tere tulemast tagasi! Siin on teie kuulutuste ülevaade.",
         "addListing": "Lisa kuulutus",
         "recentListings": "Viimased kuulutused",
@@ -22,7 +22,7 @@
         "totalViews": "Vaatamisi kokku",
         "totalFavorites": "Lemmikutesse lisatud",
         "totalMessages": "Sõnumid",
-        "thisMonth": "sellel kuul",
+        "thisMonth": "Sellel kuul",
         "error": "Statistika laadimine ebaõnnestus",
         "retry": "Proovi uuesti"
     },
@@ -153,6 +153,10 @@
             "alertsOn": "E-posti teavitused on nüüd aktiivsed.",
             "alertsOff": "E-posti teavitused on välja lülitatud.",
             "updateError": "Uuendamine ebaõnnestus."
+        },
+        "inspections": {
+            "title": "Minu tellitud ülevaatused",
+            "empty": "Teil ei ole veel tellitud ülevaatusi."
         }
     }
 }

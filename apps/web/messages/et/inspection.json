@@ -47,7 +47,7 @@
         "toastError": "Viga",
         "toastErrorDesc": "Tekkis viga taotluse saatmisel.",
         "successTitle": "Taotlus vastu võetud!",
-        "successDesc": "Oleme saanud teie soovi kontrollida sõidukit <strong>{{title}}</strong>. Võtame teiega ühendust 24 tunni jooksul.",
+        "successDesc": "Teie ülevaatuse taotlus sõidukile {{title}} on vastu võetud. Meie professionaalne tehnik võtab teiega ühendust 24 tunni jooksul, et kokku leppida ülevaatuse aeg.",
         "viewRequests": "Vaata minu taotlusi",
         "successOrdered": "Ülevaatus on edukalt tellitud!",
         "successOrderedDesc": "Võtame teiega peagi ühendust, et leppida kokku sobiv aeg.",

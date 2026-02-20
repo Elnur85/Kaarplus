@@ -1,6 +1,6 @@
 {
     "overview": {
-        "title": "Dashboard",
+        "title": "Overview",
         "welcome": "Welcome back! Here is an overview of your listings.",
         "addListing": "Add Listing",
         "recentListings": "Recent Listings",
@@ -22,7 +22,7 @@
         "totalViews": "Total views",
         "totalFavorites": "Total favorites",
         "totalMessages": "Messages",
-        "thisMonth": "this month",
+        "thisMonth": "This month",
         "error": "Failed to load statistics",
         "retry": "Try again"
     },
@@ -153,6 +153,10 @@
             "alertsOn": "Email notifications are now active.",
             "alertsOff": "Email notifications are turned off.",
             "updateError": "Update failed."
+        },
+        "inspections": {
+            "title": "My ordered inspections",
+            "empty": "You have no ordered inspections yet."
         }
     }
 }
