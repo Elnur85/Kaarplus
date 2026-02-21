@@ -76,7 +76,7 @@ authRouter.post("/register", async (req: Request, res: Response, next: NextFunct
 		res.cookie("token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "lax",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 			maxAge: 24 * 60 * 60 * 1000, // 24 hours
 		});
 
@@ -126,7 +126,7 @@ authRouter.post("/login", async (req: Request, res: Response, next: NextFunction
 		res.cookie("token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "lax",
+			sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 			maxAge: 24 * 60 * 60 * 1000,
 		});
 
@@ -149,7 +149,7 @@ authRouter.post("/logout", (_req: Request, res: Response) => {
 	res.clearCookie("token", {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
-		sameSite: "lax",
+		sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 	});
 	res.json({ message: "Logged out successfully" });
 });

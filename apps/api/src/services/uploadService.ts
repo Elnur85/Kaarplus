@@ -28,7 +28,7 @@ export class UploadService {
         // Signed URL expires in 15 minutes
         const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 900 });
 
-        const publicUrl = `https://${BUCKET_NAME}.s3.${process.env.AWS_S3_REGION || "eu-central-1"}.amazonaws.com/${key}`;
+        const publicUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
 
         return {
             uploadUrl,
@@ -38,12 +38,14 @@ export class UploadService {
     }
 
     async deleteFile(url: string) {
-        // Extract key from URL
-        // Example: https://bucket.s3.region.amazonaws.com/listings/id/uuid.jpg
-        const match = url.match(/amazonaws\.com\/(.+)$/);
-        if (!match) return;
+        // Extract key from URL by stripping the R2_PUBLIC_URL prefix
+        const publicUrl = process.env.R2_PUBLIC_URL;
+        if (!publicUrl || !url.startsWith(publicUrl)) {
+            logger.warn(`Cannot delete file: URL does not match R2_PUBLIC_URL prefix: ${url}`);
+            return;
+        }
 
-        const key = decodeURIComponent(match[1]);
+        const key = url.replace(`${publicUrl}/`, "");
 
         try {
             const command = new DeleteObjectCommand({
@@ -53,7 +55,7 @@ export class UploadService {
 
             await s3Client.send(command);
         } catch (error) {
-            logger.warn(`Failed to delete S3 file: ${key}`, { error: error instanceof Error ? error.message : String(error) });
+            logger.warn(`Failed to delete R2 file: ${key}`, { error: error instanceof Error ? error.message : String(error) });
             // Non-critical error, don't throw
         }
     }

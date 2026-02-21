@@ -7,12 +7,13 @@ const nextConfig = {
 	transpilePackages: ["@kaarplus/database"],
 	images: {
 		remotePatterns: [
-			{ protocol: "https", hostname: "kaarplus-images.s3.eu-central-1.amazonaws.com" },
+			{ protocol: "https", hostname: "*.r2.dev" },
+			{ protocol: "https", hostname: "*.cloudflarestorage.com" },
 			{ protocol: "https", hostname: "images.unsplash.com" },
 			{ protocol: "https", hostname: "upload.wikimedia.org" },
 			{ protocol: "https", hostname: "randomuser.me" },
-			{ protocol: "http", hostname: "localhost", port: "4000" },
-			{ protocol: "http", hostname: "127.0.0.1", port: "4000" },
+			{ protocol: "http", hostname: "localhost" },
+			{ protocol: "http", hostname: "127.0.0.1" },
 			{ protocol: "https", hostname: "via.placeholder.com", port: "" },
 		],
 	},
@@ -55,7 +56,7 @@ export default nextConfig;
 
 //     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
 //     // This can increase your server load as well as your hosting bill.
-//     // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+//     // Note: Check that the configured route will not match with your next.js middleware, otherwise reporting of client-
 //     // side errors will fail.
 //     tunnelRoute: "/monitoring",
 

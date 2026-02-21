@@ -1,13 +1,12 @@
 import { S3Client } from "@aws-sdk/client-s3";
 
-const region = process.env.AWS_S3_REGION || "eu-central-1";
-
 export const s3Client = new S3Client({
-    region,
+    region: "auto",
+    endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
     credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "mock",
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "mock",
+        accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
     },
 });
 
-export const BUCKET_NAME = process.env.AWS_S3_BUCKET || "kaarplus-images";
+export const BUCKET_NAME = process.env.R2_BUCKET_NAME!;

@@ -40,12 +40,10 @@ export function createApp() {
 	);
 	app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-	// --- Static File Serving (Development) ---
-	if (process.env.NODE_ENV === "development") {
-		import("path").then(path => {
-			app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
-		});
-	}
+	// --- Health Check (before other routes) ---
+	app.get("/health", (_req, res) => {
+		res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+	});
 
 	// --- Routes ---
 	app.use("/api", apiRouter);
@@ -57,11 +55,14 @@ export function createApp() {
 	app.use(errorHandler);
 
 	// --- Socket.io initialization ---
-	const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:3000";
+	const allowedOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:3000")
+		.split(",")
+		.map((o) => o.trim())
+		.filter(Boolean);
 
 	try {
 		// Initialize socket service
-		socketService.initialize(httpServer, corsOrigin);
+		socketService.initialize(httpServer, allowedOrigins);
 
 		// Get io instance and set up authentication middleware
 		const io = socketService.getIO();
