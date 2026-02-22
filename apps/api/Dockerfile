@@ -21,6 +21,9 @@ RUN npm ci --workspace=apps/api --workspace=@kaarplus/database --include-workspa
 # Copy the rest of the source code
 COPY . .
 
+# Build the database package first (needed for types)
+RUN npm run build --workspace=@kaarplus/database
+
 # Build the API (TypeScript compilation)
 RUN npm run build --workspace=apps/api
 

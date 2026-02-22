@@ -26,16 +26,16 @@ export const getAllListings = async (req: Request, res: Response) => {
       const sponsoredData = await adService.getSponsoredListingsForSearch(context);
 
       if (sponsoredData && sponsoredData.length > 0) {
-        const sponsoredListings = sponsoredData.map((s) => ({
+        const sponsoredListings = sponsoredData.map((s: any) => ({
           ...s.listing,
           isSponsored: true,
         }));
 
         // filter out sponsored listings if they already exist in standard listings to avoid duplicates
-        const sponsoredIds = new Set(sponsoredListings.map((l) => l.id));
+        const sponsoredIds = new Set(sponsoredListings.map((l: any) => l.id));
         listings.data = [
           ...sponsoredListings,
-          ...listings.data.filter((l) => !(sponsoredIds.has((l as { id: string }).id))),
+          ...listings.data.filter((l: any) => !(sponsoredIds.has((l as { id: string }).id))),
         ];
       }
     } catch (error) {
