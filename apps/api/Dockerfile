@@ -17,7 +17,7 @@ COPY packages/typescript-config/package.json ./packages/typescript-config/
 COPY packages/database/prisma/schema.prisma ./packages/database/prisma/
 
 # Install dependencies for the API and Database workspaces
-RUN npm ci --workspace=apps/api --workspace=@kaarplus/database --workspace=@kaarplus/typescript-config --include-workspace-root
+RUN npm install --legacy-peer-deps --workspace=apps/api --workspace=@kaarplus/database --workspace=@kaarplus/typescript-config --include-workspace-root
 
 # Copy the rest of the source code
 COPY . .
