@@ -53,3 +53,5 @@ packages/database/prisma/migrations/*.sql.bak
 
 # Stripe CLI
 .stripe/
+.vercel
+.env*.local

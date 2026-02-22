@@ -29,7 +29,7 @@
     "db:studio": "npm run studio --workspace=packages/database",
     "db:seed": "npm run seed --workspace=packages/database",
     "db:reset": "npm run migrate:reset --workspace=packages/database",
-    "prepare": "if [ -z \"$CI\" ]; then husky; fi",
+    "prepare": "node -e \"if (!process.env.CI) { try { require('child_process').execSync('npx husky'); } catch (e) {} }\"",
     "postinstall": "npm run db:generate"
   },
   "devDependencies": {
