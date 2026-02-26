@@ -70,7 +70,12 @@ export function HomeSearch() {
 				]);
 
 				setMakes(makesJson.data || []);
-				setBodyTypes(filtersJson.data?.bodyTypes || []);
+				// API returns "category:subtype" DB strings — extract unique top-level category keys
+				const rawBodyTypes: string[] = filtersJson.data?.bodyTypes || [];
+				const uniqueCategories = Array.from(
+					new Set(rawBodyTypes.map((bt: string) => bt.split(":")[0]).filter(Boolean))
+				);
+				setBodyTypes(uniqueCategories);
 				setCities(locationsJson.data || []);
 				if (statsJson.data) {
 					setStats({
@@ -203,7 +208,7 @@ export function HomeSearch() {
 								<SelectItem value="all">{t('search.allBodyTypes')}</SelectItem>
 								{bodyTypes.map(bt => (
 									<SelectItem key={bt} value={bt}>
-										{t(`sell:options.bodyType.${bt}`, { defaultValue: bt })}
+										{t(`sell:step1.categories.${bt}`, { defaultValue: bt })}
 									</SelectItem>
 								))}
 							</SelectContent>

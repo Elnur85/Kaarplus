@@ -33,6 +33,11 @@ export default function ListingsPage() {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 	const abortControllerRef = useRef<AbortController | null>(null);
 
+	const handlePageChange = (page: number) => {
+		window.scrollTo({ top: 0, behavior: "instant" });
+		filters.setPage(page);
+	};
+
 	useEffect(() => {
 		// Abort previous in-flight request before starting a new one
 		abortControllerRef.current?.abort();
@@ -185,17 +190,15 @@ export default function ListingsPage() {
 										/>
 										{/* Inline Display Ad after every 10th result if not already showing one */}
 										{(index + 1) % 10 === 0 && (
-											<div className="col-span-full py-4">
-												<AdSlot
-													placementId="LISTINGS_INLINE"
-													context={{
-														make: filters.make !== "none" ? filters.make : undefined,
-														fuelType: filters.fuelType[0],
-														bodyType: filters.bodyTypeSelections[0]?.category,
-													}}
-													className="h-[120px]"
-												/>
-											</div>
+											<AdSlot
+												placementId="LISTINGS_INLINE"
+												context={{
+													make: filters.make !== "none" ? filters.make : undefined,
+													fuelType: filters.fuelType[0],
+													bodyType: filters.bodyTypeSelections[0]?.category,
+												}}
+												className="col-span-full py-4 h-[120px]"
+											/>
 										)}
 									</React.Fragment>
 								))}
@@ -223,7 +226,7 @@ export default function ListingsPage() {
 								<Pagination
 									currentPage={filters.page}
 									totalPages={Math.ceil(total / 20)}
-									onPageChange={filters.setPage}
+									onPageChange={handlePageChange}
 									isLoading={isLoading}
 								/>
 							</div>

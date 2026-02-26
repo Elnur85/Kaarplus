@@ -1,0 +1,19 @@
+# Render API base URL (no trailing slash)
+NEXT_PUBLIC_API_URL=https://your-api.onrender.com
+NEXT_PUBLIC_SITE_URL=https://your-app.vercel.app
+
+# NextAuth
+NEXTAUTH_URL=https://your-app.vercel.app
+NEXTAUTH_SECRET=
+
+# Stripe publishable key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+
+# Sentry
+NEXT_PUBLIC_SENTRY_DSN=
+SENTRY_AUTH_TOKEN=
+
+# Feature Flags (optional)
+NEXT_PUBLIC_COOKIE_CONSENT=true
+NEXT_PUBLIC_ANALYTICS_ENABLED=false
+NEXT_PUBLIC_GA_ID=
