@@ -21,6 +21,7 @@ import { SlidersHorizontal } from "lucide-react";
 import { JsonLd } from "@/components/shared/json-ld";
 import { generateBreadcrumbJsonLd } from "@/lib/seo";
 import { SITE_URL, API_URL } from "@/lib/constants";
+import { parseApiError } from "@/lib/api-client";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
@@ -78,7 +79,8 @@ export default function ListingsPage() {
 				});
 
 				if (!response.ok) {
-					throw new Error(`Search failed with status ${response.status}`);
+					const message = await parseApiError(response, t('carsPage.error'));
+					throw new Error(message);
 				}
 
 				const json = await response.json();
@@ -91,7 +93,8 @@ export default function ListingsPage() {
 					return;
 				}
 				console.error("Failed to fetch listings:", error);
-				toast.error(t('carsPage.error'));
+				const message = error instanceof Error ? error.message : t('carsPage.error');
+				toast.error(message);
 			} finally {
 				// Only clear loading state if this request wasn't aborted
 				if (!controller.signal.aborted) {

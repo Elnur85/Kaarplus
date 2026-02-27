@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { useTranslation } from "react-i18next";
+import { parseApiError } from "@/lib/api-client";
 
 // Step 2 required fields for validation
 const STEP_2_REQUIRED_FIELDS: (keyof SellFormValues)[] = [
@@ -340,7 +341,8 @@ export function SellWizard() {
 			});
 
 			if (!attachRes.ok) {
-				throw new Error(t('toasts.attachError'));
+				const attachError = await parseApiError(attachRes, t('toasts.attachError'));
+				throw new Error(attachError);
 			}
 
 			setCurrentStep(4);

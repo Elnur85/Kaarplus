@@ -9,6 +9,18 @@ const allowedOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:3000")
 const productionOrigins = ["https://kaarplus-web.vercel.app", "https://kaarplus.ee"];
 allowedOrigins.push(...productionOrigins);
 
+// In development, automatically allow 127.0.0.1 as an alias for localhost (and vice versa).
+// Next.js rewrites forward the browser's Origin header, and dev tools often use 127.0.0.1.
+if (process.env.NODE_ENV !== "production") {
+	const devAliases = allowedOrigins
+		.flatMap((o) => [
+			o.replace("localhost", "127.0.0.1"),
+			o.replace("127.0.0.1", "localhost"),
+		])
+		.filter((o) => !allowedOrigins.includes(o));
+	allowedOrigins.push(...devAliases);
+}
+
 export const corsOptions = {
 	origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
 		// Log for debugging (remove in high-traffic production if too noisy)

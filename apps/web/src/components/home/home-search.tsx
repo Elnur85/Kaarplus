@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 interface SearchStats {
 	todayCount: number;
@@ -83,8 +84,11 @@ export function HomeSearch() {
 						totalCount: statsJson.data.totalListings || 0,
 					});
 				}
-			} catch {
-				// Search metadata fetch failed — dropdowns degrade with empty options
+			} catch (err) {
+				// Dropdowns degrade gracefully with empty options, but inform the user
+				const message = err instanceof Error ? err.message : "Otsinguandmete laadimine ebaõnnestus";
+				console.error("Home search metadata fetch failed:", err);
+				toast.error(`Otsingufiltrid pole saadaval: ${message}`);
 			} finally {
 				setIsLoadingMetadata(false);
 			}

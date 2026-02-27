@@ -130,14 +130,14 @@ export default function SearchPage() {
                         {/* Header Controls */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <p className="text-sm text-muted-foreground">
+                                <span className="text-sm text-muted-foreground">
                                     {isLoading ? (
                                         <Skeleton className="h-4 w-32 inline-block" />
                                     ) : (
                                         <span className="font-medium text-foreground">{total}</span>
                                     )}{" "}
                                     {!isLoading && t('results_suffix', { count: total })}
-                                </p>
+                                </span>
                             </div>
 
                             <div className="flex items-center gap-3">
