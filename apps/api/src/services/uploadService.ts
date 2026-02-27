@@ -10,19 +10,22 @@ import { s3Client, BUCKET_NAME } from "../utils/s3";
 
 export class UploadService {
     async generatePresignedUrl(fileName: string, fileType: string, listingId: string) {
-        // Validate file type
-        const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-        if (!allowedTypes.includes(fileType)) {
-            throw new BadRequestError("Invalid file type. Only JPEG, PNG and WebP are allowed.");
+        // Validate file type — normalize image/jpg (WhatsApp, Android) to image/jpeg
+        const normalizedType = fileType === "image/jpg" ? "image/jpeg" : fileType;
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+        if (!allowedTypes.includes(normalizedType)) {
+            throw new BadRequestError(`Invalid file type "${fileType}". Only JPEG, PNG, WebP, and HEIC are allowed.`);
         }
 
-        const ext = path.extname(fileName) || `.${fileType.split("/")[1]}`;
+        // Normalize extension: image/jpg → .jpg → use .jpg, image/heic → .jpg (convert to jpeg key)
+        const extFromName = path.extname(fileName);
+        const ext = extFromName || (normalizedType === "image/jpeg" ? ".jpg" : `.${normalizedType.split("/")[1]}`);
         const key = `listings/${listingId}/${uuidv4()}${ext}`;
 
         const command = new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: key,
-            ContentType: fileType,
+            ContentType: normalizedType,
         });
 
         // Signed URL expires in 15 minutes
