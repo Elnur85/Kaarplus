@@ -2,6 +2,7 @@
 
 import { Separator } from "@/components/ui/separator";
 import { useLocale } from "@/hooks/use-locale";
+import { formatBodyType } from "@/lib/body-types";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +39,7 @@ export function SpecsGrid({ listing }: SpecsGridProps) {
         { label: t('specs.power'), value: t('specs.powerValue', { kw: listing.powerKw, hp: Math.round(listing.powerKw * 1.341) }) },
         { label: t('specs.transmission'), value: t(`options.transmission.${listing.transmission}`, { ns: 'sell', defaultValue: listing.transmission }) },
         { label: t('specs.driveType'), value: listing.driveType ? t(`options.drive.${listing.driveType}`, { ns: 'sell', defaultValue: listing.driveType }) : t('specs.frontWheelDrive') },
-        { label: t('specs.bodyType'), value: t(`step1.types.${listing.bodyType.toLowerCase()}`, { ns: 'sell', defaultValue: listing.bodyType }) },
+        { label: t('specs.bodyType'), value: formatBodyType(listing.bodyType) },
         { label: t('specs.doorsSeats'), value: `${listing.doors || "—"} / ${listing.seats || "—"}` },
         { label: t('specs.exteriorColor'), value: listing.colorExterior },
         { label: t('specs.interiorColor'), value: listing.colorInterior || "—" },

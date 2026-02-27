@@ -222,5 +222,74 @@ export function flattenBodyTypeSelections(
 		}
 	}
 
+
 	return Array.from(new Set(flat)); // Remove duplicates
+}
+
+/**
+ * Human-readable Estonian labels for compound body type values (e.g. 'passengerCar:touring')
+ */
+export const BODY_TYPE_LABELS: Record<string, string> = {
+	'passengerCar': 'Sõiduauto',
+	'passengerCar:sedan': 'Sedaan',
+	'passengerCar:hatchback': 'Luukpära',
+	'passengerCar:touring': 'Universaal',
+	'passengerCar:minivan': 'Mahtuniversaal',
+	'passengerCar:coupe': 'Kupee',
+	'passengerCar:cabriolet': 'Kabriolett',
+	'passengerCar:pickup': 'Pikap',
+	'passengerCar:limousine': 'Limusiinid',
+	'suv': 'Linnamaastur',
+	'suv:touring': 'Maastur',
+	'suv:pickup': 'Maastur-pikap',
+	'suv:open': 'Avatud maastur',
+	'suv:coupe': 'SUV Kupee',
+	'commercialVehicle': 'Kommertssõiduk',
+	'commercialVehicle:smallCommercial': 'Väike kommertssõiduk',
+	'commercialVehicle:commercial': 'Kaubik',
+	'commercialVehicle:rigid': 'Veoauto (jäik)',
+	'truck': 'Veoauto',
+	'truck:saddle': 'Sadulveoauto',
+	'truck:rigid': 'Jäikveoauto',
+	'truck:chassis': 'Šassii',
+	'mototechnics': 'Mototehnika',
+	'mototechnics:classicalMotorcycle': 'Mootorratas',
+	'mototechnics:scooter': 'Skuter',
+	'mototechnics:moped': 'Moped',
+	'mototechnics:bike': 'Jalgratas',
+	'mototechnics:cruiserChopper': 'Kruiser/Chopper',
+	'mototechnics:touring': 'Turismimootorratas',
+	'mototechnics:motocross': 'Motokross',
+	'mototechnics:enduroAdventure': 'Enduro/Adventure',
+	'mototechnics:trial': 'Trial',
+	'mototechnics:threeWheeler': 'Kolmerattaline',
+	'mototechnics:atvUtv': 'ATV/UTV',
+	'mototechnics:buggy': 'Buggy',
+	'mototechnics:mopedCar': 'Mopeedauto',
+	'mototechnics:snowmobile': 'Mootorsaan',
+	'waterVehicle': 'Veesõiduk',
+	'waterVehicle:motorboat': 'Mootorpaat',
+	'waterVehicle:yachtSailboat': 'Jaht/Purjekas',
+	'waterVehicle:waterscooter': 'Vesiskuter',
+	'trailer': 'Haagis',
+	'trailer:lightTrailer': 'Kerge haagis',
+	'trailer:semiTrailer': 'Poolhaagis',
+	'trailer:trailer': 'Haagis',
+	'trailer:boatTrailer': 'Paadihaagis',
+	'caravan': 'Haagissuvilad',
+	'caravan:caravan': 'Suvila',
+	'caravan:trailerTent': 'Haagistelk',
+};
+
+/**
+ * Format a stored body type value (e.g. 'passengerCar:touring') into a readable Estonian label.
+ * Falls back gracefully: tries exact match → category only → raw value.
+ */
+export function formatBodyType(value: string): string {
+	if (!value) return value;
+	if (BODY_TYPE_LABELS[value]) return BODY_TYPE_LABELS[value];
+	// Try just the category part before the colon
+	const category = value.split(':')[0];
+	if (category && BODY_TYPE_LABELS[category]) return BODY_TYPE_LABELS[category];
+	return value;
 }
