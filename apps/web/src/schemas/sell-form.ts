@@ -2,33 +2,33 @@ import { z } from "zod";
 
 export const sellFormSchema = z.object({
     // Contact info
-    contactName: z.string().min(2, "Nimi peab olema vähemalt 2 tähemärki"),
-    contactEmail: z.string().email("Palun sisestage kehtiv e-posti aadress"),
-    contactPhone: z.string().min(5, "Palun sisestage kehtiv telefoninumber"),
+    contactName: z.string().min(2, "sell.validation.contactName.minLength"),
+    contactEmail: z.string().email("sell.validation.contactEmail.invalid"),
+    contactPhone: z.string().min(5, "sell.validation.contactPhone.invalid"),
 
     // Basic info
-    make: z.string().min(1, "Mark on kohustuslik"),
-    model: z.string().min(1, "Mudel on kohustuslik"),
+    make: z.string().min(1, "sell.validation.make.required"),
+    model: z.string().min(1, "sell.validation.model.required"),
     variant: z.string().nullable().optional(),
-    year: z.coerce.number().int().min(1900).max(new Date().getFullYear() + 1),
-    vin: z.string().length(17, "VIN-kood peab olema 17 tähemärki").nullable().optional().or(z.literal("")),
-    mileage: z.coerce.number().int().min(0, "Läbisõit ei saa olla negatiivne"),
-    price: z.coerce.number().positive("Hind peab olema positiivne"),
+    year: z.coerce.number().int().min(1900, "sell.validation.year.range").max(new Date().getFullYear() + 1, "sell.validation.year.range"),
+    vin: z.string().length(17, "sell.validation.vin.length").nullable().optional().or(z.literal("")),
+    mileage: z.coerce.number().int().min(0, "sell.validation.mileage.nonNegative"),
+    price: z.coerce.number().positive("sell.validation.price.positive"),
     priceVatIncluded: z.boolean().default(true),
-    location: z.string().min(1, "Asukoht on kohustuslik"),
+    location: z.string().min(1, "sell.validation.location.required"),
 
     // Technical info
-    bodyType: z.string().min(1, "Keretüüp on kohustuslik"),
-    fuelType: z.string().min(1, "Kütuse liik on kohustuslik"),
-    transmission: z.string().min(1, "Käigukast on kohustuslik"),
-    powerKw: z.coerce.number().int().positive("Võimsus on kohustuslik"),
-    driveType: z.string().min(1, "Veoskeem on kohustuslik"),
-    doors: z.coerce.number().int().min(2).max(5),
-    seats: z.coerce.number().int().min(1).max(9),
-    colorExterior: z.string().min(1, "Värvus on kohustuslik"),
+    bodyType: z.string().min(1, "sell.validation.bodyType.required"),
+    fuelType: z.string().min(1, "sell.validation.fuelType.required"),
+    transmission: z.string().min(1, "sell.validation.transmission.required"),
+    powerKw: z.coerce.number().int().positive("sell.validation.powerKw.required"),
+    driveType: z.string().min(1, "sell.validation.driveType.required"),
+    doors: z.coerce.number().int().min(2, "sell.validation.doors.range").max(5, "sell.validation.doors.range"),
+    seats: z.coerce.number().int().min(1, "sell.validation.seats.range").max(9, "sell.validation.seats.range"),
+    colorExterior: z.string().min(1, "sell.validation.colorExterior.required"),
     colorInterior: z.string().nullable().optional(),
-    condition: z.string().min(1, "Seisukord on kohustuslik"),
-    description: z.string().max(5000, "Kirjeldus on liigpikk").nullable().optional(),
+    condition: z.string().min(1, "sell.validation.condition.required"),
+    description: z.string().max(5000, "sell.validation.description.maxLength").nullable().optional(),
 
     // Features (stored as Boolean record)
     features: z.record(z.string(), z.boolean()).default({}),

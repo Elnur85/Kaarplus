@@ -1,15 +1,23 @@
 import { prisma } from "@kaarplus/database";
 
+import {
+	BodyTypeHierarchyItem,
+	TaxonomyScope,
+	buildBodyTypeHierarchyFromValues,
+} from "../utils/bodyTypes";
 import { cacheService } from "../utils/cache";
 
 const CACHE_TTL = 3600; // 1 hour for search options
 
-// Type definitions for filter options
 export interface FilterOptions {
 	makes: string[];
 	fuelTypes: string[];
 	bodyTypes: string[];
 	transmissions: string[];
+	driveTypes: string[];
+	colors: string[];
+	locations: string[];
+	bodyTypeHierarchy: BodyTypeHierarchyItem[];
 	years: {
 		min: number;
 		max: number;
@@ -20,14 +28,22 @@ export interface FilterOptions {
 	};
 }
 
+export function resolveTaxonomyScope(value: unknown): TaxonomyScope {
+	return value === "all" ? "all" : "active";
+}
+
 export class SearchService {
-	async getMakes(): Promise<string[]> {
-		const cacheKey = "search:makes";
+	private getScopeWhere(scope: TaxonomyScope) {
+		return scope === "active" ? { status: "ACTIVE" as const } : undefined;
+	}
+
+	async getMakes(scope: TaxonomyScope = "active"): Promise<string[]> {
+		const cacheKey = `search:makes:${scope}`;
 		const cached = cacheService.get<string[]>(cacheKey);
 		if (cached) return cached;
 
 		const makes = await prisma.listing.findMany({
-			where: { status: "ACTIVE" },
+			where: this.getScopeWhere(scope),
 			select: { make: true },
 			distinct: ["make"],
 			orderBy: { make: "asc" },
@@ -37,14 +53,17 @@ export class SearchService {
 		return result;
 	}
 
-	async getModels(make: string): Promise<string[]> {
-		const cacheKey = `search:models:${make.toLowerCase()}`;
+	async getModels(
+		make: string,
+		scope: TaxonomyScope = "active"
+	): Promise<string[]> {
+		const cacheKey = `search:models:${scope}:${make.toLowerCase()}`;
 		const cached = cacheService.get<string[]>(cacheKey);
 		if (cached) return cached;
 
 		const models = await prisma.listing.findMany({
 			where: {
-				status: "ACTIVE",
+				...this.getScopeWhere(scope),
 				make: { equals: make, mode: "insensitive" },
 			},
 			select: { model: true },
@@ -56,47 +75,86 @@ export class SearchService {
 		return result;
 	}
 
-	async getFilterOptions(): Promise<FilterOptions> {
-		const cacheKey = "search:filter-options";
+	async getFilterOptions(scope: TaxonomyScope = "active"): Promise<FilterOptions> {
+		const cacheKey = `search:filter-options:${scope}`;
 		const cached = cacheService.get<FilterOptions>(cacheKey);
 		if (cached) return cached;
 
-		// This could be optimized by querying distinct values for each field
-		const [makes, fuelTypes, bodyTypes, transmissions] = await Promise.all([
+		const where = this.getScopeWhere(scope);
+		const [makes, fuelTypes, bodyTypes, transmissions, driveTypes, colors, locations] = await Promise.all([
 			prisma.listing.findMany({
-				where: { status: "ACTIVE" },
+				where,
 				select: { make: true },
 				distinct: ["make"],
+				orderBy: { make: "asc" },
 			}),
 			prisma.listing.findMany({
-				where: { status: "ACTIVE" },
+				where,
 				select: { fuelType: true },
 				distinct: ["fuelType"],
+				orderBy: { fuelType: "asc" },
 			}),
 			prisma.listing.findMany({
-				where: { status: "ACTIVE" },
+				where,
 				select: { bodyType: true },
 				distinct: ["bodyType"],
+				orderBy: { bodyType: "asc" },
 			}),
 			prisma.listing.findMany({
-				where: { status: "ACTIVE" },
+				where,
 				select: { transmission: true },
 				distinct: ["transmission"],
+				orderBy: { transmission: "asc" },
+			}),
+			prisma.listing.findMany({
+				where,
+				select: { driveType: true },
+				distinct: ["driveType"],
+				orderBy: { driveType: "asc" },
+			}),
+			prisma.listing.findMany({
+				where,
+				select: { colorExterior: true },
+				distinct: ["colorExterior"],
+				orderBy: { colorExterior: "asc" },
+			}),
+			prisma.listing.findMany({
+				where,
+				select: { location: true },
+				distinct: ["location"],
+				orderBy: { location: "asc" },
 			}),
 		]);
 
-		// Query for min/max year and price
 		const aggregates = await prisma.listing.aggregate({
-			where: { status: "ACTIVE" },
+			where,
 			_min: { year: true, price: true },
 			_max: { year: true, price: true },
 		});
 
+		const flatBodyTypes = bodyTypes
+			.map((item) => item.bodyType)
+			.filter((value): value is string => Boolean(value))
+			.sort((a, b) => a.localeCompare(b));
+
 		const result: FilterOptions = {
 			makes: makes.map((m) => m.make).filter(Boolean).sort(),
 			fuelTypes: fuelTypes.map((f) => f.fuelType).filter(Boolean).sort(),
-			bodyTypes: bodyTypes.map((b) => b.bodyType).filter(Boolean).sort(),
+			bodyTypes: flatBodyTypes,
 			transmissions: transmissions.map((t) => t.transmission).filter(Boolean).sort(),
+			driveTypes: driveTypes
+				.map((item) => item.driveType)
+				.filter((value): value is string => Boolean(value))
+				.sort(),
+			colors: colors
+				.map((item) => item.colorExterior)
+				.filter((value): value is string => Boolean(value))
+				.sort(),
+			locations: locations
+				.map((item) => item.location)
+				.filter((value): value is string => Boolean(value))
+				.sort(),
+			bodyTypeHierarchy: buildBodyTypeHierarchyFromValues(flatBodyTypes),
 			years: {
 				min: aggregates._min.year || 1990,
 				max: aggregates._max.year || new Date().getFullYear(),
@@ -111,16 +169,13 @@ export class SearchService {
 		return result;
 	}
 
-	async getLocations(): Promise<string[]> {
-		const cacheKey = "search:locations";
+	async getLocations(scope: TaxonomyScope = "active"): Promise<string[]> {
+		const cacheKey = `search:locations:${scope}`;
 		const cached = cacheService.get<string[]>(cacheKey);
 		if (cached) return cached;
 
 		const locations = await prisma.listing.findMany({
-			where: {
-				status: "ACTIVE",
-				location: { not: "Baku" }
-			},
+			where: this.getScopeWhere(scope),
 			select: { location: true },
 			distinct: ["location"],
 			orderBy: { location: "asc" },
@@ -130,13 +185,13 @@ export class SearchService {
 		return result;
 	}
 
-	async getColors(): Promise<string[]> {
-		const cacheKey = "search:colors";
+	async getColors(scope: TaxonomyScope = "active"): Promise<string[]> {
+		const cacheKey = `search:colors:${scope}`;
 		const cached = cacheService.get<string[]>(cacheKey);
 		if (cached) return cached;
 
 		const colors = await prisma.listing.findMany({
-			where: { status: "ACTIVE" },
+			where: this.getScopeWhere(scope),
 			select: { colorExterior: true },
 			distinct: ["colorExterior"],
 			orderBy: { colorExterior: "asc" },
@@ -146,13 +201,13 @@ export class SearchService {
 		return result;
 	}
 
-	async getDriveTypes(): Promise<string[]> {
-		const cacheKey = "search:drive-types";
+	async getDriveTypes(scope: TaxonomyScope = "active"): Promise<string[]> {
+		const cacheKey = `search:drive-types:${scope}`;
 		const cached = cacheService.get<string[]>(cacheKey);
 		if (cached) return cached;
 
 		const driveTypes = await prisma.listing.findMany({
-			where: { status: "ACTIVE" },
+			where: this.getScopeWhere(scope),
 			select: { driveType: true },
 			distinct: ["driveType"],
 			orderBy: { driveType: "asc" },
@@ -164,13 +219,13 @@ export class SearchService {
 		return result;
 	}
 
-	async getBodyTypes(): Promise<string[]> {
-		const cacheKey = "search:body-types";
+	async getBodyTypes(scope: TaxonomyScope = "active"): Promise<string[]> {
+		const cacheKey = `search:body-types:${scope}`;
 		const cached = cacheService.get<string[]>(cacheKey);
 		if (cached) return cached;
 
 		const bodyTypes = await prisma.listing.findMany({
-			where: { status: "ACTIVE" },
+			where: this.getScopeWhere(scope),
 			select: { bodyType: true },
 			distinct: ["bodyType"],
 			orderBy: { bodyType: "asc" },

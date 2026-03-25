@@ -144,6 +144,43 @@
 		},
 		"empty": "Kasutajaid ei leitud.",
 		"noName": "Nimi puudub",
-		"noResults": "Otsingule ei vastanud ühtegi kasutajat."
+		"noResults": "Otsingule ei vastanud ühtegi kasutajat.",
+		"roles": {
+			"USER": "Kasutaja",
+			"DEALERSHIP": "Esindus",
+			"ADMIN": "Admin",
+			"SUPPORT": "Tugi"
+		},
+		"actions": {
+			"button": "Tegevused",
+			"menuLabel": "Kasutaja: {{value}}",
+			"changeRole": "Muuda rolli",
+			"delete": "Kustuta kasutaja"
+		},
+		"deleteDialog": {
+			"title": "Kustuta kasutaja",
+			"description": "Kas olete kindel, et soovite kustutada kasutaja <strong>{{email}}</strong>? Seda tegevust ei saa tagasi võtta. Kasutaja ja tema kuulutused eemaldatakse.",
+			"cancel": "Tühista",
+			"confirm": "Kustuta kasutaja",
+			"deleting": "Kustutamine..."
+		},
+		"toasts": {
+			"roleUpdated": {
+				"title": "Roll uuendatud",
+				"description": "Kasutaja roll muudeti väärtuseks {{role}}."
+			},
+			"roleUpdateFailed": {
+				"title": "Viga",
+				"description": "Kasutaja rolli muutmine ebaõnnestus."
+			},
+			"userDeleted": {
+				"title": "Kasutaja kustutatud",
+				"description": "{{email}} on eemaldatud."
+			},
+			"userDeleteFailed": {
+				"title": "Viga",
+				"description": "Kasutaja kustutamine ebaõnnestus."
+			}
+		}
 	}
 }

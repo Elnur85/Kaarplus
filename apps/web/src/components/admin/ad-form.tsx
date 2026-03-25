@@ -102,8 +102,9 @@ export function AdForm({ open, onOpenChange, campaignId, onSuccess }: AdFormProp
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error instanceof Error ? error.message : t("admin.advertisements.toasts.error"),
+        title: t("admin.advertisements.toasts.errorTitle"),
+        description:
+          error instanceof Error ? error.message : t("admin.advertisements.toasts.error"),
       });
     } finally {
       setIsSubmitting(false);
@@ -112,6 +113,15 @@ export function AdForm({ open, onOpenChange, campaignId, onSuccess }: AdFormProp
 
   const updateField = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const getPlacementName = (placementId: string | undefined) => {
+    if (!placementId) return "";
+
+    const key = `admin.units.placements.${placementId}.name`;
+    const translated = t(key);
+
+    return translated === key ? placementId : translated;
   };
 
   return (
@@ -144,7 +154,8 @@ export function AdForm({ open, onOpenChange, campaignId, onSuccess }: AdFormProp
               <SelectContent>
                 {adUnits.map((unit) => (
                   <SelectItem key={unit.id} value={unit.id}>
-                    {unit.name} ({unit.placementId} — {unit.width}x{unit.height})
+                    {getPlacementName(unit.placementId)} ({unit.placementId} — {unit.width}x
+                    {unit.height})
                   </SelectItem>
                 ))}
               </SelectContent>

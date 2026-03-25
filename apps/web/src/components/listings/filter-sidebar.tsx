@@ -10,9 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RotateCcw, SlidersHorizontal, ChevronDown, ChevronRight } from "lucide-react";
-import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils";
+import { useVehicleTaxonomy } from "@/hooks/use-vehicle-taxonomy";
 
 interface FilterSidebarProps {
 	onShowResults?: () => void;
@@ -72,10 +71,6 @@ function FilterSection({
 export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 	const { t } = useTranslation(["listings", "common", "sell", "home"]);
 	const filters = useFilterStore();
-	const [makes, setMakes] = useState<string[]>([]);
-	const [models, setModels] = useState<string[]>([]);
-	const [isLoadingMakes, setIsLoadingMakes] = useState(true);
-	const [isLoadingModels, setIsLoadingModels] = useState(false);
 
 	// Local state for input fields (before debounce)
 	const [localPriceMin, setLocalPriceMin] = useState(filters.priceMin);
@@ -123,71 +118,31 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 	}, [filters.priceMin, filters.priceMax, filters.mileageMin, filters.mileageMax]);
 
 	const currentMake = filters.make;
+	const {
+		taxonomy,
+		models,
+		isLoading,
+		isLoadingModels,
+		error,
+		modelError,
+		retry,
+	} = useVehicleTaxonomy({
+		scope: "active",
+		make: currentMake,
+	});
 
-	// Fetch makes on mount
-	useEffect(() => {
-		let cancelled = false;
-
-		const fetchMakes = async () => {
-			try {
-				const res = await fetch(`${API_URL}/search/makes`);
-				const json = await res.json();
-				if (!cancelled) setMakes(json.data || []);
-			} catch (error) {
-				console.error("Failed to fetch makes:", error);
-			} finally {
-				if (!cancelled) setIsLoadingMakes(false);
-			}
-		};
-
-		fetchMakes();
-
-		return () => {
-			cancelled = true;
-		};
-	}, []);
-
-	// Fetch models when make changes
 	useEffect(() => {
 		if (!currentMake || currentMake === "none") {
-			setModels([]);
 			if (filters.model) {
 				filters.setFilter("model", "");
 			}
 			return;
 		}
 
-		let cancelled = false;
-		setIsLoadingModels(true);
-
-		fetch(
-			`${API_URL}/search/models?make=${encodeURIComponent(currentMake)}`
-		)
-			.then((res) => res.json())
-			.then((json) => {
-				if (!cancelled) {
-					const fetchedModels = json.data || [];
-					setModels(fetchedModels);
-					if (
-						filters.model &&
-						fetchedModels.length > 0 &&
-						!fetchedModels.includes(filters.model)
-					) {
-						filters.setFilter("model", "");
-					}
-				}
-			})
-			.catch(console.error)
-			.finally(() => {
-				if (!cancelled) {
-					setIsLoadingModels(false);
-				}
-			});
-
-		return () => {
-			cancelled = true;
-		};
-	}, [currentMake, filters]);
+		if (!isLoadingModels && filters.model && !models.includes(filters.model)) {
+			filters.setFilter("model", "");
+		}
+	}, [currentMake, filters, isLoadingModels, models]);
 
 	// Year range validation - swaps values if range is invalid
 	const handleYearMinChange = useCallback(
@@ -222,9 +177,10 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 		[filters]
 	);
 
-	const currentYear = new Date().getFullYear();
+	const currentYear = Math.max(taxonomy.years.max, taxonomy.years.min);
+	const minYear = Math.min(taxonomy.years.min, taxonomy.years.max);
 	const yearOptions = Array.from(
-		{ length: currentYear - 1990 + 1 },
+		{ length: Math.max(currentYear - minYear + 1, 1) },
 		(_, i) => currentYear - i
 	);
 
@@ -267,12 +223,26 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 
 			{/* Scrollable content with better scroll behavior */}
 			<div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3">
+				{(error || modelError) && (
+					<div className="rounded-lg border border-destructive/20 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+						<div className="flex items-center justify-between gap-3">
+							<span>{t("filters.metadataError")}</span>
+							<Button variant="ghost" size="sm" onClick={retry} className="h-auto p-0 text-xs text-destructive hover:text-destructive">
+								{t("common:errorBoundary.retry")}
+							</Button>
+						</div>
+					</div>
+				)}
+
 				{/* Body Type - Always visible at top, most important */}
 				<FilterSection
 					title={t("filters.bodyType")}
 					defaultOpen={true}
 				>
-					<BodyTypeFilter isLoading={false} />
+					<BodyTypeFilter
+						hierarchy={taxonomy.bodyTypeHierarchy}
+						isLoading={isLoading}
+					/>
 				</FilterSection>
 
 				{/* Make & Model */}
@@ -283,20 +253,20 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 							onValueChange={(val) =>
 								filters.setFilter("make", val === "none" ? "" : val)
 							}
-							disabled={isLoadingMakes}
+							disabled={isLoading}
 						>
 							<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm h-9">
 								<SelectValue
 									placeholder={
-										isLoadingMakes
-											? t("common:common.loading")
-											: t("filters.allMakes")
+										isLoading
+												? t("common:common.loading")
+												: t("filters.allMakes")
 									}
 								/>
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="none">{t("filters.allMakes")}</SelectItem>
-								{makes.map((make) => (
+								{taxonomy.makes.map((make) => (
 									<SelectItem key={make} value={make}>
 										{make}
 									</SelectItem>
@@ -399,27 +369,23 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 				{/* Fuel Type */}
 				<FilterSection title={t("filters.fuelType")}>
 					<div className="grid grid-cols-2 gap-2">
-						{["Petrol", "Diesel", "Electric", "Hybrid", "PlugInHybrid", "LPG", "CNG", "Hydrogen"].map(
-							(fuel) => (
-								<div key={fuel} className="flex items-center gap-2">
-									<Checkbox
-										id={`fuel-${fuel}`}
-										checked={filters.fuelType.includes(fuel)}
-										onCheckedChange={() =>
-											filters.toggleFuelType(fuel)
-										}
-									/>
-									<Label
-										htmlFor={`fuel-${fuel}`}
-										className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer"
-									>
-										{t(`sell:options.fuel.${fuel}`, {
-											defaultValue: fuel,
-										})}
-									</Label>
-								</div>
-							)
-						)}
+						{taxonomy.fuelTypes.map((fuel) => (
+							<div key={fuel} className="flex items-center gap-2">
+								<Checkbox
+									id={`fuel-${fuel}`}
+									checked={filters.fuelType.includes(fuel)}
+									onCheckedChange={() =>
+										filters.toggleFuelType(fuel)
+									}
+								/>
+								<Label
+									htmlFor={`fuel-${fuel}`}
+									className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer"
+								>
+									{t(`sell:options.fuel.${fuel}`, { defaultValue: fuel })}
+								</Label>
+							</div>
+						))}
 					</div>
 				</FilterSection>
 
@@ -438,18 +404,19 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 							<SelectItem value="all">
 								{t("common:common.all")}
 							</SelectItem>
-							<SelectItem value="manual">
-								{t("sell:options.transmission.Manual")}
-							</SelectItem>
-							<SelectItem value="automatic">
-								{t("sell:options.transmission.Automatic")}
-							</SelectItem>
+							{taxonomy.transmissions.map((transmission) => (
+								<SelectItem key={transmission} value={transmission}>
+									{t(`sell:options.transmission.${transmission}`, {
+										defaultValue: transmission,
+									})}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 				</FilterSection>
 
 				{/* More Filters - Collapsible group */}
-				<FilterSection title={t("filters.moreFilters", { defaultValue: "More Filters" })}>
+				<FilterSection title={t("filters.moreFilters")}>
 					<div className="space-y-4">
 						{/* Mileage */}
 						<div className="space-y-2">
@@ -507,15 +474,13 @@ export function FilterSidebar({ onShowResults, isMobile }: FilterSidebarProps) {
 									<SelectItem value="none">
 										{t("common:common.all")}
 									</SelectItem>
-									<SelectItem value="FWD">
-										{t("sell:options.drive.FWD")}
-									</SelectItem>
-									<SelectItem value="RWD">
-										{t("sell:options.drive.RWD")}
-									</SelectItem>
-									<SelectItem value="AWD">
-										{t("sell:options.drive.AWD")}
-									</SelectItem>
+									{taxonomy.driveTypes.map((driveType) => (
+										<SelectItem key={driveType} value={driveType}>
+											{t(`sell:options.drive.${driveType}`, {
+												defaultValue: driveType,
+											})}
+										</SelectItem>
+									))}
 								</SelectContent>
 							</Select>
 						</div>

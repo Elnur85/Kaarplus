@@ -8,6 +8,7 @@
     "title": "Ad Management",
     "campaigns": {
       "title": "Campaigns",
+      "backToCampaigns": "Back to campaigns",
       "create": "New Campaign",
       "name": "Campaign Name",
       "budget": "Budget",
@@ -20,7 +21,11 @@
       "targeting": "Targeting",
       "advertiser": "Advertiser",
       "ads": "Advertisements",
+      "notFoundTitle": "Campaign not found",
+      "summary": "{{advertiser}} · Priority {{priority}}",
+      "summaryTotal": "{{total}} total",
       "statuses": {
+        "ALL": "All",
         "DRAFT": "Draft",
         "ACTIVE": "Active",
         "PAUSED": "Paused",
@@ -47,7 +52,10 @@
       "toasts": {
         "success": "Campaign created successfully",
         "error": "Failed to create campaign",
-        "fetchError": "Failed to load campaigns"
+        "fetchError": "Failed to load campaigns",
+        "errorTitle": "Error",
+        "archiveSuccess": "Campaign archived",
+        "archiveError": "Failed to archive campaign"
       }
     },
     "advertisements": {
@@ -58,6 +66,10 @@
       "active": "Active",
       "inactive": "Inactive",
       "empty": "No advertisements found",
+      "table": {
+        "title": "Title",
+        "events": "Events"
+      },
       "form": {
         "title": "Title",
         "titlePlaceholder": "e.g. LHV Auto Leasing Banner",
@@ -73,17 +85,52 @@
       },
       "toasts": {
         "success": "Advertisement created successfully",
-        "error": "Failed to create advertisement"
+        "error": "Failed to create advertisement",
+        "errorTitle": "Error"
       }
     },
     "units": {
       "title": "Ad Placements",
+      "description": "All available ad placement slots and their current occupancy.",
+      "name": "Name",
       "occupancy": "Occupancy",
       "placement": "Placement ID",
       "type": "Type",
       "dimensions": "Dimensions",
+      "activeCount": "Active: {{count}}",
       "active": "Active",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "types": {
+        "BANNER": "Banner",
+        "NATIVE": "Native",
+        "ADSENSE": "AdSense"
+      },
+      "placements": {
+        "HOME_BILLBOARD": {
+          "name": "Homepage Billboard",
+          "description": "Full-width banner displayed after the homepage search section."
+        },
+        "HOME_PARTNERS": {
+          "name": "Homepage Partners",
+          "description": "Featured partner slot displayed between homepage sections."
+        },
+        "SEARCH_SIDEBAR": {
+          "name": "Search Sidebar",
+          "description": "Sidebar ad shown below filters on desktop search pages."
+        },
+        "LISTING_NATIVE": {
+          "name": "Listings Native",
+          "description": "Sponsored native card injected into listings results."
+        },
+        "DETAIL_FINANCE": {
+          "name": "Detail Finance",
+          "description": "Finance partner ad shown in the listing detail sidebar."
+        },
+        "DETAIL_FOOTER": {
+          "name": "Detail Footer",
+          "description": "Full-width banner displayed before related vehicles."
+        }
+      }
     },
     "analytics": {
       "title": "Analytics",
@@ -94,7 +141,10 @@
       "activeCampaigns": "Active Campaigns",
       "totalBudget": "Total Budget",
       "totalSpent": "Total Spent",
-      "chartTitle": "Campaign Performance"
+      "chartTitle": "Campaign Performance",
+      "loading": "Loading analytics...",
+      "empty": "No analytics data yet",
+      "tooltip": "{{impressions}} impressions / {{clicks}} clicks"
     }
   }
 }

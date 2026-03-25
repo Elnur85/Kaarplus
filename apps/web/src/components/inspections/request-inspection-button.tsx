@@ -134,7 +134,7 @@ export function RequestInspectionButton({ listingId, listingTitle }: RequestInsp
                         <DialogFooter>
                             {!session ? (
                                 <Button asChild className="w-full">
-                                    <Link href={`/auth/login?callbackUrl=/listings/${listingId}`}>{t("request.loginToContinue")}</Link>
+                                    <Link href={`/login?callbackUrl=/listings/${listingId}`}>{t("request.loginToContinue")}</Link>
                                 </Button>
                             ) : (
                                 <Button

@@ -11,27 +11,40 @@ import { EquipmentCheckboxes } from "./equipment-checkboxes";
 import { cn } from "@/lib/utils";
 
 import { useTranslation } from "react-i18next";
-import { FUEL_TYPES, TRANSMISSION_TYPES, DRIVE_TYPES, ESTONIAN_CITIES, CAR_MAKES } from "@/lib/constants";
+import { VehicleTaxonomy } from "@/lib/vehicle-taxonomy";
 
 const CONDITIONS = ["New", "Excellent", "Used", "Damaged"] as const;
 
 interface Step2VehicleDataProps {
     validationAttempted?: boolean;
+    taxonomy: VehicleTaxonomy;
 }
 
-export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps) {
+export function Step2VehicleData({
+    validationAttempted,
+    taxonomy,
+}: Step2VehicleDataProps) {
     const { t } = useTranslation('sell');
     const { register, formState: { errors }, watch, setValue } = useFormContext<SellFormValues>();
 
-    const makes = [...CAR_MAKES];
-
-    const fuelTypes = [...FUEL_TYPES];
-    const transmissions = [...TRANSMISSION_TYPES];
-    const driveTypes = [...DRIVE_TYPES];
     const conditions = [...CONDITIONS];
 
     const hasError = (fieldName: keyof SellFormValues) => {
         return validationAttempted && errors[fieldName];
+    };
+
+    const renderError = (fieldName: keyof SellFormValues) => {
+        const message = errors[fieldName]?.message;
+
+        if (!message) {
+            return null;
+        }
+
+        return (
+            <p className="text-xs text-destructive">
+                {t(String(message), { defaultValue: String(message) })}
+            </p>
+        );
     };
 
     return (
@@ -51,7 +64,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("contactName")}
                             className={cn(hasError("contactName") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.contactName && <p className="text-xs text-destructive">{errors.contactName.message}</p>}
+                        {renderError("contactName")}
                     </div>
 
                     <div className="space-y-2">
@@ -63,7 +76,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("contactEmail")}
                             className={cn(hasError("contactEmail") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.contactEmail && <p className="text-xs text-destructive">{errors.contactEmail.message}</p>}
+                        {renderError("contactEmail")}
                     </div>
 
                     <div className="space-y-2">
@@ -74,7 +87,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("contactPhone")}
                             className={cn(hasError("contactPhone") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.contactPhone && <p className="text-xs text-destructive">{errors.contactPhone.message}</p>}
+                        {renderError("contactPhone")}
                     </div>
                 </div>
             </section>
@@ -96,12 +109,12 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 <SelectValue placeholder={t('step2.placeholders.make')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {makes.map((m) => (
+                                {taxonomy.makes.map((m) => (
                                     <SelectItem key={m} value={m}>{m}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.make && <p className="text-xs text-destructive">{errors.make.message}</p>}
+                        {renderError("make")}
                     </div>
 
                     <div className="space-y-2">
@@ -112,7 +125,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("model")}
                             className={cn(hasError("model") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.model && <p className="text-xs text-destructive">{errors.model.message}</p>}
+                        {renderError("model")}
                     </div>
 
                     <div className="space-y-2">
@@ -133,7 +146,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("year")}
                             className={cn(hasError("year") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.year && <p className="text-xs text-destructive">{errors.year.message}</p>}
+                        {renderError("year")}
                     </div>
 
                     <div className="space-y-2">
@@ -148,7 +161,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             />
                             <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">€</span>
                         </div>
-                        {errors.price && <p className="text-xs text-destructive">{errors.price.message}</p>}
+                        {renderError("price")}
                     </div>
 
                     <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border/50 h-[58px]">
@@ -169,7 +182,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("mileage")}
                             className={cn(hasError("mileage") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.mileage && <p className="text-xs text-destructive">{errors.mileage.message}</p>}
+                        {renderError("mileage")}
                     </div>
 
                     <div className="space-y-2">
@@ -182,13 +195,12 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 <SelectValue placeholder={t('step2.placeholders.location')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {ESTONIAN_CITIES.map((city) => (
+                                {taxonomy.locations.map((city) => (
                                     <SelectItem key={city} value={city}>{city}</SelectItem>
                                 ))}
-                                <SelectItem value="Other">{t('options.location.other', { defaultValue: 'Muu' })}</SelectItem>
                             </SelectContent>
                         </Select>
-                        {errors.location && <p className="text-xs text-destructive">{errors.location.message}</p>}
+                        {renderError("location")}
                     </div>
                 </div>
             </section>
@@ -210,12 +222,14 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 <SelectValue placeholder={t('step2.placeholders.fuel')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {fuelTypes.map((f) => (
-                                    <SelectItem key={f} value={f}>{t(`options.fuel.${f}`)}</SelectItem>
+                                {taxonomy.fuelTypes.map((f) => (
+                                    <SelectItem key={f} value={f}>
+                                        {t(`options.fuel.${f}`, { defaultValue: f })}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.fuelType && <p className="text-xs text-destructive">{errors.fuelType.message}</p>}
+                        {renderError("fuelType")}
                     </div>
 
                     <div className="space-y-2">
@@ -228,12 +242,16 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 <SelectValue placeholder={t('step2.placeholders.transmission')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {transmissions.map((t_item) => (
-                                    <SelectItem key={t_item} value={t_item}>{t(`options.transmission.${t_item}`)}</SelectItem>
+                                {taxonomy.transmissions.map((t_item) => (
+                                    <SelectItem key={t_item} value={t_item}>
+                                        {t(`options.transmission.${t_item}`, {
+                                            defaultValue: t_item,
+                                        })}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.transmission && <p className="text-xs text-destructive">{errors.transmission.message}</p>}
+                        {renderError("transmission")}
                     </div>
 
                     <div className="space-y-2">
@@ -250,7 +268,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 {watch("powerKw") ? t('step2.labels.powerHj', { count: Math.round(Number(watch("powerKw")) * 1.341) }) : t('step2.labels.powerHjEmpty')}
                             </div>
                         </div>
-                        {errors.powerKw && <p className="text-xs text-destructive">{errors.powerKw.message}</p>}
+                        {renderError("powerKw")}
                     </div>
 
                     <div className="space-y-2">
@@ -263,12 +281,14 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 <SelectValue placeholder={t('step2.placeholders.drive')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {driveTypes.map((d) => (
-                                    <SelectItem key={d} value={d}>{t(`options.drive.${d}`)}</SelectItem>
+                                {taxonomy.driveTypes.map((d) => (
+                                    <SelectItem key={d} value={d}>
+                                        {t(`options.drive.${d}`, { defaultValue: d })}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.driveType && <p className="text-xs text-destructive">{errors.driveType.message}</p>}
+                        {renderError("driveType")}
                     </div>
 
                     <div className="space-y-2">
@@ -286,7 +306,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.doors && <p className="text-xs text-destructive">{errors.doors.message}</p>}
+                        {renderError("doors")}
                     </div>
 
                     <div className="space-y-2">
@@ -304,7 +324,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.seats && <p className="text-xs text-destructive">{errors.seats.message}</p>}
+                        {renderError("seats")}
                     </div>
 
                     <div className="space-y-2">
@@ -315,7 +335,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("colorExterior")}
                             className={cn(hasError("colorExterior") && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.colorExterior && <p className="text-xs text-destructive">{errors.colorExterior.message}</p>}
+                        {renderError("colorExterior")}
                     </div>
 
                     <div className="space-y-2">
@@ -342,7 +362,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                                 ))}
                             </SelectContent>
                         </Select>
-                        {errors.condition && <p className="text-xs text-destructive">{errors.condition.message}</p>}
+                        {renderError("condition")}
                     </div>
 
                     <div className="space-y-2">
@@ -353,7 +373,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                             {...register("vin")}
                             className={cn("uppercase", errors.vin && "border-destructive ring-1 ring-destructive")}
                         />
-                        {errors.vin && <p className="text-xs text-destructive">{errors.vin.message}</p>}
+                        {renderError("vin")}
                     </div>
                 </div>
             </section>
@@ -379,6 +399,7 @@ export function Step2VehicleData({ validationAttempted }: Step2VehicleDataProps)
                         className="min-h-[150px]"
                         {...register("description")}
                     />
+                    {renderError("description")}
                     <p className="text-[10px] text-right text-muted-foreground">
                         {t('step2.charCount', { count: watch("description")?.length || 0 })}
                     </p>

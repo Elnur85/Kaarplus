@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Pencil, ExternalLink, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
+import { ExternalLink, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -260,20 +260,12 @@ export function MyListingsTable({
 										</span>
 									</TableCell>
 									<TableCell className="text-right">
-										<div className="flex items-center justify-end gap-1">
-											<Button variant="ghost" size="icon" asChild title={t('listings.actions.edit')}>
-												<Link href={`/dashboard/listings/${listing.id}/edit`}>
-													<Pencil className="size-4" />
-													<span className="sr-only">{t('listings.actions.edit')}</span>
-												</Link>
-											</Button>
-											<Button variant="ghost" size="icon" asChild title={t('overview.viewAll')}>
-												<Link href={`/listings/${listing.id}`}>
-													<ExternalLink className="size-4" />
-													<span className="sr-only">{t('overview.viewAll')}</span>
-												</Link>
-											</Button>
-										</div>
+										<Button variant="ghost" size="icon" asChild title={t('overview.viewAll')}>
+											<Link href={`/listings/${listing.id}`}>
+												<ExternalLink className="size-4" />
+												<span className="sr-only">{t('overview.viewAll')}</span>
+											</Link>
+										</Button>
 									</TableCell>
 								</TableRow>
 							))}
@@ -316,20 +308,12 @@ export function MyListingsTable({
 							<span className="text-xs text-muted-foreground">
 								{formatDate(listing.createdAt)}
 							</span>
-							<div className="flex gap-2">
-								<Button variant="outline" size="sm" asChild>
-									<Link href={`/dashboard/listings/${listing.id}/edit`}>
-										<Pencil className="mr-1 size-3" />
-										{t('listings.actions.edit')}
-									</Link>
-								</Button>
-								<Button variant="ghost" size="sm" asChild>
-									<Link href={`/listings/${listing.id}`}>
-										<ExternalLink className="mr-1 size-3" />
-										{t('overview.viewAll')}
-									</Link>
-								</Button>
-							</div>
+							<Button variant="ghost" size="sm" asChild>
+								<Link href={`/listings/${listing.id}`}>
+									<ExternalLink className="mr-1 size-3" />
+									{t('overview.viewAll')}
+								</Link>
+							</Button>
 						</div>
 					</Card>
 				))}

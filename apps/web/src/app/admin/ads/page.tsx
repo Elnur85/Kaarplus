@@ -14,8 +14,10 @@ import { useToast } from "@/hooks/use-toast";
 const STATUS_TABS = ["ALL", "ACTIVE", "DRAFT", "PAUSED", "COMPLETED", "ARCHIVED"] as const;
 
 export default function AdminAdsPage() {
-  const { t } = useTranslation("ads");
+  const { t, i18n } = useTranslation("ads");
   const { toast } = useToast();
+  const localeCode =
+    i18n.language === "et" ? "et-EE" : i18n.language === "ru" ? "ru-RU" : "en-GB";
    
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
@@ -63,13 +65,13 @@ export default function AdminAdsPage() {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to archive");
-      toast({ title: "Campaign archived" });
+      toast({ title: t("admin.campaigns.toasts.archiveSuccess") });
       fetchCampaigns();
     } catch {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to archive campaign",
+        title: t("admin.campaigns.toasts.errorTitle"),
+        description: t("admin.campaigns.toasts.archiveError"),
       });
     }
   };
@@ -86,7 +88,9 @@ export default function AdminAdsPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{t("admin.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {t("admin.campaigns.title")} — {total} total
+            {t("admin.campaigns.summaryTotal", {
+              total: total.toLocaleString(localeCode),
+            })}
           </p>
         </div>
         <Button
@@ -107,9 +111,7 @@ export default function AdminAdsPage() {
               value={tab}
               className="px-4 font-semibold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md"
             >
-              {tab === "ALL"
-                ? "All"
-                : t(`admin.campaigns.statuses.${tab}`)}
+              {t(`admin.campaigns.statuses.${tab}`)}
             </TabsTrigger>
           ))}
         </TabsList>

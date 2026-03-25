@@ -104,5 +104,14 @@ global.ResizeObserver = class ResizeObserver {
 
 // Mock next/image
 vi.mock('next/image', () => ({
-    default: (props: any) => React.createElement('img', props),
+    default: ({
+        fill,
+        priority,
+        placeholder,
+        blurDataURL,
+        loader,
+        quality,
+        unoptimized,
+        ...props
+    }: any) => React.createElement('img', props),
 }));

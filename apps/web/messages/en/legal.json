@@ -206,5 +206,43 @@
 				"content": "For questions:"
 			}
 		}
+	},
+	"faq": {
+		"title": "Frequently Asked Questions",
+		"subtitle": "Find answers to the most common questions about buying and selling cars on Kaarplus.",
+		"items": [
+			{
+				"question": "How can I sell my car?",
+				"answer": "Sign in, click the \"Create listing\" button in the header, and complete the four-step form: choose the vehicle type, enter the details, upload photos, and confirm the listing. Our team reviews each listing before it goes live."
+			},
+			{
+				"question": "How much does it cost to post a listing?",
+				"answer": "The first listing is free for private sellers. A private seller can have up to five active listings. Dealerships can use paid packages that allow unlimited listings."
+			},
+			{
+				"question": "How long does listing review take?",
+				"answer": "We usually review listings within 24 hours. On weekends and public holidays it may take up to 48 hours."
+			},
+			{
+				"question": "Does Kaarplus provide a warranty?",
+				"answer": "Kaarplus is an intermediary platform. We offer vehicle background-check options and connect users with warranty offers from our partners, but we are not a party to the purchase agreement."
+			},
+			{
+				"question": "How do I contact the seller as a buyer?",
+				"answer": "Open the vehicle listing and click the \"Contact\" button. You can send a message directly through the platform."
+			},
+			{
+				"question": "Which currency are prices shown in?",
+				"answer": "All prices are shown in euros (EUR). Each price indicates whether VAT is included or not."
+			},
+			{
+				"question": "How can I export my data?",
+				"answer": "Sign in and go to settings. There you will find the \"Export data\" button, which downloads a JSON file containing your personal data and listings."
+			},
+			{
+				"question": "How can I delete my account?",
+				"answer": "Sign in and go to settings. Click the \"Delete account\" button. Your personal data will be anonymized within 30 days."
+			}
+		]
 	}
 }

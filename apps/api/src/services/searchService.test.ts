@@ -13,6 +13,7 @@ vi.mock('@kaarplus/database', () => ({
 import { SearchService } from './searchService';
 
 import { prisma } from '@kaarplus/database';
+import { cacheService } from '../utils/cache';
 
 describe('SearchService', () => {
     let service: SearchService;
@@ -20,6 +21,7 @@ describe('SearchService', () => {
     beforeEach(() => {
         service = new SearchService();
         vi.clearAllMocks();
+        cacheService.clear();
     });
 
     describe('getMakes', () => {
@@ -55,8 +57,11 @@ describe('SearchService', () => {
             vi.mocked(prisma.listing.findMany)
                 .mockResolvedValueOnce([{ make: 'BMW' }, { make: 'Audi' }] as any)
                 .mockResolvedValueOnce([{ fuelType: 'Petrol' }, { fuelType: 'Diesel' }] as any)
-                .mockResolvedValueOnce([{ bodyType: 'Sedan' }, { bodyType: 'SUV' }] as any)
-                .mockResolvedValueOnce([{ transmission: 'Automatic' }, { transmission: 'Manual' }] as any);
+                .mockResolvedValueOnce([{ bodyType: 'passengerCar:sedan' }, { bodyType: 'suv:coupe' }] as any)
+                .mockResolvedValueOnce([{ transmission: 'Automatic' }, { transmission: 'Manual' }] as any)
+                .mockResolvedValueOnce([{ driveType: 'AWD' }, { driveType: 'FWD' }] as any)
+                .mockResolvedValueOnce([{ colorExterior: 'Black' }, { colorExterior: 'White' }] as any)
+                .mockResolvedValueOnce([{ location: 'Tallinn' }, { location: 'Tartu' }] as any);
             
             vi.mocked(prisma.listing.aggregate).mockResolvedValue({
                 _min: { year: 2000, price: 1000 },
@@ -67,8 +72,15 @@ describe('SearchService', () => {
             
             expect(result.makes).toContain('BMW');
             expect(result.fuelTypes).toContain('Petrol');
-            expect(result.bodyTypes).toContain('Sedan');
+            expect(result.bodyTypes).toContain('passengerCar:sedan');
             expect(result.transmissions).toContain('Automatic');
+            expect(result.driveTypes).toContain('AWD');
+            expect(result.colors).toContain('Black');
+            expect(result.locations).toContain('Tallinn');
+            expect(result.bodyTypeHierarchy).toEqual([
+                { category: 'passengerCar', subtypes: ['sedan'] },
+                { category: 'suv', subtypes: ['coupe'] },
+            ]);
             expect(result.years.min).toBe(2000);
             expect(result.price.max).toBe(50000);
         });
@@ -82,6 +94,9 @@ describe('SearchService', () => {
             
             const result = await service.getLocations();
             expect(result).toEqual(['Tallinn', 'Tartu']);
+            expect(prisma.listing.findMany).toHaveBeenCalledWith(expect.objectContaining({
+                where: { status: 'ACTIVE' },
+            }));
         });
     });
 
@@ -115,6 +130,20 @@ describe('SearchService', () => {
             
             const result = await service.getBodyTypes();
             expect(result).toEqual(['Sedan', 'SUV']);
+        });
+    });
+
+    describe('scope support', () => {
+        it('should allow querying makes across all listings', async () => {
+            vi.mocked(prisma.listing.findMany).mockResolvedValue([
+                { make: 'BMW' }, { make: 'Audi' }
+            ] as any);
+
+            await service.getMakes('all');
+
+            expect(prisma.listing.findMany).toHaveBeenCalledWith(expect.objectContaining({
+                where: undefined,
+            }));
         });
     });
 });

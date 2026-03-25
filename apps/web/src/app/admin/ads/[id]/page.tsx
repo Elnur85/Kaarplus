@@ -26,13 +26,28 @@ interface Props {
 
 export default function CampaignDetailPage({ params }: Props) {
   const { id } = use(params);
-  const { t } = useTranslation("ads");
+  const { t, i18n } = useTranslation("ads");
+  const localeCode =
+    i18n.language === "et" ? "et-EE" : i18n.language === "ru" ? "ru-RU" : "en-GB";
    
   const [campaign, setCampaign] = useState<any>(null);
    
   const [analytics, setAnalytics] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showAdForm, setShowAdForm] = useState(false);
+
+  const getPlacementText = (placementId: string | undefined, field: "name" | "description" = "name") => {
+    if (!placementId) return "";
+
+    const key = `admin.units.placements.${placementId}.${field}`;
+    const translated = t(key);
+
+    if (translated === key) {
+      return field === "name" ? placementId : "";
+    }
+
+    return translated;
+  };
 
   const fetchCampaign = useCallback(async () => {
     try {
@@ -78,9 +93,9 @@ export default function CampaignDetailPage({ params }: Props) {
   if (!campaign) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-lg font-semibold">Campaign not found</h2>
+        <h2 className="text-lg font-semibold">{t("admin.campaigns.notFoundTitle")}</h2>
         <Link href="/admin/ads">
-          <Button variant="outline" className="mt-4">Back to campaigns</Button>
+          <Button variant="outline" className="mt-4">{t("admin.campaigns.backToCampaigns")}</Button>
         </Link>
       </div>
     );
@@ -99,7 +114,7 @@ export default function CampaignDetailPage({ params }: Props) {
       {/* Back + Header */}
       <div>
         <Link href="/admin/ads" className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 mb-4">
-          <ArrowLeft size={16} /> {t("admin.campaigns.title")}
+          <ArrowLeft size={16} /> {t("admin.campaigns.backToCampaigns")}
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -116,8 +131,10 @@ export default function CampaignDetailPage({ params }: Props) {
               </Badge>
             </div>
             <p className="text-sm text-muted-foreground mt-1">
-              {campaign.advertiser.name || campaign.advertiser.email} · Priority{" "}
-              {t(`admin.campaigns.priorities.${campaign.priority}`)}
+              {t("admin.campaigns.summary", {
+                advertiser: campaign.advertiser.name || campaign.advertiser.email,
+                priority: t(`admin.campaigns.priorities.${campaign.priority}`),
+              })}
             </p>
           </div>
         </div>
@@ -142,7 +159,7 @@ export default function CampaignDetailPage({ params }: Props) {
             {t("admin.campaigns.startDate")}
           </div>
           <div className="text-xl font-bold mt-1">
-            {new Date(campaign.startDate).toLocaleDateString("et-EE")}
+            {new Date(campaign.startDate).toLocaleDateString(localeCode)}
           </div>
         </div>
         <div className="bg-white dark:bg-slate-900 border border-border rounded-xl p-4">
@@ -150,7 +167,7 @@ export default function CampaignDetailPage({ params }: Props) {
             {t("admin.campaigns.endDate")}
           </div>
           <div className="text-xl font-bold mt-1">
-            {new Date(campaign.endDate).toLocaleDateString("et-EE")}
+            {new Date(campaign.endDate).toLocaleDateString(localeCode)}
           </div>
         </div>
       </div>
@@ -179,10 +196,10 @@ export default function CampaignDetailPage({ params }: Props) {
             <Table>
               <TableHeader>
                 <TableRow className="bg-slate-50 dark:bg-slate-800/50">
-                  <TableHead className="font-bold">Title</TableHead>
+                  <TableHead className="font-bold">{t("admin.advertisements.table.title")}</TableHead>
                   <TableHead className="font-bold">{t("admin.advertisements.unit")}</TableHead>
                   <TableHead className="font-bold">{t("admin.campaigns.status")}</TableHead>
-                  <TableHead className="font-bold text-right">Events</TableHead>
+                  <TableHead className="font-bold text-right">{t("admin.advertisements.table.events")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -203,7 +220,7 @@ export default function CampaignDetailPage({ params }: Props) {
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm">{ad.adUnit?.name}</div>
+                        <div className="text-sm">{getPlacementText(ad.adUnit?.placementId)}</div>
                         <div className="text-xs text-muted-foreground">{ad.adUnit?.placementId}</div>
                       </TableCell>
                       <TableCell>
@@ -231,7 +248,7 @@ export default function CampaignDetailPage({ params }: Props) {
             />
           ) : (
             <div className="text-center py-12 text-muted-foreground">
-              Loading analytics...
+              {t("admin.analytics.loading")}
             </div>
           )}
         </TabsContent>

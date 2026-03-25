@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { AdService } from "../services/adService";
 import { ListingService, ListingQuery } from "../services/listingService";
-import { SearchService } from "../services/searchService";
+import { SearchService, resolveTaxonomyScope } from "../services/searchService";
 import { logger } from "../utils/logger";
 import { isAdmin, requireUserId } from "../utils/validation";
 
@@ -141,8 +141,8 @@ export const deleteImage = async (req: Request, res: Response) => {
  * Get all filter options for the search functionality
  * Returns makes, models grouped by make, years, body types, fuel types, etc.
  */
-export const getFilterOptions = async (_req: Request, res: Response) => {
-  const options = await searchService.getFilterOptions();
+export const getFilterOptions = async (req: Request, res: Response) => {
+  const options = await searchService.getFilterOptions(resolveTaxonomyScope(req.query.scope));
   res.json({ data: options });
 };
 

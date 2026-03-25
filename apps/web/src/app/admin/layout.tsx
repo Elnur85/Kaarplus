@@ -7,7 +7,6 @@ import {
     ClipboardList,
     Users,
     Megaphone,
-    Settings,
     ShieldCheck,
     LogOut,
     Car
@@ -30,7 +29,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         { name: t('layout.nav.queue'), href: "/admin/listings", icon: ClipboardList },
         { name: t('layout.nav.users'), href: "/admin/users", icon: Users },
         { name: t('layout.nav.ads'), href: "/admin/ads", icon: Megaphone },
-        { name: t('layout.nav.settings'), href: "/admin/settings", icon: Settings },
     ];
 
     return (

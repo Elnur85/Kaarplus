@@ -131,6 +131,7 @@
 		"credit": "Credit",
 		"barter": "Barter",
 		"reset": "Reset",
+		"metadataError": "Search filters could not be loaded.",
 		"moreFilters": "More filters",
 		"submit": "Show ads",
 		"stats": {

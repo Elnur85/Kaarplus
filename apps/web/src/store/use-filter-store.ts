@@ -42,7 +42,11 @@ interface FilterStore extends FilterState {
 	toggleFuelType: (fuel: string) => void;
 	// Body type actions for hierarchical structure
 	toggleBodyTypeCategory: (category: string) => void;
-	toggleBodyTypeSubtype: (category: string, subtype: string) => void;
+	toggleBodyTypeSubtype: (
+		category: string,
+		subtype: string,
+		availableSubtypes: string[]
+	) => void;
 	isCategorySelected: (category: string) => boolean;
 	isSubtypeSelected: (category: string, subtype: string) => boolean;
 	getBodyTypeForApi: () => string;
@@ -116,7 +120,7 @@ export const useFilterStore = create<FilterStore>((set, get) => ({
 		});
 	},
 	// Toggle specific subtype within a category
-	toggleBodyTypeSubtype: (category, subtype) => {
+	toggleBodyTypeSubtype: (category, subtype, availableSubtypes) => {
 		set((state) => {
 			const existing = state.bodyTypeSelections.find(
 				(sel) => sel.category === category
@@ -132,13 +136,11 @@ export const useFilterStore = create<FilterStore>((set, get) => ({
 			} else if (existing.subtypes.length === 0) {
 				// Category was fully selected, now switch to specific subtypes
 				// (all except the one being toggled off)
-				const { getSubtypes } = require("@/lib/body-types");
-				const allSubtypes = getSubtypes(category);
 				next = state.bodyTypeSelections.map((sel) =>
 					sel.category === category
 						? {
 							category,
-							subtypes: allSubtypes.filter((s: string) => s !== subtype),
+							subtypes: availableSubtypes.filter((item) => item !== subtype),
 						}
 						: sel
 				);

@@ -1,9 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SellWizard } from '@/components/sell/sell-wizard';
+import { useVehicleTaxonomy } from '@/hooks/use-vehicle-taxonomy';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
 import { useFormContext } from 'react-hook-form';
+
+vi.mock('@/hooks/use-vehicle-taxonomy', () => ({
+    useVehicleTaxonomy: vi.fn(),
+}));
 
 // Mock child components
 vi.mock('@/components/sell/step-1-vehicle-type', () => ({
@@ -77,6 +82,26 @@ describe('SellWizard', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        (useVehicleTaxonomy as any).mockReturnValue({
+            taxonomy: {
+                makes: ['BMW'],
+                fuelTypes: ['Petrol'],
+                bodyTypes: ['passengerCar:sedan'],
+                transmissions: ['Automatic'],
+                driveTypes: ['RWD'],
+                colors: ['Black'],
+                locations: ['Tallinn'],
+                bodyTypeHierarchy: [{ category: 'passengerCar', subtypes: ['sedan'] }],
+                years: { min: 1990, max: 2024 },
+                price: { min: 0, max: 50000 },
+            },
+            models: ['320i'],
+            isLoading: false,
+            isLoadingModels: false,
+            error: null,
+            modelError: null,
+            retry: vi.fn(),
+        });
         (useSession as any).mockReturnValue({
             data: { user: { name: 'Test User', email: 'test@example.com' } },
             status: 'authenticated',

@@ -8,6 +8,7 @@
     "title": "Reklaamihaldus",
     "campaigns": {
       "title": "Kampaaniad",
+      "backToCampaigns": "Tagasi kampaaniate juurde",
       "create": "Uus kampaania",
       "name": "Kampaania nimi",
       "budget": "Eelarve",
@@ -20,7 +21,11 @@
       "targeting": "Sihtimine",
       "advertiser": "Reklaamija",
       "ads": "Reklaamid",
+      "notFoundTitle": "Kampaaniat ei leitud",
+      "summary": "{{advertiser}} · Prioriteet {{priority}}",
+      "summaryTotal": "{{total}} kokku",
       "statuses": {
+        "ALL": "Kõik",
         "DRAFT": "Mustand",
         "ACTIVE": "Aktiivne",
         "PAUSED": "Peatatud",
@@ -47,7 +52,10 @@
       "toasts": {
         "success": "Kampaania edukalt loodud",
         "error": "Viga kampaania loomisel",
-        "fetchError": "Kampaaniate laadimine ebaõnnestus"
+        "fetchError": "Kampaaniate laadimine ebaõnnestus",
+        "errorTitle": "Viga",
+        "archiveSuccess": "Kampaania arhiveeritud",
+        "archiveError": "Kampaania arhiveerimine ebaõnnestus"
       }
     },
     "advertisements": {
@@ -58,6 +66,10 @@
       "active": "Aktiivne",
       "inactive": "Mitteaktiivne",
       "empty": "Reklaamid puuduvad",
+      "table": {
+        "title": "Pealkiri",
+        "events": "Sündmused"
+      },
       "form": {
         "title": "Pealkiri",
         "titlePlaceholder": "nt. LHV Autoliisingu Bänner",
@@ -73,17 +85,52 @@
       },
       "toasts": {
         "success": "Reklaam edukalt loodud",
-        "error": "Viga reklaami loomisel"
+        "error": "Viga reklaami loomisel",
+        "errorTitle": "Viga"
       }
     },
     "units": {
       "title": "Reklaamiplatsid",
+      "description": "Kõik saadaolevad reklaamiplatsid ja nende hetkeline täituvus.",
+      "name": "Nimi",
       "occupancy": "Täituvus",
       "placement": "Platsikood",
       "type": "Tüüp",
       "dimensions": "Mõõtmed",
+      "activeCount": "Aktiivseid: {{count}}",
       "active": "Aktiivne",
-      "inactive": "Mitteaktiivne"
+      "inactive": "Mitteaktiivne",
+      "types": {
+        "BANNER": "Bänner",
+        "NATIVE": "Omareklaam",
+        "ADSENSE": "AdSense"
+      },
+      "placements": {
+        "HOME_BILLBOARD": {
+          "name": "Esilehe bänner",
+          "description": "Täislaiuses bänner avalehe otsinguploki järel."
+        },
+        "HOME_PARTNERS": {
+          "name": "Esilehe partnerid",
+          "description": "Partnerite reklaamiplokk kategooriate vahel."
+        },
+        "SEARCH_SIDEBAR": {
+          "name": "Otsingu külgriba",
+          "description": "Filtrite all kuvatav külgriba reklaam lauavaates."
+        },
+        "LISTING_NATIVE": {
+          "name": "Kuulutuste natiivreklaam",
+          "description": "Sponsoreeritud kaart, mis lisatakse otsingutulemuste sekka."
+        },
+        "DETAIL_FINANCE": {
+          "name": "Detailvaate finantsreklaam",
+          "description": "Finantspartneri reklaam kuulutuse detailvaate külgribal."
+        },
+        "DETAIL_FOOTER": {
+          "name": "Detailvaate jaluse bänner",
+          "description": "Täislaiuses bänner enne seotud sõidukite plokki."
+        }
+      }
     },
     "analytics": {
       "title": "Analüütika",
@@ -94,7 +141,10 @@
       "activeCampaigns": "Aktiivsed kampaaniad",
       "totalBudget": "Kogu eelarve",
       "totalSpent": "Kogu kulutus",
-      "chartTitle": "Kampaania tulemused"
+      "chartTitle": "Kampaania tulemused",
+      "loading": "Analüütika laadimine...",
+      "empty": "Analüütikaandmed puuduvad veel",
+      "tooltip": "{{impressions}} kuvamist / {{clicks}} klikki"
     }
   }
 }

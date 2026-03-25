@@ -4,7 +4,6 @@ import { useFilterStore, FilterState } from "@/store/use-filter-store";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { getSubtypes } from "@/lib/body-types";
 
 export function FilterBadges() {
 	const { t } = useTranslation(["listings", "common", "sell", "bodyTypes"]);
@@ -166,7 +165,9 @@ export function FilterBadges() {
 
 			{/* Hierarchical Body Type Badges */}
 			{filters.bodyTypeSelections.map((selection) => {
-				const categoryLabel = t(`bodyTypes:categories.${selection.category}`);
+				const categoryLabel = t(`bodyTypes:categories.${selection.category}`, {
+					defaultValue: selection.category,
+				});
 
 				// If entire category selected
 				if (selection.subtypes.length === 0) {
@@ -196,12 +197,16 @@ export function FilterBadges() {
 					>
 						{t("filters.bodyType", { ns: "listings" })}:{" "}
 						{t(`bodyTypes:subtypes.${subtype}`, { defaultValue: subtype })}
-						<button
-							onClick={() =>
-								filters.toggleBodyTypeSubtype(selection.category, subtype)
-							}
-							aria-label={removeLabel}
-						>
+							<button
+								onClick={() =>
+									filters.toggleBodyTypeSubtype(
+										selection.category,
+										subtype,
+										selection.subtypes
+									)
+								}
+								aria-label={removeLabel}
+							>
 							<X size={14} className="text-muted-foreground hover:text-destructive" />
 						</button>
 					</Badge>
@@ -249,7 +254,11 @@ export function FilterBadges() {
 					variant="secondary"
 					className="flex items-center gap-1.5 px-3 py-1 bg-card border-border hover:bg-muted/80"
 				>
-					{t("filters.driveType", { ns: "listings" })}: {filters.driveType}
+					{t("filters.driveType", { ns: "listings" })}:{" "}
+					{t(`options.drive.${filters.driveType}`, {
+						ns: "sell",
+						defaultValue: filters.driveType,
+					})}
 					<button
 						onClick={() => removeBadge("driveType")}
 						aria-label={removeLabel}

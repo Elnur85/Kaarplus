@@ -31,6 +31,20 @@ export default function AdInventoryPage() {
   const [units, setUnits] = useState<AdUnitWithOccupancy[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const getPlacementText = (placementId: string, field: "name" | "description" = "name") => {
+    const key = `admin.units.placements.${placementId}.${field}`;
+    const translated = t(key);
+
+    if (translated === key) {
+      return field === "name" ? placementId : "";
+    }
+
+    return translated;
+  };
+
+  const getUnitTypeLabel = (type: string) =>
+    t(`admin.units.types.${type}`, { defaultValue: type });
+
   useEffect(() => {
     fetch(`${API_URL}/admin/ad-units`, { credentials: "include" })
       .then((res) => res.json())
@@ -44,7 +58,7 @@ export default function AdInventoryPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">{t("admin.units.title")}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          All available ad placement slots and their current occupancy
+          {t("admin.units.description")}
         </p>
       </div>
 
@@ -59,7 +73,7 @@ export default function AdInventoryPage() {
           <Table>
             <TableHeader>
               <TableRow className="bg-slate-50 dark:bg-slate-800/50">
-                <TableHead className="font-bold">Name</TableHead>
+                <TableHead className="font-bold">{t("admin.units.name")}</TableHead>
                 <TableHead className="font-bold">{t("admin.units.placement")}</TableHead>
                 <TableHead className="font-bold">{t("admin.units.type")}</TableHead>
                 <TableHead className="font-bold">{t("admin.units.dimensions")}</TableHead>
@@ -71,9 +85,11 @@ export default function AdInventoryPage() {
               {units.map((unit) => (
                 <TableRow key={unit.id}>
                   <TableCell>
-                    <div className="font-semibold text-sm">{unit.name}</div>
-                    {unit.description && (
-                      <div className="text-xs text-muted-foreground mt-0.5">{unit.description}</div>
+                    <div className="font-semibold text-sm">{getPlacementText(unit.placementId)}</div>
+                    {getPlacementText(unit.placementId, "description") && (
+                      <div className="text-xs text-muted-foreground mt-0.5">
+                        {getPlacementText(unit.placementId, "description")}
+                      </div>
                     )}
                   </TableCell>
                   <TableCell>
@@ -83,7 +99,7 @@ export default function AdInventoryPage() {
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-wider">
-                      {unit.type}
+                      {getUnitTypeLabel(unit.type)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
@@ -101,7 +117,7 @@ export default function AdInventoryPage() {
                         />
                       </div>
                       <span className="text-xs font-medium">
-                        {unit.activeAdsCount} active
+                        {t("admin.units.activeCount", { count: unit.activeAdsCount })}
                       </span>
                     </div>
                   </TableCell>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Search, Mail, Calendar, Loader2, Shield, UserX, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,13 +48,15 @@ interface User {
 }
 
 export default function AdminUsersPage() {
-	const { t } = useTranslation("admin");
+	const { t, i18n } = useTranslation("admin");
 	const { toast } = useToast();
 	const [users, setUsers] = useState<User[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
 	const [isDeleting, setIsDeleting] = useState(false);
+	const localeCode =
+		i18n.language === "et" ? "et-EE" : i18n.language === "ru" ? "ru-RU" : "en-GB";
 
 	const fetchUsers = () => {
 		setIsLoading(true);
@@ -73,7 +75,7 @@ export default function AdminUsersPage() {
 	);
 
 	const formatDate = (dateStr: string) =>
-		new Date(dateStr).toLocaleDateString('et-EE', { day: "2-digit", month: "2-digit", year: "numeric" });
+		new Date(dateStr).toLocaleDateString(localeCode, { day: "2-digit", month: "2-digit", year: "numeric" });
 
 	const getRoleBadgeVariant = (role: string) => {
 		switch (role) {
@@ -82,6 +84,9 @@ export default function AdminUsersPage() {
 			default: return 'outline';
 		}
 	};
+
+	const getRoleLabel = (role: string) =>
+		t(`users.roles.${role}`, { defaultValue: role });
 
 	const handleChangeRole = async (userId: string, newRole: string) => {
 		try {
@@ -92,10 +97,19 @@ export default function AdminUsersPage() {
 				body: JSON.stringify({ role: newRole }),
 			});
 			if (!res.ok) throw new Error("Failed to update role");
-			toast({ title: "Role updated", description: `User role changed to ${newRole}` });
+			toast({
+				title: t("users.toasts.roleUpdated.title"),
+				description: t("users.toasts.roleUpdated.description", {
+					role: getRoleLabel(newRole),
+				}),
+			});
 			fetchUsers();
 		} catch {
-			toast({ title: "Error", description: "Failed to update role", variant: "destructive" });
+			toast({
+				title: t("users.toasts.roleUpdateFailed.title"),
+				description: t("users.toasts.roleUpdateFailed.description"),
+				variant: "destructive",
+			});
 		}
 	};
 
@@ -108,11 +122,20 @@ export default function AdminUsersPage() {
 				credentials: "include",
 			});
 			if (!res.ok && res.status !== 204) throw new Error("Failed to delete user");
-			toast({ title: "User deleted", description: `${deleteTarget.email} has been removed` });
+			toast({
+				title: t("users.toasts.userDeleted.title"),
+				description: t("users.toasts.userDeleted.description", {
+					email: deleteTarget.email,
+				}),
+			});
 			setDeleteTarget(null);
 			fetchUsers();
 		} catch {
-			toast({ title: "Error", description: "Failed to delete user", variant: "destructive" });
+			toast({
+				title: t("users.toasts.userDeleteFailed.title"),
+				description: t("users.toasts.userDeleteFailed.description"),
+				variant: "destructive",
+			});
 		} finally {
 			setIsDeleting(false);
 		}
@@ -172,8 +195,8 @@ export default function AdminUsersPage() {
 							<TableRow>
 								<TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
 									{searchQuery
-										? t("users.noResults", { defaultValue: "Kasutajaid ei leitud" })
-										: t("users.empty", { defaultValue: "Kasutajaid pole" })
+										? t("users.noResults")
+										: t("users.empty")
 									}
 								</TableCell>
 							</TableRow>
@@ -186,7 +209,7 @@ export default function AdminUsersPage() {
 												{user.name?.charAt(0) || user.email.charAt(0)}
 											</div>
 											<div>
-												<p className="font-semibold text-sm">{user.name || t("users.noName", { defaultValue: "Nimi puudub" })}</p>
+												<p className="font-semibold text-sm">{user.name || t("users.noName")}</p>
 												<div className="flex items-center gap-1 text-xs text-muted-foreground">
 													<Mail size={12} />
 													{user.email}
@@ -199,7 +222,7 @@ export default function AdminUsersPage() {
 											variant={getRoleBadgeVariant(user.role)}
 											className={user.role === "ADMIN" ? "bg-primary text-white" : "font-medium"}
 										>
-											{user.role}
+											{getRoleLabel(user.role)}
 										</Badge>
 									</TableCell>
 									<TableCell>
@@ -212,15 +235,17 @@ export default function AdminUsersPage() {
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button variant="ghost" size="sm" className="gap-1 h-8 text-xs font-semibold">
-													Actions <ChevronDown size={14} />
+													{t("users.actions.button")} <ChevronDown size={14} />
 												</Button>
 											</DropdownMenuTrigger>
 											<DropdownMenuContent align="end" className="w-48">
-												<DropdownMenuLabel className="text-xs">User: {user.name || user.email}</DropdownMenuLabel>
+												<DropdownMenuLabel className="text-xs">
+													{t("users.actions.menuLabel", { value: user.name || user.email })}
+												</DropdownMenuLabel>
 												<DropdownMenuSeparator />
 												<DropdownMenuSub>
 													<DropdownMenuSubTrigger className="gap-2 text-sm">
-														<Shield size={14} /> Change Role
+														<Shield size={14} /> {t("users.actions.changeRole")}
 													</DropdownMenuSubTrigger>
 													<DropdownMenuSubContent>
 														{(["USER", "DEALERSHIP", "ADMIN"] as const).map((role) => (
@@ -230,7 +255,7 @@ export default function AdminUsersPage() {
 																onClick={() => handleChangeRole(user.id, role)}
 																className="text-sm"
 															>
-																{role === user.role ? `✓ ${role}` : role}
+																{role === user.role ? `✓ ${getRoleLabel(role)}` : getRoleLabel(role)}
 															</DropdownMenuItem>
 														))}
 													</DropdownMenuSubContent>
@@ -240,7 +265,7 @@ export default function AdminUsersPage() {
 													onClick={() => setDeleteTarget(user)}
 													className="text-destructive focus:text-destructive gap-2 text-sm"
 												>
-													<UserX size={14} /> Delete User
+													<UserX size={14} /> {t("users.actions.delete")}
 												</DropdownMenuItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
@@ -256,19 +281,33 @@ export default function AdminUsersPage() {
 			<AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete User</AlertDialogTitle>
+						<AlertDialogTitle>{t("users.deleteDialog.title")}</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete <strong>{deleteTarget?.email}</strong>? This action cannot be undone. The user and their listings will be removed.
+							<Trans
+								ns="admin"
+								i18nKey="users.deleteDialog.description"
+								values={{ email: deleteTarget?.email || "" }}
+								components={{ strong: <strong /> }}
+							/>
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+						<AlertDialogCancel disabled={isDeleting}>
+							{t("users.deleteDialog.cancel")}
+						</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleDeleteUser}
 							disabled={isDeleting}
 							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 						>
-							{isDeleting ? <><Loader2 size={14} className="animate-spin mr-2" /> Deleting...</> : "Delete User"}
+							{isDeleting ? (
+								<>
+									<Loader2 size={14} className="animate-spin mr-2" />
+									{t("users.deleteDialog.deleting")}
+								</>
+							) : (
+								t("users.deleteDialog.confirm")
+							)}
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

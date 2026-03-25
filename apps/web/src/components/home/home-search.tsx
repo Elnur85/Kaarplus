@@ -3,16 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Loader2 } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { useVehicleTaxonomy } from "@/hooks/use-vehicle-taxonomy";
 
 interface SearchStats {
 	todayCount: number;
@@ -20,15 +21,11 @@ interface SearchStats {
 }
 
 export function HomeSearch() {
-	const { t } = useTranslation(['home', 'sell']);
+	const { t } = useTranslation(['home', 'sell', 'common']);
 	const router = useRouter();
 
 	// State
 	const [activeTab, setActiveTab] = useState("all"); // all, new, used
-	const [makes, setMakes] = useState<string[]>([]);
-	const [models, setModels] = useState<string[]>([]);
-	const [cities, setCities] = useState<string[]>([]); // Assuming we have city data or hardcode major ones
-	const [bodyTypes, setBodyTypes] = useState<string[]>([]);
 
 	// Selection State
 	const [selectedMake, setSelectedMake] = useState("");
@@ -45,39 +42,28 @@ export function HomeSearch() {
 	const [isCredit, setIsCredit] = useState(false);
 	const [isBarter, setIsBarter] = useState(false);
 
-	// Loading states
-	const [isLoadingMetadata, setIsLoadingMetadata] = useState(true);
-	const [isLoadingModels, setIsLoadingModels] = useState(false);
-
 	// Stats (fetched from API)
 	const [stats, setStats] = useState<SearchStats>({ todayCount: 0, totalCount: 0 });
-	const [foundCount, setFoundCount] = useState<number | null>(null);
+	const {
+		taxonomy,
+		models,
+		isLoading,
+		isLoadingModels,
+		error,
+		modelError,
+		retry,
+	} = useVehicleTaxonomy({
+		scope: "active",
+		make: selectedMake,
+	});
 
-	// Initial Data Fetch
+	// Stats fetch
 	useEffect(() => {
-		const safeFetch = async (url: string) => {
-			const res = await fetch(url);
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			return res.json();
-		};
-
-		const fetchData = async () => {
+		const fetchStats = async () => {
 			try {
-				const [makesJson, filtersJson, locationsJson, statsJson] = await Promise.all([
-					safeFetch(`${API_URL}/search/makes`),
-					safeFetch(`${API_URL}/search/filters`),
-					safeFetch(`${API_URL}/search/locations`),
-					safeFetch(`${API_URL}/search/stats`)
-				]);
-
-				setMakes(makesJson.data || []);
-				// API returns "category:subtype" DB strings — extract unique top-level category keys
-				const rawBodyTypes: string[] = filtersJson.data?.bodyTypes || [];
-				const uniqueCategories = Array.from(
-					new Set(rawBodyTypes.map((bt: string) => bt.split(":")[0]).filter(Boolean))
-				);
-				setBodyTypes(uniqueCategories);
-				setCities(locationsJson.data || []);
+				const res = await fetch(`${API_URL}/search/stats`);
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
+				const statsJson = await res.json();
 				if (statsJson.data) {
 					setStats({
 						todayCount: statsJson.data.totalListings || 0,
@@ -85,43 +71,29 @@ export function HomeSearch() {
 					});
 				}
 			} catch (err) {
-				// Dropdowns degrade gracefully with empty options, but inform the user
-				const message = err instanceof Error ? err.message : "Otsinguandmete laadimine ebaõnnestus";
-				console.error("Home search metadata fetch failed:", err);
-				toast.error(`Otsingufiltrid pole saadaval: ${message}`);
-			} finally {
-				setIsLoadingMetadata(false);
+				console.error("Home search stats fetch failed:", err);
 			}
 		};
 
-		fetchData();
+		fetchStats();
 	}, []);
 
-	// Fetch models when make changes
 	useEffect(() => {
 		if (!selectedMake || selectedMake === "all") {
-			setModels([]);
 			setSelectedModel("");
 			return;
 		}
 
-		const fetchModels = async () => {
-			setIsLoadingModels(true);
-			try {
-				const res = await fetch(`${API_URL}/search/models?make=${encodeURIComponent(selectedMake)}`);
-				if (!res.ok) throw new Error(`HTTP ${res.status}`);
-				const json = await res.json();
-				setModels(json.data || []);
-				setSelectedModel(""); // Reset model when make changes
-			} catch {
-				// Model dropdown will remain empty
-			} finally {
-				setIsLoadingModels(false);
-			}
-		};
+		if (!isLoadingModels && selectedModel && !models.includes(selectedModel)) {
+			setSelectedModel("");
+		}
+	}, [isLoadingModels, selectedMake, selectedModel, models]);
 
-		fetchModels();
-	}, [selectedMake]);
+	useEffect(() => {
+		if (error || modelError) {
+			toast.error(t('search.metadataError'));
+		}
+	}, [error, modelError, t]);
 
 	// Search Handler
 	const handleSearch = () => {
@@ -159,8 +131,12 @@ export function HomeSearch() {
 	};
 
 	// Generate Year Options
-	const currentYear = new Date().getFullYear();
-	const years = Array.from({ length: 40 }, (_, i) => currentYear - i);
+	const currentYear = Math.max(taxonomy.years.max, taxonomy.years.min);
+	const minYear = Math.min(taxonomy.years.min, taxonomy.years.max);
+	const years = Array.from(
+		{ length: Math.max(currentYear - minYear + 1, 1) },
+		(_, i) => currentYear - i
+	);
 
 	return (
 		<div className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
@@ -180,19 +156,19 @@ export function HomeSearch() {
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
 
 						{/* Row 1 */}
-						<Select value={selectedMake} onValueChange={setSelectedMake} disabled={isLoadingMetadata}>
+						<Select value={selectedMake || "all"} onValueChange={setSelectedMake} disabled={isLoading}>
 							<SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700">
 								<SelectValue placeholder={t('search.make')} />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="all">{t('search.allMakes')}</SelectItem>
-								{makes.map(make => (
+								{taxonomy.makes.map(make => (
 									<SelectItem key={make} value={make}>{make}</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
 
-						<Select value={selectedModel} onValueChange={setSelectedModel} disabled={!selectedMake || isLoadingModels}>
+						<Select value={selectedModel || "all"} onValueChange={setSelectedModel} disabled={!selectedMake || selectedMake === "all" || isLoadingModels}>
 							<SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700">
 								<SelectValue placeholder={t('search.model')} />
 							</SelectTrigger>
@@ -204,27 +180,29 @@ export function HomeSearch() {
 							</SelectContent>
 						</Select>
 
-						<Select value={selectedBodyType} onValueChange={setSelectedBodyType} disabled={isLoadingMetadata}>
+						<Select value={selectedBodyType || "all"} onValueChange={setSelectedBodyType} disabled={isLoading}>
 							<SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700">
 								<SelectValue placeholder={t('search.bodyType')} />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="all">{t('search.allBodyTypes')}</SelectItem>
-								{bodyTypes.map(bt => (
-									<SelectItem key={bt} value={bt}>
-										{t(`sell:step1.categories.${bt}`, { defaultValue: bt })}
+								{taxonomy.bodyTypeHierarchy.map((item) => (
+									<SelectItem key={item.category} value={item.category}>
+										{t(`sell:step1.categories.${item.category}`, {
+											defaultValue: item.category,
+										})}
 									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
 
-						<Select value={selectedCity} onValueChange={setSelectedCity}>
+						<Select value={selectedCity || "all"} onValueChange={setSelectedCity}>
 							<SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700">
 								<SelectValue placeholder={t('search.city')} />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="all">{t('search.allCities')}</SelectItem>
-								{cities.map(c => (
+								{taxonomy.locations.map(c => (
 									<SelectItem key={c} value={c}>{c}</SelectItem>
 								))}
 							</SelectContent>
@@ -296,9 +274,16 @@ export function HomeSearch() {
 							</Link>
 						</div>
 
-						<Button size="lg" className="w-full md:w-auto px-10 font-bold text-lg h-12" onClick={handleSearch}>
-							{t('search.submit')}
-						</Button>
+						<div className="flex w-full flex-col gap-3 md:w-auto md:items-end">
+							<Button size="lg" className="w-full md:w-auto px-10 font-bold text-lg h-12" onClick={handleSearch}>
+								{t('search.submit')}
+							</Button>
+							{error || modelError ? (
+								<Button variant="ghost" size="sm" onClick={retry}>
+									{t('common:errorBoundary.retry')}
+								</Button>
+							) : null}
+						</div>
 					</div>
 
 				</div>

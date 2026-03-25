@@ -206,6 +206,10 @@
         "saving": "Saving...",
         "publish": "Publish Listing"
     },
+    "taxonomy": {
+        "loading": "Loading vehicle data...",
+        "error": "Vehicle data could not be loaded. Please try again."
+    },
     "loginRequired": {
         "title": "Log in to sell",
         "description": "To post a listing, you need to be logged in. It only takes a minute and is completely free.",
@@ -274,6 +278,68 @@
             "Excellent": "Excellent",
             "Used": "Used",
             "Damaged": "Damaged"
+        }
+    },
+    "validation": {
+        "contactName": {
+            "minLength": "Name must be at least 2 characters"
+        },
+        "contactEmail": {
+            "invalid": "Please enter a valid email address"
+        },
+        "contactPhone": {
+            "invalid": "Please enter a valid phone number"
+        },
+        "make": {
+            "required": "Make is required"
+        },
+        "model": {
+            "required": "Model is required"
+        },
+        "year": {
+            "range": "Year must be within the allowed range"
+        },
+        "vin": {
+            "length": "VIN must be exactly 17 characters"
+        },
+        "mileage": {
+            "nonNegative": "Mileage cannot be negative"
+        },
+        "price": {
+            "positive": "Price must be positive"
+        },
+        "location": {
+            "required": "Location is required"
+        },
+        "bodyType": {
+            "required": "Body type is required"
+        },
+        "fuelType": {
+            "required": "Fuel type is required"
+        },
+        "transmission": {
+            "required": "Transmission is required"
+        },
+        "powerKw": {
+            "required": "Power is required"
+        },
+        "driveType": {
+            "required": "Drive type is required"
+        },
+        "doors": {
+            "range": "Doors must be between 2 and 5"
+        },
+        "seats": {
+            "range": "Seats must be between 1 and 9"
+        },
+        "colorExterior": {
+            "required": "Exterior color is required"
+        },
+        "condition": {
+            "required": "Condition is required"
+        },
+        "description": {
+            "maxLength": "Description is too long"
         }
     }
 }

@@ -40,7 +40,12 @@ export function AdSlot({ placementId, className, fallback, context }: AdSlotProp
       if (!res.ok) throw new Error("Failed to fetch ad");
       const json = await res.json();
       setAd(json.data);
-    } catch {
+    } catch (error) {
+      console.error("[AdSlot] Failed to fetch ad", {
+        error,
+        placementId,
+        context,
+      });
       setAd(null);
     } finally {
       setIsLoading(false);
@@ -95,8 +100,13 @@ export function AdSlot({ placementId, className, fallback, context }: AdSlotProp
           locale: document.documentElement.lang || "et",
         }),
       });
-    } catch {
-      // fire-and-forget
+    } catch (error) {
+      console.error("[AdSlot] Failed to send ad engagement event", {
+        error,
+        adId: ad.id,
+        placementId,
+        eventType,
+      });
     }
   };
 

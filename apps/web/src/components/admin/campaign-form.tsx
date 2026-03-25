@@ -87,7 +87,7 @@ export function CampaignForm({ open, onOpenChange, onSuccess }: CampaignFormProp
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Error",
+        title: t("admin.campaigns.toasts.errorTitle"),
         description: error instanceof Error ? error.message : t("admin.campaigns.toasts.error"),
       });
     } finally {

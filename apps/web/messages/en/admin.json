@@ -144,6 +144,43 @@
 		},
 		"empty": "No users found.",
 		"noName": "No name",
-		"noResults": "No users matched your search."
+		"noResults": "No users matched your search.",
+		"roles": {
+			"USER": "User",
+			"DEALERSHIP": "Dealership",
+			"ADMIN": "Admin",
+			"SUPPORT": "Support"
+		},
+		"actions": {
+			"button": "Actions",
+			"menuLabel": "User: {{value}}",
+			"changeRole": "Change role",
+			"delete": "Delete user"
+		},
+		"deleteDialog": {
+			"title": "Delete user",
+			"description": "Are you sure you want to delete user <strong>{{email}}</strong>? This action cannot be undone. The user and their listings will be removed.",
+			"cancel": "Cancel",
+			"confirm": "Delete user",
+			"deleting": "Deleting..."
+		},
+		"toasts": {
+			"roleUpdated": {
+				"title": "Role updated",
+				"description": "User role changed to {{role}}."
+			},
+			"roleUpdateFailed": {
+				"title": "Error",
+				"description": "Failed to update user role."
+			},
+			"userDeleted": {
+				"title": "User deleted",
+				"description": "{{email}} has been removed."
+			},
+			"userDeleteFailed": {
+				"title": "Error",
+				"description": "Failed to delete user."
+			}
+		}
 	}
 }

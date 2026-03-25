@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { BODY_TYPE_HIERARCHY, getSubtypes } from "@/lib/body-types";
+import { BodyTypeHierarchyItem } from "@/lib/vehicle-taxonomy";
 
 // Map category keys to icons
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,9 +40,14 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
 interface Step1VehicleTypeProps {
     selectedType: string;
     onSelect: (type: string) => void;
+    bodyTypeHierarchy: BodyTypeHierarchyItem[];
 }
 
-export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypeProps) {
+export function Step1VehicleType({
+    selectedType,
+    onSelect,
+    bodyTypeHierarchy,
+}: Step1VehicleTypeProps) {
     const { t } = useTranslation('sell');
 
     // Parse current selection to determine if we have a category and/or subtype selected
@@ -53,7 +58,7 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
             return { category: cat, subtype: sub };
         }
         // Check if value is a category itself
-        const isCategory = BODY_TYPE_HIERARCHY.some((cat) => cat.key === value);
+        const isCategory = bodyTypeHierarchy.some((cat) => cat.category === value);
         if (isCategory) {
             return { category: value, subtype: null };
         }
@@ -85,7 +90,9 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
 
     // If viewing a category's subtypes
     if (viewingCategory) {
-        const subtypes = getSubtypes(viewingCategory);
+        const subtypes = bodyTypeHierarchy.find(
+            (item) => item.category === viewingCategory
+        )?.subtypes ?? [];
         const categoryLabel = t(`step1.categories.${viewingCategory}`, viewingCategory);
 
         return (
@@ -98,13 +105,13 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
                         className="gap-2"
                     >
                         <ArrowLeft size={16} />
-                        {t('step1.backToCategories', 'Tagasi kategooriatesse')}
+                        {t('step1.backToCategories')}
                     </Button>
                 </div>
 
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold tracking-tight">
-                        {t('step1.selectSubtype', 'Vali alamkategooria')}
+                        {t('step1.selectSubtype')}
                     </h2>
                     <p className="text-muted-foreground mt-2">
                         {categoryLabel}
@@ -152,7 +159,7 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
                             selectedCategory === viewingCategory && !selectedSubtype && "border-primary bg-primary/5"
                         )}
                     >
-                        {t('step1.selectGeneral', 'Vali üldine: {{category}}', { category: categoryLabel })}
+                        {t('step1.selectGeneral', { category: categoryLabel })}
                     </Button>
                 </div>
             </div>
@@ -170,16 +177,16 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {BODY_TYPE_HIERARCHY.map((category) => {
-                    const Icon = categoryIcons[category.key] || Car;
-                    const isSelected = selectedCategory === category.key && !selectedSubtype;
-                    const hasSubtypeSelected = selectedCategory === category.key && !!selectedSubtype;
-                    const categoryLabel = t(`step1.categories.${category.key}`, category.key);
+                {bodyTypeHierarchy.map((category) => {
+                    const Icon = categoryIcons[category.category] || Car;
+                    const isSelected = selectedCategory === category.category && !selectedSubtype;
+                    const hasSubtypeSelected = selectedCategory === category.category && !!selectedSubtype;
+                    const categoryLabel = t(`step1.categories.${category.category}`, category.category);
 
                     return (
                         <Card
-                            key={category.key}
-                            onClick={() => handleCategoryClick(category.key)}
+                            key={category.category}
+                            onClick={() => handleCategoryClick(category.category)}
                             className={cn(
                                 "p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 border-2 group hover:border-primary/50 relative",
                                 isSelected
@@ -226,7 +233,7 @@ export function Step1VehicleType({ selectedType, onSelect }: Step1VehicleTypePro
             {selectedType && (
                 <div className="text-center pt-4">
                     <p className="text-sm text-muted-foreground">
-                        {t('step1.selected', 'Valitud')}: <span className="font-medium text-foreground">
+                        {t('step1.selected')}: <span className="font-medium text-foreground">
                             {selectedCategory && t(`step1.categories.${selectedCategory}`, selectedCategory)}
                             {selectedSubtype && ` - ${t(`step1.subtypes.${selectedSubtype}`, selectedSubtype)}`}
                         </span>

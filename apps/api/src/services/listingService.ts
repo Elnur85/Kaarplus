@@ -1,6 +1,10 @@
 import { prisma, ListingStatus, UserRole, Prisma } from "@kaarplus/database";
 
-import { parseBodyType, getBodyTypeValues } from "../utils/bodyTypes";
+import {
+	getBodyTypeHierarchy,
+	getBodyTypeValues,
+	parseBodyType,
+} from "../utils/bodyTypes";
 import { cacheService } from "../utils/cache";
 import { ForbiddenError, NotFoundError } from "../utils/errors";
 import { logger } from "../utils/logger";
@@ -141,7 +145,8 @@ export class ListingService {
 		if (bodyType) {
 			// Parse hierarchical body type format
 			const selections = parseBodyType(bodyType);
-			const bodyTypeValues = getBodyTypeValues(selections);
+			const hierarchy = await getBodyTypeHierarchy("all");
+			const bodyTypeValues = getBodyTypeValues(selections, hierarchy);
 			if (bodyTypeValues.length > 0) {
 				where.bodyType = { in: bodyTypeValues };
 			}

@@ -41,17 +41,13 @@ const statusColors: Record<string, string> = {
   ARCHIVED: "bg-slate-100 text-slate-500 border-slate-200",
 };
 
-const priorityLabels: Record<number, string> = {
-  1: "Takeover",
-  2: "House",
-  3: "Programmatic",
-};
-
 export function CampaignTable({ campaigns, onArchive }: CampaignTableProps) {
-  const { t } = useTranslation("ads");
+  const { t, i18n } = useTranslation("ads");
+  const localeCode =
+    i18n.language === "et" ? "et-EE" : i18n.language === "ru" ? "ru-RU" : "en-GB";
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("et-EE", {
+    return new Date(date).toLocaleDateString(localeCode, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -106,7 +102,7 @@ export function CampaignTable({ campaigns, onArchive }: CampaignTableProps) {
                 <TableCell>
                   <span className="text-xs font-medium text-muted-foreground">
                     {t(`admin.campaigns.priorities.${campaign.priority}`, {
-                      defaultValue: priorityLabels[campaign.priority],
+                      defaultValue: String(campaign.priority),
                     })}
                   </span>
                 </TableCell>

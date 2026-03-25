@@ -206,5 +206,43 @@
 				"content": "Küsimuste korral:"
 			}
 		}
+	},
+	"faq": {
+		"title": "Korduma kippuvad küsimused",
+		"subtitle": "Leidke vastused enamlevinud küsimustele auto ostmise ja müümise kohta.",
+		"items": [
+			{
+				"question": "Kuidas ma saan oma autot müüa?",
+				"answer": "Logige sisse, vajutage päises nuppu \"Lisa kuulutus\" ja täitke nelja sammuga vorm: valige sõiduki tüüp, sisestage andmed, laadige fotod üles ja kinnitage kuulutus. Meie meeskond kontrollib kuulutuse enne avaldamist."
+			},
+			{
+				"question": "Kui palju maksab kuulutuse lisamine?",
+				"answer": "Eraisikutele on esimese kuulutuse lisamine tasuta. Eraisik saab omada kuni viit aktiivset kuulutust. Edasimüüjatele on saadaval tasulised paketid piiramatu kuulutuste arvuga."
+			},
+			{
+				"question": "Kui kaua võtab kuulutuse kontroll aega?",
+				"answer": "Tavaliselt kontrollime kuulutused 24 tunni jooksul. Nädalavahetustel ja pühade ajal võib see võtta kuni 48 tundi."
+			},
+			{
+				"question": "Kas Kaarplus pakub garantiid?",
+				"answer": "Kaarplus on vahendusplatvorm. Pakume sõiduki taustakontrolli võimalusi ja vahendame garantiipakkumisi koostööpartneritelt, kuid me ei ole ostu-müügi lepingu osapool."
+			},
+			{
+				"question": "Kuidas saan ostjana müüjaga ühendust võtta?",
+				"answer": "Avage sõiduki kuulutus ja vajutage nuppu \"Võta ühendust\". Saate saata sõnumi otse läbi platvormi."
+			},
+			{
+				"question": "Mis valuutas hinnad kuvatakse?",
+				"answer": "Kõik hinnad kuvatakse eurodes (EUR). Iga hinna juures on näidatud, kas hind sisaldab käibemaksu (KM-ga) või mitte (KM-ta)."
+			},
+			{
+				"question": "Kuidas saan oma andmeid eksportida?",
+				"answer": "Logige sisse ja minge seadete alla. Sealt leiate \"Andmete eksport\" nupu, mis laadib alla JSON-faili kõigi teie isikuandmete ja kuulutustega."
+			},
+			{
+				"question": "Kuidas saan oma konto kustutada?",
+				"answer": "Logige sisse ja minge seadete alla. Vajutage \"Kustuta konto\" nuppu. Teie andmed anonümiseeritakse 30 päeva jooksul."
+			}
+		]
 	}
 }

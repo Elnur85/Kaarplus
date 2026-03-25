@@ -7,20 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { API_URL } from "@/lib/constants";
 import { useFilterStore } from "@/store/use-filter-store";
-
-interface FilterOptions {
-	makes: string[];
-	years: {
-		min: number;
-		max: number;
-	};
-	price: {
-		min: number;
-		max: number;
-	};
-}
+import { useVehicleTaxonomy } from "@/hooks/use-vehicle-taxonomy";
 
 export function SearchBar() {
 	const router = useRouter();
@@ -33,73 +21,29 @@ export function SearchBar() {
 	const [yearMin, setYearMin] = useState("");
 	const [yearMax, setYearMax] = useState("");
 	const [priceMax, setPriceMax] = useState("");
+	const {
+		taxonomy,
+		models,
+		isLoading,
+		isLoadingModels,
+		error,
+		modelError,
+		retry,
+	} = useVehicleTaxonomy({
+		scope: "active",
+		make,
+	});
 
-	const [makes, setMakes] = useState<string[]>([]);
-	const [models, setModels] = useState<string[]>([]);
-	const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
-	const [isLoadingMakes, setIsLoadingMakes] = useState(true);
-	const [isLoadingModels, setIsLoadingModels] = useState(false);
-
-	// Fetch makes and filter options on mount
-	useEffect(() => {
-		let cancelled = false;
-
-		Promise.all([
-			fetch(`${API_URL}/search/makes`).then(r => r.json()),
-			fetch(`${API_URL}/search/filters`).then(r => r.json()),
-		])
-			.then(([makesData, filtersData]) => {
-				if (!cancelled) {
-					setMakes(makesData.data || []);
-					setFilterOptions(filtersData.data);
-				}
-			})
-			.catch(console.error)
-			.finally(() => {
-				if (!cancelled) {
-					setIsLoadingMakes(false);
-				}
-			});
-
-		return () => {
-			cancelled = true;
-		};
-	}, []);
-
-	// Fetch models when make changes
 	useEffect(() => {
 		if (!make) {
-			// Clear models when no make is selected
-			setModels([]);
 			setModel("");
 			return;
 		}
 
-		let cancelled = false;
-
-		const loadModels = async () => {
-			setIsLoadingModels(true);
-			try {
-				const res = await fetch(`${API_URL}/search/models?make=${encodeURIComponent(make)}`);
-				const json = await res.json();
-				if (!cancelled) {
-					setModels(json.data || []);
-				}
-			} catch (err) {
-				console.error(err);
-			} finally {
-				if (!cancelled) {
-					setIsLoadingModels(false);
-				}
-			}
-		};
-
-		loadModels();
-
-		return () => {
-			cancelled = true;
-		};
-	}, [make]);
+		if (!isLoadingModels && model && !models.includes(model)) {
+			setModel("");
+		}
+	}, [isLoadingModels, make, model, models]);
 
 	// Handle yearMin change with validation - swaps values if range is invalid
 	const handleYearMinChange = useCallback((val: string) => {
@@ -151,10 +95,10 @@ export function SearchBar() {
 	}, [make, model, yearMin, yearMax, priceMax, router, filterStore]);
 
 	// Generate year options from filter options or fallback
-	const currentYear = new Date().getFullYear();
-	const minYear = filterOptions?.years?.min || 2000;
+	const currentYear = Math.max(taxonomy.years.max, taxonomy.years.min);
+	const minYear = Math.min(taxonomy.years.min, taxonomy.years.max);
 	const yearOptions = Array.from(
-		{ length: currentYear - minYear + 1 },
+		{ length: Math.max(currentYear - minYear + 1, 1) },
 		(_, i) => currentYear - i
 	);
 
@@ -180,14 +124,14 @@ export function SearchBar() {
 				<Select
 					value={make || "all"}
 					onValueChange={(val) => setMake(val === "all" ? "" : val)}
-					disabled={isLoadingMakes}
+					disabled={isLoading}
 				>
 					<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
-						<SelectValue placeholder={isLoadingMakes ? t('common:common.loading') : t('filters.make')} />
+						<SelectValue placeholder={isLoading ? t('common:common.loading') : t('filters.make')} />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="all">{t('filters.allMakes')}</SelectItem>
-						{makes.map((m) => (
+						{taxonomy.makes.map((m) => (
 							<SelectItem key={m} value={m}>{m}</SelectItem>
 						))}
 					</SelectContent>
@@ -219,7 +163,7 @@ export function SearchBar() {
 
 			{/* Year Range */}
 			<div className="space-y-1.5">
-				<label className={labelStyle}>{t('filters.year')} {t('filters.from', { defaultValue: 'from' })}</label>
+				<label className={labelStyle}>{t('filters.year')} {t('filters.from')}</label>
 				<Select
 					value={yearMin || "any"}
 					onValueChange={handleYearMinChange}
@@ -237,7 +181,7 @@ export function SearchBar() {
 			</div>
 
 			<div className="space-y-1.5">
-				<label className={labelStyle}>{t('filters.year')} {t('filters.to', { defaultValue: 'to' })}</label>
+				<label className={labelStyle}>{t('filters.year')} {t('filters.to')}</label>
 				<Select
 					value={yearMax || "any"}
 					onValueChange={handleYearMaxChange}
@@ -256,7 +200,7 @@ export function SearchBar() {
 
 			{/* Price */}
 			<div className="space-y-1.5">
-				<label className={labelStyle}>{t('filters.price')} Max</label>
+				<label className={labelStyle}>{t('filters.price')} {t('filters.max')}</label>
 				<Select value={priceMax || "any"} onValueChange={(val) => setPriceMax(val === "any" ? "" : val)}>
 					<SelectTrigger className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg">
 						<SelectValue placeholder={t('filters.price')} />
@@ -275,9 +219,9 @@ export function SearchBar() {
 				<Button
 					className="w-full bg-primary hover:bg-primary/90 h-[42px] rounded-lg font-bold transition-all shadow-lg shadow-primary/30 gap-2"
 					onClick={handleSearch}
-					disabled={isLoadingMakes}
+					disabled={isLoading}
 				>
-					{isLoadingMakes ? (
+					{isLoading ? (
 						<Loader2 className="h-4 w-4 animate-spin" />
 					) : (
 						<Search className="h-4 w-4" />
@@ -285,6 +229,15 @@ export function SearchBar() {
 					{t('home:hero.cta')}
 				</Button>
 			</div>
+
+			{error || modelError ? (
+				<div className="md:col-span-3 lg:col-span-6 flex items-center justify-between gap-3 text-sm text-destructive">
+					<span>{t('home:search.metadataError')}</span>
+					<Button variant="ghost" size="sm" onClick={retry}>
+						{t('common:errorBoundary.retry')}
+					</Button>
+				</div>
+			) : null}
 		</div>
 	);
 }

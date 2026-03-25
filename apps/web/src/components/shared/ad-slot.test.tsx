@@ -94,12 +94,6 @@ function simulateIntersection(isIntersecting: boolean) {
   ]);
 }
 
-// ── Mock next/image ─────────────────────────────────────────────
-
-vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) => React.createElement("img", props),
-}));
-
 vi.mock("@/components/ui/skeleton", () => ({
   Skeleton: (props: Record<string, unknown>) => React.createElement("div", { ...props, "data-testid": "skeleton" }),
 }));
@@ -108,6 +102,7 @@ vi.mock("@/components/ui/skeleton", () => ({
 
 describe("AdSlot", () => {
   let windowOpenSpy: ReturnType<typeof vi.spyOn>;
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -120,6 +115,7 @@ describe("AdSlot", () => {
 
     // Spy on window.open for click tracking tests
     windowOpenSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     // Default document lang
     Object.defineProperty(document.documentElement, "lang", {
@@ -132,6 +128,7 @@ describe("AdSlot", () => {
   afterEach(() => {
     vi.useRealTimers();
     windowOpenSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 
   // ── Loading State ───────────────────────────────────────────
@@ -239,6 +236,15 @@ describe("AdSlot", () => {
       await waitFor(() => {
         expect(screen.getByTestId("error-fallback")).toBeInTheDocument();
       });
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "[AdSlot] Failed to fetch ad",
+        expect.objectContaining({
+          error: expect.any(Error),
+          placementId: "HOME_BILLBOARD",
+          context: undefined,
+        })
+      );
     });
   });
 
@@ -425,6 +431,41 @@ describe("AdSlot", () => {
         expect(engageCalls).toHaveLength(1);
       });
     });
+
+    it("should log impression tracking failures without crashing", async () => {
+      mockFetchSuccess(mockBannerAd);
+      vi.mocked(global.fetch).mockRejectedValueOnce(new Error("Tracking failed"));
+
+      render(<AdSlot placementId="HOME_BILLBOARD" />);
+
+      await waitFor(() => {
+        expect(screen.getByRole("complementary")).toBeInTheDocument();
+      });
+
+      vi.useFakeTimers();
+
+      act(() => {
+        simulateIntersection(true);
+      });
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1000);
+      });
+
+      vi.useRealTimers();
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          "[AdSlot] Failed to send ad engagement event",
+          expect.objectContaining({
+            error: expect.any(Error),
+            adId: "ad-1",
+            placementId: "HOME_BILLBOARD",
+            eventType: "IMPRESSION",
+          })
+        );
+      });
+    });
   });
 
   // ── Click Tracking ──────────────────────────────────────────
@@ -486,6 +527,39 @@ describe("AdSlot", () => {
       await user.click(screen.getByRole("complementary"));
 
       expect(windowOpenSpy).not.toHaveBeenCalled();
+    });
+
+    it("should open link and log click tracking failures", async () => {
+      mockFetchSuccess(mockBannerAd);
+      vi.mocked(global.fetch).mockRejectedValueOnce(new Error("Click tracking failed"));
+
+      const user = userEvent.setup();
+
+      render(<AdSlot placementId="HOME_BILLBOARD" />);
+
+      await waitFor(() => {
+        expect(screen.getByRole("complementary")).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByRole("complementary"));
+
+      expect(windowOpenSpy).toHaveBeenCalledWith(
+        "https://partner.com/offer",
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          "[AdSlot] Failed to send ad engagement event",
+          expect.objectContaining({
+            error: expect.any(Error),
+            adId: "ad-1",
+            placementId: "HOME_BILLBOARD",
+            eventType: "CLICK",
+          })
+        );
+      });
     });
   });
 

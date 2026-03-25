@@ -19,7 +19,9 @@ interface CampaignAnalyticsChartProps {
 }
 
 export function CampaignAnalyticsChart({ timeSeries, totals }: CampaignAnalyticsChartProps) {
-  const { t } = useTranslation("ads");
+  const { t, i18n } = useTranslation("ads");
+  const localeCode =
+    i18n.language === "et" ? "et-EE" : i18n.language === "ru" ? "ru-RU" : "en-GB";
 
   const maxImpressions = Math.max(...timeSeries.map((d) => d.impressions), 1);
 
@@ -29,7 +31,7 @@ export function CampaignAnalyticsChart({ timeSeries, totals }: CampaignAnalytics
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white dark:bg-slate-900 border border-border rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-slate-800 dark:text-white">
-            {totals.impressions.toLocaleString("et-EE")}
+            {totals.impressions.toLocaleString(localeCode)}
           </div>
           <div className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mt-1">
             {t("admin.analytics.impressions")}
@@ -37,7 +39,7 @@ export function CampaignAnalyticsChart({ timeSeries, totals }: CampaignAnalytics
         </div>
         <div className="bg-white dark:bg-slate-900 border border-border rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-primary">
-            {totals.clicks.toLocaleString("et-EE")}
+            {totals.clicks.toLocaleString(localeCode)}
           </div>
           <div className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mt-1">
             {t("admin.analytics.clicks")}
@@ -72,8 +74,13 @@ export function CampaignAnalyticsChart({ timeSeries, totals }: CampaignAnalytics
                 >
                   {/* Tooltip */}
                   <div className="absolute bottom-full mb-2 hidden group-hover:block bg-slate-800 text-white text-[10px] rounded-md px-2 py-1 whitespace-nowrap z-10">
-                    <div>{new Date(point.date).toLocaleDateString("et-EE")}</div>
-                    <div>{point.impressions} imp / {point.clicks} clicks</div>
+                    <div>{new Date(point.date).toLocaleDateString(localeCode)}</div>
+                    <div>
+                      {t("admin.analytics.tooltip", {
+                        impressions: point.impressions.toLocaleString(localeCode),
+                        clicks: point.clicks.toLocaleString(localeCode),
+                      })}
+                    </div>
                   </div>
 
                   {/* Bar */}
@@ -95,7 +102,7 @@ export function CampaignAnalyticsChart({ timeSeries, totals }: CampaignAnalytics
                   {/* Date label (show every nth) */}
                   {(i % Math.max(1, Math.floor(timeSeries.length / 7)) === 0 || i === timeSeries.length - 1) && (
                     <span className="text-[9px] text-muted-foreground mt-1">
-                      {new Date(point.date).toLocaleDateString("et-EE", {
+                      {new Date(point.date).toLocaleDateString(localeCode, {
                         day: "2-digit",
                         month: "2-digit",
                       })}
@@ -118,7 +125,7 @@ export function CampaignAnalyticsChart({ timeSeries, totals }: CampaignAnalytics
         </div>
       ) : (
         <div className="text-center py-12 text-muted-foreground text-sm border border-dashed rounded-xl">
-          No analytics data yet
+          {t("admin.analytics.empty")}
         </div>
       )}
     </div>

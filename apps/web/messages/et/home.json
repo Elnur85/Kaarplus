@@ -131,6 +131,7 @@
 		"credit": "Krediit",
 		"barter": "Vahetus",
 		"reset": "Lähtesta",
+		"metadataError": "Otsingufiltrite laadimine ebaõnnestus.",
 		"moreFilters": "Rohkem filtreid",
 		"submit": "Näita kuulutusi",
 		"stats": {

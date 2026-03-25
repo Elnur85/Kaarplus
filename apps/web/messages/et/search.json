@@ -10,6 +10,9 @@
     "noResults": "Tulemusi ei leitud",
     "noResultsDesc": "Proovige muuta filtreid või otsingusõna.",
     "clearFilters": "Puhasta kõik filtrid",
+    "metadata": {
+        "error": "Filtriandmete laadimine ebaõnnestus."
+    },
     "pagination": "Näitan {{start}} kuni {{end}} sõidukit {{total}}-st",
     "filters": {
         "count_one": "{{count}} filter",

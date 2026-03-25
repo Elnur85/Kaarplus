@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 
 import { useTranslation } from "react-i18next";
 import { parseApiError } from "@/lib/api-client";
+import { useVehicleTaxonomy } from "@/hooks/use-vehicle-taxonomy";
 
 // Step 2 required fields for validation
 const STEP_2_REQUIRED_FIELDS: (keyof SellFormValues)[] = [
@@ -42,7 +43,7 @@ const STEP_2_REQUIRED_FIELDS: (keyof SellFormValues)[] = [
 ];
 
 export function SellWizard() {
-	const { t } = useTranslation('sell');
+	const { t } = useTranslation(['sell', 'common']);
 	const { data: session } = useSession();
 	const { toast } = useToast();
 	const router = useRouter();
@@ -89,6 +90,15 @@ export function SellWizard() {
 			colorInterior: "",
 			description: "",
 		} as SellFormValues,
+	});
+	const {
+		taxonomy,
+		isLoading: isTaxonomyLoading,
+		error: taxonomyError,
+		retry: retryTaxonomy,
+	} = useVehicleTaxonomy({
+		scope: "all",
+		make: form.watch("make"),
 	});
 
 	// Update form values when session loads
@@ -275,7 +285,7 @@ export function SellWizard() {
 					try {
 						errorData = await res.json();
 					} catch {
-						errorData = { message: t('toasts.createError', { defaultValue: 'Server error occurred' }) };
+						errorData = { message: t('toasts.createError') };
 					}
 
 					// Detailed error message for validation errors
@@ -384,6 +394,34 @@ export function SellWizard() {
 		);
 	}
 
+	if (currentStep <= 2 && isTaxonomyLoading) {
+		return (
+			<div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
+				<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
+					<Loader2 className="size-8 animate-spin text-primary" />
+					<p className="text-sm text-muted-foreground">
+						{t('sell:taxonomy.loading')}
+					</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (currentStep <= 2 && taxonomyError) {
+		return (
+			<div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
+				<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
+					<p className="max-w-md text-sm text-muted-foreground">
+						{t('sell:taxonomy.error')}
+					</p>
+					<Button variant="outline" onClick={retryTaxonomy}>
+						{t('common:errorBoundary.retry')}
+					</Button>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<FormProvider {...form}>
 			<div className="space-y-8">
@@ -398,11 +436,15 @@ export function SellWizard() {
 							<Step1VehicleType
 								selectedType={form.watch("bodyType")}
 								onSelect={(type) => form.setValue("bodyType", type, { shouldValidate: true })}
+								bodyTypeHierarchy={taxonomy.bodyTypeHierarchy}
 							/>
 						)}
 
 						{currentStep === 2 && (
-							<Step2VehicleData validationAttempted={validationAttempted} />
+							<Step2VehicleData
+								validationAttempted={validationAttempted}
+								taxonomy={taxonomy}
+							/>
 						)}
 
 						{currentStep === 3 && (

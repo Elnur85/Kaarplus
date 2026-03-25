@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { useFilterStore } from "@/store/use-filter-store";
 import {
     Accordion,
@@ -22,12 +21,8 @@ import {
 } from "@/components/ui/select";
 import { RotateCcw, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FUEL_TYPES, DRIVE_TYPES, API_URL } from "@/lib/constants";
 import { BodyTypeFilter } from "@/components/listings/body-type-filter";
-
-const fuelTypes = FUEL_TYPES.filter(f => f !== "Ethanol").map(f => ({ value: f, key: f }));
-
-const driveTypes = DRIVE_TYPES.map(d => ({ value: d, key: d }));
+import { useVehicleTaxonomy } from "@/hooks/use-vehicle-taxonomy";
 
 const conditionOptions = [
     { value: "New", key: "New" },
@@ -40,62 +35,29 @@ const doorOptions = ["2", "3", "4", "5"];
 const seatOptions = ["2", "4", "5", "6", "7", "8+"];
 
 export function AdvancedFilters() {
-    const { t } = useTranslation('search');
+    const { t } = useTranslation(['search', 'sell']);
     const filters = useFilterStore();
-    const [makes, setMakes] = useState<string[]>([]);
-    const [models, setModels] = useState<string[]>([]);
-    const [locations, setLocations] = useState<string[]>([]);
-    const [colors, setColors] = useState<string[]>([]);
     const currentMake = filters.make;
-
-    useEffect(() => {
-        const safeFetch = (url: string) =>
-            fetch(url).then(r => {
-                if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                return r.json();
-            });
-
-        Promise.all([
-            safeFetch(`${API_URL}/search/makes`),
-            safeFetch(`${API_URL}/search/locations`),
-            safeFetch(`${API_URL}/search/colors`),
-        ])
-            .then(([makesJson, locationsJson, colorsJson]) => {
-                setMakes(makesJson.data || []);
-                setLocations(locationsJson.data || []);
-                setColors(colorsJson.data || []);
-            })
-            .catch(() => {
-                // Filter options will remain empty — dropdowns degrade gracefully
-            });
-    }, []);
-
-    useEffect(() => {
-        if (!currentMake || currentMake === "none") {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setModels(prev => prev.length === 0 ? prev : []);
-            return;
-        }
-
-        let cancelled = false;
-        fetch(`${API_URL}/search/models?make=${encodeURIComponent(currentMake)}`)
-            .then((res) => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.json();
-            })
-            .then((json) => {
-                if (!cancelled) setModels(json.data || []);
-            })
-            .catch(() => {
-                // Model dropdown will remain empty
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    }, [currentMake]);
+    const {
+        taxonomy,
+        models,
+        isLoading,
+        isLoadingModels,
+        error,
+        modelError,
+        retry,
+    } = useVehicleTaxonomy({
+        scope: "active",
+        make: currentMake,
+    });
 
     const activeFilterCount = getActiveFilterCount(filters);
+    const yearMin = Math.min(taxonomy.years.min, taxonomy.years.max);
+    const yearMax = Math.max(taxonomy.years.min, taxonomy.years.max);
+    const yearOptions = Array.from(
+        { length: Math.max(yearMax - yearMin + 1, 1) },
+        (_, i) => yearMax - i
+    );
 
     return (
         <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
@@ -120,6 +82,17 @@ export function AdvancedFilters() {
                     </Button>
                 </div>
             </div>
+
+            {(error || modelError) && (
+                <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-3">
+                    <p className="text-sm text-destructive">
+                        {t('metadata.error')}
+                    </p>
+                    <Button variant="ghost" size="sm" onClick={retry}>
+                        {t('tryAgain')}
+                    </Button>
+                </div>
+            )}
 
             <div className="max-h-[calc(100vh-220px)] overflow-y-auto">
                 <Accordion
@@ -149,18 +122,19 @@ export function AdvancedFilters() {
                                     {t('fields.make.label')}
                                 </Label>
                                 <Select
-                                    value={filters.make}
+                                    value={filters.make || "none"}
                                     onValueChange={(val) => {
-                                        filters.setFilter("make", val);
+                                        filters.setFilter("make", val === "none" ? "" : val);
                                         filters.setFilter("model", "");
                                     }}
+                                    disabled={isLoading}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder={t('fields.make.placeholder')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">{t('fields.make.placeholder')}</SelectItem>
-                                        {makes.map((make) => (
+                                        {taxonomy.makes.map((make) => (
                                             <SelectItem key={make} value={make}>
                                                 {make}
                                             </SelectItem>
@@ -173,9 +147,11 @@ export function AdvancedFilters() {
                                     {t('fields.model.label')}
                                 </Label>
                                 <Select
-                                    value={filters.model}
-                                    onValueChange={(val) => filters.setFilter("model", val)}
-                                    disabled={!filters.make || filters.make === "none"}
+                                    value={filters.model || "none"}
+                                    onValueChange={(val) =>
+                                        filters.setFilter("model", val === "none" ? "" : val)
+                                    }
+                                    disabled={!filters.make || filters.make === "none" || isLoadingModels}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder={t('fields.model.placeholder')} />
@@ -245,9 +221,9 @@ export function AdvancedFilters() {
                                 </Label>
                                 <div className="flex gap-2">
                                     <Select
-                                        value={filters.yearMin}
+                                        value={filters.yearMin || "none"}
                                         onValueChange={(val) =>
-                                            filters.setFilter("yearMin", val)
+                                            filters.setFilter("yearMin", val === "none" ? "" : val)
                                         }
                                     >
                                         <SelectTrigger>
@@ -255,10 +231,7 @@ export function AdvancedFilters() {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="none">{t('fields.year.all')}</SelectItem>
-                                            {Array.from(
-                                                { length: 30 },
-                                                (_, i) => new Date().getFullYear() - i
-                                            ).map((y) => (
+                                            {yearOptions.map((y) => (
                                                 <SelectItem key={y} value={y.toString()}>
                                                     {y}
                                                 </SelectItem>
@@ -266,9 +239,9 @@ export function AdvancedFilters() {
                                         </SelectContent>
                                     </Select>
                                     <Select
-                                        value={filters.yearMax}
+                                        value={filters.yearMax || "none"}
                                         onValueChange={(val) =>
-                                            filters.setFilter("yearMax", val)
+                                            filters.setFilter("yearMax", val === "none" ? "" : val)
                                         }
                                     >
                                         <SelectTrigger>
@@ -276,10 +249,7 @@ export function AdvancedFilters() {
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="none">{t('fields.year.all')}</SelectItem>
-                                            {Array.from(
-                                                { length: 30 },
-                                                (_, i) => new Date().getFullYear() - i
-                                            ).map((y) => (
+                                            {yearOptions.map((y) => (
                                                 <SelectItem key={y} value={y.toString()}>
                                                     {y}
                                                 </SelectItem>
@@ -329,23 +299,25 @@ export function AdvancedFilters() {
                                     {t('fields.fuel.label')}
                                 </Label>
                                 <div className="grid grid-cols-2 gap-2">
-                                    {fuelTypes.map((fuel) => (
+                                    {taxonomy.fuelTypes.map((fuel) => (
                                         <div
-                                            key={fuel.value}
+                                            key={fuel}
                                             className="flex items-center space-x-2"
                                         >
                                             <Checkbox
-                                                id={`adv-fuel-${fuel.value}`}
-                                                checked={filters.fuelType.includes(fuel.value)}
+                                                id={`adv-fuel-${fuel}`}
+                                                checked={filters.fuelType.includes(fuel)}
                                                 onCheckedChange={() =>
-                                                    filters.toggleFuelType(fuel.value)
+                                                    filters.toggleFuelType(fuel)
                                                 }
                                             />
                                             <label
-                                                htmlFor={`adv-fuel-${fuel.value}`}
+                                                htmlFor={`adv-fuel-${fuel}`}
                                                 className="text-sm leading-none cursor-pointer"
                                             >
-                                                {t(`fields.fuel.types.${fuel.key}`)}
+                                                {t(`sell:options.fuel.${fuel}`, {
+                                                    defaultValue: fuel,
+                                                })}
                                             </label>
                                         </div>
                                     ))}
@@ -373,24 +345,25 @@ export function AdvancedFilters() {
                                             {t('fields.transmission.options.all')}
                                         </Label>
                                     </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="automatic" id="adv-t-auto" />
-                                        <Label
-                                            htmlFor="adv-t-auto"
-                                            className="text-sm font-normal"
+                                    {taxonomy.transmissions.map((transmission) => (
+                                        <div
+                                            key={transmission}
+                                            className="flex items-center space-x-2"
                                         >
-                                            {t('fields.transmission.options.automatic')}
-                                        </Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="manual" id="adv-t-manual" />
-                                        <Label
-                                            htmlFor="adv-t-manual"
-                                            className="text-sm font-normal"
-                                        >
-                                            {t('fields.transmission.options.manual')}
-                                        </Label>
-                                    </div>
+                                            <RadioGroupItem
+                                                value={transmission}
+                                                id={`adv-t-${transmission}`}
+                                            />
+                                            <Label
+                                                htmlFor={`adv-t-${transmission}`}
+                                                className="text-sm font-normal"
+                                            >
+                                                {t(`sell:options.transmission.${transmission}`, {
+                                                    defaultValue: transmission,
+                                                })}
+                                            </Label>
+                                        </div>
+                                    ))}
                                 </RadioGroup>
                             </div>
 
@@ -399,7 +372,10 @@ export function AdvancedFilters() {
                                 <Label className="text-xs text-muted-foreground mb-2 block">
                                     {t('fields.body.label')}
                                 </Label>
-                                <BodyTypeFilter />
+                                <BodyTypeFilter
+                                    hierarchy={taxonomy.bodyTypeHierarchy}
+                                    isLoading={isLoading}
+                                />
                             </div>
 
                             {/* Drive Type */}
@@ -408,9 +384,9 @@ export function AdvancedFilters() {
                                     {t('fields.drive.label')}
                                 </Label>
                                 <Select
-                                    value={filters.driveType}
+                                    value={filters.driveType || "none"}
                                     onValueChange={(val) =>
-                                        filters.setFilter("driveType", val)
+                                        filters.setFilter("driveType", val === "none" ? "" : val)
                                     }
                                 >
                                     <SelectTrigger>
@@ -418,9 +394,11 @@ export function AdvancedFilters() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">{t('fields.drive.placeholder')}</SelectItem>
-                                        {driveTypes.map((dt) => (
-                                            <SelectItem key={dt.value} value={dt.value}>
-                                                {t(`fields.drive.options.${dt.key}`)}
+                                        {taxonomy.driveTypes.map((driveType) => (
+                                            <SelectItem key={driveType} value={driveType}>
+                                                {t(`sell:options.drive.${driveType}`, {
+                                                    defaultValue: driveType,
+                                                })}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -468,9 +446,9 @@ export function AdvancedFilters() {
                                     {t('fields.color.label')}
                                 </Label>
                                 <Select
-                                    value={filters.color}
+                                    value={filters.color || "none"}
                                     onValueChange={(val) =>
-                                        filters.setFilter("color", val)
+                                        filters.setFilter("color", val === "none" ? "" : val)
                                     }
                                 >
                                     <SelectTrigger>
@@ -478,7 +456,7 @@ export function AdvancedFilters() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">{t('fields.color.placeholder')}</SelectItem>
-                                        {colors.map((c) => (
+                                        {taxonomy.colors.map((c) => (
                                             <SelectItem key={c} value={c}>
                                                 {c}
                                             </SelectItem>
@@ -491,9 +469,9 @@ export function AdvancedFilters() {
                                     {t('fields.doors.label')}
                                 </Label>
                                 <Select
-                                    value={filters.doors}
+                                    value={filters.doors || "none"}
                                     onValueChange={(val) =>
-                                        filters.setFilter("doors", val)
+                                        filters.setFilter("doors", val === "none" ? "" : val)
                                     }
                                 >
                                     <SelectTrigger>
@@ -514,9 +492,9 @@ export function AdvancedFilters() {
                                     {t('fields.seats.label')}
                                 </Label>
                                 <Select
-                                    value={filters.seats}
+                                    value={filters.seats || "none"}
                                     onValueChange={(val) =>
-                                        filters.setFilter("seats", val)
+                                        filters.setFilter("seats", val === "none" ? "" : val)
                                     }
                                 >
                                     <SelectTrigger>
@@ -546,9 +524,9 @@ export function AdvancedFilters() {
                                     {t('fields.condition.label')}
                                 </Label>
                                 <Select
-                                    value={filters.condition}
+                                    value={filters.condition || "none"}
                                     onValueChange={(val) =>
-                                        filters.setFilter("condition", val)
+                                        filters.setFilter("condition", val === "none" ? "" : val)
                                     }
                                 >
                                     <SelectTrigger>
@@ -569,9 +547,9 @@ export function AdvancedFilters() {
                                     {t('fields.location.label')}
                                 </Label>
                                 <Select
-                                    value={filters.location}
+                                    value={filters.location || "none"}
                                     onValueChange={(val) =>
-                                        filters.setFilter("location", val)
+                                        filters.setFilter("location", val === "none" ? "" : val)
                                     }
                                 >
                                     <SelectTrigger>
@@ -579,7 +557,7 @@ export function AdvancedFilters() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="none">{t('fields.location.placeholder')}</SelectItem>
-                                        {locations.map((loc) => (
+                                        {taxonomy.locations.map((loc) => (
                                             <SelectItem key={loc} value={loc}>
                                                 {loc}
                                             </SelectItem>

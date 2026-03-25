@@ -206,6 +206,10 @@
         "saving": "Salvestamine...",
         "publish": "Avalda kuulutus"
     },
+    "taxonomy": {
+        "loading": "Laen sõidukiandmeid...",
+        "error": "Sõidukiandmete laadimine ebaõnnestus. Proovi uuesti."
+    },
     "loginRequired": {
         "title": "Logi sisse, et müüa",
         "description": "Kuulutuse lisamiseks pead olema sisseloginud. See võtab ainult minuti ja on täiesti tasuta.",
@@ -274,6 +278,68 @@
             "Excellent": "Uueväärne",
             "Used": "Kasutatud",
             "Damaged": "Vigastatud"
+        }
+    },
+    "validation": {
+        "contactName": {
+            "minLength": "Nimi peab olema vähemalt 2 tähemärki"
+        },
+        "contactEmail": {
+            "invalid": "Palun sisestage kehtiv e-posti aadress"
+        },
+        "contactPhone": {
+            "invalid": "Palun sisestage kehtiv telefoninumber"
+        },
+        "make": {
+            "required": "Mark on kohustuslik"
+        },
+        "model": {
+            "required": "Mudel on kohustuslik"
+        },
+        "year": {
+            "range": "Aasta peab jääma lubatud vahemikku"
+        },
+        "vin": {
+            "length": "VIN-kood peab olema 17 tähemärki"
+        },
+        "mileage": {
+            "nonNegative": "Läbisõit ei saa olla negatiivne"
+        },
+        "price": {
+            "positive": "Hind peab olema positiivne"
+        },
+        "location": {
+            "required": "Asukoht on kohustuslik"
+        },
+        "bodyType": {
+            "required": "Keretüüp on kohustuslik"
+        },
+        "fuelType": {
+            "required": "Kütuse liik on kohustuslik"
+        },
+        "transmission": {
+            "required": "Käigukast on kohustuslik"
+        },
+        "powerKw": {
+            "required": "Võimsus on kohustuslik"
+        },
+        "driveType": {
+            "required": "Veoskeem on kohustuslik"
+        },
+        "doors": {
+            "range": "Uste arv peab olema vahemikus 2 kuni 5"
+        },
+        "seats": {
+            "range": "Istekohtade arv peab olema vahemikus 1 kuni 9"
+        },
+        "colorExterior": {
+            "required": "Värvus on kohustuslik"
+        },
+        "condition": {
+            "required": "Seisukord on kohustuslik"
+        },
+        "description": {
+            "maxLength": "Kirjeldus on liigpikk"
         }
     }
 }

@@ -2,19 +2,23 @@
 
 import { useState } from "react";
 import { useFilterStore } from "@/store/use-filter-store";
-import { BODY_TYPE_HIERARCHY, getSubtypes } from "@/lib/body-types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import { BodyTypeHierarchyItem } from "@/lib/vehicle-taxonomy";
 
 interface BodyTypeFilterProps {
+	hierarchy: BodyTypeHierarchyItem[];
 	isLoading?: boolean;
 }
 
-export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
-	const { t } = useTranslation(["listings", "bodyTypes"]);
+export function BodyTypeFilter({
+	hierarchy,
+	isLoading,
+}: BodyTypeFilterProps) {
+	const { t } = useTranslation(["listings", "bodyTypes", "common"]);
 	const filters = useFilterStore();
 	const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
@@ -30,8 +34,12 @@ export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
 		filters.toggleBodyTypeCategory(category);
 	};
 
-	const handleSubtypeToggle = (category: string, subtype: string) => {
-		filters.toggleBodyTypeSubtype(category, subtype);
+	const handleSubtypeToggle = (
+		category: string,
+		subtype: string,
+		availableSubtypes: string[]
+	) => {
+		filters.toggleBodyTypeSubtype(category, subtype, availableSubtypes);
 	};
 
 	const isCategorySelected = (category: string) => {
@@ -49,7 +57,8 @@ export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
 		);
 		if (!sel) return false;
 		if (sel.subtypes.length === 0) return false; // All selected
-		const allSubtypes = getSubtypes(category);
+		const allSubtypes =
+			hierarchy.find((item) => item.category === category)?.subtypes ?? [];
 		return sel.subtypes.length > 0 && sel.subtypes.length < allSubtypes.length;
 	};
 
@@ -59,25 +68,31 @@ export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
 		);
 	}
 
+	if (hierarchy.length === 0) {
+		return (
+			<div className="text-sm text-slate-500">{t("listings:filters.noBodyTypes")}</div>
+		);
+	}
+
 	return (
 		<div className="space-y-1">
-			{BODY_TYPE_HIERARCHY.map((category) => {
-				const isSelected = isCategorySelected(category.key);
-				const isPartial = isPartiallySelected(category.key);
-				const isExpanded = expandedCategories.includes(category.key);
+			{hierarchy.map((category) => {
+				const isSelected = isCategorySelected(category.category);
+				const isPartial = isPartiallySelected(category.category);
+				const isExpanded = expandedCategories.includes(category.category);
 				const subtypes = category.subtypes;
 
 				return (
-					<div key={category.key} className="border rounded-lg overflow-hidden">
+					<div key={category.category} className="border rounded-lg overflow-hidden">
 						{/* Category Header */}
 						<div
 							role="button"
 							tabIndex={0}
-							onClick={() => toggleCategoryExpand(category.key)}
+							onClick={() => toggleCategoryExpand(category.category)}
 							onKeyDown={(e) => {
 								if (e.key === 'Enter' || e.key === ' ') {
 									e.preventDefault();
-									toggleCategoryExpand(category.key);
+									toggleCategoryExpand(category.category);
 								}
 							}}
 							className={cn(
@@ -90,7 +105,7 @@ export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
 							<div
 								onClick={(e) => {
 									e.stopPropagation();
-									handleCategoryToggle(category.key);
+									handleCategoryToggle(category.category);
 								}}
 								className="flex items-center"
 							>
@@ -103,7 +118,9 @@ export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
 
 							{/* Category Label */}
 							<span className="flex-1 font-medium text-sm">
-								{t(`bodyTypes:categories.${category.key}`)}
+								{t(`bodyTypes:categories.${category.category}`, {
+									defaultValue: category.category,
+								})}
 							</span>
 
 							{/* Expand Icon */}
@@ -124,14 +141,18 @@ export function BodyTypeFilter({ isLoading }: BodyTypeFilterProps) {
 											className="flex items-center gap-2 py-1"
 										>
 											<Checkbox
-												id={`${category.key}-${subtype}`}
-												checked={isSubtypeSelected(category.key, subtype)}
+												id={`${category.category}-${subtype}`}
+												checked={isSubtypeSelected(category.category, subtype)}
 												onCheckedChange={() =>
-													handleSubtypeToggle(category.key, subtype)
+													handleSubtypeToggle(
+														category.category,
+														subtype,
+														subtypes
+													)
 												}
 											/>
 											<Label
-												htmlFor={`${category.key}-${subtype}`}
+												htmlFor={`${category.category}-${subtype}`}
 												className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer hover:text-primary transition-colors"
 											>
 												{t(`bodyTypes:subtypes.${subtype}`, {

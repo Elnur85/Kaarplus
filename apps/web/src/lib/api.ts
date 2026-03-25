@@ -26,7 +26,18 @@ class ApiClient {
   }
 
   private buildUrl(path: string, params?: Record<string, string | number | boolean | undefined>): string {
-    const url = new URL(`${this.baseUrl}${path}`);
+    const isAbsoluteBase = this.baseUrl.startsWith("http://") || this.baseUrl.startsWith("https://");
+    const baseUrl = isAbsoluteBase
+      ? `${this.baseUrl.replace(/\/$/, "")}/`
+      : typeof window !== "undefined"
+        ? window.location.origin
+        : "http://localhost";
+
+    const target = isAbsoluteBase
+      ? path.replace(/^\//, "")
+      : `${this.baseUrl}${path}`;
+
+    const url = new URL(target, baseUrl);
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined) {
@@ -34,7 +45,7 @@ class ApiClient {
         }
       });
     }
-    return url.toString();
+    return isAbsoluteBase ? url.toString() : `${url.pathname}${url.search}`;
   }
 
   async request<T>(path: string, options: ApiOptions = {}): Promise<ApiResponse<T>> {
