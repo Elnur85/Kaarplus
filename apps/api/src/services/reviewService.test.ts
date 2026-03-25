@@ -4,6 +4,12 @@ import { BadRequestError, NotFoundError, ForbiddenError } from '../utils/errors'
 
 // Mock must be before importing the service
 vi.mock('@kaarplus/database', () => ({
+    UserRole: {
+        USER: 'USER',
+        DEALERSHIP: 'DEALERSHIP',
+        ADMIN: 'ADMIN',
+        SUPPORT: 'SUPPORT',
+    },
     prisma: {
         review: {
             findMany: vi.fn(),
@@ -88,7 +94,8 @@ describe('ReviewService', () => {
             vi.mocked(prisma.user.findUnique).mockResolvedValue({ 
                 id: 'u2', 
                 name: 'Seller',
-                email: 'seller@example.com'
+                email: 'seller@example.com',
+                role: 'DEALERSHIP',
             } as any);
             vi.mocked(prisma.review.findUnique).mockResolvedValue(null);
             vi.mocked(prisma.review.create).mockResolvedValue({ 
@@ -130,7 +137,13 @@ describe('ReviewService', () => {
                 rating: 5,
                 body: 'Great!',
             };
-            
+
+            vi.mocked(prisma.user.findUnique).mockResolvedValue({
+                id: 'u2',
+                name: 'Seller',
+                email: 'seller@example.com',
+                role: 'DEALERSHIP',
+            } as any);
             vi.mocked(prisma.review.findUnique).mockResolvedValue({ id: 'r1' } as any);
 
             await expect(service.createReview('u1', reviewData)).rejects.toThrow(BadRequestError);
