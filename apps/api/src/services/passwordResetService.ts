@@ -2,7 +2,7 @@ import crypto from "crypto";
 
 import { prisma } from "@kaarplus/database";
 
-const RESET_TOKEN_EXPIRY_HOURS = 1;
+const RESET_TOKEN_EXPIRY_HOURS = 24;
 
 /**
  * Service for handling password reset operations

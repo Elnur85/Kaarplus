@@ -5,6 +5,12 @@ import { prisma } from "@kaarplus/database";
 import { ForbiddenError, NotFoundError } from "../../utils/errors";
 
 vi.mock("@kaarplus/database", () => ({
+    UserRole: {
+        USER: "USER",
+        DEALERSHIP: "DEALERSHIP",
+        ADMIN: "ADMIN",
+        SUPPORT: "SUPPORT",
+    },
     prisma: {
         listing: {
             findUnique: vi.fn(),
