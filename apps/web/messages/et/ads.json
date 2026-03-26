@@ -37,6 +37,16 @@
         "2": "Oma reklaam",
         "3": "Programmeerimislik"
       },
+      "detailError": {
+        "title": "Kampaaniat ei saanud laadida",
+        "message": "Kampaania detailide laadimine ebaõnnestus. Palun proovige uuesti.",
+        "retry": "Proovi uuesti"
+      },
+      "error": {
+        "title": "Kampaaniaid ei saanud laadida",
+        "message": "Kampaaniate laadimine ebaõnnestus. Palun proovige uuesti.",
+        "retry": "Proovi uuesti"
+      },
       "empty": "Kampaaniad puuduvad",
       "archive": "Arhiveeri",
       "archiveConfirm": "Kas olete kindel, et soovite selle kampaania arhiveerida?",
@@ -70,6 +80,15 @@
         "title": "Pealkiri",
         "events": "Sündmused"
       },
+      "adUnits": {
+        "loading": "Reklaamiplatside laadimine...",
+        "empty": "Ühtegi reklaamiplatsi pole praegu saadaval.",
+        "error": {
+          "title": "Reklaamiplatse ei saanud laadida",
+          "message": "Reklaamiplatside laadimine ebaõnnestus. Palun proovige uuesti.",
+          "retry": "Proovi uuesti"
+        }
+      },
       "form": {
         "title": "Pealkiri",
         "titlePlaceholder": "nt. LHV Autoliisingu Bänner",
@@ -92,6 +111,7 @@
     "units": {
       "title": "Reklaamiplatsid",
       "description": "Kõik saadaolevad reklaamiplatsid ja nende hetkeline täituvus.",
+      "empty": "Reklaamiplatsid puuduvad",
       "name": "Nimi",
       "occupancy": "Täituvus",
       "placement": "Platsikood",
@@ -100,6 +120,11 @@
       "activeCount": "Aktiivseid: {{count}}",
       "active": "Aktiivne",
       "inactive": "Mitteaktiivne",
+      "error": {
+        "title": "Reklaamiplatse ei saanud laadida",
+        "message": "Reklaamiplatside laadimine ebaõnnestus. Palun proovige uuesti.",
+        "retry": "Proovi uuesti"
+      },
       "types": {
         "BANNER": "Bänner",
         "NATIVE": "Omareklaam",
@@ -143,6 +168,11 @@
       "totalSpent": "Kogu kulutus",
       "chartTitle": "Kampaania tulemused",
       "loading": "Analüütika laadimine...",
+      "error": {
+        "title": "Analüütikat ei saanud laadida",
+        "message": "Analüütika laadimine ebaõnnestus. Palun proovige uuesti.",
+        "retry": "Proovi uuesti"
+      },
       "empty": "Analüütikaandmed puuduvad veel",
       "tooltip": "{{impressions}} kuvamist / {{clicks}} klikki"
     }

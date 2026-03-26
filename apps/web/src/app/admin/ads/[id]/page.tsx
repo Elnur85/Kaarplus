@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { CampaignAnalyticsChart } from "@/components/admin/campaign-analytics-chart";
 import { AdForm } from "@/components/admin/ad-form";
-import { ArrowLeft, Plus } from "lucide-react";
+import { AlertCircle, ArrowLeft, Plus } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
@@ -31,9 +31,12 @@ export default function CampaignDetailPage({ params }: Props) {
     i18n.language === "et" ? "et-EE" : i18n.language === "ru" ? "ru-RU" : "en-GB";
    
   const [campaign, setCampaign] = useState<any>(null);
-   
   const [analytics, setAnalytics] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isCampaignLoading, setIsCampaignLoading] = useState(true);
+  const [campaignError, setCampaignError] = useState<string | null>(null);
+  const [isCampaignNotFound, setIsCampaignNotFound] = useState(false);
+  const [isAnalyticsLoading, setIsAnalyticsLoading] = useState(false);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
   const [showAdForm, setShowAdForm] = useState(false);
 
   const getPlacementText = (placementId: string | undefined, field: "name" | "description" = "name") => {
@@ -49,38 +52,80 @@ export default function CampaignDetailPage({ params }: Props) {
     return translated;
   };
 
-  const fetchCampaign = useCallback(async () => {
-    try {
-      const res = await fetch(`${API_URL}/admin/campaigns/${id}`, {
-        credentials: "include",
-      });
-      const json = await res.json();
-      setCampaign(json.data);
-    } catch (error) {
-      console.error("Failed to fetch campaign:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id]);
-
   const fetchAnalytics = useCallback(async () => {
+    setIsAnalyticsLoading(true);
+    setAnalyticsError(null);
+
     try {
       const res = await fetch(`${API_URL}/admin/campaigns/${id}/analytics`, {
         credentials: "include",
       });
-      const json = await res.json();
-      setAnalytics(json.data);
+      const json = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        throw new Error(t("admin.analytics.error.message"));
+      }
+
+      setAnalytics(
+        json?.data ?? { timeSeries: [], totals: { impressions: 0, clicks: 0, ctr: 0 } }
+      );
     } catch (error) {
-      console.error("Failed to fetch analytics:", error);
+      console.error("[CampaignDetailPage] Failed to fetch analytics", {
+        error,
+        id,
+      });
+      setAnalytics(null);
+      setAnalyticsError(t("admin.analytics.error.message"));
+    } finally {
+      setIsAnalyticsLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
+
+  const fetchCampaign = useCallback(async () => {
+    setIsCampaignLoading(true);
+    setCampaignError(null);
+    setIsCampaignNotFound(false);
+    setAnalytics(null);
+    setAnalyticsError(null);
+    setIsAnalyticsLoading(false);
+
+    try {
+      const res = await fetch(`${API_URL}/admin/campaigns/${id}`, {
+        credentials: "include",
+      });
+      const json = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        const isNotFound = res.status === 404 || json?.code === "CAMPAIGN_NOT_FOUND";
+
+        if (isNotFound) {
+          setCampaign(null);
+          setIsCampaignNotFound(true);
+          return;
+        }
+
+        throw new Error(t("admin.campaigns.detailError.message"));
+      }
+
+      setCampaign(json.data);
+      await fetchAnalytics();
+    } catch (error) {
+      console.error("[CampaignDetailPage] Failed to fetch campaign", {
+        error,
+        id,
+      });
+      setCampaign(null);
+      setCampaignError(t("admin.campaigns.detailError.message"));
+    } finally {
+      setIsCampaignLoading(false);
+    }
+  }, [fetchAnalytics, id, t]);
 
   useEffect(() => {
-    fetchCampaign();
-    fetchAnalytics();
-  }, [fetchCampaign, fetchAnalytics]);
+    void fetchCampaign();
+  }, [fetchCampaign]);
 
-  if (isLoading) {
+  if (isCampaignLoading) {
     return (
       <div className="space-y-6">
         <div className="h-8 w-48 bg-muted animate-pulse rounded" />
@@ -90,7 +135,25 @@ export default function CampaignDetailPage({ params }: Props) {
     );
   }
 
-  if (!campaign) {
+  if (campaignError) {
+    return (
+      <div
+        role="alert"
+        className="bg-destructive/10 border border-destructive/20 rounded-xl p-8 text-center max-w-lg mx-auto"
+      >
+        <AlertCircle className="text-destructive mx-auto mb-4" size={48} />
+        <h2 className="text-xl font-bold text-destructive">
+          {t("admin.campaigns.detailError.title")}
+        </h2>
+        <p className="text-muted-foreground mt-2 mb-6">{campaignError}</p>
+        <Button onClick={() => void fetchCampaign()} variant="outline">
+          {t("admin.campaigns.detailError.retry")}
+        </Button>
+      </div>
+    );
+  }
+
+  if (isCampaignNotFound || !campaign) {
     return (
       <div className="text-center py-20">
         <h2 className="text-lg font-semibold">{t("admin.campaigns.notFoundTitle")}</h2>
@@ -241,7 +304,25 @@ export default function CampaignDetailPage({ params }: Props) {
 
         {/* Analytics Tab */}
         <TabsContent value="analytics" className="mt-6">
-          {analytics ? (
+          {isAnalyticsLoading ? (
+            <div className="text-center py-12 text-muted-foreground">
+              {t("admin.analytics.loading")}
+            </div>
+          ) : analyticsError ? (
+            <div
+              role="alert"
+              className="bg-destructive/10 border border-destructive/20 rounded-xl p-8 text-center max-w-lg mx-auto"
+            >
+              <AlertCircle className="text-destructive mx-auto mb-4" size={48} />
+              <h3 className="text-xl font-bold text-destructive">
+                {t("admin.analytics.error.title")}
+              </h3>
+              <p className="text-muted-foreground mt-2 mb-6">{analyticsError}</p>
+              <Button onClick={() => void fetchAnalytics()} variant="outline">
+                {t("admin.analytics.error.retry")}
+              </Button>
+            </div>
+          ) : analytics ? (
             <CampaignAnalyticsChart
               timeSeries={analytics.timeSeries || []}
               totals={analytics.totals || { impressions: 0, clicks: 0, ctr: 0 }}

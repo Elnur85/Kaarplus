@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pagination } from "@/components/shared/pagination";
 import { CampaignTable } from "@/components/admin/campaign-table";
 import { CampaignForm } from "@/components/admin/campaign-form";
-import { Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import { API_URL } from "@/lib/constants";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
@@ -24,10 +24,13 @@ export default function AdminAdsPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const fetchCampaigns = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
+
     try {
       const params = new URLSearchParams();
       params.set("page", page.toString());
@@ -37,20 +40,28 @@ export default function AdminAdsPage() {
       const res = await fetch(`${API_URL}/admin/campaigns?${params.toString()}`, {
         credentials: "include",
       });
+
+      if (!res.ok) {
+        throw new Error(t("admin.campaigns.error.message"));
+      }
+
       const json = await res.json();
       setCampaigns(json.data || []);
       setTotal(json.meta?.total || 0);
-    } catch {
-      toast({
-        variant: "destructive",
-        title: t("admin.campaigns.toasts.fetchError"),
+    } catch (error) {
+      console.error("[AdminAdsPage] Failed to fetch campaigns", {
+        error,
+        page,
+        statusFilter,
       });
+
+      setError(t("admin.campaigns.error.message"));
       setCampaigns([]);
       setTotal(0);
     } finally {
       setIsLoading(false);
     }
-  }, [page, statusFilter, toast, t]);
+  }, [page, statusFilter, t]);
 
   useEffect(() => {
     fetchCampaigns();
@@ -64,10 +75,17 @@ export default function AdminAdsPage() {
         method: "DELETE",
         credentials: "include",
       });
+
       if (!res.ok) throw new Error("Failed to archive");
+
       toast({ title: t("admin.campaigns.toasts.archiveSuccess") });
-      fetchCampaigns();
-    } catch {
+      await fetchCampaigns();
+    } catch (error) {
+      console.error("[AdminAdsPage] Failed to archive campaign", {
+        error,
+        id,
+      });
+
       toast({
         variant: "destructive",
         title: t("admin.campaigns.toasts.errorTitle"),
@@ -124,12 +142,26 @@ export default function AdminAdsPage() {
             <div key={i} className="h-16 bg-muted animate-pulse rounded-lg" />
           ))}
         </div>
+      ) : error ? (
+        <div
+          role="alert"
+          className="bg-destructive/10 border border-destructive/20 rounded-xl p-8 text-center max-w-lg mx-auto"
+        >
+          <AlertCircle className="text-destructive mx-auto mb-4" size={48} />
+          <h3 className="text-xl font-bold text-destructive">
+            {t("admin.campaigns.error.title")}
+          </h3>
+          <p className="text-muted-foreground mt-2 mb-6">{error}</p>
+          <Button onClick={fetchCampaigns} variant="outline">
+            {t("admin.campaigns.error.retry")}
+          </Button>
+        </div>
       ) : (
         <CampaignTable campaigns={campaigns} onArchive={handleArchive} />
       )}
 
       {/* Pagination */}
-      {!isLoading && total > 20 && (
+      {!isLoading && !error && total > 20 && (
         <div className="flex justify-center">
           <Pagination
             currentPage={page}

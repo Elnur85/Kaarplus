@@ -37,6 +37,16 @@
         "2": "House Ad",
         "3": "Programmatic"
       },
+      "detailError": {
+        "title": "Unable to load campaign",
+        "message": "Campaign details could not be loaded right now. Please try again.",
+        "retry": "Retry"
+      },
+      "error": {
+        "title": "Unable to load campaigns",
+        "message": "Campaigns could not be loaded right now. Please try again.",
+        "retry": "Retry"
+      },
       "empty": "No campaigns found",
       "archive": "Archive",
       "archiveConfirm": "Are you sure you want to archive this campaign?",
@@ -70,6 +80,15 @@
         "title": "Title",
         "events": "Events"
       },
+      "adUnits": {
+        "loading": "Loading ad placements...",
+        "empty": "No ad placements are available right now.",
+        "error": {
+          "title": "Unable to load ad placements",
+          "message": "Ad placements could not be loaded right now. Please try again.",
+          "retry": "Retry"
+        }
+      },
       "form": {
         "title": "Title",
         "titlePlaceholder": "e.g. LHV Auto Leasing Banner",
@@ -92,6 +111,7 @@
     "units": {
       "title": "Ad Placements",
       "description": "All available ad placement slots and their current occupancy.",
+      "empty": "No ad placements found",
       "name": "Name",
       "occupancy": "Occupancy",
       "placement": "Placement ID",
@@ -100,6 +120,11 @@
       "activeCount": "Active: {{count}}",
       "active": "Active",
       "inactive": "Inactive",
+      "error": {
+        "title": "Unable to load ad placements",
+        "message": "Ad placements could not be loaded right now. Please try again.",
+        "retry": "Retry"
+      },
       "types": {
         "BANNER": "Banner",
         "NATIVE": "Native",
@@ -143,6 +168,11 @@
       "totalSpent": "Total Spent",
       "chartTitle": "Campaign Performance",
       "loading": "Loading analytics...",
+      "error": {
+        "title": "Unable to load analytics",
+        "message": "Analytics could not be loaded right now. Please try again.",
+        "retry": "Retry"
+      },
       "empty": "No analytics data yet",
       "tooltip": "{{impressions}} impressions / {{clicks}} clicks"
     }
