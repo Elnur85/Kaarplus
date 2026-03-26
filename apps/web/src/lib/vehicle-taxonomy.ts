@@ -55,6 +55,38 @@ function normalizeStringArray(value: unknown): string[] {
 	);
 }
 
+function buildBodyTypeHierarchyFromBodyTypes(
+	bodyTypes: string[]
+): BodyTypeHierarchyItem[] {
+	const hierarchy = new Map<string, Set<string>>();
+
+	for (const rawBodyType of bodyTypes) {
+		const bodyType = rawBodyType.trim();
+		if (!bodyType) continue;
+
+		const [categoryRaw, subtypeRaw] = bodyType.split(":", 2);
+		const category = categoryRaw?.trim();
+		const subtype = subtypeRaw?.trim();
+
+		if (!category) continue;
+
+		if (!hierarchy.has(category)) {
+			hierarchy.set(category, new Set<string>());
+		}
+
+		if (subtype) {
+			hierarchy.get(category)?.add(subtype);
+		}
+	}
+
+	return Array.from(hierarchy.entries())
+		.map(([category, subtypes]) => ({
+			category,
+			subtypes: Array.from(subtypes).sort((a, b) => a.localeCompare(b)),
+		}))
+		.sort((a, b) => a.category.localeCompare(b.category));
+}
+
 function normalizeBodyTypeHierarchy(value: unknown): BodyTypeHierarchyItem[] {
 	if (!Array.isArray(value)) return [];
 
@@ -87,16 +119,23 @@ export async function loadVehicleTaxonomy(
 	});
 
 	const data = response.data ?? {};
+	const bodyTypes = normalizeStringArray(data.bodyTypes);
+	const normalizedBodyTypeHierarchy = normalizeBodyTypeHierarchy(
+		data.bodyTypeHierarchy
+	);
 
 	return {
 		makes: normalizeStringArray(data.makes),
 		fuelTypes: normalizeStringArray(data.fuelTypes),
-		bodyTypes: normalizeStringArray(data.bodyTypes),
+		bodyTypes,
 		transmissions: normalizeStringArray(data.transmissions),
 		driveTypes: normalizeStringArray(data.driveTypes),
 		colors: normalizeStringArray(data.colors),
 		locations: normalizeStringArray(data.locations),
-		bodyTypeHierarchy: normalizeBodyTypeHierarchy(data.bodyTypeHierarchy),
+		bodyTypeHierarchy:
+			normalizedBodyTypeHierarchy.length > 0
+				? normalizedBodyTypeHierarchy
+				: buildBodyTypeHierarchyFromBodyTypes(bodyTypes),
 		years: {
 			min:
 				typeof data.years?.min === "number" ? data.years.min : currentYear,

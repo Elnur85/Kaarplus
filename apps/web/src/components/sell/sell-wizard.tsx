@@ -422,6 +422,21 @@ export function SellWizard() {
 		);
 	}
 
+	if (currentStep === 1 && taxonomy.bodyTypeHierarchy.length === 0) {
+		return (
+			<div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
+				<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
+					<p className="max-w-md text-sm text-muted-foreground">
+						{t('sell:taxonomy.error')}
+					</p>
+					<Button variant="outline" onClick={retryTaxonomy}>
+						{t('common:errorBoundary.retry')}
+					</Button>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<FormProvider {...form}>
 			<div className="space-y-8">
