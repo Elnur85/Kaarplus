@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 
 import { useTranslation } from "react-i18next";
 import { parseApiError } from "@/lib/api-client";
-import { useVehicleTaxonomy } from "@/hooks/use-vehicle-taxonomy";
+import { useSellReferenceData } from "@/hooks/use-sell-reference-data";
 
 // Step 2 required fields for validation
 const STEP_2_REQUIRED_FIELDS: (keyof SellFormValues)[] = [
@@ -92,14 +92,27 @@ export function SellWizard() {
 		} as SellFormValues,
 	});
 	const {
-		taxonomy,
-		isLoading: isTaxonomyLoading,
-		error: taxonomyError,
-		retry: retryTaxonomy,
-	} = useVehicleTaxonomy({
-		scope: "all",
+		referenceData,
+		models,
+		isLoadingReferenceData,
+		isLoadingModels,
+		referenceError,
+		modelError,
+		retryReferenceData,
+		retryModels,
+	} = useSellReferenceData({
 		make: form.watch("make"),
 	});
+
+	const hasRequiredReferenceData =
+		referenceData.bodyTypeHierarchy.length > 0 &&
+		referenceData.makes.length > 0 &&
+		referenceData.fuelTypes.length > 0 &&
+		referenceData.transmissions.length > 0 &&
+		referenceData.driveTypes.length > 0 &&
+		referenceData.colors.length > 0 &&
+		referenceData.locations.length > 0 &&
+		referenceData.conditions.length > 0;
 
 	// Update form values when session loads
 	useEffect(() => {
@@ -394,7 +407,7 @@ export function SellWizard() {
 		);
 	}
 
-	if (currentStep <= 2 && isTaxonomyLoading) {
+	if (currentStep <= 2 && isLoadingReferenceData) {
 		return (
 			<div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
 				<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
@@ -407,14 +420,14 @@ export function SellWizard() {
 		);
 	}
 
-	if (currentStep <= 2 && taxonomyError) {
+	if (currentStep <= 2 && referenceError) {
 		return (
 			<div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
 				<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
 					<p className="max-w-md text-sm text-muted-foreground">
 						{t('sell:taxonomy.error')}
 					</p>
-					<Button variant="outline" onClick={retryTaxonomy}>
+					<Button variant="outline" onClick={retryReferenceData}>
 						{t('common:errorBoundary.retry')}
 					</Button>
 				</div>
@@ -422,14 +435,14 @@ export function SellWizard() {
 		);
 	}
 
-	if (currentStep === 1 && taxonomy.bodyTypeHierarchy.length === 0) {
+	if (currentStep <= 2 && !hasRequiredReferenceData) {
 		return (
 			<div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8 md:p-12 transition-all">
 				<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
 					<p className="max-w-md text-sm text-muted-foreground">
 						{t('sell:taxonomy.error')}
 					</p>
-					<Button variant="outline" onClick={retryTaxonomy}>
+					<Button variant="outline" onClick={retryReferenceData}>
 						{t('common:errorBoundary.retry')}
 					</Button>
 				</div>
@@ -451,14 +464,18 @@ export function SellWizard() {
 							<Step1VehicleType
 								selectedType={form.watch("bodyType")}
 								onSelect={(type) => form.setValue("bodyType", type, { shouldValidate: true })}
-								bodyTypeHierarchy={taxonomy.bodyTypeHierarchy}
+								bodyTypeHierarchy={referenceData.bodyTypeHierarchy}
 							/>
 						)}
 
 						{currentStep === 2 && (
 							<Step2VehicleData
 								validationAttempted={validationAttempted}
-								taxonomy={taxonomy}
+								referenceData={referenceData}
+								models={models}
+								isLoadingModels={isLoadingModels}
+								modelError={modelError}
+								onRetryModels={retryModels}
 							/>
 						)}
 

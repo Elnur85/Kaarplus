@@ -91,18 +91,20 @@ describe("SellWizard vehicle type selector", () => {
 		});
 	});
 
-	it("renders vehicle type cards when the API only returns canonical bodyTypes", async () => {
+	it("renders vehicle type cards from sell reference data", async () => {
 		(api.get as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
 			data: {
-				makes: [],
-				fuelTypes: [],
-				bodyTypes: ["passengerCar:sedan", "suv:coupe"],
-				transmissions: [],
-				driveTypes: [],
-				colors: [],
-				locations: [],
-				years: { min: 1990, max: 2026 },
-				price: { min: 0, max: 100000 },
+				makes: ["BMW"],
+				fuelTypes: ["Petrol"],
+				bodyTypeHierarchy: [
+					{ category: "passengerCar", subtypes: ["sedan"] },
+					{ category: "suv", subtypes: ["coupe"] },
+				],
+				transmissions: ["Automatic"],
+				driveTypes: ["AWD"],
+				colors: ["Black"],
+				locations: ["Tallinn"],
+				conditions: ["Used"],
 			},
 		});
 
@@ -121,14 +123,12 @@ describe("SellWizard vehicle type selector", () => {
 			data: {
 				makes: [],
 				fuelTypes: [],
-				bodyTypes: [],
 				bodyTypeHierarchy: [],
 				transmissions: [],
 				driveTypes: [],
 				colors: [],
 				locations: [],
-				years: { min: 1990, max: 2026 },
-				price: { min: 0, max: 100000 },
+				conditions: [],
 			},
 		});
 

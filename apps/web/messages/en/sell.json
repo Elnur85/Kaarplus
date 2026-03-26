@@ -127,25 +127,31 @@
             "contactEmail": "Enter your email",
             "contactPhone": "Enter your phone",
             "make": "Select make",
-            "model": "e.g. 520d",
+            "model": "Select model",
             "variant": "e.g. xDrive Luxury Line",
             "year": "2024",
             "price": "0",
             "mileage": "0",
             "power": "0",
-            "location": "e.g. Tallinn, Harjumaa",
+            "location": "Select location",
             "fuel": "Select fuel",
             "transmission": "Select transmission",
             "drive": "Select drivetrain",
             "doors": "Count",
             "seats": "Count",
-            "color": "e.g. Black metallic",
+            "color": "Select exterior color",
             "colorInterior": "e.g. Black leather",
             "condition": "Select condition",
             "vin": "VIN1234567890ABCD",
             "description": "Tell more about your car..."
         },
-        "charCount": "{{count}} / 5000 characters"
+        "charCount": "{{count}} / 5000 characters",
+        "modelState": {
+            "selectMakeFirst": "Select a make to see available models.",
+            "loading": "Loading models...",
+            "error": "Models could not be loaded.",
+            "empty": "No models are available for the selected make."
+        }
     },
     "step3": {
         "title": "Add Photos",

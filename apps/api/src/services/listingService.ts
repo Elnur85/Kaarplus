@@ -13,8 +13,27 @@ import { validateRanges } from "../utils/validation";
 import { emailService } from "./emailService";
 import { socketService } from "./socketService";
 import { UploadService } from "./uploadService";
+import { VehicleReferenceService } from "./vehicleReferenceService";
 
 const uploadService = new UploadService();
+const vehicleReferenceService = new VehicleReferenceService();
+
+function getStringFieldValue(value: unknown): string | undefined {
+	if (typeof value === "string") {
+		return value;
+	}
+
+	if (
+		value &&
+		typeof value === "object" &&
+		"set" in value &&
+		typeof value.set === "string"
+	) {
+		return value.set;
+	}
+
+	return undefined;
+}
 
 export interface ListingQuery {
 	page: number;
@@ -298,9 +317,33 @@ export class ListingService {
 			}
 		}
 
+		const normalizedReferenceValues =
+			await vehicleReferenceService.normalizeListingReferenceValues({
+				make: data.make,
+				model: data.model,
+				bodyType: data.bodyType,
+				fuelType: data.fuelType,
+				transmission: data.transmission,
+				driveType: data.driveType ?? undefined,
+				colorExterior: data.colorExterior,
+				condition: data.condition,
+				location: data.location,
+			});
+
 		const result = await prisma.listing.create({
 			data: {
 				...data,
+				make: normalizedReferenceValues.make ?? data.make,
+				model: normalizedReferenceValues.model ?? data.model,
+				bodyType: normalizedReferenceValues.bodyType ?? data.bodyType,
+				fuelType: normalizedReferenceValues.fuelType ?? data.fuelType,
+				transmission:
+					normalizedReferenceValues.transmission ?? data.transmission,
+				driveType: normalizedReferenceValues.driveType ?? data.driveType,
+				colorExterior:
+					normalizedReferenceValues.colorExterior ?? data.colorExterior,
+				condition: normalizedReferenceValues.condition ?? data.condition,
+				location: normalizedReferenceValues.location ?? data.location,
 				userId,
 				status: "PENDING",
 			},
@@ -318,9 +361,75 @@ export class ListingService {
 			throw new ForbiddenError("You don't have permission to update this listing");
 		}
 
+		const updateData = { ...data };
+		const makeValue = getStringFieldValue(updateData.make);
+		const modelValue = getStringFieldValue(updateData.model);
+		const bodyTypeValue = getStringFieldValue(updateData.bodyType);
+		const fuelTypeValue = getStringFieldValue(updateData.fuelType);
+		const transmissionValue = getStringFieldValue(updateData.transmission);
+		const driveTypeValue = getStringFieldValue(updateData.driveType);
+		const colorExteriorValue = getStringFieldValue(updateData.colorExterior);
+		const conditionValue = getStringFieldValue(updateData.condition);
+		const locationValue = getStringFieldValue(updateData.location);
+
+		const normalizedReferenceValues =
+			await vehicleReferenceService.normalizeListingReferenceValues({
+				...(makeValue !== undefined || modelValue !== undefined
+					? {
+							make: makeValue ?? listing.make,
+							model: modelValue ?? listing.model,
+					  }
+					: {}),
+				...(bodyTypeValue !== undefined ? { bodyType: bodyTypeValue } : {}),
+				...(fuelTypeValue !== undefined ? { fuelType: fuelTypeValue } : {}),
+				...(transmissionValue !== undefined
+					? { transmission: transmissionValue }
+					: {}),
+				...(driveTypeValue !== undefined ? { driveType: driveTypeValue } : {}),
+				...(colorExteriorValue !== undefined
+					? { colorExterior: colorExteriorValue }
+					: {}),
+				...(conditionValue !== undefined ? { condition: conditionValue } : {}),
+				...(locationValue !== undefined ? { location: locationValue } : {}),
+			});
+
+		if (makeValue !== undefined && normalizedReferenceValues.make) {
+			updateData.make = normalizedReferenceValues.make;
+		}
+		if (modelValue !== undefined && normalizedReferenceValues.model) {
+			updateData.model = normalizedReferenceValues.model;
+		}
+		if (bodyTypeValue !== undefined && normalizedReferenceValues.bodyType) {
+			updateData.bodyType = normalizedReferenceValues.bodyType;
+		}
+		if (fuelTypeValue !== undefined && normalizedReferenceValues.fuelType) {
+			updateData.fuelType = normalizedReferenceValues.fuelType;
+		}
+		if (
+			transmissionValue !== undefined &&
+			normalizedReferenceValues.transmission
+		) {
+			updateData.transmission = normalizedReferenceValues.transmission;
+		}
+		if (driveTypeValue !== undefined && normalizedReferenceValues.driveType) {
+			updateData.driveType = normalizedReferenceValues.driveType;
+		}
+		if (
+			colorExteriorValue !== undefined &&
+			normalizedReferenceValues.colorExterior
+		) {
+			updateData.colorExterior = normalizedReferenceValues.colorExterior;
+		}
+		if (conditionValue !== undefined && normalizedReferenceValues.condition) {
+			updateData.condition = normalizedReferenceValues.condition;
+		}
+		if (locationValue !== undefined && normalizedReferenceValues.location) {
+			updateData.location = normalizedReferenceValues.location;
+		}
+
 		const result = await prisma.listing.update({
 			where: { id },
-			data,
+			data: updateData,
 		});
 
 		this.invalidateSearchCache();

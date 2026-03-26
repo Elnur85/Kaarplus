@@ -24,6 +24,15 @@ enum ListingStatus {
   EXPIRED
 }
 
+enum VehicleReferenceOptionType {
+  FUEL_TYPE
+  TRANSMISSION
+  DRIVE_TYPE
+  EXTERIOR_COLOR
+  LOCATION
+  CONDITION
+}
+
 enum PaymentStatus {
   PENDING
   COMPLETED
@@ -126,6 +135,62 @@ model Listing {
   @@index([transmission, status])
   @@index([bodyType, status])
   @@index([mileage])
+}
+
+model VehicleMake {
+  id        String         @id @default(cuid())
+  name      String         @unique
+  sortOrder Int            @default(0)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  models    VehicleModel[]
+}
+
+model VehicleModel {
+  id        String      @id @default(cuid())
+  makeId    String
+  name      String
+  sortOrder Int         @default(0)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  make      VehicleMake @relation(fields: [makeId], references: [id], onDelete: Cascade)
+
+  @@unique([makeId, name])
+  @@index([makeId, sortOrder])
+}
+
+model VehicleBodyCategory {
+  id        String               @id @default(cuid())
+  key       String               @unique
+  sortOrder Int                  @default(0)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  subtypes  VehicleBodySubtype[]
+}
+
+model VehicleBodySubtype {
+  id         String              @id @default(cuid())
+  categoryId String
+  key        String
+  sortOrder  Int                 @default(0)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+  category   VehicleBodyCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, key])
+  @@index([categoryId, sortOrder])
+}
+
+model VehicleReferenceOption {
+  id        String                     @id @default(cuid())
+  type      VehicleReferenceOptionType
+  key       String
+  sortOrder Int                        @default(0)
+  createdAt DateTime                   @default(now())
+  updatedAt DateTime                   @updatedAt
+
+  @@unique([type, key])
+  @@index([type, sortOrder])
 }
 
 model ListingImage {

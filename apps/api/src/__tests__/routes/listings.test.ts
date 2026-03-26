@@ -17,6 +17,31 @@ describe('Listing Routes', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		(prisma.vehicleMake.findMany as any).mockResolvedValue([
+			{
+				name: 'Tesla',
+				models: [{ name: 'Model 3' }],
+			},
+			{
+				name: 'BMW',
+				models: [{ name: 'X5' }],
+			},
+		]);
+		(prisma.vehicleBodyCategory.findMany as any).mockResolvedValue([
+			{
+				key: 'passengerCar',
+				subtypes: [{ key: 'sedan' }],
+			},
+		]);
+		(prisma.vehicleReferenceOption.findMany as any).mockResolvedValue([
+			{ type: 'FUEL_TYPE', key: 'Petrol' },
+			{ type: 'FUEL_TYPE', key: 'Electric' },
+			{ type: 'TRANSMISSION', key: 'Automatic' },
+			{ type: 'DRIVE_TYPE', key: 'AWD' },
+			{ type: 'EXTERIOR_COLOR', key: 'White' },
+			{ type: 'LOCATION', key: 'Tallinn' },
+			{ type: 'CONDITION', key: 'Used' },
+		]);
 	});
 
 	const createAuthToken = (userId: string, role = 'USER') => {
@@ -65,6 +90,28 @@ describe('Listing Routes', () => {
 		});
 	});
 
+	describe('GET /api/listings/metadata/sell-options', () => {
+		it('returns sell reference data from dedicated tables', async () => {
+			const response = await request(app).get('/api/listings/metadata/sell-options');
+
+			expect(response.status).toBe(200);
+			expect(response.body.data.makes).toEqual(['Tesla', 'BMW']);
+			expect(response.body.data.bodyTypeHierarchy).toEqual([
+				{ category: 'passengerCar', subtypes: ['sedan'] },
+			]);
+			expect(response.body.data.conditions).toEqual(['Used']);
+		});
+	});
+
+	describe('GET /api/listings/metadata/sell-models', () => {
+		it('returns models for the selected make from dedicated tables', async () => {
+			const response = await request(app).get('/api/listings/metadata/sell-models?make=Tesla');
+
+			expect(response.status).toBe(200);
+			expect(response.body.data).toEqual(['Model 3']);
+		});
+	});
+
 	describe('POST /api/listings', () => {
 		it('should return 401 if not authenticated', async () => {
 			const response = await request(app)
@@ -82,13 +129,13 @@ describe('Listing Routes', () => {
 				year: 2022,
 				price: 35000,
 				mileage: 15000,
-				bodyType: 'sedan',
-				fuelType: 'electric',
-				transmission: 'automatic',
+				bodyType: 'passengerCar:sedan',
+				fuelType: 'Electric',
+				transmission: 'Automatic',
 				powerKw: 200,
 				driveType: 'AWD',
 				colorExterior: 'White',
-				condition: 'used',
+				condition: 'Used',
 				location: 'Tallinn',
 				features: {}, // Corrected from []
 			};

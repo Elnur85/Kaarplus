@@ -30,6 +30,16 @@ listingsRouter.get(
 	asyncHandler(listingController.getFilterOptions)
 );
 listingsRouter.get(
+	"/metadata/sell-options",
+	readLimiter,
+	asyncHandler(listingController.getSellOptions)
+);
+listingsRouter.get(
+	"/metadata/sell-models",
+	readLimiter,
+	asyncHandler(listingController.getSellModels)
+);
+listingsRouter.get(
 	"/metadata/featured",
 	readLimiter,
 	asyncHandler(listingController.getFeaturedListings)

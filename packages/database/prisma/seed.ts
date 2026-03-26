@@ -1,62 +1,25 @@
-import { PrismaClient, UserRole, ListingStatus, AdUnitType } from '@prisma/client';
+import {
+	AdUnitType,
+	ListingStatus,
+	PrismaClient,
+	UserRole,
+	VehicleReferenceOptionType,
+} from "@prisma/client";
+
+import {
+	COVERED_VEHICLE_MAKE_REFERENCES,
+	VEHICLE_BODY_CATEGORY_REFERENCES,
+	VEHICLE_BODY_TYPE_VALUES,
+	VEHICLE_COLOR_REFERENCES,
+	VEHICLE_CONDITION_REFERENCES,
+	VEHICLE_DRIVE_TYPE_REFERENCES,
+	VEHICLE_FUEL_TYPE_REFERENCES,
+	VEHICLE_LOCATION_REFERENCES,
+	VEHICLE_MODEL_REFERENCES,
+	VEHICLE_TRANSMISSION_REFERENCES,
+} from "./vehicleReferenceData";
 
 const prisma = new PrismaClient();
-
-// Car data for realistic seeding
-const CAR_DATA = {
-    makes: [
-        { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg', popularity: 100 },
-        { name: 'Mercedes-Benz', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Benz_Logo_2010.svg', popularity: 95 },
-        { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg', popularity: 90 },
-        { name: 'Volkswagen', logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg', popularity: 85 },
-        { name: 'Toyota', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_car_logo.svg', popularity: 80 },
-        { name: 'Volvo', logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Volvo_logo.svg', popularity: 75 },
-        { name: 'Tesla', logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg', popularity: 70 },
-        { name: 'Porsche', logo: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Porsche_logo.svg', popularity: 65 },
-        { name: 'Skoda', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/8f/Skoda_logo_2022.svg', popularity: 60 },
-        { name: 'Ford', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Ford_logo_flat.svg', popularity: 55 },
-        { name: 'Hyundai', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Hyundai_Motor_Company_logo.svg', popularity: 50 },
-        { name: 'Kia', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Kia_logo_2021.svg', popularity: 45 },
-        { name: 'Lexus', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Lexus_logo_2023.svg', popularity: 40 },
-        { name: 'Nissan', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Nissan_2020_logo.svg', popularity: 35 },
-        { name: 'Honda', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Honda_logo.svg', popularity: 30 },
-    ],
-    models: {
-        'BMW': ['3 Series', '5 Series', 'X3', 'X5', 'X1', '1 Series', '7 Series', 'X6', '4 Series', '2 Series'],
-        'Mercedes-Benz': ['C-Class', 'E-Class', 'A-Class', 'GLC', 'GLE', 'S-Class', 'CLA', 'GLA', 'G-Class', 'V-Class'],
-        'Audi': ['A4', 'A6', 'Q5', 'A3', 'Q7', 'Q3', 'A5', 'e-tron', 'Q8', 'TT'],
-        'Volkswagen': ['Golf', 'Passat', 'Tiguan', 'Polo', 'Touareg', 'Arteon', 'T-Roc', 'ID.4', 'Transporter', 'Jetta'],
-        'Toyota': ['Corolla', 'RAV4', 'Camry', 'Yaris', 'Land Cruiser', 'C-HR', 'Prius', 'Hilux', 'Supra', 'Highlander'],
-        'Volvo': ['XC60', 'XC90', 'V60', 'S60', 'XC40', 'V90', 'S90', 'C40', 'EX30', 'EX90'],
-        'Tesla': ['Model 3', 'Model Y', 'Model S', 'Model X', 'Cybertruck'],
-        'Porsche': ['911', 'Cayenne', 'Panamera', 'Macan', 'Taycan', 'Cayman', 'Boxster'],
-        'Skoda': ['Octavia', 'Superb', 'Kodiaq', 'Karoq', 'Fabia', 'Scala', 'Enyaq', 'Kamiq'],
-        'Ford': ['Focus', 'Fiesta', 'Kuga', 'Mondeo', 'Puma', 'Mustang', 'Explorer', 'Transit', 'Ranger'],
-        'Hyundai': ['i30', 'Tucson', 'Kona', 'i20', 'Santa Fe', 'Bayon', 'IONIQ 5', 'i10', 'Venue'],
-        'Kia': ['Ceed', 'Sportage', 'Sorento', 'Picanto', 'Stonic', 'Niro', 'EV6', 'XCeed', 'Proceed'],
-        'Lexus': ['RX', 'NX', 'IS', 'ES', 'UX', 'LX', 'RC', 'LC', 'RZ'],
-        'Nissan': ['Qashqai', 'Juke', 'X-Trail', 'Micra', 'Leaf', 'Navara', 'Ariya', 'Primera'],
-        'Honda': ['Civic', 'CR-V', 'Jazz', 'HR-V', 'Accord', 'e', 'NSX', 'ZRV'],
-    },
-    // New hierarchical body types: category:subtype
-    bodyTypes: [
-        'passengerCar:sedan',
-        'passengerCar:hatchback',
-        'passengerCar:touring',
-        'passengerCar:minivan',
-        'passengerCar:coupe',
-        'passengerCar:cabriolet',
-        'passengerCar:pickup',
-        'suv:touring',
-        'suv:coupe',
-        'commercialVehicle:commercial',
-        'truck:saddle',
-    ],
-    fuelTypes: ['Petrol', 'Diesel', 'Hybrid', 'Electric'],
-    transmissions: ['Manual', 'Automatic'],
-    colors: ['Black', 'White', 'Silver', 'Grey', 'Blue', 'Red', 'Green', 'Brown', 'Beige', 'Yellow', 'Orange'],
-    locations: ['Tallinn', 'Tartu', 'Pärnu', 'Narva', 'Harjumaa', 'Viljandi', 'Rakvere', 'Kuressaare', 'Jõhvi'],
-};
 
 // Sample car images from Unsplash
 const CAR_IMAGES = [
@@ -124,9 +87,9 @@ function generatePrice(year: number, make: string): number {
 
 function generateListing(make: string, model: string, userId: string, status: ListingStatus = ListingStatus.ACTIVE) {
     const year = getRandomInt(2015, 2024);
-    const bodyType = getRandomItem(CAR_DATA.bodyTypes);
-    const fuelType = getRandomItem(CAR_DATA.fuelTypes);
-    const transmission = fuelType === 'Electric' ? 'Automatic' : getRandomItem(CAR_DATA.transmissions);
+    const bodyType = getRandomItem(VEHICLE_BODY_TYPE_VALUES);
+    const fuelType = getRandomItem(VEHICLE_FUEL_TYPE_REFERENCES);
+    const transmission = fuelType === 'Electric' ? 'Automatic' : getRandomItem(VEHICLE_TRANSMISSION_REFERENCES);
     const price = generatePrice(year, make);
     const mileage = getRandomInt(5000, 200000);
 
@@ -148,13 +111,13 @@ function generateListing(make: string, model: string, userId: string, status: Li
         fuelType,
         transmission,
         powerKw: getRandomInt(60, 400),
-        driveType: getRandomItem(['FWD', 'RWD', 'AWD']),
+        driveType: getRandomItem(VEHICLE_DRIVE_TYPE_REFERENCES),
         doors: isCoupe ? 2 : getRandomItem([3, 4, 5]),
         seats: isCoupe ? 2 : getRandomItem([4, 5, 7]),
-        colorExterior: getRandomItem(CAR_DATA.colors),
+        colorExterior: getRandomItem(VEHICLE_COLOR_REFERENCES),
         colorInterior: getRandomItem(['Black', 'Beige', 'Brown', 'Grey', 'Red']),
         condition: mileage < 10000 ? 'New' : 'Used',
-        location: getRandomItem(CAR_DATA.locations),
+        location: getRandomItem(VEHICLE_LOCATION_REFERENCES),
         status,
         description: getRandomItem(ESTONIAN_DESCRIPTIONS),
         features: generateFeatures(),
@@ -163,8 +126,102 @@ function generateListing(make: string, model: string, userId: string, status: Li
     };
 }
 
+async function seedVehicleReferenceData() {
+	console.log("🗂️ Seeding vehicle reference data");
+
+	for (const [index, make] of COVERED_VEHICLE_MAKE_REFERENCES.entries()) {
+		const vehicleMake = await prisma.vehicleMake.upsert({
+			where: { name: make.name },
+			update: { sortOrder: index },
+			create: {
+				name: make.name,
+				sortOrder: index,
+			},
+		});
+
+		const models = VEHICLE_MODEL_REFERENCES[make.name] ?? [];
+		for (const [modelIndex, modelName] of models.entries()) {
+			await prisma.vehicleModel.upsert({
+				where: {
+					makeId_name: {
+						makeId: vehicleMake.id,
+						name: modelName,
+					},
+				},
+				update: { sortOrder: modelIndex },
+				create: {
+					makeId: vehicleMake.id,
+					name: modelName,
+					sortOrder: modelIndex,
+				},
+			});
+		}
+	}
+
+	for (const [index, category] of VEHICLE_BODY_CATEGORY_REFERENCES.entries()) {
+		const vehicleCategory = await prisma.vehicleBodyCategory.upsert({
+			where: { key: category.key },
+			update: { sortOrder: index },
+			create: {
+				key: category.key,
+				sortOrder: index,
+			},
+		});
+
+		for (const [subtypeIndex, subtypeKey] of category.subtypes.entries()) {
+			await prisma.vehicleBodySubtype.upsert({
+				where: {
+					categoryId_key: {
+						categoryId: vehicleCategory.id,
+						key: subtypeKey,
+					},
+				},
+				update: { sortOrder: subtypeIndex },
+				create: {
+					categoryId: vehicleCategory.id,
+					key: subtypeKey,
+					sortOrder: subtypeIndex,
+				},
+			});
+		}
+	}
+
+	const optionGroups: Array<{
+		type: VehicleReferenceOptionType;
+		values: string[];
+	}> = [
+		{ type: VehicleReferenceOptionType.FUEL_TYPE, values: VEHICLE_FUEL_TYPE_REFERENCES },
+		{ type: VehicleReferenceOptionType.TRANSMISSION, values: VEHICLE_TRANSMISSION_REFERENCES },
+		{ type: VehicleReferenceOptionType.DRIVE_TYPE, values: VEHICLE_DRIVE_TYPE_REFERENCES },
+		{ type: VehicleReferenceOptionType.EXTERIOR_COLOR, values: VEHICLE_COLOR_REFERENCES },
+		{ type: VehicleReferenceOptionType.LOCATION, values: VEHICLE_LOCATION_REFERENCES },
+		{ type: VehicleReferenceOptionType.CONDITION, values: VEHICLE_CONDITION_REFERENCES },
+	];
+
+	for (const group of optionGroups) {
+		for (const [index, value] of group.values.entries()) {
+			await prisma.vehicleReferenceOption.upsert({
+				where: {
+					type_key: {
+						type: group.type,
+						key: value,
+					},
+				},
+				update: { sortOrder: index },
+				create: {
+					type: group.type,
+					key: value,
+					sortOrder: index,
+				},
+			});
+		}
+	}
+}
+
 async function main() {
     console.log('🌱 Starting comprehensive seed...');
+
+    await seedVehicleReferenceData();
 
     const passwordHash = '$2b$10$Rci8sWp2x5wYiUr9Nt94Se6NsHYx52ToZJCXWzlfXnylu06vw8ca.'; // password123
 
@@ -274,8 +331,8 @@ async function main() {
     const users = [dealer1, dealer2, dealer3, seller1, seller2];
 
     for (let i = 0; i < 80; i++) {
-        const make = getRandomItem(CAR_DATA.makes).name;
-        const model = getRandomItem(CAR_DATA.models[make as keyof typeof CAR_DATA.models] || CAR_DATA.models['BMW']);
+        const make = getRandomItem(COVERED_VEHICLE_MAKE_REFERENCES).name;
+        const model = getRandomItem(VEHICLE_MODEL_REFERENCES[make] || VEHICLE_MODEL_REFERENCES['BMW']);
         const user = getRandomItem(users);
         const status = Math.random() > 0.1 ? ListingStatus.ACTIVE : ListingStatus.PENDING;
 

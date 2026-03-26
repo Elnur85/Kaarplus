@@ -30,19 +30,17 @@ vi.mock("@/components/sell/equipment-checkboxes", () => ({
 
 import { Step2VehicleData } from "@/components/sell/step-2-vehicle-data";
 import type { SellFormValues } from "@/schemas/sell-form";
-import type { VehicleTaxonomy } from "@/lib/vehicle-taxonomy";
+import type { SellReferenceData } from "@/lib/sell-reference-data";
 
-const taxonomy: VehicleTaxonomy = {
+const referenceData: SellReferenceData = {
     makes: ["BMW"],
     fuelTypes: ["Petrol"],
-    bodyTypes: ["passengerCar:sedan"],
     transmissions: ["Automatic"],
     driveTypes: ["RWD"],
     colors: ["Black"],
     locations: ["Tallinn"],
+    conditions: ["Used"],
     bodyTypeHierarchy: [{ category: "passengerCar", subtypes: ["sedan"] }],
-    years: { min: 1990, max: 2026 },
-    price: { min: 0, max: 100000 },
 };
 
 function TestForm() {
@@ -84,7 +82,14 @@ function TestForm() {
 
     return (
         <FormProvider {...methods}>
-            <Step2VehicleData validationAttempted={true} taxonomy={taxonomy} />
+            <Step2VehicleData
+                validationAttempted={true}
+                referenceData={referenceData}
+                models={["3 Series"]}
+                isLoadingModels={false}
+                modelError={null}
+                onRetryModels={vi.fn()}
+            />
         </FormProvider>
     );
 }

@@ -3,12 +3,14 @@ import { Request, Response } from "express";
 import { AdService } from "../services/adService";
 import { ListingService, ListingQuery } from "../services/listingService";
 import { SearchService, resolveTaxonomyScope } from "../services/searchService";
+import { VehicleReferenceService } from "../services/vehicleReferenceService";
 import { logger } from "../utils/logger";
 import { isAdmin, requireUserId } from "../utils/validation";
 
 const listingService = new ListingService();
 const adService = new AdService();
 const searchService = new SearchService();
+const vehicleReferenceService = new VehicleReferenceService();
 
 export const getAllListings = async (req: Request, res: Response) => {
   // Validation is handled by middleware, data is in req.validatedQuery
@@ -144,6 +146,17 @@ export const deleteImage = async (req: Request, res: Response) => {
 export const getFilterOptions = async (req: Request, res: Response) => {
   const options = await searchService.getFilterOptions(resolveTaxonomyScope(req.query.scope));
   res.json({ data: options });
+};
+
+export const getSellOptions = async (_req: Request, res: Response) => {
+  const options = await vehicleReferenceService.getSellOptions();
+  res.json({ data: options });
+};
+
+export const getSellModels = async (req: Request, res: Response) => {
+  const make = typeof req.query.make === "string" ? req.query.make : "";
+  const models = await vehicleReferenceService.getSellModels(make);
+  res.json({ data: models });
 };
 
 /**

@@ -16,6 +16,15 @@ vi.mock('@kaarplus/database', () => ({
 		user: {
 			findUnique: vi.fn(),
 		},
+		vehicleMake: {
+			findMany: vi.fn(),
+		},
+		vehicleBodyCategory: {
+			findMany: vi.fn(),
+		},
+		vehicleReferenceOption: {
+			findMany: vi.fn(),
+		},
 		image: {
 			createMany: vi.fn(),
 			deleteMany: vi.fn(),
@@ -32,6 +41,14 @@ vi.mock('@kaarplus/database', () => ({
 		DEALERSHIP: 'DEALERSHIP',
 		ADMIN: 'ADMIN',
 	},
+	VehicleReferenceOptionType: {
+		FUEL_TYPE: 'FUEL_TYPE',
+		TRANSMISSION: 'TRANSMISSION',
+		DRIVE_TYPE: 'DRIVE_TYPE',
+		EXTERIOR_COLOR: 'EXTERIOR_COLOR',
+		LOCATION: 'LOCATION',
+		CONDITION: 'CONDITION',
+	},
 }));
 
 import { ListingService } from './listingService';
@@ -44,6 +61,37 @@ describe('ListingService', () => {
 	beforeEach(() => {
 		service = new ListingService();
 		vi.clearAllMocks();
+		vi.mocked(prisma.vehicleMake.findMany).mockResolvedValue([
+			{
+				name: 'BMW',
+				models: [{ name: 'X5' }, { name: '320i' }],
+			},
+			{
+				name: 'Tesla',
+				models: [{ name: 'Model 3' }],
+			},
+		] as any);
+		vi.mocked(prisma.vehicleBodyCategory.findMany).mockResolvedValue([
+			{
+				key: 'passengerCar',
+				subtypes: [{ key: 'sedan' }],
+			},
+			{
+				key: 'suv',
+				subtypes: [{ key: 'touring' }],
+			},
+		] as any);
+		vi.mocked(prisma.vehicleReferenceOption.findMany).mockResolvedValue([
+			{ type: 'FUEL_TYPE', key: 'Petrol' },
+			{ type: 'FUEL_TYPE', key: 'Electric' },
+			{ type: 'TRANSMISSION', key: 'Automatic' },
+			{ type: 'DRIVE_TYPE', key: 'AWD' },
+			{ type: 'DRIVE_TYPE', key: 'RWD' },
+			{ type: 'EXTERIOR_COLOR', key: 'Black' },
+			{ type: 'EXTERIOR_COLOR', key: 'White' },
+			{ type: 'LOCATION', key: 'Tallinn' },
+			{ type: 'CONDITION', key: 'Used' },
+		] as any);
 	});
 
 	describe('getAllListings', () => {
@@ -116,10 +164,11 @@ describe('ListingService', () => {
 				mileage: 50000,
 				fuelType: 'Petrol',
 				transmission: 'Automatic',
-				bodyType: 'SUV',
+				bodyType: 'suv:touring',
 				colorExterior: 'Black',
 				condition: 'Used',
 				location: 'Tallinn',
+				driveType: 'AWD',
 			} as any);
 
 			expect(result.status).toBe('PENDING');
@@ -139,6 +188,34 @@ describe('ListingService', () => {
 
 			await expect(service.createListing('999', { make: 'BMW' } as any))
 				.rejects.toThrow(NotFoundError);
+		});
+
+		it('should reject unsupported reference data', async () => {
+			vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: 'u1', role: 'USER' } as any);
+			vi.mocked(prisma.listing.count).mockResolvedValue(0);
+
+			await expect(
+				service.createListing('u1', {
+					make: 'Unknown Make',
+					model: 'Imaginary',
+					year: 2020,
+					price: 30000,
+					mileage: 50000,
+					fuelType: 'Petrol',
+					transmission: 'Automatic',
+					bodyType: 'suv:touring',
+					colorExterior: 'Black',
+					condition: 'Used',
+					location: 'Tallinn',
+					driveType: 'AWD',
+				} as any)
+			).rejects.toMatchObject({
+				details: expect.arrayContaining([
+					expect.objectContaining({
+						field: 'make',
+					}),
+				]),
+			});
 		});
 	});
 

@@ -127,25 +127,31 @@
             "contactEmail": "Sisestage oma e-post",
             "contactPhone": "Sisestage oma telefon",
             "make": "Valige mark",
-            "model": "nt. 520d",
+            "model": "Valige mudel",
             "variant": "nt. xDrive Luxury Line",
             "year": "2024",
             "price": "0",
             "mileage": "0",
             "power": "0",
-            "location": "nt. Tallinn, Harjumaa",
+            "location": "Valige asukoht",
             "fuel": "Valige kütus",
             "transmission": "Valige käigukast",
             "drive": "Valige vedu",
             "doors": "Arv",
             "seats": "Arv",
-            "color": "nt. Must metallik",
+            "color": "Valige välisvärv",
             "colorInterior": "nt. Hall nahk",
             "condition": "Valige seisukord",
             "vin": "VIN1234567890ABCD",
             "description": "Räägi oma autost lähemalt..."
         },
-        "charCount": "{{count}} / 5000 tähemärki"
+        "charCount": "{{count}} / 5000 tähemärki",
+        "modelState": {
+            "selectMakeFirst": "Valige mark, et näha saadaolevaid mudeleid.",
+            "loading": "Laen mudeleid...",
+            "error": "Mudelite laadimine ebaõnnestus.",
+            "empty": "Valitud margi jaoks ei ole ühtegi mudelit saadaval."
+        }
     },
     "step3": {
         "title": "Lisage fotod",

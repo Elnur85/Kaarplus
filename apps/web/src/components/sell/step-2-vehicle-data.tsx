@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { SellFormValues } from "@/schemas/sell-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -11,23 +12,32 @@ import { EquipmentCheckboxes } from "./equipment-checkboxes";
 import { cn } from "@/lib/utils";
 
 import { useTranslation } from "react-i18next";
-import { VehicleTaxonomy } from "@/lib/vehicle-taxonomy";
-
-const CONDITIONS = ["New", "Excellent", "Used", "Damaged"] as const;
+import { SellReferenceData } from "@/lib/sell-reference-data";
 
 interface Step2VehicleDataProps {
     validationAttempted?: boolean;
-    taxonomy: VehicleTaxonomy;
+    referenceData: SellReferenceData;
+    models: string[];
+    isLoadingModels: boolean;
+    modelError: Error | null;
+    onRetryModels: () => void;
 }
 
 export function Step2VehicleData({
     validationAttempted,
-    taxonomy,
+    referenceData,
+    models,
+    isLoadingModels,
+    modelError,
+    onRetryModels,
 }: Step2VehicleDataProps) {
     const { t } = useTranslation('sell');
     const { register, formState: { errors }, watch, setValue } = useFormContext<SellFormValues>();
-
-    const conditions = [...CONDITIONS];
+    const selectedMake = watch("make");
+    const selectedModel = watch("model");
+    const conditions = [...referenceData.conditions];
+    const isModelDisabled =
+        !selectedMake || isLoadingModels || Boolean(modelError) || models.length === 0;
 
     const hasError = (fieldName: keyof SellFormValues) => {
         return validationAttempted && errors[fieldName];
@@ -45,6 +55,50 @@ export function Step2VehicleData({
                 {t(String(message), { defaultValue: String(message) })}
             </p>
         );
+    };
+
+    const renderModelState = () => {
+        if (!selectedMake) {
+            return (
+                <p className="text-xs text-muted-foreground">
+                    {t("step2.modelState.selectMakeFirst")}
+                </p>
+            );
+        }
+
+        if (isLoadingModels) {
+            return (
+                <p className="text-xs text-muted-foreground">
+                    {t("step2.modelState.loading")}
+                </p>
+            );
+        }
+
+        if (modelError) {
+            return (
+                <div className="flex items-center gap-2 text-xs text-destructive">
+                    <span>{t("step2.modelState.error")}</span>
+                    <Button
+                        type="button"
+                        variant="link"
+                        className="h-auto p-0 text-xs"
+                        onClick={onRetryModels}
+                    >
+                        {t("common:errorBoundary.retry")}
+                    </Button>
+                </div>
+            );
+        }
+
+        if (models.length === 0) {
+            return (
+                <p className="text-xs text-muted-foreground">
+                    {t("step2.modelState.empty")}
+                </p>
+            );
+        }
+
+        return null;
     };
 
     return (
@@ -102,14 +156,17 @@ export function Step2VehicleData({
                     <div className="space-y-2">
                         <Label htmlFor="make">{t('step2.labels.make')}</Label>
                         <Select
-                            onValueChange={(v) => setValue("make", v, { shouldValidate: true })}
-                            value={watch("make")}
+                            onValueChange={(value) => {
+                                setValue("make", value, { shouldValidate: true });
+                                setValue("model", "", { shouldValidate: true });
+                            }}
+                            value={selectedMake}
                         >
                             <SelectTrigger className={cn(hasError("make") && "border-destructive ring-1 ring-destructive")}>
                                 <SelectValue placeholder={t('step2.placeholders.make')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {taxonomy.makes.map((m) => (
+                                {referenceData.makes.map((m) => (
                                     <SelectItem key={m} value={m}>{m}</SelectItem>
                                 ))}
                             </SelectContent>
@@ -119,13 +176,24 @@ export function Step2VehicleData({
 
                     <div className="space-y-2">
                         <Label htmlFor="model">{t('step2.labels.model')}</Label>
-                        <Input
-                            id="model"
-                            placeholder={t('step2.placeholders.model')}
-                            {...register("model")}
-                            className={cn(hasError("model") && "border-destructive ring-1 ring-destructive")}
-                        />
+                        <Select
+                            onValueChange={(value) => setValue("model", value, { shouldValidate: true })}
+                            value={selectedModel}
+                            disabled={isModelDisabled}
+                        >
+                            <SelectTrigger className={cn(hasError("model") && "border-destructive ring-1 ring-destructive")}>
+                                <SelectValue placeholder={t('step2.placeholders.model')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {models.map((model) => (
+                                    <SelectItem key={model} value={model}>
+                                        {model}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                         {renderError("model")}
+                        {renderModelState()}
                     </div>
 
                     <div className="space-y-2">
@@ -195,7 +263,7 @@ export function Step2VehicleData({
                                 <SelectValue placeholder={t('step2.placeholders.location')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {taxonomy.locations.map((city) => (
+                                {referenceData.locations.map((city) => (
                                     <SelectItem key={city} value={city}>{city}</SelectItem>
                                 ))}
                             </SelectContent>
@@ -222,7 +290,7 @@ export function Step2VehicleData({
                                 <SelectValue placeholder={t('step2.placeholders.fuel')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {taxonomy.fuelTypes.map((f) => (
+                                {referenceData.fuelTypes.map((f) => (
                                     <SelectItem key={f} value={f}>
                                         {t(`options.fuel.${f}`, { defaultValue: f })}
                                     </SelectItem>
@@ -242,7 +310,7 @@ export function Step2VehicleData({
                                 <SelectValue placeholder={t('step2.placeholders.transmission')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {taxonomy.transmissions.map((t_item) => (
+                                {referenceData.transmissions.map((t_item) => (
                                     <SelectItem key={t_item} value={t_item}>
                                         {t(`options.transmission.${t_item}`, {
                                             defaultValue: t_item,
@@ -281,7 +349,7 @@ export function Step2VehicleData({
                                 <SelectValue placeholder={t('step2.placeholders.drive')} />
                             </SelectTrigger>
                             <SelectContent>
-                                {taxonomy.driveTypes.map((d) => (
+                                {referenceData.driveTypes.map((d) => (
                                     <SelectItem key={d} value={d}>
                                         {t(`options.drive.${d}`, { defaultValue: d })}
                                     </SelectItem>
@@ -329,12 +397,21 @@ export function Step2VehicleData({
 
                     <div className="space-y-2">
                         <Label htmlFor="colorExterior">{t('step2.labels.colorExterior')}</Label>
-                        <Input
-                            id="colorExterior"
-                            placeholder={t('step2.placeholders.color')}
-                            {...register("colorExterior")}
-                            className={cn(hasError("colorExterior") && "border-destructive ring-1 ring-destructive")}
-                        />
+                        <Select
+                            onValueChange={(value) => setValue("colorExterior", value, { shouldValidate: true })}
+                            value={watch("colorExterior")}
+                        >
+                            <SelectTrigger className={cn(hasError("colorExterior") && "border-destructive ring-1 ring-destructive")}>
+                                <SelectValue placeholder={t('step2.placeholders.color')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {referenceData.colors.map((color) => (
+                                    <SelectItem key={color} value={color}>
+                                        {color}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                         {renderError("colorExterior")}
                     </div>
 

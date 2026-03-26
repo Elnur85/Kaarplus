@@ -29,6 +29,14 @@ vi.mock('@kaarplus/database', () => {
 			FAILED: 'FAILED',
 			REFUNDED: 'REFUNDED',
 		},
+		VehicleReferenceOptionType: {
+			FUEL_TYPE: 'FUEL_TYPE',
+			TRANSMISSION: 'TRANSMISSION',
+			DRIVE_TYPE: 'DRIVE_TYPE',
+			EXTERIOR_COLOR: 'EXTERIOR_COLOR',
+			LOCATION: 'LOCATION',
+			CONDITION: 'CONDITION',
+		},
 		InspectionStatus: {
 			PENDING: 'PENDING',
 			SCHEDULED: 'SCHEDULED',
@@ -74,6 +82,26 @@ vi.mock('@kaarplus/database', () => {
 			update: vi.fn(),
 			delete: vi.fn(),
 			count: vi.fn(),
+			aggregate: vi.fn(),
+		},
+		vehicleMake: {
+			findMany: vi.fn(),
+			upsert: vi.fn(),
+		},
+		vehicleModel: {
+			findMany: vi.fn(),
+			upsert: vi.fn(),
+		},
+		vehicleBodyCategory: {
+			findMany: vi.fn(),
+			upsert: vi.fn(),
+		},
+		vehicleBodySubtype: {
+			upsert: vi.fn(),
+		},
+		vehicleReferenceOption: {
+			findMany: vi.fn(),
+			upsert: vi.fn(),
 		},
 		favorite: {
 			create: vi.fn(),
